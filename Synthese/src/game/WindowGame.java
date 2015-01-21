@@ -12,21 +12,23 @@ import data.*;
 public class WindowGame extends BasicGame {
 	
 	 private GameContainer container;
-	 private TiledMap map;
+	 private MobHandler mobHandler;
 
 	    public WindowGame() throws SlickException {
-	        super("Jeu de plateau");
+	        super(Data.NAME);
+	        mobHandler = new MobHandler();
 	    }
 
 	    @Override
 	    public void init(GameContainer container) throws SlickException {
 	        this.container = container;
-	        this.map = new TiledMap(Data.MAP_FILE);
+	        SpriteData.initMap();
 	        
 	    }
 
 	    public void render(GameContainer container, Graphics g) throws SlickException {
-	    	this.map.render(0, 0);
+	    	SpriteData.map.render(0, 0);
+	    	mobHandler.render(container, g);
 	    }
 
 	    @Override

@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args) throws SlickException {
         
-        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), 1600, 1200, false);
+        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), 1200, 1000, false);
     	gameContaineur.setTargetFrameRate(60);
     	gameContaineur.start();
 	}
