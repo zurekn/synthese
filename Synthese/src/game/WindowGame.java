@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -7,16 +9,19 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
+
 import data.*;
 
 public class WindowGame extends BasicGame {
 	
 	 private GameContainer container;
 	 private MobHandler mobHandler;
-
+	 private ArrayList<Mob> mobs;
+	 private playerHandler playerHandler;
+	 private Player player;
+	 
 	    public WindowGame() throws SlickException {
 	        super(Data.NAME);
-	        mobHandler = new MobHandler();
 	    }
 
 	    @Override
@@ -24,11 +29,19 @@ public class WindowGame extends BasicGame {
 	        this.container = container;
 	        SpriteData.initMap();
 	        
+	        player = new Player(5, 5);
+	        playerHandler = new playerHandler(player);
+	        
+	        mobs =  Data.initMobs();
+	        mobHandler = new MobHandler(mobs);
 	    }
 
 	    public void render(GameContainer container, Graphics g) throws SlickException {
 	    	SpriteData.map.render(0, 0);
 	    	mobHandler.render(container, g);
+	    	//TODO
+	    	//Bug playerrender doesn't work
+	    	playerHandler.render(container, g);
 	    }
 
 	    @Override
