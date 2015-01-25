@@ -14,11 +14,12 @@ public class Data {
 	public static int BLOCK_SIZE_Y;
 	public static int BLOCK_NUMBER;
 	
-	public static String MAP_FILE = "Synthese/res/images/map2.tmx";
+	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
+	public static final String MONSTER_XML = "Synthese/res/xml/monsters.xml";
 
 	public static ArrayList<Mob> initMobs() {
 		ArrayList<Mob> mobs = new ArrayList<Mob>();
-		mobs.add(new Mob(10, 10));
+		mobs.add(new Mob(10, 10, "m1"));
 		
 		return mobs;
 	}

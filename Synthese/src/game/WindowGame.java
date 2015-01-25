@@ -20,6 +20,9 @@ public class WindowGame extends BasicGame {
 	 private playerHandler playerHandler;
 	 private Player player;
 	 
+	 private int playerNumber;
+	 private int turn;
+	 
 	    public WindowGame() throws SlickException {
 	        super(Data.NAME);
 	    }
@@ -28,6 +31,7 @@ public class WindowGame extends BasicGame {
 	    public void init(GameContainer container) throws SlickException {
 	        this.container = container;
 	        SpriteData.initMap();
+	        SpriteData.initMob();
 	        
 	        player = new Player(5, 5);
 	        playerHandler = new playerHandler(player);

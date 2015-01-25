@@ -1,0 +1,7 @@
+<monsters>
+	<monster id = "m1">
+		<file>Synthese/res/images/tiles/Monsters/ghost.png</file>
+		<celDimensionX>40</celDimensionX>
+		<celDimensionY>46</celDimensionY>
+	</monster>
+</monsters>
