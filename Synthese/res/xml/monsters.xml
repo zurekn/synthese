@@ -3,5 +3,10 @@
 		<file>Synthese/res/images/tiles/Monsters/ghost.png</file>
 		<celDimensionX>40</celDimensionX>
 		<celDimensionY>46</celDimensionY>
-	</monster>
+		<Life>100</Life>
+		<Strength>10</Strength>
+		<Mana>40</Mana>
+		<Armor>10</Armor>
+		<MagicPower>10</MagicPower>
+		<Luck>5</Luck></monster>
 </monsters>

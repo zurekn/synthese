@@ -67,7 +67,10 @@ public class SpriteData {
 
 			Element el = (Element) i.next();
 			try {
-				monsterData.addMonster(new Monster(el.getAttributeValue("id"), new SpriteSheet(""+el.getChildText("file"), Integer.parseInt(el.getChildText("celDimensionX")), Integer.parseInt(el.getChildText("celDimensionY")))));
+				String id = el.getAttributeValue("id");
+				SpriteSheet ss = new SpriteSheet(""+el.getChildText("file"), Integer.parseInt(el.getChildText("celDimensionX")), Integer.parseInt(el.getChildText("celDimensionY")));
+				Stats stats = new Stats(10, 10);
+				monsterData.addMonster(new Monster(id, ss, stats));
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

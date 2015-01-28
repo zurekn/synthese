@@ -8,11 +8,13 @@ public class Monster {
 	private String id;
 	private SpriteSheet sprite;
 	private Animation[] animation = new Animation[8];
+	private Stats stats;
 	
-	public Monster(String id, SpriteSheet sprite) {
+	public Monster(String id, SpriteSheet sprite, Stats stats) {
 		super();
 		this.id = id;
 		this.sprite = sprite;
+		this.stats = stats;
 		initAnimation();
 	}
 
