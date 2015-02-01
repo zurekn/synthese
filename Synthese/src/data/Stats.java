@@ -1,13 +1,13 @@
 package data;
 
 public class Stats {
-	private int life;
-	private int armor;
-	private int mana;
-	private int strength;
-	private int magicPower;
-	private int luck;
-	private int movementPoints;
+	private int life = 1;
+	private int armor = 1;
+	private int mana = 1;
+	private int strength = 1;
+	private int magicPower = 1;
+	private int luck = 1;
+	private int movementPoints = 1;
 	
 	public Stats(int life, int mana) {
 		super();

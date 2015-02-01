@@ -71,7 +71,7 @@ public class Player {
 
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.blue);
-		g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
+		g.fillRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 	}
 

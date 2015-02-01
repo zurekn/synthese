@@ -14,13 +14,15 @@ public class Data {
 	public static int BLOCK_SIZE_Y;
 	public static int BLOCK_NUMBER;
 	
+	public static int TURN_MAX_TIME = 10;
+	
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_XML = "Synthese/res/xml/monsters.xml";
 
 	public static ArrayList<Mob> initMobs() {
 		ArrayList<Mob> mobs = new ArrayList<Mob>();
 		mobs.add(new Mob(10, 10, "m1"));
-		
+		mobs.add(new Mob(20, 20, "m2"));
 		return mobs;
 	}
 }
