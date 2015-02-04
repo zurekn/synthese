@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
+	<mapInfo>
+		<background>Synthese/res/images/map2.tmx</background>
+		<x>25</x>
+		<y>25</y>
+	</mapInfo>
+
 	<blockInfo>
 		<size>32</size>
 		<numberX>25</numberX>
 		<numberY>25</numberY>
 	</blockInfo>
-	
+
+
+	<block x="5" y="3">
+		<untraversable></untraversable>
+	</block>
+	<block x="8" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="7" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="6" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="5" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="5" y="3">
+		<untraversable></untraversable>
+	</block>
+	<block x="6" y="6">
+		<trap id="T1"></trap>
+	</block>
+	<block x="1" y="1">
+		<damage type="fire">10</damage>
+	</block>
+
 </map>
