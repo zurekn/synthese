@@ -1,0 +1,12 @@
+<spells>
+	<spell id = "s1">
+		<damage>10</damage>
+		<heal>0</heal>
+		<name>Fire Ball</name>
+	</spell>
+	<spell id = "s2">
+		<damage>0</damage>
+		<heal>15</heal>
+		<name>Holly Ray</name>
+	</spell>
+</spells>

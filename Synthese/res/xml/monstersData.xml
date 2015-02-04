@@ -3,22 +3,23 @@
 		<file>Synthese/res/images/tiles/Monsters/ghost.png</file>
 		<celDimensionX>40</celDimensionX>
 		<celDimensionY>46</celDimensionY>
-		<Life>100</Life>
-		<Strength>10</Strength>
-		<Mana>40</Mana>
-		<Armor>10</Armor>
-		<MagicPower>10</MagicPower>
-		<Luck>5</Luck>
+		<life>100</Life>
+		<strength>10</Strength>
+		<mana>40</Mana>
+		<armor>10</Armor>
+		<magicPower>10</MagicPower>
+		<luck>5</Luck>
+		<
 	</monster>
 	<monster id="m2">
 		<file>Synthese/res/images/tiles/Monsters/pumpking.png</file>
 		<celDimensionX>46</celDimensionX>
 		<celDimensionY>46</celDimensionY>
-		<Life>300</Life>
-		<Strength>20</Strength>
-		<Mana>40</Mana>
-		<Armor>20</Armor>
-		<MagicPower>1</MagicPower>
-		<Luck>10</Luck>
+		<life>300</Life>
+		<strength>20</Strength>
+		<mana>40</Mana>
+		<armor>20</Armor>
+		<magicPower>1</MagicPower>
+		<luck>10</Luck>
 	</monster>
 </monsters>
