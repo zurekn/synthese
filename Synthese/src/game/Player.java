@@ -6,7 +6,7 @@ import org.newdawn.slick.Graphics;
 
 import data.Data;
 import data.Stats;
-import exception.InvalidMovementException;
+import exception.IllegalMovementException;
 
 public class Player {
 
@@ -47,26 +47,29 @@ public class Player {
 		this.y = y;
 	}
 
-	public void moveTo(String position) throws InvalidMovementException {
+	public void moveTo(String position) throws IllegalMovementException {
 		String tokens[] = position.split(":");
 		if (tokens.length != 2) {
-			throw new InvalidMovementException("Invalid movement syntax");
-		}
+			throw new IllegalMovementException("Invalid movement syntax");
+		} else {
 
-		int x = Integer.parseInt(tokens[0]);
-		int y = Integer.parseInt(tokens[1]);
+			int x = Integer.parseInt(tokens[0]);
+			int y = Integer.parseInt(tokens[1]);
 
-		if (x < 0 || x > Data.MAP_SIZE || y < 0 || y > Data.MAP_SIZE) {
-			throw new InvalidMovementException("Movement is out of the map");
-		}
+			if (x < 0 || x > Data.MAP_SIZE || y < 0 || y > Data.MAP_SIZE) {
+				throw new IllegalMovementException("Movement is out of the map");
+			} else {
 
-		int xTmp = this.x, yTmp = this.y;
-		int movePoints = this.stats.getMovementPoints();
-		if(Math.round(Math.sqrt(Math.pow(x-xTmp, 2)+Math.pow(y-yTmp, 2)))-1>movePoints){
-			throw new InvalidMovementException("Position too far away from character");
+				int xTmp = this.x, yTmp = this.y;
+				int movePoints = this.stats.getMovementPoints();
+				if (Math.sqrt(Math.pow(x - xTmp, 2) + Math.pow(y - yTmp, 2)) > movePoints) {
+					throw new IllegalMovementException("Not enough movements points");
+				} else {
+					this.x = x;
+					this.y = y;
+				}
+			}
 		}
-		this.x = x;
-		this.y = y;
 	}
 
 	public void render(GameContainer container, Graphics g) {

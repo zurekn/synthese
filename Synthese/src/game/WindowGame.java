@@ -12,7 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import data.*;
-import exception.InvalidMovementException;
+import exception.IllegalMovementException;
 
 /**
  * Main class whith handle the game
@@ -101,7 +101,7 @@ public class WindowGame extends BasicGame {
 			if(turn < player.size()){
 				try {
 					player.get(turn).moveTo(str);
-				} catch (InvalidMovementException e) {
+				} catch (IllegalMovementException e) {
 
 					e.printStackTrace();
 				}
