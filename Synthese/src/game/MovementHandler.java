@@ -8,8 +8,8 @@ import data.Data;
 public class MovementHandler implements Runnable{
 
 	//For debug
-	Scanner sc;
-	String str;
+	private Scanner sc;
+	private String str;
 	
 	private WindowGame windowGame;
 	
@@ -23,11 +23,17 @@ public class MovementHandler implements Runnable{
 			sc = new Scanner(System.in);
 		}
 	}
+	
+	private String randomMove(){
+		String s = "";
+		
+		return s;
+	}
+	
 	public void run() {
 		if(Data.debug){
 			str = sc.nextLine();
-			windowGame.move(str);
-			
+			windowGame.move(randomMove());
 		}
 		
 	}

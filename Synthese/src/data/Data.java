@@ -12,12 +12,18 @@ public class Data {
 	public static int MAP_SIZE;
 	public static int BLOCK_SIZE_X;
 	public static int BLOCK_SIZE_Y;
-	public static int BLOCK_NUMBER;
+	public static int BLOCK_NUMBER_X;
+	public static int BLOCK_NUMBER_Y;
+	public static int DECK_AREA_SIZE_X;
+	public static int DECK_AREA_SIZE_Y;
+	public static int RELATIVE_X_POS;
+	public static int RELATIVE_Y_POS;
 	
 	public static int TURN_MAX_TIME = 10;
 	
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
-	public static final String MONSTER_XML = "Synthese/res/xml/monsters.xml";
+	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
+	public static final String MONSTERS_XML = "Synthese/res/xml/monsters.xml";
 
 	public static ArrayList<Mob> initMobs() {
 		ArrayList<Mob> mobs = new ArrayList<Mob>();

@@ -62,12 +62,30 @@ public class WindowGame extends BasicGame {
 	    }
 
 	    public void render(GameContainer container, Graphics g) throws SlickException {
-	    	SpriteData.map.render(0, 0);
+	    	SpriteData.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
 	    	mobHandler.render(container, g);
 	    	//TODO
-	    	//Bug playerrender doesn't work
+	    	//Bug playerrender doesn't work every time
 	    	playerHandler.render(container, g);
 	    	
+	    	renderDeckArea(container, g);
+	    	renderText(container, g);
+	    }
+	    
+	    private void renderDeckArea(GameContainer container, Graphics g){
+	    	g.setColor(Color.white);
+	    	//TOP
+	    	g.drawRect(Data.DECK_AREA_SIZE_Y, 0, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+	    	//BOTTOM
+	    	g.drawRect(Data.DECK_AREA_SIZE_Y,  Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+	    	//LEFT
+	    	g.drawRect(0, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+	    	//RIGHT
+	    	g.drawRect(Data.DECK_AREA_SIZE_X + Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+	    }
+	    
+	    private void renderText(GameContainer container, Graphics g){
+	    	//render text
 	    	g.setColor(Color.white);
 	    	g.drawString("End of turn in : "+turnTimer, 10, 20);
 	    }
@@ -102,7 +120,6 @@ public class WindowGame extends BasicGame {
 				try {
 					player.get(turn).moveTo(str);
 				} catch (IllegalMovementException e) {
-
 					e.printStackTrace();
 				}
 			}else{

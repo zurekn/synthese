@@ -1,5 +1,9 @@
 package data;
 
+import game.Spell;
+
+import java.util.ArrayList;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.SpriteSheet;
 
@@ -9,12 +13,22 @@ public class Monster {
 	private SpriteSheet sprite;
 	private Animation[] animation = new Animation[8];
 	private Stats stats;
+	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	
 	public Monster(String id, SpriteSheet sprite, Stats stats) {
 		super();
 		this.id = id;
 		this.sprite = sprite;
 		this.stats = stats;
+		initAnimation();
+	}
+	
+	public Monster(String id, SpriteSheet sprite, Stats stats, ArrayList<Spell> spells) {
+		super();
+		this.id = id;
+		this.sprite = sprite;
+		this.stats = stats;
+		this.spells = spells;
 		initAnimation();
 	}
 

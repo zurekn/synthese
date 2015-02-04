@@ -23,17 +23,25 @@ public class SpriteData {
 		System.out.println(" Begin data init ");
 		map = new TiledMap(Data.MAP_FILE);
 		Data.MAP_SIZE = map.getHeight();
-		Data.BLOCK_NUMBER = map.getLayerCount();
+		Data.BLOCK_NUMBER_X = map.getHeight();
+		Data.BLOCK_NUMBER_Y = map.getWidth();
 		Data.BLOCK_SIZE_X = map.getTileHeight();
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
-
+		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.MAP_SIZE;
+		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
+		Data.RELATIVE_X_POS = Data.RELATIVE_Y_POS = Data.DECK_AREA_SIZE_Y;
 		System.out.println("MAP_FILE = " + Data.MAP_FILE + ", MAP_SIZE = "
-				+ Data.MAP_SIZE + ", BLOCK_NUMBER = " + Data.BLOCK_NUMBER
+				+ Data.MAP_SIZE + ", BLOCK_NUMBER = " + Data.BLOCK_NUMBER_X
 				+ ", BLOCK_SIZE_X = " + Data.BLOCK_SIZE_X + ", BLOCK_SIZE_Y = "
 				+ Data.BLOCK_SIZE_Y);
 
 	}
 
+	public static void initSpell(){
+		
+		
+	}
+	
 	/**
 	 * Read the xml files and store data in a list
 	 */
@@ -46,7 +54,7 @@ public class SpriteData {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
-			doc = builder.build(new File(Data.MONSTER_XML));
+			doc = builder.build(new File(Data.MONSTER_DATA_XML));
 		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +63,7 @@ public class SpriteData {
 			e.printStackTrace();
 		}
 		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MONSTER_XML + "]");
+			System.out.println("Error : Can't load [" + Data.MONSTER_DATA_XML + "]");
 			System.exit(1);
 		}
 		Element root = doc.getRootElement();
