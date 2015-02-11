@@ -50,7 +50,7 @@ public class WindowGame extends BasicGame {
 	        movementHandler = new MovementHandler(this);
 	        
 	        player = new ArrayList<Player>();
-	        player.add(new Player(5, 5, new Stats(100, 50)));
+	        player.add(new Player(5, 5, "P1" ,new Stats(100, 50)));
 	        playerHandler = new playerHandler(player);
 	        
 	        mobs =  Data.initMobs();
