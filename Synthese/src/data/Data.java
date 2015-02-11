@@ -23,7 +23,7 @@ public class Data {
 	
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
-	public static final String MONSTERS_XML = "Synthese/res/xml/monsters.xml";
+	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 
 	public static ArrayList<Mob> initMobs() {
 		ArrayList<Mob> mobs = new ArrayList<Mob>();

@@ -37,20 +37,17 @@ public class SpriteData {
 
 	}
 
-	public static void initSpell(){
-		
-		
+	public static void initSpell() {
+
 	}
-	
+
 	/**
 	 * Read the xml files and store data in a list
 	 */
 	public static void initMob() {
-		// TODO
-		monsterData = new MonsterData();
-		
+		MonsterData monsterData = new MonsterData();
 		// Load the xml file
-		System.out.println("Initializing monsters");
+		System.out.println("Initializing monsters, loading "+Data.MONSTER_DATA_XML);
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
@@ -63,7 +60,8 @@ public class SpriteData {
 			e.printStackTrace();
 		}
 		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MONSTER_DATA_XML + "]");
+			System.out.println("Error : Can't load [" + Data.MONSTER_DATA_XML
+					+ "]");
 			System.exit(1);
 		}
 		Element root = doc.getRootElement();
@@ -71,20 +69,42 @@ public class SpriteData {
 		List monsters = root.getChildren("monster");
 
 		Iterator i = monsters.iterator();
+		int life, armor, mana, strength, magicPower, luck, movementPoints;
+		List <Element> spells = new ArrayList<Element>();
 		while (i.hasNext()) {
 
 			Element el = (Element) i.next();
 			try {
+				life = Integer.parseInt(el.getChildText("life"));
+				armor = Integer.parseInt(el.getChildText("armor"));
+				mana = Integer.parseInt(el.getChildText("mana"));
+				strength = Integer.parseInt(el.getChildText("strength"));
+				magicPower= Integer.parseInt(el.getChildText("magicPower"));
+				luck = Integer.parseInt(el.getChildText("luck"));
+				movementPoints = Integer.parseInt(el.getChildText("movementPoints"));
 				String id = el.getAttributeValue("id");
-				SpriteSheet ss = new SpriteSheet(""+el.getChildText("file"), Integer.parseInt(el.getChildText("celDimensionX")), Integer.parseInt(el.getChildText("celDimensionY")));
-				Stats stats = new Stats(10, 10);
-				monsterData.addMonster(new Monster(id, ss, stats));
+				spells = el.getChild("spells").getChildren("spell");
+				Iterator ii = spells.iterator();
+				SpriteSheet ss = new SpriteSheet("" + el.getChildText("file"),
+						Integer.parseInt(el.getChildText("celDimensionX")),
+						Integer.parseInt(el.getChildText("celDimensionY")));
+				Stats stats = new Stats(life, armor, mana, strength,
+						magicPower, luck, movementPoints);
+				Monster m = new Monster(id, ss, stats);
+				while(ii.hasNext()){
+					Element e = (Element) ii.next();
+					SpellD s = SpellData.getSpellById(e.getText());
+					if(s != null)
+						m.addSpell(s);
+						
+				}
+
+				monsterData.addMonster(m);
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(el.getAttributeValue("id"));
-			System.out.println(el.getChild("file").getText());
+			System.out.println("Loading end : "+el.getChild("file").getText());
 		}
 
 	}

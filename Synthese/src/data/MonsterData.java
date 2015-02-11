@@ -21,4 +21,13 @@ public class MonsterData {
 		return null;
 	}
 	
+	public static Monster getMonsterById(String id){
+		for(int i = 0; i < monsters.size(); i++){
+			if(monsters.get(i).getId().equals(id)){
+				return monsters.get(i);
+			}
+		}
+		return null;
+	}
+	
 }

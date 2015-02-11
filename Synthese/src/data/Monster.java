@@ -81,4 +81,13 @@ public class Monster {
 				+ animation + "]";
 	}
 
+	public void addSpell(SpellD s) {
+		//TODO
+		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(), s.getHeal(), s.getMana(), s.getAnimation()));		
+	}
+	
+	public Stats getStats(){
+		return stats;
+	}
+
 }

@@ -1,6 +1,10 @@
 package game;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+
+import data.Data;
 
 public class Spell {
 
@@ -10,6 +14,10 @@ public class Spell {
 	private int heal;
 	private int mana;
 	private Animation[] animation = new Animation[1];
+	private int directionX = 1;
+	private int directionY = 1;
+	private int x = 20;
+	private int y = 20;
 
 	public Spell(String id, String name, int damage, int heal, int mana,
 			Animation[] animation) {
@@ -74,6 +82,10 @@ public class Spell {
 	public String toString() {
 		return "Spell [id=" + id + ", name=" + name + ", damage=" + damage
 				+ ", heal=" + heal + ", mana=" + mana + "]";
+	}
+
+	public void render(GameContainer container, Graphics g) {
+		g.drawAnimation(animation[0], x, y);
 	}
 
 

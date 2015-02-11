@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="25" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="001-Grassland01" tilewidth="32" tileheight="32">
+  <image source="tiles/Tilesets/001-Grassland01.png" width="256" height="576"/>
+ </tileset>
+ <tileset firstgid="145" name="001-G_Water01" tilewidth="32" tileheight="32">
+  <image source="tiles/Autotiles/001-G_Water01.png" width="384" height="128"/>
+ </tileset>
+ <tileset firstgid="193" name="003-Forest01" tilewidth="32" tileheight="32">
+  <image source="tiles/Tilesets/003-Forest01.png" width="256" height="608"/>
+ </tileset>
+ <tileset firstgid="345" name="015-Sa_Water01" tilewidth="32" tileheight="32">
+  <image source="tiles/Autotiles/015-Sa_Water01.png" width="384" height="128"/>
+ </tileset>
+ <tileset firstgid="393" name="002-Woods01" tilewidth="32" tileheight="32">
+  <image source="tiles/Tilesets/002-Woods01.png" width="256" height="800"/>
+ </tileset>
+ <tileset firstgid="593" name="046-Cave04" tilewidth="32" tileheight="32">
+  <image source="tiles/Tilesets/046-Cave04.png" width="256" height="1056"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAeTALilVDMSAImBQwHOxhH7Ri1Y9SOUTuoYAc6iGIkHpMDikkwf9SOUTtG7Rh4OwCy7kqp
+  </data>
+ </layer>
+ <layer name="Calque 2" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJxbxcjAsIpIvBqIQWA1A2mAWPNH7Ri1Y9SOUTtGgh2BTORhWttBKhi1Y9SOUTsG1g4ARseoUQ==
+  </data>
+ </layer>
+</map>

@@ -28,6 +28,7 @@ public class WindowGame extends BasicGame {
 	 private playerHandler playerHandler;
 	 private ArrayList<Player> player;
 	 private MovementHandler movementHandler;
+	 private ArrayList<Spell> spells = new ArrayList<Spell>();
 	 
 	 private int playerNumber;
 	 private int turn;
@@ -43,6 +44,7 @@ public class WindowGame extends BasicGame {
 	    public void init(GameContainer container) throws SlickException {
 	        this.container = container;
 	        SpriteData.initMap();
+	        SpellData.initSpell();
 	        SpriteData.initMob();
 	        
 	        movementHandler = new MovementHandler(this);
@@ -67,7 +69,7 @@ public class WindowGame extends BasicGame {
 	    	//TODO
 	    	//Bug playerrender doesn't work every time
 	    	playerHandler.render(container, g);
-	    	
+	    	renderSpell(container, g);
 	    	renderDeckArea(container, g);
 	    	renderText(container, g);
 	    }
@@ -89,7 +91,13 @@ public class WindowGame extends BasicGame {
 	    	g.setColor(Color.white);
 	    	g.drawString("End of turn in : "+turnTimer, 10, 20);
 	    }
-
+	    
+	    private void renderSpell(GameContainer container, Graphics g){
+	    	for(int i = 0; i < spells.size(); i++){
+	    		spells.get(i).render(container, g);
+	    	}
+	    }
+	    
 	    @Override
 	    public void update(GameContainer container, int delta) throws SlickException {
 	    	if(System.currentTimeMillis() -  timeStamp > 1000){
@@ -97,6 +105,7 @@ public class WindowGame extends BasicGame {
 	    		timeStamp = System.currentTimeMillis();
 	    	}
 	    	
+	    	//Turn timer 
 	    	if(turnTimer < 0){
 	    		turnTimer = Data.TURN_MAX_TIME;
 	    		turn = (turn + 1)%playerNumber;
@@ -106,11 +115,19 @@ public class WindowGame extends BasicGame {
 	    	}
 	    }
 
+	    public void pushAction(String s){
+	    	
+	    }
+	    
 	    @Override
 	    public void keyReleased(int key, char c) {
 	    	System.out.println("WindowGame, keyReleased : "+key+", char : "+c);
 	        if (Input.KEY_ESCAPE == key) {
 	            container.exit();
+	        }
+	        
+	        if(Input.KEY_P == key){
+	        	pushAction("spell:1:1");
 	        }
 	    }
 

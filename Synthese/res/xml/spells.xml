@@ -1,12 +1,42 @@
 <spells>
-	<spell id = "s1">
+	<spell id="s1">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
 		<damage>10</damage>
 		<heal>0</heal>
+		<mana>10</mana>
 		<name>Fire Ball</name>
 	</spell>
-	<spell id = "s2">
+	<spell id="s2">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
 		<damage>0</damage>
 		<heal>15</heal>
+		<mana>10</mana>
 		<name>Holly Ray</name>
+	</spell>
+	<spell id="s3">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>5</damage>
+		<heal>0</heal>
+		<mana>5</mana>
+		<name>Dark Mater</name>
+	</spell>
+	<spell id="s4">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>20</damage>
+		<heal>0</heal>
+		<mana>25</mana>
+		<name>Meteor</name>
 	</spell>
 </spells>
