@@ -43,7 +43,7 @@ public class WindowGame extends BasicGame {
 	    @Override
 	    public void init(GameContainer container) throws SlickException {
 	        this.container = container;
-	        SpriteData.initMap();
+	        Data.initMap();
 	        SpellData.initSpell();
 	        MonsterData.initMob();
 	        
@@ -64,7 +64,8 @@ public class WindowGame extends BasicGame {
 	    }
 
 	    public void render(GameContainer container, Graphics g) throws SlickException {
-	    	SpriteData.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
+	    	g.scale(Data.SCALE, Data.SCALE);
+	    	Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
 	    	mobHandler.render(container, g);
 	    	//TODO
 	    	//Bug playerrender doesn't work every time

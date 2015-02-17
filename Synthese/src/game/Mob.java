@@ -36,7 +36,9 @@ public class Mob extends Character{
 		int y = this.getY();
 		//g.setColor(Color.red);
 		//g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
-		g.drawAnimation(animation[6], x * Data.BLOCK_SIZE_X, y * Data.BLOCK_SIZE_Y);
+
+		
+		animation[6].draw(x * Data.BLOCK_SIZE_X, y * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 	}
 
 	@Override

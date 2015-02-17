@@ -27,7 +27,7 @@ public abstract class Character {
 			int x = Integer.parseInt(tokens[0]);
 			int y = Integer.parseInt(tokens[1]);
 
-			if (x < 0 || x > Data.MAP_SIZE || y < 0 || y > Data.MAP_SIZE) {
+			if (x < 0 || x > Data.BLOCK_NUMBER_X || y < 0 || y > Data.BLOCK_NUMBER_Y) {
 				throw new IllegalMovementException("Movement is out of the map");
 			} else {
 
