@@ -18,6 +18,7 @@ public class Data {
 	public static int DECK_AREA_SIZE_Y;
 	public static int RELATIVE_X_POS;
 	public static int RELATIVE_Y_POS;
+	public static int SCALE;
 	
 	public static int TURN_MAX_TIME = 10;
 	

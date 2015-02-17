@@ -45,7 +45,7 @@ public class WindowGame extends BasicGame {
 	        this.container = container;
 	        SpriteData.initMap();
 	        SpellData.initSpell();
-	        SpriteData.initMob();
+	        MonsterData.initMob();
 	        
 	        movementHandler = new MovementHandler(this);
 	        
