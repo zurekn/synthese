@@ -4,32 +4,70 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
-		<damage>10</damage>
-		<heal>0</heal>
-		<mana>10</mana>
-		<name>Fire Ball</name>
+		<damage>0</damage>
+		<heal>10</heal>
+		<mana>6</mana>
+		<name>Heal</name>
 	</spell>
 	<spell id="s2">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
-		<damage>0</damage>
-		<heal>15</heal>
+		<damage>10</damage>
+		<heal>0</heal>
 		<mana>10</mana>
-		<name>Holly Ray</name>
+		<element>Fire</element>
+		<name>Fire Ball</name>
 	</spell>
 	<spell id="s3">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
-		<damage>5</damage>
+		<damage>10</damage>
 		<heal>0</heal>
-		<mana>5</mana>
-		<name>Dark Mater</name>
+		<mana>10</mana>
+		<element>Ice</element>
+		<name>Ice Crush</name>
 	</spell>
 	<spell id="s4">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>10</damage>
+		<heal>0</heal>
+		<mana>10</mana>
+		<element>Water</element>
+		<name>Water Wave</name>
+	</spell>
+	
+	<spell id="s5">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>12</damage>
+		<heal>0</heal>
+		<mana>15</mana>
+		<element>Thunder</element>
+		<name>Lightning Bolt</name>
+	</spell>
+	
+	<spell id="s6">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>9</damage>
+		<heal>0</heal>
+		<mana>6</mana>
+		<element>Wind</element>
+		<name>Aero</name>
+	</spell>
+	
+	<spell id="s7">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
 		<celX>36</celX>
 		<celY>36</celY>
@@ -37,6 +75,42 @@
 		<damage>20</damage>
 		<heal>0</heal>
 		<mana>25</mana>
+		<element>Earth</element>
 		<name>Meteor</name>
+	</spell>
+	
+	<spell id="s8">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>20</damage>
+		<heal>0</heal>
+		<mana>15</mana>
+		<element>Dark</element>
+		<name>Dark Mater</name>
+	</spell>
+	<spell id="s9">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>20</damage>
+		<heal>0</heal>
+		<mana>15</mana>
+		<element>Light</element>
+		<name>Holy Shit</name>
+	</spell>
+	
+	<spell id="s11">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>0</damage>
+		<heal>20</heal>
+		<mana>13</mana>
+		<element>None</element>
+		<name>Holly Ray</name>
 	</spell>
 </spells>
