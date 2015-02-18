@@ -23,6 +23,7 @@ import exception.IllegalMovementException;
  */
 public class WindowGame extends BasicGame {
 
+
 	private GameContainer container;
 	private MobHandler mobHandler;
 	private ArrayList<Mob> mobs;
@@ -36,7 +37,7 @@ public class WindowGame extends BasicGame {
 
 	private int turnTimer;
 	private long timeStamp = -1;
-
+	
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
 	}
@@ -47,6 +48,7 @@ public class WindowGame extends BasicGame {
 		Data.initMap();
 		SpellData.initSpell();
 		MonsterData.initMob();
+		Data.initMapXML();
 
 		movementHandler = new MovementHandler(this);
 

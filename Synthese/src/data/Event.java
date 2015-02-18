@@ -17,11 +17,11 @@ public class Event {
 	public Event(String id) {
 		this.id = id;
 		String type = id.substring(0, 1);
-		if(type.equals("S")){//Spells
+		if(type.equalsIgnoreCase("S")){//Spells
 			this.animation = SpellData.getAnimationById(id);
-		}else if(type.equals("T")){ //Traps
+		}else if(type.equalsIgnoreCase("T")){ //Traps
 			this.animation = TrapData.getAnimationById(id);
-		}else if(type.equals("D")){ //Deaths
+		}else if(type.equalsIgnoreCase("D")){ //Deaths
 			
 		}
 	}
