@@ -4,26 +4,27 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SpriteSheet;
 
-public class SpellD {
-
+public class TrapD {
 	private String id;
 	private String name;
+	private String damageType;
+	private int celNumber;
 	private int damage;
-	private int heal;
-	private int mana;
 	private Event event;
+	
+	
 
-	public SpellD(String id, int damage, int heal, int mana, String name,
-			int celNumber, SpriteSheet ss, Music sound) {
+	public TrapD(String id, int damage, String damageType, String name, int celNumber,
+			SpriteSheet ss, Music sound) {
 		this.id = id;
 		this.damage = damage;
-		this.heal = heal;
-		this.mana = mana;
 		this.name = name;
-		this.event = new Event(id,sound);
+		this.celNumber = celNumber;
+		this.damageType = damageType;
+		this.event = new Event(id, sound);
 		initEventAnimation(celNumber, ss);
 	}
-
+	
 	private void initEventAnimation(int n, SpriteSheet ss) {
 		Animation[] a = new Animation[1];
 		a[0]= loadAnimation(ss, 0, n, 0);
@@ -55,28 +56,20 @@ public class SpellD {
 		this.name = name;
 	}
 
+	public String getDamageType() {
+		return damageType;
+	}
+
+	public void setDamageType(String damageType) {
+		this.damageType = damageType;
+	}
+
 	public int getDamage() {
 		return damage;
 	}
 
 	public void setDamage(int damage) {
 		this.damage = damage;
-	}
-
-	public int getHeal() {
-		return heal;
-	}
-
-	public void setHeal(int heal) {
-		this.heal = heal;
-	}
-
-	public int getMana() {
-		return mana;
-	}
-
-	public void setMana(int mana) {
-		this.mana = mana;
 	}
 
 	public Event getEvent() {

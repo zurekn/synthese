@@ -1,10 +1,9 @@
 package game;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-import data.Data;
+import data.Event;
 
 public class Spell {
 
@@ -13,21 +12,21 @@ public class Spell {
 	private int damage;
 	private int heal;
 	private int mana;
-	private Animation[] animation = new Animation[1];
+	private Event event;
 	private int directionX = 1;
 	private int directionY = 1;
 	private int x = 20;
 	private int y = 20;
 
 	public Spell(String id, String name, int damage, int heal, int mana,
-			Animation[] animation) {
+			Event event) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.damage = damage;
 		this.heal = heal;
 		this.mana = mana;
-		this.animation = animation;
+		this.event = event;
 	}
 
 	public String getId() {
@@ -38,12 +37,12 @@ public class Spell {
 		this.id = id;
 	}
 
-	public Animation[] getAnimation() {
-		return animation;
+	public Event getEvent() {
+		return event;
 	}
 
-	public void setAnimation(Animation[] animation) {
-		this.animation = animation;
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 	public String getName() {
@@ -85,7 +84,7 @@ public class Spell {
 	}
 
 	public void render(GameContainer container, Graphics g) {
-		g.drawAnimation(animation[0], x, y);
+		g.drawAnimation(event.getAnimation()[0], x, y);
 	}
 
 

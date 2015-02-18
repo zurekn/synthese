@@ -1,7 +1,5 @@
 package data;
 
-import game.Spell;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
@@ -27,7 +26,7 @@ public class SpellData {
 	public static Animation[] getAnimationById(String id){
 		for(int i = 0; i < spells.size(); i++){
 			if(spells.get(i).getId().equals(id)){
-				return spells.get(i).getAnimation();
+				return spells.get(i).getEvent().getAnimation();
 			}
 		}
 		return null;
@@ -36,7 +35,7 @@ public class SpellData {
 	public static void initSpell(){
 
 		// Load the xml file
-		System.out.println("Initializing spels, loading "+Data.SPELLS_DATA_XML);
+		System.out.println("Initializing spells, loading "+Data.SPELLS_DATA_XML);
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
@@ -70,12 +69,13 @@ public class SpellData {
 			id = el.getAttributeValue("id");
 			file = el.getChildText("file");
 			celNumber = Integer.parseInt(el.getChildText("celNumber"));
+			Music sound = new Music(el.getChildText("sound"));
 			SpriteSheet ss;
 			
 				ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
-			spells.add(new SpellD(id, damage, heal, mana, name, celNumber, ss));
+			spells.add(new SpellD(id, damage, heal, mana, name, celNumber, ss, sound));
 			System.out.println("   Spell : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
