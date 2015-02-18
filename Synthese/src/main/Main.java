@@ -1,15 +1,24 @@
 package main;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
+import data.Data;
 import game.WindowGame;
 
 public class Main {
 	
 	public static void main(String[] args) throws SlickException {
         
-        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), 1200, 1000, false);
+		//Load the screen size
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		Data.SCREEN_WIDTH = gd.getDisplayMode().getWidth();
+		Data.SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
+		
+        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, true);
     	gameContaineur.setTargetFrameRate(60);
     	gameContaineur.start();
 	}
