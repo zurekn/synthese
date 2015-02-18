@@ -71,8 +71,8 @@ public class Data {
 
 	public static ArrayList<Mob> initMobs() {
 		ArrayList<Mob> mobs = new ArrayList<Mob>();
-		mobs.add(new Mob(10, 10, "m1"));
-		mobs.add(new Mob(20, 20, "m2"));
+		mobs.add(new Mob(0, 0, "m1"));
+		mobs.add(new Mob(19, 10, "m2"));
 		return mobs;
 	}
 }

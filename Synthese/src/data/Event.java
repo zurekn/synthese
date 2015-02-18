@@ -1,12 +1,18 @@
 package data;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
 
 public class Event {
-	String id;
-	Animation[] animation;
-	Music sound;
+	private String id;
+	private Animation[] animation;
+	private Music sound;
+	private int x;
+	private int y;
+	private int xRelative;
+	private int yRelative;
 
 	public Event(String id) {
 		this.id = id;
@@ -43,6 +49,11 @@ public class Event {
 
 	public void setSound(Music sound) {
 		this.sound = sound;
+	}
+
+	public void render(GameContainer container, Graphics g) {
+		g.drawAnimation(animation[0], xRelative, yRelative);
+		
 	}
 	
 	

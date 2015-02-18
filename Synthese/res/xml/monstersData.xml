@@ -10,6 +10,7 @@
 		<magicPower>10</magicPower>
 		<luck>5</luck>
 		<movementPoints>3</movementPoints>
+		<magicResist>10</magicResist>
 		<spells>
 			<spell>s1</spell>
 			<spell>s3</spell>
@@ -26,6 +27,7 @@
 		<magicPower>1</magicPower>
 		<luck>10</luck>
 		<movementPoints>3</movementPoints>
+		<magicResist>10</magicResist>
 		<spells>
 			<spell>s4</spell>
 		</spells>

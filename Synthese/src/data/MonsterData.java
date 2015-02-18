@@ -65,7 +65,7 @@ public class MonsterData {
 		List monsters = root.getChildren("monster");
 
 		Iterator i = monsters.iterator();
-		int life, armor, mana, strength, magicPower, luck, movementPoints;
+		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist;
 		List <Element> spells = new ArrayList<Element>();
 		while (i.hasNext()) {
 
@@ -80,12 +80,13 @@ public class MonsterData {
 				movementPoints = Integer.parseInt(el.getChildText("movementPoints"));
 				String id = el.getAttributeValue("id");
 				spells = el.getChild("spells").getChildren("spell");
+				magicResist = Integer.parseInt(el.getChildText("magicResist"));
 				Iterator ii = spells.iterator();
 				SpriteSheet ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celDimensionX")),
 						Integer.parseInt(el.getChildText("celDimensionY")));
 				Stats stats = new Stats(life, armor, mana, strength,
-						magicPower, luck, movementPoints);
+						magicPower, luck, movementPoints, magicResist);
 				Monster m = new Monster(id, ss, stats);
 				while(ii.hasNext()){
 					Element e = (Element) ii.next();
@@ -98,6 +99,8 @@ public class MonsterData {
 				monsterData.addMonster(m);
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (NumberFormatException e){
 				e.printStackTrace();
 			}
 			System.out.println("Loading end : "+el.getChild("file").getText());
