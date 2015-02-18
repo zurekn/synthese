@@ -2,10 +2,21 @@ package data;
 
 import game.Mob;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
+import org.jdom2.DataConversionException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class Data {
@@ -35,8 +46,10 @@ public class Data {
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
+	public static final String MAP_XML = "Synthese/res/xml/traps.xml";
 	
 	public static final HashMap<String,Event> eventMap = new HashMap<String, Event>();
+	public static final HashMap<String,Boolean> untraversableBlocks = new HashMap<String, Boolean>();
 
 	public static TiledMap map;
 	public static MonsterData monsterData;
@@ -66,6 +79,41 @@ public class Data {
 	}
 
 	public static void initSpell() {
+
+	}
+	
+	public static void initMapXML(){
+		// Load the xml file
+		System.out.println("Loading untraversable blocks");
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = null;
+		try {
+			doc = builder.build(new File(Data.MAP_XML));
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (doc.equals(null)) {
+			System.out.println("Error : Can't load [" + Data.MAP_XML
+					+ "]");
+			System.exit(1);
+		}
+		
+		try {
+			Element root = doc.getRootElement();
+			List<Element> blocks = root.getChildren("block");
+			int x,y;
+			Element block;
+			for (Iterator<Element> it = blocks.iterator(); it.hasNext();) {
+				block = it.next();
+				x = block.getAttribute("x").getIntValue();
+				y = block.getAttribute("y").getIntValue();
+				untraversableBlocks.put(x+":"+y, new Boolean(true));
+			}
+		}catch(DataConversionException e){
+			e.printStackTrace();
+		}
 
 	}
 
