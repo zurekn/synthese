@@ -1,12 +1,12 @@
 package game;
 
-import data.Trap;
+import data.TrapD;
 
 public class Block {
 	private int x;
 	private int y;
 	private boolean traversable;
-	private Trap trap;
+	private TrapD trap;
 	private int damage;
 	private String damageType;
 	
@@ -31,12 +31,12 @@ public class Block {
 		this.traversable=traversable;
 	}
 
-	public Block(int x, int y, Trap trap) {
+	public Block(int x, int y, TrapD trap) {
 		this(x,y);
 		this.trap=trap;
 	}
 
-	public Block(int x, int y, boolean traversable, Trap trap, String damageType, int damage) {
+	public Block(int x, int y, boolean traversable, TrapD trap, String damageType, int damage) {
 		this(x, y, damageType, damage);
 		this.traversable = traversable;
 		this.trap=trap;
@@ -70,11 +70,11 @@ public class Block {
 		return trap!=null;
 	}
 	
-	public Trap getTrap(){
+	public TrapD getTrap(){
 		return trap;
 	}
 
-	public void setTrap(Trap trap) {
+	public void setTrap(TrapD trap) {
 		this.trap = trap;
 	}
 

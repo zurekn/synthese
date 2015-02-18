@@ -3,6 +3,7 @@ package data;
 import game.Mob;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
@@ -33,6 +34,9 @@ public class Data {
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
+	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
+	
+	public static final HashMap<String,Event> eventMap = new HashMap<String, Event>();
 
 	public static TiledMap map;
 	public static MonsterData monsterData;

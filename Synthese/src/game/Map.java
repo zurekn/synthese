@@ -8,7 +8,7 @@ import java.util.List;
 import org.jdom2.DataConversionException;
 import org.jdom2.Element;
 
-import data.Trap;
+import data.TrapD;
 import data.TrapData;
 
 public class Map {
@@ -48,7 +48,7 @@ public class Map {
 
 				e = block.getChild("trap");
 				if (e != null) {
-					Trap trap = TrapData.getTrapById(e.getAttribute("id")
+					TrapD trap = TrapData.getTrapById(e.getAttribute("id")
 							.getValue());
 					if (trap == null)
 						throw new NullPointerException("Trap not found");
