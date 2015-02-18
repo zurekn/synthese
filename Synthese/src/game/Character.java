@@ -14,6 +14,7 @@ public abstract class Character {
 	private String id;
 	private Animation[] animation;
 	private Stats stats;
+	private boolean myTurn = false;
 
 	public abstract void render(GameContainer container, Graphics g);
 	public abstract void init();
@@ -83,4 +84,12 @@ public abstract class Character {
 		this.animation = animation;
 	}
 		
+	public void setMyTurn(boolean b){
+		myTurn = b;
+	}
+	
+	public boolean getMyTurn(){
+		return myTurn;
+	}
+	
 }

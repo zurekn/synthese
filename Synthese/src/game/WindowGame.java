@@ -61,6 +61,7 @@ public class WindowGame extends BasicGame {
 	        turnTimer = Data.TURN_MAX_TIME;
 	        new Thread (movementHandler).start();
 	        turn = 0;
+	        player.get(turn).setMyTurn(true);
 	    }
 
 	    public void render(GameContainer container, Graphics g) throws SlickException {
@@ -108,14 +109,42 @@ public class WindowGame extends BasicGame {
 	    	
 	    	//Turn timer 
 	    	if(turnTimer < 0){
+	    		setTurn();
 	    		turnTimer = Data.TURN_MAX_TIME;
 	    		turn = (turn + 1)%playerNumber;
 	    		System.out.println("========================");
-	    		System.out.println("Tour du joueur "+turn);
+	    		if(turn < player.size()){
+	    			System.out.println("Tour du Joueur " + turn);
+	    			System.out.println("Player : "+player.get(turn).toString());
+	    		}else{
+	    			System.out.println("Tour du Monster" + (turn - player.size()));
+	    			System.out.println("Monster "+mobs.get(turn-player.size()).toString());
+	    		}
 	    		System.out.println("========================");
 	    	}
 	    }
 
+	    public void setTurn(){
+	    	
+	    	//Set the new character turn
+	    	if(turn < player.size()){
+	    		player.get(turn).setMyTurn(true);
+	    	}else{
+	    		mobs.get(turn - player.size()).setMyTurn(true);
+	    	}
+	    	
+	    	//set to false the previous character turn
+	    	if(turn == 0){
+	    		mobs.get(mobs.size()-1).setMyTurn(false);
+	    	}else{
+	    		if(turn <= player.size()){
+	    			player.get(turn - 1).setMyTurn(false);
+	    		}else{
+	    			mobs.get(turn - 1).setMyTurn(false);
+	    		}
+	    	}
+	    }
+	    
 	    public void pushAction(String s){
 	    	
 	    }

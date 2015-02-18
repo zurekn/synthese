@@ -28,7 +28,7 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 10;
+	public static int TURN_MAX_TIME = 20;
 
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";

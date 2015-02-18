@@ -18,8 +18,8 @@ public class Main {
 		Data.SCREEN_WIDTH = gd.getDisplayMode().getWidth();
 		Data.SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
 		
-        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, true);
-    	gameContaineur.setTargetFrameRate(60);
+        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, false);
+    	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
 	}
 
