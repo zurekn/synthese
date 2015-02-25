@@ -34,7 +34,7 @@ public class Player extends Character {
 
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.blue);
-		g.fillRect(Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y,
+		if(Data.debug)	g.fillRect(Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (getMyTurn()) {
 			int posX = Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;

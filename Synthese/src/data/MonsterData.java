@@ -65,7 +65,6 @@ public class MonsterData {
 			posX = Integer.parseInt(el.getChildText("x"));
 			posY = Integer.parseInt(el.getChildText("y"));
 			Mob m = new Mob(posX, posY, id);
-			System.out.println("Monster : "+m.toString());
 			mobs.add(m);
 		}
 		
