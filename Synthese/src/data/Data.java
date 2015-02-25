@@ -42,14 +42,20 @@ public class Data {
 
 	public static int TURN_MAX_TIME = 20;
 
+	public static int SELF = 0;
+	public static int NORTH = 1;
+	public static int EAST = 2;
+	public static int SOUTH = 3;
+	public static int WEST = 4;
+
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
 	public static final String MAP_XML = "Synthese/res/xml/map.xml";
-	
-	public static final HashMap<String,Event> eventMap = new HashMap<String, Event>();
-	public static final HashMap<String,Boolean> untraversableBlocks = new HashMap<String, Boolean>();
+
+	public static final HashMap<String, Event> eventMap = new HashMap<String, Event>();
+	public static final HashMap<String, Boolean> untraversableBlocks = new HashMap<String, Boolean>();
 
 	public static TiledMap map;
 	public static MonsterData monsterData;
@@ -68,7 +74,7 @@ public class Data {
 		Data.RELATIVE_X_POS = Data.RELATIVE_Y_POS = Data.DECK_AREA_SIZE_Y;
 		Data.TOTAL_HEIGHT = Data.MAP_HEIGHT + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.TOTAL_WIDTH = Data.MAP_WIDTH + 2 * Data.DECK_AREA_SIZE_Y;
-		Data.SCALE = (float) Data.SCREEN_HEIGHT /  Data.TOTAL_HEIGHT ;
+		Data.SCALE = (float) Data.SCREEN_HEIGHT / Data.TOTAL_HEIGHT;
 
 		System.out.println("MAP_FILE = " + Data.MAP_FILE + ", MAP_WIDTH = "
 				+ Data.MAP_WIDTH + ", MAP_HEIGHT = " + Data.MAP_HEIGHT
@@ -81,8 +87,8 @@ public class Data {
 	public static void initSpell() {
 
 	}
-	
-	public static void loadMap(){
+
+	public static void loadMap() {
 		// Load the xml file
 		System.out.println("Loading untraversable blocks");
 		SAXBuilder builder = new SAXBuilder();
@@ -95,23 +101,22 @@ public class Data {
 			e.printStackTrace();
 		}
 		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MAP_XML
-					+ "]");
+			System.out.println("Error : Can't load [" + Data.MAP_XML + "]");
 			System.exit(1);
 		}
-		
+
 		try {
 			Element root = doc.getRootElement();
 			List<Element> blocks = root.getChildren("block");
-			int x,y;
+			int x, y;
 			Element block;
 			for (Iterator<Element> it = blocks.iterator(); it.hasNext();) {
 				block = it.next();
 				x = block.getAttribute("x").getIntValue();
 				y = block.getAttribute("y").getIntValue();
-				untraversableBlocks.put(x+":"+y, new Boolean(true));
+				untraversableBlocks.put(x + ":" + y, new Boolean(true));
 			}
-		}catch(DataConversionException e){
+		} catch (DataConversionException e) {
 			e.printStackTrace();
 		}
 

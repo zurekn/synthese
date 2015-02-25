@@ -11,6 +11,7 @@ public class Event {
 	private Music sound;
 	private int x;
 	private int y;
+	private int duration;
 	private int xRelative;
 	private int yRelative;
 

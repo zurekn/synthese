@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import data.*;
+import exception.IllegalActionException;
 import exception.IllegalMovementException;
 
 /**
@@ -23,21 +24,22 @@ import exception.IllegalMovementException;
  */
 public class WindowGame extends BasicGame {
 
-
 	private GameContainer container;
 	private MobHandler mobHandler;
 	private ArrayList<Mob> mobs;
 	private playerHandler playerHandler;
-	private ArrayList<Player> player;
+	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
+	//TODO add traps
+	private Character currentCharacter;
 
 	private int playerNumber;
 	private int turn;
 
 	private int turnTimer;
 	private long timeStamp = -1;
-	
+
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
 	}
@@ -48,14 +50,14 @@ public class WindowGame extends BasicGame {
 		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMob();
-//		Data.initMapXML();
+		// Data.initMapXML();
 
 		movementHandler = new MovementHandler(this);
 
-		player = new ArrayList<Player>();
-		player.add(new Player(16, 14, "P1", new Stats(100, 10, 50, 10, 10, 10,
+		players = new ArrayList<Player>();
+		players.add(new Player(16, 14, "P1", new Stats(100, 10, 50, 10, 10, 10,
 				3, 10)));
-		playerHandler = new playerHandler(player);
+		playerHandler = new playerHandler(players);
 
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
@@ -65,7 +67,7 @@ public class WindowGame extends BasicGame {
 		turnTimer = Data.TURN_MAX_TIME;
 		new Thread(movementHandler).start();
 		turn = 0;
-		player.get(turn).setMyTurn(true);
+		players.get(turn).setMyTurn(true);
 	}
 
 	public void render(GameContainer container, Graphics g)
@@ -133,69 +135,84 @@ public class WindowGame extends BasicGame {
 
 		// Switch the turn
 		// Set the new character turn
-		if (turn < player.size()) {
-			player.get(turn).setMyTurn(true);
+		if (turn < players.size()) {
+			players.get(turn).setMyTurn(true);
+			currentCharacter = players.get(turn);
 		} else {
-			mobs.get(turn - player.size()).setMyTurn(true);
+			mobs.get(turn - players.size()).setMyTurn(true);
+			currentCharacter = mobs.get(turn);
 		}
 
 		// set to false the previous character turn
 		if (turn == 0) {
 			mobs.get(mobs.size() - 1).setMyTurn(false);
 		} else {
-			if (turn <= player.size()) {
-				player.get(turn - 1).setMyTurn(false);
+			if (turn <= players.size()) {
+				players.get(turn - 1).setMyTurn(false);
 			} else {
-				mobs.get(turn - player.size() - 1).setMyTurn(false);
+				mobs.get(turn - players.size() - 1).setMyTurn(false);
 			}
 		}
 
 		// print the current turn in the console
 		if (Data.debug) {
 			System.out.println("========================");
-			if (turn < player.size()) {
+			if (turn < players.size()) {
 				System.out.println("Tour du Joueur " + turn);
-				System.out.println("Player : " + player.get(turn).toString());
+				System.out.println("Player : " + players.get(turn).toString());
 			} else {
-				System.out.println("Tour du Monster" + (turn - player.size()));
+				System.out.println("Tour du Monster" + (turn - players.size()));
 				System.out.println("Monster "
-						+ mobs.get(turn - player.size()).toString());
+						+ mobs.get(turn - players.size()).toString());
 			}
 			System.out.println("========================");
 		}
 
 	}
 
+
 	/**
 	 * decode a action and create associated event
 	 * 
-	 * @param s
-	 *            , a string witch contains the action:x:y
+	 * @param action
+	 *            , a string which defines the action
 	 * @throws IllegalMovementException
 	 */
-	public void pushAction(String s) throws IllegalMovementException {
-		// decode the action
-		String[] split = s.split(":");
-		if (split.length != 3) {
-			throw new IllegalMovementException("Invalid action synthaxe");
+	public void decodeAction(String action) throws IllegalActionException {
+		if (action.startsWith("s")) { // Spell action
+			String[] tokens = action.split(":");
+			if (tokens.length != 2)
+				throw new IllegalActionException(
+						"Wrong number of arguments in action string");
+
+			String spellID = tokens[0];
+			int direction = Integer.parseInt(tokens[1]);
+			currentCharacter.useSpell(spellID, direction);
+			events.add(currentCharacter.getSpell(spellID).getEvent());
 		}
-		String action = split[0];
-		int x = Integer.parseInt(split[1]);
-		int y = Integer.parseInt(split[2]);
 
-		decodeAction(action);
-	}
-
-	public void decodeAction(String action) {
-		if (action.startsWith("s")) {
-			System.out.println("Find a spell action");
-		} else if (action.startsWith("t")) {
+		else if (action.startsWith("t")) { // Trap action
 			System.out.println("Find a trap action");
-		} else if (action.startsWith("a")) {
-			System.out.println("Find a attack action");
-			
+		} 
+		
+		else if (action.startsWith("m")) {
+			try {
+				String[] tokens = action.split(":");
+				if (tokens.length != 3)
+					throw new IllegalActionException(
+							"Wrong number of arguments in action string");
+				String id = tokens[0];
+				if(!currentCharacter.getId().equals(id))
+					throw new IllegalActionException("Not your turn, try again later.");
+					
+				String position = tokens[1] + ":" + tokens[2];
+				currentCharacter.moveTo(position);
+				switchTurn();
+			} catch (IllegalMovementException ime) {
+				throw new IllegalActionException("Mob can't reach this block");
+			}
 		} else {
-			System.err.println("Action not find : "+action);
+			throw new IllegalActionException("Action not found : " + action);
 		}
 	}
 
@@ -209,8 +226,8 @@ public class WindowGame extends BasicGame {
 
 		if (Input.KEY_P == key) {
 			try {
-				pushAction("s1:1:1");
-			} catch (IllegalMovementException e) {
+				decodeAction("s1:1:1");
+			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -219,20 +236,29 @@ public class WindowGame extends BasicGame {
 
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
-		if (turn < player.size()) {
+		if (turn < players.size()) {
 			try {
-				player.get(turn).moveTo(str);
+				players.get(turn).moveTo(str);
 			} catch (IllegalMovementException e) {
 				e.printStackTrace();
 			}
 		} else {
 			try {
-				mobs.get(turn - player.size()).moveTo(str);
+				mobs.get(turn - players.size()).moveTo(str);
 			} catch (IllegalMovementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
+	}
+
+	public Mob getMobById(String id) {
+		for (int i = 0; i < mobs.size(); i++) {
+			if (mobs.get(i).getId().equals(id)) {
+				return mobs.get(i);
+			}
+		}
+		return null;
 	}
 }

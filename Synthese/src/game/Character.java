@@ -1,10 +1,14 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 import data.Data;
+import data.SpellD;
 import data.Stats;
 import exception.IllegalMovementException;
 
@@ -15,12 +19,13 @@ public abstract class Character {
 	private Animation[] animation;
 	private Stats stats;
 	private boolean myTurn = false;
+	private ArrayList<Spell> spells = new ArrayList<Spell>();
 
 	public abstract void render(GameContainer container, Graphics g);
 
 	public abstract void init();
 
-public void moveTo(String position) throws IllegalMovementException {
+	public void moveTo(String position) throws IllegalMovementException {
 		if (Data.untraversableBlocks.containsKey(position)) {
 			throw new IllegalMovementException("Untraversable block");
 		} else {
@@ -52,13 +57,21 @@ public void moveTo(String position) throws IllegalMovementException {
 		}
 	}
 
+	public void useSpell(Spell spell, int dir) {
+
+	}
+
+	public void useSpell(String spellID, int dir) {
+
+	}
+
 	public void takeDamage(int damage, String type) {
 		if (type.equals("magic")) {
 			damage = damage - getStats().getMagicResist();
 		} else if (type.equals("physic")) {
 			damage = damage - getStats().getArmor();
-		}else{
-			System.out.println("Wrong damage type : "+type);
+		} else {
+			System.out.println("Wrong damage type : " + type);
 		}
 		if (damage < 0)
 			damage = 0;
@@ -113,4 +126,26 @@ public void moveTo(String position) throws IllegalMovementException {
 		return myTurn;
 	}
 
+	public void addSpell(SpellD s) {
+		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
+				s.getHeal(), s.getMana(), s.getEvent()));
+	}
+
+	public Spell getSpell(String spellID) {
+		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
+			Spell s = it.next();
+			if (s.getId().equals(spellID))
+				return s;
+		}
+		return null;
+	}
+
+	public boolean isSpellLearned(String spellID) {
+		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
+			Spell s = it.next();
+			if (s.getId().equals(spellID))
+				return true;
+		}
+		return false;
+	}
 }
