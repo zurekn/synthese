@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <map>
 	<mapInfo>
 		<background>Synthese/res/images/map2.tmx</background>
 		<x>25</x>
 		<y>25</y>
+		<RandomTraps>3</RandomTraps>
 	</mapInfo>
 
 	<blockInfo>
@@ -12,7 +12,7 @@
 		<numberY>25</numberY>
 	</blockInfo>
 
-
+	<!-- Blocks  -->
 	<block x="12" y="0">
 		<untraversable></untraversable>
 	</block>
@@ -133,11 +133,11 @@
 		<damage type="fire">10</damage>
 	</block>
 
+	<!--  Monsters -->
 	<monster id="m1">
 		<x>5</x>
 		<y>5</y>
 	</monster>
-
 	<monster id="m1">
 		<x>6</x>
 		<y>5</y>
@@ -150,5 +150,7 @@
 		<x>11</x>
 		<y>11</y>
 	</monster>
-
+	
+	<!--Traps  -->
+	
 </map>
