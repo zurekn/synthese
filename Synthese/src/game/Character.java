@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import data.Data;
 import data.SpellD;
 import data.Stats;
+import exception.IllegalActionException;
 import exception.IllegalMovementException;
 
 public abstract class Character {
@@ -63,12 +64,11 @@ public void moveTo(String position) throws IllegalMovementException {
 		}
 	}
 
-	public void useSpell(Spell spell, int dir) {
 
-	}
-
-	public void useSpell(String spellID, int dir) {
-
+	public void useSpell(String spellID, int dir) throws IllegalActionException {
+		Spell spell = this.getSpell(spellID);
+		if(spell == null)
+			throw new IllegalActionException("Spell unkown");
 	}
 
 	public void takeDamage(int damage, String type) {
@@ -143,6 +143,7 @@ public void moveTo(String position) throws IllegalMovementException {
 	public Spell getSpell(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
+			System.out.println(s.toString());
 			if (s.getId().equals(spellID))
 				return s;
 		}
