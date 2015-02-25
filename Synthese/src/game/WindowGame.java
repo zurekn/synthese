@@ -45,10 +45,10 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		this.container = container;
-		Data.initMap();
-		SpellData.initSpell();
-		MonsterData.initMob();
-		Data.initMapXML();
+		Data.loadGame();
+		SpellData.loadSpell();
+		MonsterData.loadMob();
+//		Data.initMapXML();
 
 		movementHandler = new MovementHandler(this);
 
@@ -57,7 +57,7 @@ public class WindowGame extends BasicGame {
 				3, 10)));
 		playerHandler = new playerHandler(player);
 
-		mobs = Data.initMobs();
+		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
 		playerNumber = 1 + mobs.size();
@@ -193,6 +193,7 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		} else if (action.startsWith("a")) {
 			System.out.println("Find a attack action");
+			
 		} else {
 			System.err.println("Action not find : "+action);
 		}

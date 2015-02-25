@@ -32,7 +32,7 @@ public class SpellData {
 		return null;
 	}
 	
-	public static void initSpell(){
+	public static void loadSpell(){
 
 		// Load the xml file
 		System.out.println("Initializing spells, loading "+Data.SPELLS_DATA_XML);

@@ -46,7 +46,7 @@ public class Data {
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
-	public static final String MAP_XML = "Synthese/res/xml/traps.xml";
+	public static final String MAP_XML = "Synthese/res/xml/map.xml";
 	
 	public static final HashMap<String,Event> eventMap = new HashMap<String, Event>();
 	public static final HashMap<String,Boolean> untraversableBlocks = new HashMap<String, Boolean>();
@@ -54,7 +54,7 @@ public class Data {
 	public static TiledMap map;
 	public static MonsterData monsterData;
 
-	public static void initMap() throws SlickException {
+	public static void loadGame() throws SlickException {
 		System.out.println(" Begin data init ");
 		map = new TiledMap(Data.MAP_FILE);
 		Data.BLOCK_NUMBER_X = map.getHeight();
@@ -82,7 +82,7 @@ public class Data {
 
 	}
 	
-	public static void initMapXML(){
+	public static void loadMap(){
 		// Load the xml file
 		System.out.println("Loading untraversable blocks");
 		SAXBuilder builder = new SAXBuilder();
@@ -115,12 +115,5 @@ public class Data {
 			e.printStackTrace();
 		}
 
-	}
-
-	public static ArrayList<Mob> initMobs() {
-		ArrayList<Mob> mobs = new ArrayList<Mob>();
-		mobs.add(new Mob(0, 0, "m1"));
-		mobs.add(new Mob(19, 10, "m2"));
-		return mobs;
 	}
 }

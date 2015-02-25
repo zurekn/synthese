@@ -1,5 +1,7 @@
 package data;
 
+import game.Mob;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,10 +42,57 @@ public class MonsterData {
 		return null;
 	}
 	
-	public static void initMob() {
+	public static ArrayList<Mob> initMobs() {
+		ArrayList<Mob> mobs = new ArrayList<Mob>();
+//		mobs.add(new Mob(0, 0, "m1"));
+//		mobs.add(new Mob(19, 10, "m2"));
+		
+		System.out.println("Initializating monsters from : "+Data.MAP_XML);
+		
+		SAXBuilder builder = new SAXBuilder();
+		Document doc = null;
+		try {
+			doc = builder.build(new File(Data.MAP_XML));
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (doc.equals(null)) {
+			System.out.println("Error : Can't load [" + Data.MAP_XML
+					+ "]");
+			System.exit(1);
+		}
+		
+		Element root = doc.getRootElement();
+		List monsters = root.getChildren("monster");
+
+		Iterator i = monsters.iterator();
+		int posX, posY;
+		String id;
+		List <Element> spells = new ArrayList<Element>();
+		while (i.hasNext()) {
+
+			Element el = (Element) i.next();
+			id = el.getAttributeValue("id");
+			posX = Integer.parseInt(el.getChildText("x"));
+			posY = Integer.parseInt(el.getChildText("y"));
+			Mob m = new Mob(posX, posY, id);
+			System.out.println("Load : "+m.toString());
+			mobs.add(m);
+		}
+		
+		
+		return mobs;
+		
+	}
+	
+	public static void loadMob() {
 		MonsterData monsterData = new MonsterData();
 		// Load the xml file
-		System.out.println("Initializing monsters, loading "+Data.MONSTER_DATA_XML);
+		System.out.println("Loading monsters, loading "+Data.MONSTER_DATA_XML);
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
