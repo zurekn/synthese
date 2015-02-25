@@ -22,8 +22,8 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		
 		TraitementImage ti = new TraitementImage();
 //		int seuil = 110;
-		Pixel p = ti.EtiquetageIntuitifImage(pathToDir+fileName, pathToDir+outFileName);
-		System.out.println("pixel centre gravité : "+p.getX()+" "+p.getY());
+		//Pixel p = ti.EtiquetageIntuitifImage(pathToDir+fileName, pathToDir+outFileName);
+		//System.out.println("pixel centre gravité : "+p.getX()+" "+p.getY());
 		System.out.println(System.currentTimeMillis()-time);
 	}
 
