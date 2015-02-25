@@ -21,6 +21,7 @@ public abstract class Character {
 	private Stats stats;
 	private boolean myTurn = false;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
+	private String name;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -103,6 +104,14 @@ public void moveTo(String position) throws IllegalMovementException {
 		this.x = x;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getY() {
 		return y;
 	}
@@ -140,6 +149,14 @@ public void moveTo(String position) throws IllegalMovementException {
 				s.getHeal(), s.getMana(), s.getEvent()));
 	}
 
+	public ArrayList<Spell> getSpells(){
+		return spells;
+	}
+	
+	public void setSpells(ArrayList<Spell> spells){
+		this.spells = spells;
+	}
+	
 	public Spell getSpell(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
@@ -150,6 +167,7 @@ public void moveTo(String position) throws IllegalMovementException {
 		return null;
 	}
 
+	
 	public boolean isSpellLearned(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
