@@ -69,6 +69,7 @@ public class WindowGame extends BasicGame {
 		new Thread(movementHandler).start();
 		turn = 0;
 		players.get(turn).setMyTurn(true);
+		currentCharacter = players.get(turn);
 	}
 
 	public void render(GameContainer container, Graphics g)
@@ -227,7 +228,7 @@ public class WindowGame extends BasicGame {
 		//TODO
 		if (Input.KEY_P == key) {
 			try {
-				decodeAction("s1:1:1");
+				decodeAction("s1:1");
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

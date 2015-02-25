@@ -16,6 +16,7 @@ public class Mob extends Character{
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
+
 		init();
 		
 		if(Data.debug){
@@ -27,6 +28,8 @@ public class Mob extends Character{
 		Monster m = MonsterData.getMonsterById(this.getId());
 		this.setAnimation(m.getAnimation());
 		this.setStats(m.getStats());
+		this.setName(m.getName());
+		this.setSpells(m.getSpells());
 		
 	}
 	
@@ -51,11 +54,11 @@ public class Mob extends Character{
 
 	@Override
 	public String toString() {
-		return "Mob [x=" + getX() + ", y=" + getY() + ", id=" + getId() + "]";
+		return "Mob [name=" + getName() + ", x=" + getX() + ", y=" + getY() + ", id=" + getId() + "]";
 	}
 	
 	public String toStringAll(){
-		return "Mob [x=" + getX() + ", y=" + getY() + ", id=" + getId() + ", " + getStats().toString()+"]";
+		return "Mob [name=" + getName() + ", x=" + getX() + ", y=" + getY() + ", id=" + getId() + ", " + getStats().toString()+", Spells "+getSpells().toString()+"]";
 	}
 
 	

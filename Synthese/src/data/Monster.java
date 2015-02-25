@@ -100,4 +100,8 @@ public class Monster {
 		return stats;
 	}
 
+	public ArrayList<Spell> getSpells() {
+		return spells;
+	}
+
 }
