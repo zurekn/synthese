@@ -1,7 +1,7 @@
 <traps>
 	<trap id="t1">
-		<file>Synthese/res/images/tiles/Traps</file>
-		<sound></sound>
+		<file>Synthese/res/images/tiles/Traps/fireBall.png</file>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
@@ -10,8 +10,8 @@
 		<name>Fire Ball</name>
 	</trap>
 	<trap id="t2">
-		<file>Synthese/res/images/tiles/Traps</file>
-		<sound></sound>
+		<file>Synthese/res/images/tiles/Traps/fireBall.png</file>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>

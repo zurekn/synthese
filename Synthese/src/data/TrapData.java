@@ -43,7 +43,7 @@ public class TrapData {
 	/**
 	 * Load all traps data from Data.TRAPS_DATA.XML
 	 */
-	public static void initTrap(){
+	public static void loadTrap(){
 
 
 		Document doc = XMLReader.readXML(Data.TRAPS_DATA_XML);
@@ -71,7 +71,7 @@ public class TrapData {
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
 			traps.add(new TrapD(id, damage, damageType, name, celNumber, ss, new Music(sound)));
-			System.out.println("   Spell : ["+name+"] load end");
+			System.out.println("   Trap : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

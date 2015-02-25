@@ -48,7 +48,7 @@ public class WindowGame extends BasicGame {
 		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMob();
-//		Data.initMapXML();
+		TrapData.loadTrap();
 
 		movementHandler = new MovementHandler(this);
 
@@ -216,6 +216,11 @@ public class WindowGame extends BasicGame {
 		}
 	}
 
+	
+	/**
+	 * 
+	 * @param str x:y
+	 */
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
 		if (turn < player.size()) {

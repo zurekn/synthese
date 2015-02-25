@@ -9,7 +9,7 @@ import org.jdom2.input.SAXBuilder;
 
 public class XMLReader {
 	public static Document readXML(String path) {
-		System.out.println("Loading game from "+path);
+		System.out.println("Loading ressources from ["+path+"]");
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {

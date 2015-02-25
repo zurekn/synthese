@@ -8,6 +8,8 @@
 		<heal>0</heal>
 		<mana>10</mana>
 		<name>Fire Ball</name>
+		<range>5</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
 	<spell id="s2">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
@@ -18,6 +20,8 @@
 		<heal>15</heal>
 		<mana>10</mana>
 		<name>Holly Ray</name>
+		<range>5</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
 	<spell id="s3">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
@@ -28,6 +32,8 @@
 		<heal>0</heal>
 		<mana>5</mana>
 		<name>Dark Mater</name>
+		<range>5</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
 	<spell id="s4">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
@@ -38,5 +44,55 @@
 		<heal>0</heal>
 		<mana>25</mana>
 		<name>Meteor</name>
+		<range>5</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+	</spell>
+	<spell id="s5">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>15</damage>
+		<heal>0</heal>
+		<mana>0</mana>
+		<name>Sword Slash</name>
+		<range>1</range>
+		<sound>Synthese/res/sounds/sword_slash.wav</sound>
+	</spell>
+	<spell id="s6">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>0</damage>
+		<heal>10</heal>
+		<mana>5</mana>
+		<name>Lunar light</name>
+		<range>2</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+	</spell>
+	<spell id="s7">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>5</damage>
+		<heal>0</heal>
+		<mana>0</mana>
+		<name>Root</name>
+		<range>3</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+	</spell>
+	<spell id="s8">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>7</damage>
+		<heal>0</heal>
+		<mana>0</mana>
+		<name>Shoot</name>
+		<range>5</range>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
 </spells>

@@ -65,7 +65,7 @@ public class MonsterData {
 			posX = Integer.parseInt(el.getChildText("x"));
 			posY = Integer.parseInt(el.getChildText("y"));
 			Mob m = new Mob(posX, posY, id);
-			System.out.println("Load : "+m.toString());
+			System.out.println("Monster : "+m.toString());
 			mobs.add(m);
 		}
 		
@@ -84,12 +84,14 @@ public class MonsterData {
 		List monsters = root.getChildren("monster");
 
 		Iterator i = monsters.iterator();
+		String name;
 		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist;
 		List <Element> spells = new ArrayList<Element>();
 		while (i.hasNext()) {
 
 			Element el = (Element) i.next();
 			try {
+				name = el.getChildText("name");
 				life = Integer.parseInt(el.getChildText("life"));
 				armor = Integer.parseInt(el.getChildText("armor"));
 				mana = Integer.parseInt(el.getChildText("mana"));
@@ -100,13 +102,13 @@ public class MonsterData {
 				String id = el.getAttributeValue("id");
 				spells = el.getChild("spells").getChildren("spell");
 				magicResist = Integer.parseInt(el.getChildText("magicResist"));
-				Iterator ii = spells.iterator();
+				Iterator<Element> ii = spells.iterator();
 				SpriteSheet ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celDimensionX")),
 						Integer.parseInt(el.getChildText("celDimensionY")));
 				Stats stats = new Stats(life, armor, mana, strength,
 						magicPower, luck, movementPoints, magicResist);
-				Monster m = new Monster(id, ss, stats);
+				Monster m = new Monster(id, name, ss, stats);
 				while(ii.hasNext()){
 					Element e = (Element) ii.next();
 					SpellD s = SpellData.getSpellById(e.getText());
@@ -114,7 +116,7 @@ public class MonsterData {
 						m.addSpell(s);
 						
 				}
-
+				System.out.println("	Monster : "+m.getName());
 				monsterData.addMonster(m);
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
@@ -122,7 +124,6 @@ public class MonsterData {
 			}catch (NumberFormatException e){
 				e.printStackTrace();
 			}
-			System.out.println("Loading end : "+el.getChild("file").getText());
 		}
 
 	}

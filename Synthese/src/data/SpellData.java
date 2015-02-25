@@ -63,7 +63,7 @@ public class SpellData {
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
 			spells.add(new SpellD(id, damage, heal, mana, name, celNumber, ss, sound));
-			System.out.println("   Spell : ["+name+"] load end");
+			System.out.println("	Spell : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
