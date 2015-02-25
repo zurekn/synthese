@@ -18,7 +18,11 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
-
+/**
+ * Class witch contains all static variables
+ * @author bob
+ *
+ */
 public class Data {
 
 	public static final boolean debug = true;
@@ -54,9 +58,16 @@ public class Data {
 	public static TiledMap map;
 	public static MonsterData monsterData;
 
+	/**
+	 * Load all game variables
+	 * @throws SlickException
+	 */
 	public static void loadGame() throws SlickException {
+		
 		System.out.println(" Begin data init ");
+		
 		map = new TiledMap(Data.MAP_FILE);
+		
 		Data.BLOCK_NUMBER_X = map.getHeight();
 		Data.BLOCK_NUMBER_Y = map.getWidth();
 		Data.BLOCK_SIZE_X = map.getTileHeight();
@@ -82,23 +93,13 @@ public class Data {
 
 	}
 	
+	/**
+	 * Load all specific blocks from Data.MAP_XML 
+	 */
 	public static void loadMap(){
 		// Load the xml file
-		System.out.println("Loading untraversable blocks");
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.MAP_XML));
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MAP_XML
-					+ "]");
-			System.exit(1);
-		}
+		
+		Document doc = XMLReader.readXML(Data.MAP_XML);
 		
 		try {
 			Element root = doc.getRootElement();

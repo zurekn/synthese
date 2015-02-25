@@ -20,13 +20,18 @@ public abstract class Character {
 
 	public abstract void init();
 
+	/**
+	 * 
+	 * @param position
+	 * @throws IllegalMovementException
+	 */
 public void moveTo(String position) throws IllegalMovementException {
 		if (Data.untraversableBlocks.containsKey(position)) {
-			throw new IllegalMovementException("Untraversable block");
+			throw new IllegalMovementException("Untraversable block at ["+position+"]");
 		} else {
 			String tokens[] = position.split(":");
 			if (tokens.length != 2) {
-				throw new IllegalMovementException("Invalid movement syntax");
+				throw new IllegalMovementException("Invalid movement syntax ");
 			} else {
 
 				int x = Integer.parseInt(tokens[0]);
@@ -65,6 +70,9 @@ public void moveTo(String position) throws IllegalMovementException {
 		System.out.println(id + " take : [" + damage + "] damage");
 	}
 
+	public boolean checkDeath(){
+		return stats.getLife() <= 0;
+	}
 	public String getId() {
 		return id;
 	}

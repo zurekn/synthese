@@ -32,26 +32,13 @@ public class SpellData {
 		return null;
 	}
 	
+	/**
+	 * Load all spell data from Data.SPELLS_DATA_XML
+	 */
 	public static void loadSpell(){
 
-		// Load the xml file
-		System.out.println("Initializing spells, loading "+Data.SPELLS_DATA_XML);
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.SPELLS_DATA_XML));
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.SPELLS_DATA_XML
-					+ "]");
-			System.exit(1);
-		}
+		Document doc = XMLReader.readXML(Data.SPELLS_DATA_XML);
+		
 		Element root = doc.getRootElement();
 
 		List monsters = root.getChildren("spell");

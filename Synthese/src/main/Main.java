@@ -21,8 +21,8 @@ public class Main {
 //		Data.SCREEN_WIDTH = 1920;
 //		Data.SCREEN_HEIGHT = 1080;
 	
-		
-        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, false);
+		boolean fullScreen = false;
+        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, fullScreen);
     	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
 	}

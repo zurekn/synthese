@@ -201,17 +201,16 @@ public class WindowGame extends BasicGame {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		System.out
-				.println("WindowGame, keyReleased : " + key + ", char : " + c);
+		if(Data.debug)	System.out.println("WindowGame, keyReleased : " + key + ", char : " + c);
 		if (Input.KEY_ESCAPE == key) {
 			container.exit();
 		}
 
+		//TODO
 		if (Input.KEY_P == key) {
 			try {
 				pushAction("s1:1:1");
 			} catch (IllegalMovementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -229,7 +228,6 @@ public class WindowGame extends BasicGame {
 			try {
 				mobs.get(turn - player.size()).moveTo(str);
 			} catch (IllegalMovementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

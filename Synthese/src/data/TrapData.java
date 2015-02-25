@@ -40,24 +40,14 @@ public class TrapData {
 		return null;
 	}
 	
+	/**
+	 * Load all traps data from Data.TRAPS_DATA.XML
+	 */
 	public static void initTrap(){
 
-		// Load the xml file
-		System.out.println("Initializing traps, loading "+Data.TRAPS_DATA_XML);
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.TRAPS_DATA_XML));
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.TRAPS_DATA_XML
-					+ "]");
-			System.exit(1);
-		}
+
+		Document doc = XMLReader.readXML(Data.TRAPS_DATA_XML);
+		
 		Element root = doc.getRootElement();
 
 		List trapsList = root.getChildren("trap");

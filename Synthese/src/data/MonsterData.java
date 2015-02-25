@@ -42,30 +42,15 @@ public class MonsterData {
 		return null;
 	}
 	
+	/**
+	 * Load all Mobs from Data.MAP_XML in a ArrayList
+	 * @return ArrayList<Mob>
+	 */
 	public static ArrayList<Mob> initMobs() {
-		ArrayList<Mob> mobs = new ArrayList<Mob>();
-//		mobs.add(new Mob(0, 0, "m1"));
-//		mobs.add(new Mob(19, 10, "m2"));
+		ArrayList<Mob> mobs = new ArrayList<Mob>();	
 		
-		System.out.println("Initializating monsters from : "+Data.MAP_XML);
-		
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.MAP_XML));
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MAP_XML
-					+ "]");
-			System.exit(1);
-		}
-		
+		Document doc = XMLReader.readXML(Data.MAP_XML);
+			
 		Element root = doc.getRootElement();
 		List monsters = root.getChildren("monster");
 
@@ -91,24 +76,9 @@ public class MonsterData {
 	
 	public static void loadMob() {
 		MonsterData monsterData = new MonsterData();
-		// Load the xml file
-		System.out.println("Loading monsters, loading "+Data.MONSTER_DATA_XML);
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.MONSTER_DATA_XML));
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.MONSTER_DATA_XML
-					+ "]");
-			System.exit(1);
-		}
+
+		Document doc = XMLReader.readXML(Data.MONSTER_DATA_XML);
+		
 		Element root = doc.getRootElement();
 
 		List monsters = root.getChildren("monster");
