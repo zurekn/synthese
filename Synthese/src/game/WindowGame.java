@@ -142,7 +142,7 @@ public class WindowGame extends BasicGame {
 			currentCharacter = players.get(turn);
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
-			currentCharacter = mobs.get(turn);
+			currentCharacter = mobs.get(turn - players.size());
 		}
 
 		// set to false the previous character turn
@@ -189,11 +189,10 @@ public class WindowGame extends BasicGame {
 
 			String spellID = tokens[0];
 			int direction = Integer.parseInt(tokens[1]);
-			currentCharacter.useSpell(spellID, direction);
-			if(currentCharacter.getSpell(spellID)==null)
-				throw new IllegalActionException("Spell not found");
 			
+			currentCharacter.getSpell(spellID);
 			events.add(currentCharacter.getSpell(spellID).getEvent());
+			currentCharacter.useSpell(spellID, direction);
 		}
 
 		else if (action.startsWith("t")) { // Trap action

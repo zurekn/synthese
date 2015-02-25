@@ -160,7 +160,6 @@ public void moveTo(String position) throws IllegalMovementException {
 	public Spell getSpell(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
-			System.out.println(s.toString());
 			if (s.getId().equals(spellID))
 				return s;
 		}
