@@ -6,14 +6,14 @@ import org.newdawn.slick.Graphics;
 import data.Event;
 
 public class Spell {
-//TODO add range in constructors
-	
+	// TODO add range in constructors
+
 	private String id;
 	private String name;
 	private int damage;
 	private int heal;
 	private int mana;
-	private int range ;
+	private int range;
 	private Event event;
 	private int directionX = 1;
 	private int directionY = 1;
@@ -21,14 +21,16 @@ public class Spell {
 	private int y = 20;
 
 	public Spell(String id, String name, int damage, int heal, int mana,
-			Event event) {
+			int range, Event event) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.damage = damage;
 		this.heal = heal;
 		this.mana = mana;
+		this.range = range;
 		this.event = event;
+		this.event.setRange(range);
 	}
 
 	public String getId() {
@@ -96,6 +98,5 @@ public class Spell {
 	public void render(GameContainer container, Graphics g) {
 		g.drawAnimation(event.getAnimation()[0], x, y);
 	}
-
 
 }

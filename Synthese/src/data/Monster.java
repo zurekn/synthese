@@ -93,7 +93,7 @@ public class Monster {
 
 	public void addSpell(SpellD s) {
 		//TODO
-		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(), s.getHeal(), s.getMana(), s.getEvent()));		
+		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(), s.getHeal(), s.getMana(), s.getRange(), s.getEvent()));		
 	}
 	
 	public Stats getStats(){

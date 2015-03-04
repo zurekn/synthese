@@ -11,14 +11,16 @@ public class SpellD {
 	private int damage;
 	private int heal;
 	private int mana;
+	private int range;
 	private Event event;
 
-	public SpellD(String id, int damage, int heal, int mana, String name,
+	public SpellD(String id, int damage, int heal, int mana, int range, String name,
 			int celNumber, SpriteSheet ss, Music sound) {
 		this.id = id;
 		this.damage = damage;
 		this.heal = heal;
 		this.mana = mana;
+		this.range = range;
 		this.name = name;
 		this.event = new Event(id,sound);
 		initEventAnimation(celNumber, ss);
@@ -85,6 +87,14 @@ public class SpellD {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
 	}
 
 }

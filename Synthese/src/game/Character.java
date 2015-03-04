@@ -147,7 +147,7 @@ public void moveTo(String position) throws IllegalMovementException {
 
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getEvent()));
+				s.getHeal(), s.getMana(), s.getRange(), s.getEvent()));
 	}
 
 	public ArrayList<Spell> getSpells(){

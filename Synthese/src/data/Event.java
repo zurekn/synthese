@@ -13,6 +13,7 @@ public class Event {
 	private int y;
 	private int direction = Data.NORTH;
 	private int duration = Data.INF;
+	private int range;
 	private int xRelative;
 	private int yRelative;
 
@@ -34,7 +35,7 @@ public class Event {
 	}
 
 	public Event(String id, Animation[] animation, Music sound, int x, int y,
-			int direction, int duration, int xRelative, int yRelative) {
+			int direction, int duration, int range, int xRelative, int yRelative) {
 		super();
 		this.id = id;
 		this.animation = animation;
@@ -43,6 +44,7 @@ public class Event {
 		this.y = y;
 		this.direction = direction;
 		this.duration = duration;
+		this.range = range;
 		this.xRelative = xRelative;
 		this.yRelative = yRelative;
 	}
@@ -86,6 +88,7 @@ public class Event {
 	public int getDirection() {
 		return direction;
 	}
+	
 
 	public void setDirection(int direction) {
 		this.direction = direction;
@@ -122,8 +125,16 @@ public class Event {
 		this.duration = duration;
 	}
 	
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
+	}
+
 	public Event getCopiedEvent(){
-		Event e = new Event(id, animation, sound, x, y, direction, duration, xRelative, yRelative);
+		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative);
 		return e;
 	}
 

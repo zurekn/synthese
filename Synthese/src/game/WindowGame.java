@@ -52,7 +52,7 @@ public class WindowGame extends BasicGame {
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
-		
+
 		TrapData.loadTrap();
 
 		movementHandler = new MovementHandler(this);
@@ -126,7 +126,10 @@ public class WindowGame extends BasicGame {
 			e.render(container, g);
 			x = e.getX();
 			y = e.getY();
-			if (x < xMin || x > xMax || y < yMin || y > yMax) {
+			e.setRange(e.getRange() - 1);
+			System.out.println(e.getRange());
+			if (x < xMin || x > xMax || y < yMin || y > yMax
+					|| e.getRange() <= 0) {
 				events.remove(i);
 			}
 
