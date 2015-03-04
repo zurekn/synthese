@@ -46,11 +46,13 @@ public class Data {
 
 	public static int TURN_MAX_TIME = 20;
 
-	public static int SELF = 0;
-	public static int NORTH = 1;
-	public static int EAST = 2;
-	public static int SOUTH = 3;
-	public static int WEST = 4;
+	public static final int SELF = 0;
+	public static final int NORTH = 1;
+	public static final int EAST = 2;
+	public static final int SOUTH = 3;
+	public static final int WEST = 4;
+	
+	public static final int INF = 0; 
 
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
