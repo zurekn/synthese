@@ -18,8 +18,10 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.tiled.TiledMap;
+
 /**
  * Class witch contains all static variables
+ * 
  * @author bob
  *
  */
@@ -47,13 +49,17 @@ public class Data {
 
 	public static int TURN_MAX_TIME = 20;
 
-	public static final int SELF = 0;
-	public static final int NORTH = 1;
-	public static final int EAST = 2;
-	public static final int SOUTH = 3;
-	public static final int WEST = 4;
-	
-	public static final int INF = 0; 
+	public static final int SELF = 360;
+	public static final int NORTH = 0;
+	public static final int NORTH_EAST = 45;
+	public static final int EAST = 90;
+	public static final int SOUTH_EAST = 135;
+	public static final int SOUTH = 180;
+	public static final int SOUTH_WEST = -135;
+	public static final int WEST = -90;
+	public static final int NORTH_WEST = -45;
+
+	public static final int INF = 500;
 
 	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
@@ -70,14 +76,15 @@ public class Data {
 
 	/**
 	 * Load all game variables
+	 * 
 	 * @throws SlickException
 	 */
 	public static void loadGame() throws SlickException {
-		
+
 		System.out.println(" Begin data init ");
-		
+
 		map = new TiledMap(Data.MAP_FILE);
-		
+
 		Data.BLOCK_NUMBER_X = map.getHeight();
 		Data.BLOCK_NUMBER_Y = map.getWidth();
 		Data.BLOCK_SIZE_X = map.getTileHeight();
@@ -102,7 +109,6 @@ public class Data {
 	public static void initSpell() {
 
 	}
-
 
 	public static void loadMap() {
 		Document doc = XMLReader.readXML(Data.MAP_XML);

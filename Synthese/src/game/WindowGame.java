@@ -127,12 +127,11 @@ public class WindowGame extends BasicGame {
 			x = e.getX();
 			y = e.getY();
 			e.setRange(e.getRange() - 1);
-			System.out.println(e.getRange());
 			if (x < xMin || x > xMax || y < yMin || y > yMax
 					|| e.getRange() <= 0) {
 				events.remove(i);
 			}
-
+			
 		}
 	}
 
@@ -265,7 +264,7 @@ public class WindowGame extends BasicGame {
 		// TODO
 		if (Input.KEY_P == key) {
 			try {
-				decodeAction("s1:1");
+				decodeAction("s1:"+Data.SOUTH);
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

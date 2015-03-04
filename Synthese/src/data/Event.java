@@ -16,6 +16,7 @@ public class Event {
 	private int range;
 	private int xRelative;
 	private int yRelative;
+	private boolean playSound = false;
 
 	public Event(String id) {
 		this.id = id;
@@ -32,6 +33,8 @@ public class Event {
 	public Event(String id, Music sound) {
 		this.id = id;
 		this.sound = sound;
+		if (this.sound != null)
+			this.playSound = true;
 	}
 
 	public Event(String id, Animation[] animation, Music sound, int x, int y,
@@ -47,6 +50,8 @@ public class Event {
 		this.range = range;
 		this.xRelative = xRelative;
 		this.yRelative = yRelative;
+		if (sound != null)
+			playSound = true;
 	}
 
 	public String getId() {
@@ -88,7 +93,6 @@ public class Event {
 	public int getDirection() {
 		return direction;
 	}
-	
 
 	public void setDirection(int direction) {
 		this.direction = direction;
@@ -99,19 +103,19 @@ public class Event {
 			break;
 		case Data.NORTH:
 			this.xRelative = 0;
-			this.yRelative = -1*Data.BLOCK_SIZE_Y;
+			this.yRelative = -1 * Data.BLOCK_SIZE_Y;
 			break;
 		case Data.SOUTH:
 			this.xRelative = 0;
-			this.yRelative = 1*Data.BLOCK_SIZE_Y;
+			this.yRelative = 1 * Data.BLOCK_SIZE_Y;
 			break;
 
 		case Data.EAST:
-			this.xRelative = 1*Data.BLOCK_SIZE_X;
+			this.xRelative = 1 * Data.BLOCK_SIZE_X;
 			this.yRelative = 0;
 			break;
 		case Data.WEST:
-			this.xRelative = -1*Data.BLOCK_SIZE_X;
+			this.xRelative = -1 * Data.BLOCK_SIZE_X;
 			this.yRelative = 0;
 			break;
 		}
@@ -125,7 +129,7 @@ public class Event {
 		this.duration = duration;
 
 	}
-	
+
 	public int getRange() {
 		return range;
 	}
@@ -134,15 +138,29 @@ public class Event {
 		this.range = range;
 	}
 
-	public Event getCopiedEvent(){
-		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative);
+	public Event getCopiedEvent() {
+		Event e = new Event(id, animation, sound, x, y, direction, duration,
+				range, xRelative, yRelative);
 		return e;
 	}
 
 	public void render(GameContainer container, Graphics g) {
-		g.drawAnimation(animation[0], x, y);
-		this.x+=this.xRelative;
-		this.y+=this.yRelative;
+		
+			g.rotate(x, y, direction);
+
+			g.drawAnimation(animation[0], x, y);
+
+			g.rotate(x, y, -direction);
+			
+		
+
+		if (playSound) {
+			playSound = false;
+			sound.play();
+		}
+		this.x += this.xRelative;
+		this.y += this.yRelative;
+	
 	}
 
 }
