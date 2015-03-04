@@ -54,6 +54,7 @@ public class Event {
 
 	public void render(GameContainer container, Graphics g) {
 		g.drawAnimation(animation[0], xRelative, yRelative);
+		sound.play();
 		
 	}
 	
