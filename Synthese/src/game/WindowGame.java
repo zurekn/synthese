@@ -31,7 +31,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
-	//TODO add traps
+	// TODO add traps
 	private Character currentCharacter;
 
 	private int playerNumber;
@@ -172,7 +172,6 @@ public class WindowGame extends BasicGame {
 
 	}
 
-
 	/**
 	 * decode a action and create associated event
 	 * 
@@ -189,26 +188,30 @@ public class WindowGame extends BasicGame {
 
 			String spellID = tokens[0];
 			int direction = Integer.parseInt(tokens[1]);
-			
-			currentCharacter.getSpell(spellID);
+
+			if (currentCharacter.getSpell(spellID) == null)
+				throw new IllegalActionException("Spell " + spellID
+						+ "not found");
+
 			events.add(currentCharacter.getSpell(spellID).getEvent());
 			currentCharacter.useSpell(spellID, direction);
 		}
 
 		else if (action.startsWith("t")) { // Trap action
 			System.out.println("Find a trap action");
-		} 
-		
-		else if (action.startsWith("m")) {
+		}
+
+		else if (action.startsWith("m")) {//Monster movement action
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
 				String id = tokens[0];
-				if(!currentCharacter.getId().equals(id))
-					throw new IllegalActionException("Not your turn, try again later.");
-					
+				if (!currentCharacter.getId().equals(id))
+					throw new IllegalActionException(
+							"Not your turn, try again later.");
+
 				String position = tokens[1] + ":" + tokens[2];
 				currentCharacter.moveTo(position);
 				switchTurn();
@@ -222,12 +225,14 @@ public class WindowGame extends BasicGame {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		if(Data.debug)	System.out.println("WindowGame, keyReleased : " + key + ", char : " + c);
+		if (Data.debug)
+			System.out.println("WindowGame, keyReleased : " + key + ", char : "
+					+ c);
 		if (Input.KEY_ESCAPE == key) {
 			container.exit();
 		}
 
-		//TODO
+		// TODO
 		if (Input.KEY_P == key) {
 			try {
 				decodeAction("s1:1");
@@ -238,10 +243,10 @@ public class WindowGame extends BasicGame {
 		}
 	}
 
-	
 	/**
 	 * 
-	 * @param str x:y
+	 * @param str
+	 *            x:y
 	 */
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
