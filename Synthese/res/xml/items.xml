@@ -1,0 +1,47 @@
+<items>
+	<item id="o1">
+		<image></image>
+		<usable>yes</usable>
+		<quest>no</quest>
+		<heal>10</heal>
+		<damages>0</damages>
+		<name>Potion</name>
+	</item>
+	
+	<item id="o5">
+		<image></image>
+		<usable>yes</usable>
+		<quest>no</quest>
+		<heal>0</heal>
+		<damages>8</damages>
+		<name>Shuriken</name>
+	</item>
+	
+	<item id="o10">
+		<image></image>
+		<usable>no</usable>
+		<quest>yes</quest>
+		<heal>0</heal>
+		<damages>0</damages>
+		<name>Key</name>
+	</item>
+	
+	<item id="o20">
+		<image></image>
+		<usable>no</usable>
+		<quest>no</quest>
+		<heal>0</heal>
+		<damages>0</damages>
+		<name>Fur</name>
+	</item>
+	
+	<item id="o30">
+		<image></image>
+		<usable>yes</usable>
+		<quest>yes</quest>
+		<heal>0</heal>
+		<damages>0</damages>
+		<name>Memory Stone</name>
+	</item>
+	
+</items>

@@ -13,6 +13,7 @@ import org.newdawn.slick.tiled.TiledMap;
 
 import data.*;
 import exception.IllegalActionException;
+import exception.IllegalCaracterClassException;
 import exception.IllegalMovementException;
 
 /**
@@ -49,15 +50,20 @@ public class WindowGame extends BasicGame {
 		this.container = container;
 		Data.loadGame();
 		SpellData.loadSpell();
-		MonsterData.loadMob();
-
+		MonsterData.loadMonster();
+		HeroData.loadHeros();
+		
 		TrapData.loadTrap();
 
 		movementHandler = new MovementHandler(this);
 
 		players = new ArrayList<Player>();
-		players.add(new Player(16, 14, "P1", new Stats(100, 10, 50, 10, 10, 10,
-				3, 10)));
+		try {
+			players.add(new Player(16, 14, "P1", "mage"));
+		} catch (IllegalCaracterClassException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		playerHandler = new playerHandler(players);
 
 		mobs = MonsterData.initMobs();

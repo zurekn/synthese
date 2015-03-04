@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.newdawn.slick.Animation;
@@ -175,4 +176,14 @@ public void moveTo(String position) throws IllegalMovementException {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Character [x=" + x + ", y=" + y + ", id=" + id + ", animation="
+				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
+				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
+	}
+	
+	
+	
 }

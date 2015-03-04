@@ -73,7 +73,7 @@ public class MonsterData {
 		
 	}
 	
-	public static void loadMob() {
+	public static void loadMonster() {
 		MonsterData monsterData = new MonsterData();
 
 		Document doc = XMLReader.readXML(Data.MONSTER_DATA_XML);

@@ -26,6 +26,7 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Data {
 
 	public static final boolean debug = true;
+	public static final boolean DISPLAY_PLAYER = true;
 
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -59,6 +60,7 @@ public class Data {
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
 	public static final String MAP_XML = "Synthese/res/xml/map.xml";
+	public static final String HERO_XML = "Synthese/res/xml/hero.xml";
 
 	public static final HashMap<String, Event> eventMap = new HashMap<String, Event>();
 	public static final HashMap<String, Boolean> untraversableBlocks = new HashMap<String, Boolean>();
