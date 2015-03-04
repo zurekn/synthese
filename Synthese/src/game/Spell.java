@@ -6,12 +6,14 @@ import org.newdawn.slick.Graphics;
 import data.Event;
 
 public class Spell {
-
+//TODO add range in constructors
+	
 	private String id;
 	private String name;
 	private int damage;
 	private int heal;
 	private int mana;
+	private int range ;
 	private Event event;
 	private int directionX = 1;
 	private int directionY = 1;
@@ -75,6 +77,14 @@ public class Spell {
 
 	public void setMana(int mana) {
 		this.mana = mana;
+	}
+
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
 	}
 
 	@Override

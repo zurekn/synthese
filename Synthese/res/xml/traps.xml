@@ -1,0 +1,22 @@
+<traps>
+	<trap id="t1">
+		<file>Synthese/res/images/tiles/Traps/fireBall.png</file>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>10</damage>
+		<damageType>fire</damageType>
+		<name>Fire Ball</name>
+	</trap>
+	<trap id="t2">
+		<file>Synthese/res/images/tiles/Traps/fireBall.png</file>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>42</damage>
+		<damageType>god</damageType>
+		<name>Claptor de Mazrock</name>
+	</trap>
+</traps>

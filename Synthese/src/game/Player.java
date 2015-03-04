@@ -5,41 +5,71 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 import data.Data;
+import data.Hero;
+import data.HeroData;
 import data.Monster;
 import data.MonsterData;
+import data.SpellData;
 import data.Stats;
+import exception.IllegalCaracterClassException;
 import exception.IllegalMovementException;
 
-public class Player extends Character{
-
+public class Player extends Character {
+	
+	/**
+	 * This constructor is not available
+	 * @param x
+	 * @param y
+	 * @param id
+	 * @param stats
+	 * @deprecated
+	 */
 	public Player(int x, int y, String id, Stats stats) {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
 		this.setStats(stats);
+		this.setSpells(SpellData.getSpellForClass(this.getStats().getCharacterClass()));
 		init();
+
+		if (Data.debug) {
+			System.out.println("Debug : Player " + getId() + " created");
+		}
+	}
+	
+	public Player(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
+		this.setX(x);
+		this.setY(y);
+		this.setId(id);
+		Hero h = HeroData.getHeroByClass(caracterClass);
+		if(h == null){
+			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
+		}
+			
+		this.setStats(h.getStat());
+		this.setSpells(h.getSpells());
 		
-		if(Data.debug){
-			System.out.println("Debug : Player " + id + " created");
+		if (Data.debug) {
+			System.out.println("Debug : Player " + this.toString() + " created");
 		}
 	}
 
-	
-	public void init(){
-		/*Monster m = MonsterData.getMonsterById(this.getId());
-		this.setAnimation(m.getAnimation());*/
-		
-	}
-	
-	public void render(GameContainer container, Graphics g) {
-		g.setColor(Color.blue);
-		g.fillRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
-				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+	public void init() {
+
 	}
 
-	@Override
-	public String toString() {
-		return "Player [id=" + getId() + ", x=" + getX() + ", y=" + getY() + "]";
+	public void render(GameContainer container, Graphics g) {
+		g.setColor(Color.blue);
+		if(Data.DISPLAY_PLAYER)	g.fillRect(Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y,
+				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		if (getMyTurn()) {
+			int posX = Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
+			int posY = Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
+			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
+			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
+			g.drawOval(posX, posY, sizeX, sizeY);
+		}
 	}
+
 
 }

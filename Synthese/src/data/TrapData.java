@@ -40,24 +40,14 @@ public class TrapData {
 		return null;
 	}
 	
-	public static void initTrap(){
+	/**
+	 * Load all traps data from Data.TRAPS_DATA.XML
+	 */
+	public static void loadTrap(){
 
-		// Load the xml file
-		System.out.println("Initializing traps, loading "+Data.TRAPS_DATA_XML);
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.TRAPS_DATA_XML));
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.TRAPS_DATA_XML
-					+ "]");
-			System.exit(1);
-		}
+
+		Document doc = XMLReader.readXML(Data.TRAPS_DATA_XML);
+		
 		Element root = doc.getRootElement();
 
 		List trapsList = root.getChildren("trap");
@@ -81,7 +71,7 @@ public class TrapData {
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
 			traps.add(new TrapD(id, damage, damageType, name, celNumber, ss, new Music(sound)));
-			System.out.println("   Spell : ["+name+"] load end");
+			System.out.println("   Trap : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

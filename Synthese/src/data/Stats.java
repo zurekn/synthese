@@ -8,7 +8,9 @@ public class Stats {
 	private int magicPower = 1;
 	private int luck = 1;
 	private int movementPoints = 1;
-	
+	private int magicResist = 1;
+	private String characterClass = "";
+
 	public Stats(int life, int mana) {
 		super();
 		this.life = life;
@@ -16,7 +18,7 @@ public class Stats {
 	}
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
-			int luck, int movementPoints) {
+			int luck, int movementPoints, int magicResist) {
 		super();
 		this.life = life;
 		this.armor = armor;
@@ -25,6 +27,37 @@ public class Stats {
 		this.magicPower = magicPower;
 		this.luck = luck;
 		this.movementPoints = movementPoints;
+		this.magicResist = magicResist;
+	}
+
+	public Stats(int life, int armor, int mana, int strength, int magicPower,
+			int luck, int movementPoints, int magicResist, String caracterClass) {
+		super();
+		this.life = life;
+		this.armor = armor;
+		this.mana = mana;
+		this.strength = strength;
+		this.magicPower = magicPower;
+		this.luck = luck;
+		this.movementPoints = movementPoints;
+		this.magicResist = magicResist;
+		this.characterClass = caracterClass;
+	}
+
+	public String getCharacterClass() {
+		return characterClass;
+	}
+
+	public void setCharacterClass(String characterClass) {
+		this.characterClass = characterClass;
+	}
+
+	public int getMagicResist() {
+		return magicResist;
+	}
+
+	public void setMagicResist(int magicResist) {
+		this.magicResist = magicResist;
 	}
 
 	public int getLife() {
@@ -87,7 +120,11 @@ public class Stats {
 	public String toString() {
 		return "Stats [life=" + life + ", armor=" + armor + ", mana=" + mana
 				+ ", strength=" + strength + ", magicPower=" + magicPower
-				+ ", luck=" + luck + ", movementPoints=" + movementPoints + "]";
+				+ ", luck=" + luck + ", movementPoints=" + movementPoints
+				+ ", magicResist=" + magicResist + ", characterClass="
+				+ characterClass + "]";
 	}
-	
+
+
+
 }

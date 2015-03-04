@@ -1,5 +1,7 @@
 package data;
 
+import game.Spell;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,26 +34,13 @@ public class SpellData {
 		return null;
 	}
 	
-	public static void initSpell(){
+	/**
+	 * Load all spell data from Data.SPELLS_DATA_XML
+	 */
+	public static void loadSpell(){
 
-		// Load the xml file
-		System.out.println("Initializing spells, loading "+Data.SPELLS_DATA_XML);
-		SAXBuilder builder = new SAXBuilder();
-		Document doc = null;
-		try {
-			doc = builder.build(new File(Data.SPELLS_DATA_XML));
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (doc.equals(null)) {
-			System.out.println("Error : Can't load [" + Data.SPELLS_DATA_XML
-					+ "]");
-			System.exit(1);
-		}
+		Document doc = XMLReader.readXML(Data.SPELLS_DATA_XML);
+		
 		Element root = doc.getRootElement();
 
 		List monsters = root.getChildren("spell");
@@ -76,7 +65,7 @@ public class SpellData {
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
 			spells.add(new SpellD(id, damage, heal, mana, name, celNumber, ss, sound));
-			System.out.println("   Spell : ["+name+"] load end");
+			System.out.println("	Spell : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -95,6 +84,13 @@ public class SpellData {
 				return spells.get(i);
 		}
 		return null;
+	}
+
+	public static ArrayList<Spell> getSpellForClass(String characterClass) {
+		ArrayList<Spell> array = new ArrayList<Spell>();
+		
+		
+		return array;
 	}
 	
 }

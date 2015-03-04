@@ -1,5 +1,6 @@
 <monsters>
 	<monster id="m1">
+	<name>Ghost</name>
 		<file>Synthese/res/images/tiles/Monsters/ghost.png</file>
 		<celDimensionX>40</celDimensionX>
 		<celDimensionY>46</celDimensionY>
@@ -10,12 +11,14 @@
 		<magicPower>10</magicPower>
 		<luck>5</luck>
 		<movementPoints>3</movementPoints>
+		<magicResist>10</magicResist>
 		<spells>
 			<spell>s1</spell>
 			<spell>s3</spell>
 		</spells>
 	</monster>
 	<monster id="m2">
+	<name>Pumpking</name>
 		<file>Synthese/res/images/tiles/Monsters/pumpking.png</file>
 		<celDimensionX>46</celDimensionX>
 		<celDimensionY>46</celDimensionY>
@@ -26,6 +29,7 @@
 		<magicPower>1</magicPower>
 		<luck>10</luck>
 		<movementPoints>3</movementPoints>
+		<magicResist>10</magicResist>
 		<spells>
 			<spell>s4</spell>
 		</spells>

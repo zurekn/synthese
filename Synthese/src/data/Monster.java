@@ -10,16 +10,18 @@ import org.newdawn.slick.SpriteSheet;
 public class Monster {
 
 	private String id;
+	private String name;
 	private SpriteSheet sprite;
 	private Animation[] animation = new Animation[8];
 	private Stats stats;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	
-	public Monster(String id, SpriteSheet sprite, Stats stats) {
+	public Monster(String id, String name, SpriteSheet sprite, Stats stats) {
 		super();
 		this.id = id;
 		this.sprite = sprite;
 		this.stats = stats;
+		this.name = name;
 		initAnimation();
 	}
 	
@@ -30,6 +32,14 @@ public class Monster {
 		this.stats = stats;
 		this.spells = spells;
 		initAnimation();
+	}
+
+	public String getName(){
+		return name;
+	}
+	
+	public void setName(String name){
+		this.name = name;
 	}
 
 	public String getId() {
@@ -77,7 +87,7 @@ public class Monster {
 	
 	@Override
 	public String toString() {
-		return "Monster [id=" + id + ", sprite=" + sprite + ", animation="
+		return "Monster [id=" + id + ", name=" + name + ", sprite=" + sprite + ", animation="
 				+ animation + "]";
 	}
 
@@ -88,6 +98,10 @@ public class Monster {
 	
 	public Stats getStats(){
 		return stats;
+	}
+
+	public ArrayList<Spell> getSpells() {
+		return spells;
 	}
 
 }

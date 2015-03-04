@@ -17,9 +17,13 @@ public class Main {
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		Data.SCREEN_WIDTH = gd.getDisplayMode().getWidth();
 		Data.SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
-		
-        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, true);
-    	gameContaineur.setTargetFrameRate(60);
+	
+//		Data.SCREEN_WIDTH = 1920;
+//		Data.SCREEN_HEIGHT = 1080;
+	
+		boolean fullScreen = false;
+        AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, fullScreen);
+    	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
 	}
 
