@@ -1,0 +1,58 @@
+<heros>
+	<hero id="mage">
+		<life>200</life>
+		<armor>0</armor>
+		<mana>100</mana>
+		<strength>5</strength>
+		<magicPower>10</magicPower>
+		<luck>7</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>5</magicResist>
+		<spells>
+			<spell id="s1"></spell>
+			<spell id="s4"></spell>
+		</spells>		
+	</hero>
+	<hero id="rogue">
+		<life>200</life>
+		<armor>0</armor>
+		<mana>100</mana>
+		<strength>5</strength>
+		<magicPower>10</magicPower>
+		<luck>7</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>5</magicResist>
+		<spells>
+			<spell id="s5"></spell>
+			<spell id="s7"></spell>
+		</spells>		
+	</hero>
+	<hero id="barbarian">
+		<life>200</life>
+		<armor>0</armor>
+		<mana>100</mana>
+		<strength>5</strength>
+		<magicPower>10</magicPower>
+		<luck>7</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>5</magicResist>
+		<spells>
+			<spell id="s5"></spell>
+		</spells>		
+	</hero>
+	<hero id="cleric">
+		<life>200</life>
+		<armor>0</armor>
+		<mana>100</mana>
+		<strength>5</strength>
+		<magicPower>10</magicPower>
+		<luck>7</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>5</magicResist>
+		<spells>
+			<spell id="s2"></spell>
+			<spell id="s3"></spell>
+			<spell id="s6"></spell>
+		</spells>		
+	</hero>
+</heros>

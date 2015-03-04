@@ -1,5 +1,7 @@
 package data;
 
+import game.Spell;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,6 +84,13 @@ public class SpellData {
 				return spells.get(i);
 		}
 		return null;
+	}
+
+	public static ArrayList<Spell> getSpellForClass(String characterClass) {
+		ArrayList<Spell> array = new ArrayList<Spell>();
+		
+		
+		return array;
 	}
 	
 }
