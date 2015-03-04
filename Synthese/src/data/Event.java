@@ -123,6 +123,7 @@ public class Event {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+
 	}
 	
 	public int getRange() {
