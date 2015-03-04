@@ -17,7 +17,7 @@ import exception.IllegalCaracterClassException;
 import exception.IllegalMovementException;
 
 /**
- * Main class whith handle the game Contain the init method for creating all
+ * Main class which handle the game Contain the init method for creating all
  * game objects
  * 
  * @author bob
@@ -116,8 +116,20 @@ public class WindowGame extends BasicGame {
 	}
 
 	private void renderEvents(GameContainer container, Graphics g) {
+		int x, y, xMin, yMin, xMax, yMax;
+		xMin = Data.RELATIVE_X_POS;
+		xMax = Data.RELATIVE_X_POS + Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
+		yMin = Data.RELATIVE_Y_POS;
+		yMax = Data.RELATIVE_Y_POS + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		for (int i = 0; i < events.size(); i++) {
-			events.get(i).render(container, g);
+			Event e = events.get(i);
+			e.render(container, g);
+			x = e.getX();
+			y = e.getY();
+			if (x < xMin || x > xMax || y < yMin || y > yMax) {
+				events.remove(i);
+			}
+
 		}
 	}
 
@@ -197,9 +209,18 @@ public class WindowGame extends BasicGame {
 
 			if (currentCharacter.getSpell(spellID) == null)
 				throw new IllegalActionException("Spell " + spellID
-						+ "not found");
+						+ " not found");
 
-			events.add(currentCharacter.getSpell(spellID).getEvent());
+			Event e = currentCharacter.getSpell(spellID).getEvent()
+					.getCopiedEvent();
+
+			e.setDirection(direction);
+			e.setX(Data.RELATIVE_X_POS + currentCharacter.getX()
+					* Data.BLOCK_SIZE_X);
+			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY()
+					* Data.BLOCK_SIZE_Y);
+			events.add(e);
+
 			currentCharacter.useSpell(spellID, direction);
 		}
 
@@ -207,7 +228,7 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		}
 
-		else if (action.startsWith("m")) {//Monster movement action
+		else if (action.startsWith("m")) {// Monster movement action
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
