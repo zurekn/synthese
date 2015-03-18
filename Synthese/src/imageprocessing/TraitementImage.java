@@ -136,7 +136,12 @@ public class TraitementImage {
 		
 		subImgElements = getSubstractImg(imgCompare, imgSrcRef, seuil);
 
-		int attA, attB,attC, temp = 0, numEt = 1;
+		//#debug
+		if(countPixelsNotNull(subImgElements) == 0)
+			subImgElements = getBinaryImage(imgCompare, seuil);
+		//#debug
+		
+		int attA, attB,attC, temp = 1, numEt = 1;
 		List<Integer> T = new ArrayList<Integer>();
 		if(subImgElements!=null)
 		{
@@ -200,14 +205,197 @@ public class TraitementImage {
 			}
 			System.out.println("numEt " + numEt + " max "+max);
 			
+			for (Integer integer : T) {
+				System.out.print(integer);
+			}
+			
+			System.out.println();
+			System.out.println();
+			display(etiquettes);
+			System.out.println();
+			System.out.println();
+
+
 			
 			List<FormObject> formList = new ArrayList<FormObject>();
-			FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
-			formList.add(myForm);
-			filtreSobel(myForm);
+			System.out.println("t size" + T.size());			
 			
-			displayList(formList);
+			if (T.size() == 1)
+			{
+				//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
+				FormObject myForm = etiquetteToForm(etiquettes, numEt);
+				display(myForm.getMatrix());
+				formList.add(myForm);
+				filtreSobel(myForm);
+			}
+			else
+			{
+				for (Integer it : T) 
+				{
+					//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(it));
+					FormObject myForm = etiquetteToForm(etiquettes, numEt);
+					if (myForm != null)
+					{
+						display(myForm.getMatrix());
+						formList.add(myForm);
+						filtreSobel(myForm);
+						myForm.findObjectType();
+					}
+				}
+			}
+			displayListForm(formList);
+			return formList;
+		}
+		else
+		{
+			System.out.println("fail");
+			return null;
+		}
+	}
+	
+	/*
+	 * Mise en place de l'algorithme d'étiquetage perso
+	 */
+	public List<FormObject> etiquetageIntuitifImage2(String webCamCaptureImg, String srcImg, int seuil)
+	{			
+		BufferedImage imgCompare = null;
+		BufferedImage imgSrcRef = null;
+		try {
+			imgCompare = ImageIO.read(new File(urlImage + webCamCaptureImg));
+			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
+		} 
+		catch (Exception e) 
+		{	System.out.println("problème chargement des images");}
+		
+		imgHeight = imgCompare.getHeight();
+		imgWidth = imgCompare.getWidth();
+		int[][] subImgElements = new int[imgWidth][imgHeight];
+		int [][] etiquettes = new int[imgWidth][imgHeight];
+		
+		subImgElements = getSubstractImg(imgCompare, imgSrcRef, seuil);
+		
+		//#debug
+		if(countPixelsNotNull(subImgElements) == 0)
+			subImgElements = getBinaryImage(imgCompare, seuil);
+		//#debug
+		display(subImgElements);
+		
+		int attA, attB,attC, temp = 1, numEt = 1;
+		List<Integer> T = new ArrayList<Integer>();
+		List<ArrayList<Pixel>> Num = new ArrayList<ArrayList<Pixel>>();
+		Num.add(new ArrayList<Pixel>());//pour etiquette 0
+		if(subImgElements!=null)
+		{
+			for(int i = 1; i < imgWidth; i++)
+			{
+				for(int j = 1; j < imgHeight; j++)
+				{
+					if(subImgElements[i][j]== 255)
+					{
+						attA = subImgElements[i-1][j];
+						attB = subImgElements[i][j-1];
+						attC = subImgElements[i][j];
+	
+						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
+						{
+							System.out.println("nouvelle etiquette");
+							etiquettes[i][j] = numEt;
+							Num.add(new ArrayList<Pixel>());
+							Num.get(numEt).add(new Pixel(i, j));
+							T.add(temp);
+							numEt++;
+						}
+			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
+						{	
+			 				etiquettes[i][j] = etiquettes[i-1][j]; 
+			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+			 				temp++;
+						}
+						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
+						{
+							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i][j]));
+							Num.get(etiquettes[i][j]).clear();
+							System.out.println("position : [" +i+","+j +"] clear de l'etiquette : " + etiquettes[i][j] + " , "+etiquettes[i][j-1] +" , "+etiquettes[i-1][j] );
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							temp++;
+				
+							for(int x=0;x<=i;x++)
+							{
+								for(int y=0;y<=j;y++)
+								{
+									if(etiquettes[x][y]==etiquettes[i-1][j])
+									{	
+										etiquettes[x][y]=etiquettes[i][j-1];
+										temp++;
+									}
+								}					
+							}
+						}
+						else {
+							System.out.println("pas passé");
+						}
+					}
+				}
+			}
+			int max=0;
+			for (Integer integer : T) {
+				if (integer>max)
+					max=integer;
+			}
+			System.out.println("numEt " + numEt + " max "+max);
 			
+			for (ArrayList<Pixel> arrayList : Num) {
+				System.out.println("Num size array " +arrayList.size());
+			}
+			
+			System.out.println();
+			System.out.println();
+			display(etiquettes);
+			System.out.println();
+			System.out.println();
+
+
+			
+			List<FormObject> formList = new ArrayList<FormObject>();
+			System.out.println("t size" + T.size());			
+			
+			if (T.size() == 1)
+			{
+				//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
+				FormObject myForm = etiquetteToForm(etiquettes, numEt);
+				display(myForm.getMatrix());
+				formList.add(myForm);
+				filtreSobel(myForm);
+			}
+			else
+			{
+				for (Integer it : T) 
+				{
+					//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(it));
+					FormObject myForm = etiquetteToForm(etiquettes, numEt);
+					if (myForm != null)
+					{
+						display(myForm.getMatrix());
+						formList.add(myForm);
+						filtreSobel(myForm);
+						myForm.findObjectType();
+					}
+				}
+			}
+			displayListForm(formList);
 			return formList;
 		}
 		else
@@ -220,7 +408,7 @@ public class TraitementImage {
 	/*
 	 * Mise en place de l'algorithme d'étiquetage avec tables de substitution
 	 */
-	public List<FormObject> etiquetageSubstitutionImage(String webCamCaptureImg, String srcImg, int seuil)
+	public List<FormObject> etiquetageSubstitutionTableImage(String webCamCaptureImg, String srcImg, int seuil)
 	{			
 		BufferedImage imgCompare = null;
 		BufferedImage imgSrcRef = null;
@@ -298,7 +486,7 @@ public class TraitementImage {
 			formList.add(myForm);
 			filtreSobel(myForm);
 			
-			displayList(formList);
+			displayListForm(formList);
 			
 			return formList;
 		}
@@ -356,10 +544,28 @@ public class TraitementImage {
     }
 
 	/*
+	 * compte le nombre de pixels non nulls
+	 */
+	private int countPixelsNotNull(int [][]myMatrix)
+	{
+		int nbNotNull = 0;
+		for(int i = 0; i < myMatrix.length; i++)
+		{
+			for(int j = 0; j < myMatrix[i].length; j++)
+			{
+				if(myMatrix[i][j]!=0)
+					nbNotNull++;
+			}
+		}
+		return nbNotNull;
+	}
+
+	/*
 	 * Affichage d'une matrice
 	 */
 	private void display(int[][] myMatrix) 
 	{
+		System.out.println("matrix width = "+ myMatrix.length + "matrix height = "+myMatrix[0].length);
 		for(int i = 0; i < myMatrix.length; i++)
 		{
 			for(int j = 0; j < myMatrix[i].length; j++)
@@ -371,9 +577,9 @@ public class TraitementImage {
 	}
 		
 	/*
-	 * Affiche tous les éléments d'une liste
+	 * Affiche tous les éléments d'une liste de FormObject
 	 */
-	private void displayList(List<FormObject> myList) 
+	private void displayListForm(List<FormObject> myList) 
 	{
 		System.out.println("test");
 		System.out.println(" form list size " + myList.size());
@@ -416,6 +622,7 @@ public class TraitementImage {
 		}
 		return elements;
 	}
+	
 	/*
 	 * Retourne une matrice des éléments résultants de la soustraction de deux images
 	 */
@@ -468,9 +675,17 @@ public class TraitementImage {
 				}
 			}
 		}
-		System.out.println(imgWidth +" "+ imgHeight);
-		FormObject myForm = new FormObject(pixelsByEtiquette, this.imgHeight, this.imgWidth);
-		
+		//FormObject myForm = new FormObject(pixelsByEtiquette, this.imgHeight, this.imgWidth);
+		//return myForm;
+
+		FormObject myForm;
+		if (pixelsByEtiquette.size()>50)
+		{
+			System.out.println("imgWidth " + imgWidth +" "+ "imgHeight "+imgHeight);
+			myForm = new FormObject(pixelsByEtiquette, this.imgHeight, this.imgWidth);
+		}
+		else
+			myForm = null;
 		return myForm;
 	}
 	
