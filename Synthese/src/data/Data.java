@@ -120,9 +120,15 @@ public class Data {
 			Element block;
 			for (Iterator<Element> it = blocks.iterator(); it.hasNext();) {
 				block = it.next();
+				
+				if(block.getChild("untraversable") == null)
+					continue;
+				
 				x = block.getAttribute("x").getIntValue();
 				y = block.getAttribute("y").getIntValue();
 				untraversableBlocks.put(x + ":" + y, new Boolean(true));
+				if(debug)
+					System.out.println("New untravesable block at : ["+x+":"+y+"]");
 			}
 		} catch (DataConversionException e) {
 			e.printStackTrace();
