@@ -350,51 +350,53 @@ public class TraitementImage {
 					}
 				}
 			}
-			int max=0;
-			for (Integer integer : T) {
-				if (integer>max)
-					max=integer;
-			}
-			System.out.println("numEt " + numEt + " max "+max);
-			
-			for (ArrayList<Pixel> arrayList : Num) {
-				System.out.println("Num size array " +arrayList.size());
-			}
-			
-			System.out.println();
-			System.out.println();
-			display(etiquettes);
-			System.out.println();
-			System.out.println();
-
-
-			
+//			int max=0;
+//			for (Integer integer : T) {
+//				if (integer>max)
+//					max=integer;
+//			}
+//			System.out.println("numEt " + numEt + " max "+max);
 			List<FormObject> formList = new ArrayList<FormObject>();
-			System.out.println("t size" + T.size());			
-			
-			if (T.size() == 1)
-			{
-				//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
-				FormObject myForm = etiquetteToForm(etiquettes, numEt);
-				display(myForm.getMatrix());
-				formList.add(myForm);
-				filtreSobel(myForm);
-			}
-			else
-			{
-				for (Integer it : T) 
+			System.out.println("num size = " +Num.size());
+			for (ArrayList<Pixel> OneArray : Num) {
+				System.out.println("OneArray size = "+OneArray.size());
+				if(OneArray.size()>50)
 				{
-					//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(it));
-					FormObject myForm = etiquetteToForm(etiquettes, numEt);
-					if (myForm != null)
-					{
-						display(myForm.getMatrix());
-						formList.add(myForm);
-						filtreSobel(myForm);
-						myForm.findObjectType();
-					}
+					System.out.println("gagné !!");
+
+					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
+					display(myForm.getMatrix());
+					formList.add(myForm);
+					filtreSobel(myForm);
+					myForm.findObjectType();
 				}
-			}
+			}		
+//			List<FormObject> formList = new ArrayList<FormObject>();
+//			System.out.println("t size" + T.size());			
+//			
+//			if (T.size() == 1)
+//			{
+//				//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
+//				FormObject myForm = etiquetteToForm(etiquettes, numEt);
+//				display(myForm.getMatrix());
+//				formList.add(myForm);
+//				filtreSobel(myForm);
+//			}
+//			else
+//			{
+//				for (Integer it : T) 
+//				{
+//					//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(it));
+//					FormObject myForm = etiquetteToForm(etiquettes, numEt);
+//					if (myForm != null)
+//					{
+//						display(myForm.getMatrix());
+//						formList.add(myForm);
+//						filtreSobel(myForm);
+//						myForm.findObjectType();
+//					}
+//				}
+//			}
 			displayListForm(formList);
 			return formList;
 		}
