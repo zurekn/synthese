@@ -20,7 +20,8 @@ public class FormObject {
 		carre,
 		rectangle,
 		triangle,
-		cercle;
+		cercle,
+		otherForm;
 	}
 
 	public FormObject(List<Pixel> pixelList, int imgHeight, int imgWidth) {
@@ -45,7 +46,6 @@ public class FormObject {
 		for (Pixel pixel : pixelList) {
 			matrix[pixel.getX()][pixel.getY()] = 255;	
 		}	
-		//display(matrix);
 	}
 	
 	/*
@@ -54,7 +54,20 @@ public class FormObject {
 	public double calculCompacite(int perimeter, int surface) {
 		double compacite;
 		compacite = 4*Math.PI*(surface/(perimeter*perimeter));
-		System.out.println("compacité de : "+compacite);
+		double t = perimeter*perimeter;
+//		System.out.printf ("perimeter² = %f", t);
+//		System.out.println();
+		t = surface/t;
+//		System.out.printf ("surface/perimeter² = %f", t);
+//		System.out.println();
+		double pi = 4*Math.PI;
+//		System.out.printf ("4*Math.PI = %f", pi);
+//		System.out.println();
+		compacite = pi*t;
+//		System.out.printf ("%f", compacite);
+//		System.out.println();
+
+//		System.out.println("compacité de : "+compacite + " perimetre de : "+perimeter + " surface de : "+surface);
 		return compacite;
 	}
 	
@@ -64,13 +77,25 @@ public class FormObject {
 	public void findObjectType() {
 		double compacite = calculCompacite(perimeter, surface);
 		if(compacite > 0.85)
+		{	
 			myTypeForm = typeForm.cercle;
-		else if (compacite < 0.65)
-			myTypeForm = typeForm.carre;
-		else if (compacite < 0.45)
+//			System.out.println("objet de type cercle");
+		}
+		else if (compacite <= 0.85 && compacite >0.65)
+		{	
 			myTypeForm = typeForm.rectangle;
-		else
+//			System.out.println("objet de type rectangle ou carre");
+		}
+		else if (compacite <= 0.65 && compacite >= 0.45)
+		{	
 			myTypeForm = typeForm.triangle;
+//			System.out.println("objet de type triangle");
+		}
+		else
+		{
+			myTypeForm = typeForm.otherForm;
+//			System.out.println("objet de type otherFotm");
+		}
 	}
 	
 	/*
@@ -84,13 +109,12 @@ public class FormObject {
 		left = PointsInterests.get(0).getX();
 		
 		for (Pixel pixel : PointsInterests) {
-			up = (up<pixel.getY())? up:pixel.getY();
-			down = (down>pixel.getY())? down:pixel.getY();
-			left = (left<pixel.getX())? left:pixel.getX();
-			right = (right>pixel.getX())? right:pixel.getX();
-			//System.out.println(pixel.getX() + " " + pixel.getY());
+			up = (up<pixel.getX())? up:pixel.getX();
+			down = (down>pixel.getX())? down:pixel.getX();
+			left = (left<pixel.getY())? left:pixel.getY();
+			right = (right>pixel.getY())? right:pixel.getY();
 		}		
-		
+		System.out.println("up : " + up + " down : " + down +" left : " + left +" right : " + right);
 		Pixel gravityGenter = new Pixel(((right+left)/2), ((down+up)/2));
 		return gravityGenter;
 	}
