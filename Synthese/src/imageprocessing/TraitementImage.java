@@ -8,11 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.imageio.ImageIO;
 
 
 public class TraitementImage {
-	String urlImage = "res"+File.separator;
+	String urlImage = "Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
 
@@ -257,7 +258,7 @@ public class TraitementImage {
 	 * Mise en place de l'algorithme d'étiquetage perso
 	 */
 	public List<FormObject> etiquetageIntuitifImage2(String webCamCaptureImg, String srcImg, int seuil)
-	{			
+	{	
 		BufferedImage imgCompare = null;
 		BufferedImage imgSrcRef = null;
 		try {
@@ -273,12 +274,11 @@ public class TraitementImage {
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
 		subImgElements = getSubstractImg(imgCompare, imgSrcRef, seuil);
-		
+
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
 			subImgElements = getBinaryImage(imgCompare, seuil);
 		//#debug
-		display(subImgElements);
 		
 		int attA, attB,attC, temp = 1, numEt = 1;
 		List<Integer> T = new ArrayList<Integer>();
@@ -286,9 +286,9 @@ public class TraitementImage {
 		Num.add(new ArrayList<Pixel>());//pour etiquette 0
 		if(subImgElements!=null)
 		{
-			for(int i = 1; i < imgWidth; i++)
+			for(int j = 1; j < imgHeight; j++)
 			{
-				for(int j = 1; j < imgHeight; j++)
+				for(int i = 1; i < imgWidth; i++)
 				{
 					if(subImgElements[i][j]== 255)
 					{
@@ -298,7 +298,6 @@ public class TraitementImage {
 	
 						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
 						{
-							System.out.println("nouvelle etiquette");
 							etiquettes[i][j] = numEt;
 							Num.add(new ArrayList<Pixel>());
 							Num.get(numEt).add(new Pixel(i, j));
@@ -325,11 +324,12 @@ public class TraitementImage {
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
 						{
-							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i][j]));
-							Num.get(etiquettes[i][j]).clear();
-							System.out.println("position : [" +i+","+j +"] clear de l'etiquette : " + etiquettes[i][j] + " , "+etiquettes[i][j-1] +" , "+etiquettes[i-1][j] );
+							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
+							Num.get(etiquettes[i-1][j]).clear();
+							
 							etiquettes[i][j] = etiquettes[i][j-1];
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
 							temp++;
 				
 							for(int x=0;x<=i;x++)
@@ -566,9 +566,9 @@ public class TraitementImage {
 	private void display(int[][] myMatrix) 
 	{
 		System.out.println("matrix width = "+ myMatrix.length + "matrix height = "+myMatrix[0].length);
-		for(int i = 0; i < myMatrix.length; i++)
+		for(int j = 0; j < myMatrix[0].length; j++)
 		{
-			for(int j = 0; j < myMatrix[i].length; j++)
+			for(int i = 0; i < myMatrix.length; i++)
 			{
 				System.out.print(myMatrix[i][j]+" ");
 			}
