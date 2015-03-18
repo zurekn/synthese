@@ -59,7 +59,7 @@ public class Player extends Character {
 	}
 
 	public void render(GameContainer container, Graphics g) {
-		g.setColor(Color.blue);
+		g.setColor(Color.black);
 		if(Data.DISPLAY_PLAYER)	g.fillRect(Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (getMyTurn()) {

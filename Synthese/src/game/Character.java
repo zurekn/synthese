@@ -30,7 +30,7 @@ public abstract class Character {
 
 
 	/**
-	 * 
+	 * Move the caracter to the position x:y if it's possible
 	 * @param position
 	 * @throws IllegalMovementException
 	 */

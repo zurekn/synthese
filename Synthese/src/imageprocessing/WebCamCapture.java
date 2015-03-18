@@ -58,8 +58,20 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 			System.out.println("No webcams found...");
 			System.exit(1);
 		}
-
-		webcam.setViewSize(WebcamResolution.VGA.getSize());
+		try{
+			System.out.println(webcam.getCustomViewSizes().length);
+			System.out.println(webcam.getViewSizes()[0]+", "+webcam.getViewSizes()[1]+", "+webcam.getViewSizes()[2]);
+			
+			webcam.setCustomViewSizes(new Dimension [] {new Dimension(1920, 1080)});
+			webcam.setViewSize(new Dimension(1920, 1080));
+			
+			System.out.println(webcam.getViewSize());
+			//webcam.setViewSize(WebcamResolution.HD720.getSize());
+			
+		}catch(java.lang.IllegalArgumentException e){
+			System.err.println(e);
+		}
+		System.out.println(webcam.getViewSize());
 		webcam.addWebcamListener(WebCamCapture.this);
 
 		panel = new WebcamPanel(webcam, false);
@@ -157,9 +169,8 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 				webcam.close();
 
 				webcam = (Webcam) e.getItem();
-				//set the camera resolution
-				//webcam.setViewSize(WebcamResolution.VGA.getSize());
-				webcam.setViewSize(new Dimension(640, 480));
+				webcam.setCustomViewSizes(new Dimension [] {new Dimension(1280, 1024)});
+				webcam.setViewSize(new Dimension(1280, 1024));
 				
 				webcam.addWebcamListener(this);
 
@@ -207,6 +218,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		// save image to PNG file
 		try {
 			ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
+			System.out.println("Image de dim : ["+image.getWidth()+", "+image.getHeight()+"]");
 		} catch (Exception e2) {
 			System.out.println(e2);
 		}
@@ -214,7 +226,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		TraitementImage ti = new TraitementImage();
 		//ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 80);
 //		int seuil = 110;
-		ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
+		//ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
 		//List<FormObject> p = ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
 	}
 }

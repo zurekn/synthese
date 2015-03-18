@@ -52,8 +52,9 @@ public class WindowGame extends BasicGame {
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
-
 		TrapData.loadTrap();
+		
+		Data.loadMap();
 
 		movementHandler = new MovementHandler(this);
 
@@ -131,7 +132,7 @@ public class WindowGame extends BasicGame {
 					|| e.getRange() <= 0) {
 				events.remove(i);
 			}
-			
+
 		}
 	}
 
@@ -237,10 +238,11 @@ public class WindowGame extends BasicGame {
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
 				String id = tokens[0];
+				/*
 				if (!currentCharacter.getId().equals(id))
 					throw new IllegalActionException(
 							"Not your turn, try again later.");
-
+				*/
 				String position = tokens[1] + ":" + tokens[2];
 				currentCharacter.moveTo(position);
 				switchTurn();
@@ -254,9 +256,27 @@ public class WindowGame extends BasicGame {
 
 	@Override
 	public void keyReleased(int key, char c) {
-		if (Data.debug)
+		if (Data.debug) {
 			System.out.println("WindowGame, keyReleased : " + key + ", char : "
 					+ c);
+			try {
+				if (Input.KEY_LEFT == key)
+					decodeAction("m:" + (currentCharacter.getX() - 1) + ":"
+							+ currentCharacter.getY());
+				if (Input.KEY_RIGHT == key)
+					decodeAction("m:" + (currentCharacter.getX() + 1) + ":"
+							+ currentCharacter.getY());
+				if (Input.KEY_UP == key)
+					decodeAction("m:" + currentCharacter.getX() + ":"
+							+ (currentCharacter.getY() - 1));
+				if (Input.KEY_DOWN == key)
+					decodeAction("m:" + currentCharacter.getX() + ":"
+							+ (currentCharacter.getY() + 1));
+			} catch (IllegalActionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if (Input.KEY_ESCAPE == key) {
 			container.exit();
 		}
@@ -264,7 +284,7 @@ public class WindowGame extends BasicGame {
 		// TODO
 		if (Input.KEY_P == key) {
 			try {
-				decodeAction("s1:"+Data.SOUTH);
+				decodeAction("s1:" + Data.SOUTH);
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -273,9 +293,10 @@ public class WindowGame extends BasicGame {
 	}
 
 	/**
+	 * Move the current player to the destination x:y if possible
 	 * 
 	 * @param str
-	 *            x:y
+	 *            , x:y
 	 */
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
