@@ -145,14 +145,32 @@ public class Event {
 	}
 
 	public void render(GameContainer container, Graphics g) {
-		
-			g.rotate(x, y, direction);
+		int dx = 0, dy = 0;
+		switch (direction) {
+		case Data.NORTH:
+			break;
 
-			g.drawAnimation(animation[0], x, y);
+		case Data.SOUTH:
+			dx = -Data.BLOCK_SIZE_X;
+			dy = -Data.BLOCK_SIZE_Y;
+			break;
 
-			g.rotate(x, y, -direction);
-			
-		
+		case Data.EAST:
+			dx = 0;
+			dy = -Data.BLOCK_SIZE_Y;
+			break;
+
+		case Data.WEST:
+			dx = -Data.BLOCK_SIZE_X;
+			dy = 0;
+			break;
+		}
+
+		g.rotate(x, y, direction);
+
+		g.drawAnimation(animation[0], x + dx, y + dy);
+
+		g.rotate(x, y, -direction);
 
 		if (playSound) {
 			playSound = false;
@@ -160,7 +178,7 @@ public class Event {
 		}
 		this.x += this.xRelative;
 		this.y += this.yRelative;
-	
+
 	}
 
 }

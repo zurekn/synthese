@@ -264,7 +264,7 @@ public class WindowGame extends BasicGame {
 		// TODO
 		if (Input.KEY_P == key) {
 			try {
-				decodeAction("s1:"+Data.SOUTH);
+				decodeAction("s1:"+Data.WEST);
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
