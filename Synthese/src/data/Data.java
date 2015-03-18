@@ -1,6 +1,7 @@
 package data;
 
 import game.Mob;
+import game.WindowGame;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +74,7 @@ public class Data {
 
 	public static TiledMap map;
 	public static MonsterData monsterData;
+	public static WindowGame game;
 
 	/**
 	 * Load all game variables
