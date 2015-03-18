@@ -206,7 +206,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		BufferedImage image = webcam.getImage();
 		// save image to PNG file
 		try {
-			ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
+			ImageIO.write(image, "png", new File("Synthese/res/testRes/QRCodes/QRCapture5.png"));
 		} catch (Exception e2) {
 			System.out.println(e2);
 		}
@@ -214,7 +214,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		TraitementImage ti = new TraitementImage();
 		//ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 80);
 //		int seuil = 110;
-		ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
+		// ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
 		//List<FormObject> p = ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
 	}
 }
