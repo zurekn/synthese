@@ -42,7 +42,7 @@ public class Mob extends Character{
 
 		
 		animation[6].draw(Data.DECK_AREA_SIZE_Y + x * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y +  y * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
-		if (getMyTurn()) {
+		if (isMyTurn()) {
 			int posX = Data.DECK_AREA_SIZE_Y +  getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
 			int posY = Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
 			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;

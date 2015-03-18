@@ -13,7 +13,10 @@ import data.SpellD;
 import data.Stats;
 import exception.IllegalActionException;
 import exception.IllegalMovementException;
-
+/**
+ * Class representing a character which can be either a player or a monster.
+ * 
+ */
 public abstract class Character {
 	private int x;
 	private int y;
@@ -28,15 +31,16 @@ public abstract class Character {
 
 	public abstract void init();
 
-
 	/**
 	 * Move the caracter to the position x:y if it's possible
+	 * 
 	 * @param position
 	 * @throws IllegalMovementException
 	 */
-public void moveTo(String position) throws IllegalMovementException {
+	public void moveTo(String position) throws IllegalMovementException {
 		if (Data.untraversableBlocks.containsKey(position)) {
-			throw new IllegalMovementException("Untraversable block at ["+position+"]");
+			throw new IllegalMovementException("Untraversable block at ["
+					+ position + "]");
 		} else {
 			String tokens[] = position.split(":");
 			if (tokens.length != 2) {
@@ -66,13 +70,26 @@ public void moveTo(String position) throws IllegalMovementException {
 		}
 	}
 
-
-	public void useSpell(String spellID, int dir) throws IllegalActionException {
+	/**
+	 * Use a spell given by its id, throws an {@link IllegalActionException}
+	 * otherwise.
+	 * 
+	 * @param spellID
+	 * @param direction
+	 * @throws IllegalActionException
+	 */
+	public void useSpell(String spellID, int direction)
+			throws IllegalActionException {
 		Spell spell = this.getSpell(spellID);
-		if(spell == null)
+		if (spell == null)
 			throw new IllegalActionException("Spell unkown");
 	}
 
+	/**
+	 * 
+	 * @param damage the damage value
+	 * @param type type of damage (fire, ice, shock...)
+	 */
 	public void takeDamage(int damage, String type) {
 		if (type.equals("magic")) {
 			damage = damage - getStats().getMagicResist();
@@ -86,9 +103,10 @@ public void moveTo(String position) throws IllegalMovementException {
 		System.out.println(id + " take : [" + damage + "] damage");
 	}
 
-	public boolean checkDeath(){
+	public boolean checkDeath() {
 		return stats.getLife() <= 0;
 	}
+
 	public String getId() {
 		return id;
 	}
@@ -141,23 +159,35 @@ public void moveTo(String position) throws IllegalMovementException {
 		myTurn = b;
 	}
 
-	public boolean getMyTurn() {
+	public boolean isMyTurn() {
 		return myTurn;
 	}
 
+	/**
+	 * Add the spell s to this character.
+	 * 
+	 * @param s
+	 * @see Spell
+	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
 				s.getHeal(), s.getMana(), s.getRange(), s.getEvent()));
 	}
 
-	public ArrayList<Spell> getSpells(){
+	public ArrayList<Spell> getSpells() {
 		return spells;
 	}
-	
-	public void setSpells(ArrayList<Spell> spells){
+
+	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
 	}
-	
+
+	/**
+	 * Get a spell by its id
+	 * 
+	 * @param spellID
+	 * @return the {@link Spell} or null if not found.
+	 */
 	public Spell getSpell(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
@@ -167,7 +197,11 @@ public void moveTo(String position) throws IllegalMovementException {
 		return null;
 	}
 
-	
+	/**
+	 * 
+	 * @param spellID
+	 * @return true if this character know the spell, false otherwise.
+	 */
 	public boolean isSpellLearned(String spellID) {
 		for (Iterator<Spell> it = spells.iterator(); it.hasNext();) {
 			Spell s = it.next();
@@ -183,7 +217,5 @@ public void moveTo(String position) throws IllegalMovementException {
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
 	}
-	
-	
-	
+
 }
