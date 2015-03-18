@@ -275,13 +275,13 @@ public class WindowGame extends BasicGame {
 				if (Input.KEY_DOWN == key)
 					decodeAction("m:" + currentCharacter.getX() + ":"
 							+ (currentCharacter.getY() + 1));
-				if (Input.KEY_8 == key)
+				if (Input.KEY_NUMPAD8 == key)
 					decodeAction("s1:" + Data.NORTH);
-				if (Input.KEY_6 == key)
+				if (Input.KEY_NUMPAD6 == key)
 					decodeAction("s1:" + Data.EAST);
-				if (Input.KEY_2 == key)
+				if (Input.KEY_NUMPAD2 == key)
 					decodeAction("s1:" + Data.SOUTH);
-				if (Input.KEY_4 == key)
+				if (Input.KEY_NUMPAD4 == key)
 					decodeAction("s1:" + Data.WEST);
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
