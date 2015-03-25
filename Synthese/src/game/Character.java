@@ -70,7 +70,6 @@ public void moveTo(String position) throws IllegalMovementException {
 					} else {
 						this.x = x;
 						this.y = y;
-						this.stats.setMovementPoints(movePoints - dist);
 					}
 				}
 			}
@@ -95,7 +94,7 @@ public void moveTo(String position) throws IllegalMovementException {
 	/**
 	 * 
 	 * @param damage the damage value
-	 * @param type type of damage (fire, ice, shock...)
+	 * @param type, type of damage (fire, ice, shock...)
 	 */
 	public void takeDamage(int damage, String type) {
 		if (type.equals("magic")) {
@@ -178,7 +177,7 @@ public void moveTo(String position) throws IllegalMovementException {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getEvent()));
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getEvent()));
 	}
 
 	public ArrayList<Spell> getSpells() {

@@ -19,9 +19,10 @@ public class Spell {
 	private int directionY = 1;
 	private int x = 20;
 	private int y = 20;
+	private String type;
 
 	public Spell(String id, String name, int damage, int heal, int mana,
-			int range, Event event) {
+			int range, String type, Event event) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -30,7 +31,11 @@ public class Spell {
 		this.mana = mana;
 		this.range = range;
 		this.event = event;
+		this.type = type;
 		this.event.setRange(range);
+		this.event.setDamage(damage);
+		this.event.setHeal(heal);
+		this.event.setType(type);
 	}
 
 	public String getId() {
@@ -89,10 +94,13 @@ public class Spell {
 		this.range = range;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "Spell [id=" + id + ", name=" + name + ", damage=" + damage
-				+ ", heal=" + heal + ", mana=" + mana + "]";
+				+ ", heal=" + heal + ", mana=" + mana + ", range=" + range
+				+ ", type=" + type + "]";
 	}
 
 	public void render(GameContainer container, Graphics g) {

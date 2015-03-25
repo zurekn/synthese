@@ -17,6 +17,9 @@ public class Event {
 	private int xRelative;
 	private int yRelative;
 	private boolean playSound = false;
+	private int damage;
+	private int heal;
+	private String type;
 
 	public Event(String id) {
 		this.id = id;
@@ -58,8 +61,20 @@ public class Event {
 		return id;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public int getX() {
 		return x;
+	}
+	
+	public int getXOnBoard(){
+		return (x - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_X;
 	}
 
 	public void setX(int x) {
@@ -68,6 +83,10 @@ public class Event {
 
 	public int getY() {
 		return y;
+	}
+	
+	public int getYOntBoard(){
+		return (y - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_Y;
 	}
 
 	public void setY(int y) {
@@ -121,6 +140,22 @@ public class Event {
 		}
 	}
 
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	public int getHeal() {
+		return heal;
+	}
+
+	public void setHeal(int heal) {
+		this.heal = heal;
+	}
+
 	public int getDuration() {
 		return duration;
 	}
@@ -141,6 +176,9 @@ public class Event {
 	public Event getCopiedEvent() {
 		Event e = new Event(id, animation, sound, x, y, direction, duration,
 				range, xRelative, yRelative);
+		e.setDamage(damage);
+		e.setHeal(heal);
+		e.setType(type);
 		return e;
 	}
 
@@ -180,5 +218,17 @@ public class Event {
 		this.y += this.yRelative;
 
 	}
+
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", x=" + x + ", y=" + y + ", direction="
+				+ direction + ", duration=" + duration + ", range=" + range
+				+ ", xRelative=" + xRelative + ", yRelative=" + yRelative
+				+ ", damage=" + damage + ", heal=" + heal + ", type=" + type
+				+ "]";
+	}
+	
+	
+	
 
 }

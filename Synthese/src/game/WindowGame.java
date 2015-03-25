@@ -41,14 +41,15 @@ public class WindowGame extends BasicGame {
 
 	private int turnTimer;
 	private long timeStamp = -1;
+	private long eventTimer = -1;
 
 	public static WindowGame windowGame;
-	
+
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
 		windowGame = this;
 	}
-	
+
 	private WindowGame(String title, GameContainer container,
 			MobHandler mobHandler, ArrayList<Mob> mobs,
 			game.playerHandler playerHandler, ArrayList<Player> players,
@@ -69,8 +70,6 @@ public class WindowGame extends BasicGame {
 		this.turnTimer = turnTimer;
 		this.timeStamp = timeStamp;
 	}
-
-
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
@@ -106,6 +105,10 @@ public class WindowGame extends BasicGame {
 		currentCharacter = players.get(turn);
 	}
 
+	/**
+	 * The render function
+	 * Call all game's render
+	 */
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
@@ -119,6 +122,11 @@ public class WindowGame extends BasicGame {
 		renderText(container, g);
 	}
 
+	/**
+	 * Render the Deck Area
+	 * @param container
+	 * @param g
+	 */
 	private void renderDeckArea(GameContainer container, Graphics g) {
 		g.setColor(Color.white);
 		// TOP
@@ -137,12 +145,22 @@ public class WindowGame extends BasicGame {
 				Data.DECK_AREA_SIZE_X);
 	}
 
+	/**
+	 * Render the Game Text
+	 * @param container
+	 * @param g
+	 */
 	private void renderText(GameContainer container, Graphics g) {
 		// render text
 		g.setColor(Color.white);
 		g.drawString("End of turn in : " + turnTimer, 10, 20);
 	}
 
+	/**
+	 * Render all events in the game
+	 * @param container
+	 * @param g
+	 */
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
 		xMin = Data.RELATIVE_X_POS;
@@ -166,18 +184,21 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		if (System.currentTimeMillis() - timeStamp > 1000) {
+		long time = System.currentTimeMillis();
+		if (time - timeStamp > 1000) {
 			turnTimer--;
-			timeStamp = System.currentTimeMillis();
+			timeStamp = time;
 		}
 
 		// Turn timer
 		if (turnTimer < 0) {
 			switchTurn();
-
 		}
 	}
 
+	/**
+	 * Function call for switch the current character turn
+	 */
 	public void switchTurn() {
 		// Reset the timer
 		turnTimer = Data.TURN_MAX_TIME;
@@ -220,6 +241,7 @@ public class WindowGame extends BasicGame {
 
 	}
 
+
 	/**
 	 * decode a action and create associated event
 	 * 
@@ -249,6 +271,12 @@ public class WindowGame extends BasicGame {
 					* Data.BLOCK_SIZE_X);
 			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY()
 					* Data.BLOCK_SIZE_Y);
+			// Get the range to the next character to hit
+			int r = getFirstCharacterRange(
+					getCharacterePositionOnLine(currentCharacter.getX(),
+							currentCharacter.getY(), e.getDirection()), e);
+			r = r > e.getRange()? e.getRange() : r;
+			e.setRange(r);
 			events.add(e);
 
 			currentCharacter.useSpell(spellID, direction);
@@ -278,6 +306,35 @@ public class WindowGame extends BasicGame {
 		} else {
 			throw new IllegalActionException("Action not found : " + action);
 		}
+	}
+
+	/**
+	 * Return the distance between the currentCharacter and the closer mob
+	 * @param chars
+	 * @param e
+	 * @return
+	 */
+	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
+		int range = Data.MAX_RANGE;
+		System.out.println("Search the first character range : "+e.toString());
+		
+		for (Character c : chars) {
+			if (e.getDirection() == Data.NORTH
+					|| e.getDirection() == Data.SOUTH) {
+				int i = (Math.abs(c.getY() - e.getYOntBoard()));
+				if (i < range)
+					range = i;
+			}
+			if (e.getDirection() == Data.EAST
+					|| e.getDirection() == Data.WEST) {
+				int i = (Math.abs(c.getX() - e.getXOnBoard()));
+				if (i < range)
+					range = i;
+			}
+		}
+		if(Data.debug)
+			System.out.println("The Range is : "+range);
+		return range;
 	}
 
 	@Override
@@ -349,13 +406,90 @@ public class WindowGame extends BasicGame {
 		return null;
 	}
 
+	/**
+	 * 	Get all the Character positions
+	 * @return ArrayList<String>
+	 */
 	public ArrayList<String> getAllPosition() {
 		System.out.println("Toto");
 		ArrayList<String> list = new ArrayList<String>();
-		for(int i = 0; i < players.size(); i++)
-			list.add(players.get(i).getX()+":"+players.get(i).getY());
-		for(int i = 0; i < mobs.size(); i ++)
-			list.add(mobs.get(i).getX()+":"+mobs.get(i).getY());
+		for (int i = 0; i < players.size(); i++)
+			list.add(players.get(i).getX() + ":" + players.get(i).getY());
+		for (int i = 0; i < mobs.size(); i++)
+			list.add(mobs.get(i).getX() + ":" + mobs.get(i).getY());
 		return list;
 	}
+
+	/**
+	 * Get all character on a line 
+	 * 	line = Horizontal or Vertical
+	 * @param x
+	 * @param y
+	 * @param direction
+	 * @return ArrayList<Character>
+	 */
+	private ArrayList<Character> getCharacterePositionOnLine(int x, int y,
+			int direction) {
+		System.out.println("["+x+""+y+"] Direction = "+direction+", North = "+Data.NORTH+", South = "+Data.SOUTH+", East = "+Data.EAST+", West = "+Data.WEST);
+		ArrayList<Character> c = new ArrayList<Character>();
+
+		for (int i = 0; i < players.size(); i++) {
+			// above
+			if (direction == Data.NORTH && players.get(i).getY() < y
+					&& players.get(i).getX() == x)
+				c.add(mobs.get(i));
+			// bottom
+			if (direction == Data.SOUTH && players.get(i).getY() > y
+					&& players.get(i).getX() == x)
+				c.add(mobs.get(i));
+			// on left
+			if (direction == Data.EAST && players.get(i).getY() == y
+					&& players.get(i).getX() > x)
+				c.add(mobs.get(i));
+			// on right
+			if (direction == Data.WEST && players.get(i).getY() == y
+					&& players.get(i).getX() < x)
+				c.add(mobs.get(i));
+		}
+
+		for (int i = 0; i < mobs.size(); i++) {
+			// above
+			if (direction == Data.NORTH && mobs.get(i).getY() < y
+					&& mobs.get(i).getX() == x)
+				c.add(mobs.get(i));
+			// bottom
+			if (direction == Data.SOUTH && mobs.get(i).getY() > y
+					&& mobs.get(i).getX() == x)
+				c.add(mobs.get(i));
+			// on left
+			if (direction == Data.EAST && mobs.get(i).getY() == y
+					&& mobs.get(i).getX() > x)
+				c.add(mobs.get(i));
+			// on right
+			if (direction == Data.WEST && mobs.get(i).getY() == y
+					&& mobs.get(i).getX() < x)
+				c.add(mobs.get(i));
+		}
+		System.out.println(c.toString());
+		return c;
+	}
+
+	/**
+	 * Return the Character with have the x,y position
+	 * @param x
+	 * @param y
+	 * @return Character
+	 */
+	private Character getCharacterByPosition(int x, int y) {
+		for (int i = 0; i < players.size(); i++)
+			if (players.get(i).getX() == x && players.get(i).getY() == y)
+				return players.get(i);
+
+		for (int i = 0; i < mobs.size(); i++)
+			if (mobs.get(i).getX() == x && mobs.get(i).getY() == y)
+				return mobs.get(i);
+
+		return null;
+	}
+
 }
