@@ -1,4 +1,4 @@
-package testpackage;
+package imageprocessing;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -24,7 +24,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import imageprocessing. QRCodeProcessing;
 
-public class WebCamQRCode extends JFrame implements Runnable, ThreadFactory {
+public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	
 	private static final long serialVersionUID = 6441489157408381878L;
 	private Executor executor = Executors.newSingleThreadExecutor(this);
@@ -34,7 +34,7 @@ public class WebCamQRCode extends JFrame implements Runnable, ThreadFactory {
 	// QR datas
 	private String QRDatas;
 	
-	public WebCamQRCode() {
+	public QRCam() {
 		super();
 		setLayout(new FlowLayout());
 		setTitle("Read QR / Bar Code With Webcam");
@@ -57,25 +57,25 @@ public class WebCamQRCode extends JFrame implements Runnable, ThreadFactory {
 	public void run() {
 		do {
 			try {
-			Thread.sleep(100);
+				Thread.sleep(900);
 			} catch (InterruptedException e) {
-			e.printStackTrace();
+				e.printStackTrace();
 			}
 			// Those lines are for the multi QR code reader
 			String testMulti = null;
-			 QRCodeProcessing tqr = new  QRCodeProcessing();
-			
+			QRCodeProcessing tqr = new QRCodeProcessing();
+
 			Result result = null;
 			// image will contain the webcam captured pictures
 			BufferedImage image = null;
-			
+
 			if (webcam.isOpen()) {
 				if ((image = webcam.getImage()) == null) {
 					continue;
 				}
 				try {
-
-					tqr.findAllQR("", 2, image);
+						// set seuil to 20 to ensure better results
+					tqr.findAllQR("",20, image);
 					testMulti = tqr.getQRDatas();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -96,14 +96,14 @@ public class WebCamQRCode extends JFrame implements Runnable, ThreadFactory {
 	}
 	
 	public Thread newThread(Runnable r) {
-		Thread t = new Thread(r, "example-runner");
+		Thread t = new Thread(r, "QR Decoder");
 		t.setDaemon(true);
 		return t;
 	}
 	
 	
 	public static void main(String[] args) {
-		new WebCamQRCode();
+		new QRCam();
 	}
 	
 	public String getQRDatas(){
