@@ -5,6 +5,12 @@ import java.util.Scanner;
 
 import data.Data;
 
+/**
+ * Used for the debug fonction, 
+ * The class wait the input from keybord for a movement
+ * @author bob
+ *
+ */
 public class MovementHandler implements Runnable {
 
 	// For debug

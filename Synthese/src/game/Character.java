@@ -37,7 +37,12 @@ public abstract class Character {
 	 * @param position
 	 * @throws IllegalMovementException
 	 */
-	public void moveTo(String position) throws IllegalMovementException {
+
+public void moveTo(String position) throws IllegalMovementException {
+		if(WindowGame.windowGame.getAllPosition().contains(position)){
+			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
+		}
+
 		if (Data.untraversableBlocks.containsKey(position)) {
 			throw new IllegalMovementException("Untraversable block at ["
 					+ position + "]");
@@ -58,12 +63,14 @@ public abstract class Character {
 
 					int xTmp = this.x, yTmp = this.y;
 					int movePoints = this.stats.getMovementPoints();
-					if (Math.sqrt(Math.pow(x - xTmp, 2) + Math.pow(y - yTmp, 2)) > movePoints) {
+					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2) + Math.pow(y - yTmp, 2));
+					if (dist > movePoints) {
 						throw new IllegalMovementException(
 								"Not enough movements points");
 					} else {
 						this.x = x;
 						this.y = y;
+						this.stats.setMovementPoints(movePoints - dist);
 					}
 				}
 			}

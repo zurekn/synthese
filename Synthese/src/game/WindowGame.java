@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.List;
 import java.util.ArrayList;
 
 import org.newdawn.slick.AppGameContainer;
@@ -41,8 +42,11 @@ public class WindowGame extends BasicGame {
 	private int turnTimer;
 	private long timeStamp = -1;
 
+	public static WindowGame windowGame;
+	
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
+		windowGame = this;
 	}
 	
 	private WindowGame(String title, GameContainer container,
@@ -343,5 +347,15 @@ public class WindowGame extends BasicGame {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<String> getAllPosition() {
+		System.out.println("Toto");
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0; i < players.size(); i++)
+			list.add(players.get(i).getX()+":"+players.get(i).getY());
+		for(int i = 0; i < mobs.size(); i ++)
+			list.add(mobs.get(i).getX()+":"+mobs.get(i).getY());
+		return list;
 	}
 }
