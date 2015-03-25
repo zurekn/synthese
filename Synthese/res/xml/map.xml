@@ -12,7 +12,7 @@
 		<numberY>25</numberY>
 	</blockInfo>
 
-	<!-- Blocks  -->
+	<!-- Blocks -->
 	<block x="12" y="0">
 		<untraversable></untraversable>
 	</block>
@@ -133,7 +133,7 @@
 		<damage type="fire">10</damage>
 	</block>
 
-	<!--  Monsters -->
+	<!-- Monsters -->
 	<monster id="m1">
 		<x>5</x>
 		<y>5</y>
@@ -150,7 +150,7 @@
 		<x>11</x>
 		<y>11</y>
 	</monster>
-	
-	<!--Traps  -->
-	
+
+	<!--Traps -->
+
 </map>

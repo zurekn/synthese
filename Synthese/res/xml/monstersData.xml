@@ -1,6 +1,6 @@
 <monsters>
 	<monster id="m1">
-	<name>Ghost</name>
+		<name>Ghost</name>
 		<file>Synthese/res/images/tiles/Monsters/ghost.png</file>
 		<celDimensionX>40</celDimensionX>
 		<celDimensionY>46</celDimensionY>
@@ -16,9 +16,11 @@
 			<spell>s1</spell>
 			<spell>s3</spell>
 		</spells>
+		<iaLevel>3</iaLevel>
 	</monster>
+
 	<monster id="m2">
-	<name>Pumpking</name>
+		<name>Pumpking</name>
 		<file>Synthese/res/images/tiles/Monsters/pumpking.png</file>
 		<celDimensionX>46</celDimensionX>
 		<celDimensionY>46</celDimensionY>
