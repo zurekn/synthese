@@ -329,7 +329,7 @@ public class TraitementImage {
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-							System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
+//							System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
 							temp++;
 				
 							for(int x=0;x<=i;x++)
@@ -350,53 +350,21 @@ public class TraitementImage {
 					}
 				}
 			}
-//			int max=0;
-//			for (Integer integer : T) {
-//				if (integer>max)
-//					max=integer;
-//			}
-//			System.out.println("numEt " + numEt + " max "+max);
 			List<FormObject> formList = new ArrayList<FormObject>();
 			System.out.println("num size = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
-				System.out.println("OneArray size = "+OneArray.size());
+//				System.out.println("OneArray size = "+OneArray.size());
 				if(OneArray.size()>50)
 				{
-					System.out.println("gagné !!");
+//					System.out.println("gagné !!");
 
 					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
-					display(myForm.getMatrix());
+//					display(myForm.getMatrix());
 					formList.add(myForm);
 					filtreSobel(myForm);
 					myForm.findObjectType();
 				}
 			}		
-//			List<FormObject> formList = new ArrayList<FormObject>();
-//			System.out.println("t size" + T.size());			
-//			
-//			if (T.size() == 1)
-//			{
-//				//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
-//				FormObject myForm = etiquetteToForm(etiquettes, numEt);
-//				display(myForm.getMatrix());
-//				formList.add(myForm);
-//				filtreSobel(myForm);
-//			}
-//			else
-//			{
-//				for (Integer it : T) 
-//				{
-//					//FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(it));
-//					FormObject myForm = etiquetteToForm(etiquettes, numEt);
-//					if (myForm != null)
-//					{
-//						display(myForm.getMatrix());
-//						formList.add(myForm);
-//						filtreSobel(myForm);
-//						myForm.findObjectType();
-//					}
-//				}
-//			}
 			displayListForm(formList);
 			return formList;
 		}
@@ -586,7 +554,9 @@ public class TraitementImage {
 		System.out.println("test");
 		System.out.println(" form list size " + myList.size());
 		for (FormObject pixel : myList) {
-			System.out.println(" form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
+			System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
+			System.out.println("bary center :  " + pixel.getBaryCenter().getX() + " : " + pixel.getBaryCenter().getY());
+			System.out.println("ecart type : " + pixel.sigmaX + " : " + pixel.sigmaY);
 		}
 	}
 	
