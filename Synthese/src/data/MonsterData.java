@@ -84,8 +84,9 @@ public class MonsterData {
 
 		Iterator i = monsters.iterator();
 		String name;
-		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist;
+		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight;
 		List <Element> spells = new ArrayList<Element>();
+		String aiType ;
 		while (i.hasNext()) {
 
 			Element el = (Element) i.next();
@@ -101,13 +102,15 @@ public class MonsterData {
 				String id = el.getAttributeValue("id");
 				spells = el.getChild("spells").getChildren("spell");
 				magicResist = Integer.parseInt(el.getChildText("magicResist"));
+				eyeSight = Integer.parseInt(el.getChildText("eyeSight"));
 				Iterator<Element> ii = spells.iterator();
 				SpriteSheet ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celDimensionX")),
 						Integer.parseInt(el.getChildText("celDimensionY")));
 				Stats stats = new Stats(life, armor, mana, strength,
-						magicPower, luck, movementPoints, magicResist);
-				Monster m = new Monster(id, name, ss, stats);
+						magicPower, luck, movementPoints, magicResist, eyeSight);
+				aiType = el.getChildText("aiType");
+				Monster m = new Monster(id, aiType, name, ss, stats);
 				while(ii.hasNext()){
 					Element e = (Element) ii.next();
 					SpellD s = SpellData.getSpellById(e.getText());

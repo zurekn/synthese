@@ -34,7 +34,7 @@ public class HeroData {
 
 		Iterator i = heros.iterator();
 		String id;
-		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist;
+		int life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight;
 		List <Element> spells = new ArrayList<Element>();
 		
 		while(i.hasNext()){
@@ -49,7 +49,8 @@ public class HeroData {
 			luck = Integer.parseInt(el.getChildText("luck"));
 			movementPoints = Integer.parseInt(el.getChildText("movementPoints"));
 			magicResist = Integer.parseInt(el.getChildText("magicResist"));
-			Hero h = new Hero(id, new Stats(life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, id));
+			eyeSight = Integer.parseInt(el.getChildText("eyeSight"));
+			Hero h = new Hero(id, new Stats(life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight ,id));
 			Iterator<Element> ii =  el.getChild("spells").getChildren("spell").iterator();
 			
 			while(ii.hasNext()){

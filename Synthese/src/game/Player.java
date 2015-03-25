@@ -41,6 +41,7 @@ public class Player extends Character {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
+		this.setAiType("hero");
 		Hero h = HeroData.getHeroByClass(caracterClass);
 		if(h == null){
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));

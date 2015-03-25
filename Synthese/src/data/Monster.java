@@ -15,22 +15,25 @@ public class Monster {
 	private Animation[] animation = new Animation[8];
 	private Stats stats;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
+	private String aiType;
 	
-	public Monster(String id, String name, SpriteSheet sprite, Stats stats) {
+	public Monster(String id, String aiType, String name, SpriteSheet sprite, Stats stats) {
 		super();
 		this.id = id;
 		this.sprite = sprite;
 		this.stats = stats;
 		this.name = name;
+		this.aiType = aiType;
 		initAnimation();
 	}
 	
-	public Monster(String id, SpriteSheet sprite, Stats stats, ArrayList<Spell> spells) {
+	public Monster(String id, String aiType, SpriteSheet sprite, Stats stats, ArrayList<Spell> spells) {
 		super();
 		this.id = id;
 		this.sprite = sprite;
 		this.stats = stats;
 		this.spells = spells;
+		this.aiType = aiType;
 		initAnimation();
 	}
 
@@ -102,6 +105,10 @@ public class Monster {
 
 	public ArrayList<Spell> getSpells() {
 		return spells;
+	}
+
+	public String getAiType() {
+		return this.aiType;
 	}
 
 }

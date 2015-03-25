@@ -12,6 +12,7 @@
 			<spell id="s1"></spell>
 			<spell id="s4"></spell>
 		</spells>
+		<eyeSight>5</eyeSight>
 	</hero>
 	<hero id="rogue">
 		<life>200</life>
@@ -26,6 +27,7 @@
 			<spell id="s5"></spell>
 			<spell id="s7"></spell>
 		</spells>
+		<eyeSight>6</eyeSight>
 	</hero>
 	<hero id="barbarian">
 		<life>200</life>
@@ -39,6 +41,7 @@
 		<spells>
 			<spell id="s5"></spell>
 		</spells>
+		<eyeSight>4</eyeSight>
 	</hero>
 	<hero id="cleric">
 		<life>200</life>
@@ -54,5 +57,6 @@
 			<spell id="s3"></spell>
 			<spell id="s6"></spell>
 		</spells>
+		<eyeSight>6</eyeSight>
 	</hero>
 </heros>

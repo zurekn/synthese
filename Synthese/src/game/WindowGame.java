@@ -12,6 +12,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
+import ai.AIHandler;
+import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
 import exception.IllegalCaracterClassException;
@@ -191,6 +193,8 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
+			String[] commands = AIHandler.getMobsMovements(new WindowGameData(mobs, players, currentCharacter, playerNumber, turn));
+			
 		}
 
 		// set to false the previous character turn
