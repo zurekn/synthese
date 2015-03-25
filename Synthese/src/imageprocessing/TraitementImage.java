@@ -329,7 +329,7 @@ public class TraitementImage {
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-//							System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
+							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
 							temp++;
 				
 							for(int x=0;x<=i;x++)
@@ -426,7 +426,7 @@ public class TraitementImage {
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
 						{
-//							etiquettes[i][j] = T[etiquettes[i][j-1]];
+							//etiquettes[i][j] = T[etiquettes[i][j-1]];
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
 						{
@@ -465,6 +465,148 @@ public class TraitementImage {
 			System.out.println("fail");
 			return null;
 		}
+	}
+	
+	public void errosion(String srcImg, int seuil, int degree) 
+	{
+		BufferedImage imgSrcRef = null;
+		try 
+		{
+			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
+		
+			int height = imgSrcRef.getHeight();
+			int width = imgSrcRef.getWidth();
+			int[][] subImgElements = new int[width][height];
+			int [][] resultErrosion = new int[width][height];
+//			for(int i = 1; i < width; i++)
+//			{
+//				for(int j = 1; j < height; j++)
+//				{
+//					resultErrosion[i][j] = 0;
+//				}
+//			}
+			subImgElements = getBinaryImage(imgSrcRef, seuil);
+			//display(subImgElements);
+			
+			int up, down, right, left;
+			if(subImgElements!=null)
+			{
+				for(int y = 0; y < degree; y++)
+				{
+					for(int i = 1; i < width-1; i++)
+					{
+						for(int j = 1; j < height-1; j++)
+						{
+							left = subImgElements[i-1][j];
+							up = subImgElements[i][j-1];
+							right = subImgElements[i+1][j];
+							down = subImgElements[i][j+1];
+							if( up != 0 && down != 0 && left != 0 && right != 0 && subImgElements[i][j] != 0)
+								resultErrosion[i][j] = 255;	
+							else
+								resultErrosion[i][j] = 0;
+						}
+					}
+					subImgElements = resultErrosion;
+				}
+				
+				for(int i = 1; i < width-1; i++)
+				{
+					for(int j = 1; j < height-1; j++)
+					{	
+						Color pixelcolor= new Color(imgSrcRef.getRGB(i, j));
+						if (resultErrosion[i][j] == 255)
+							pixelcolor = Color.BLACK;
+						else
+							pixelcolor = Color.WHITE;
+						imgSrcRef.setRGB(i, j, pixelcolor.getRGB());
+					}
+				}
+				
+				ImageIO.write(imgSrcRef, "jpg" , new File(urlImage + "toto2_errosion.jpg"));
+			} 
+		}
+		catch (Exception e) 
+		{	System.out.println("problème d'images");}
+			
+		//display(resultErrosion);
+	}
+	
+	public void dilatation(String srcImg, int seuil, int degree) 
+	{
+		BufferedImage imgSrcRef = null;
+		try 
+		{
+			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
+		
+			int height = imgSrcRef.getHeight();
+			int width = imgSrcRef.getWidth();
+			int[][] subImgElements = new int[width][height];
+			int [][] resultErrosion = new int[width][height];
+
+			subImgElements = getBinaryImage(imgSrcRef, seuil);
+			
+			int up, down, right, left, upRight, upLeft, downLeft, downRight;
+			int elemBInit = 0;
+			int elemBRes = 0;
+			if(subImgElements!=null)
+			{
+//				display(subImgElements);
+				for(int y = 0; y < degree; y++)
+				{
+					for(int i = 1; i < width-1; i++)
+					{
+						for(int j = 1; j < height-1; j++)
+						{
+							left = subImgElements[i-1][j];
+							up = subImgElements[i][j-1];
+							right = subImgElements[i+1][j];
+							down = subImgElements[i][j+1];
+							
+							upLeft = subImgElements[i-1][j-1];
+							upRight = subImgElements[i+1][j-1];
+							downLeft = subImgElements[i-1][j+1];
+							downRight = subImgElements[i+1][j+1];
+							
+							if (subImgElements[i][j] == 255)
+								elemBInit ++;
+							
+							if( up != 0 || down != 0 || left != 0 || right != 0 ||downLeft != 0 || downRight != 0  || subImgElements[i][j] != 0)
+							{
+								resultErrosion[i][j] = 255;
+								elemBRes++;
+							}
+							else
+								resultErrosion[i][j] = 0;
+							
+						}
+					}
+					subImgElements = resultErrosion;
+//					display(resultErrosion);
+					System.out.println("elemBInit = " + elemBInit + " elemBRes = " + elemBRes);
+				}
+				
+				
+				for(int i = 1; i < width-1; i++)
+				{
+					for(int j = 1; j < height-1; j++)
+					{	
+						Color pixelcolor= new Color(imgSrcRef.getRGB(i, j));
+						if (resultErrosion[i][j] == 255)
+							pixelcolor = Color.BLACK;
+						else
+							pixelcolor = Color.WHITE;
+						imgSrcRef.setRGB(i, j, pixelcolor.getRGB());
+					}
+				}
+				
+				ImageIO.write(imgSrcRef, "jpg" , new File(urlImage + "toto2_dilatation.jpg"));
+			} 
+		}
+		catch (Exception e) 
+		{	System.out.println("problème d'images");}
+			
+		//display(resultErrosion);
 	}
 	
 	/*
@@ -554,7 +696,7 @@ public class TraitementImage {
 		System.out.println("test");
 		System.out.println(" form list size " + myList.size());
 		for (FormObject pixel : myList) {
-			System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
+			//System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
 			System.out.println("bary center :  " + pixel.getBaryCenter().getX() + " : " + pixel.getBaryCenter().getY());
 			System.out.println("ecart type : " + pixel.sigmaX + " : " + pixel.sigmaY);
 		}
