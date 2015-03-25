@@ -32,21 +32,22 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
 
-public class TraitementQRjavapapers {
+public class QRCodeProcessing {
 	
 private String data;
 private String filePath;
 private String charset;
 private Map hintMap;
+private String QRDatas;
 
-	public TraitementQRjavapapers(){
+	public  QRCodeProcessing(){
 		super();
 		charset = "UTF-8"; // or "ISO-8859-1"
 		hintMap = new HashMap();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 		filePath = "Synthese/res/testRes/QRcodes/";
-		
-	        System.out.println("main: " + "Program end.");
+		System.out.println("main: " + "Program end.");
+		QRDatas = "";
 	    }
 	
 	
@@ -82,8 +83,10 @@ private Map hintMap;
 	 * @throws IOException
 	 * @throws NotFoundException (if no QR Code was found)
 	 */
-	public String findAllQR(String srcImgName,float seuil, BufferedImage imweb) throws IOException, NotFoundException{
+	public void findAllQR(String srcImgName,float seuil, BufferedImage imweb) throws IOException, NotFoundException{
+		QRDatas = ""; // reset final object
 		String res="";
+		
 		// Read Image
 		BufferedImage img;
 		// Will contain all QRCode results
@@ -103,7 +106,7 @@ private Map hintMap;
 	}else{
 		img = imweb;
 	}
-		System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
+		// System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
 		
 		LuminanceSource source = new BufferedImageLuminanceSource(img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -113,17 +116,25 @@ private Map hintMap;
 			
 			for(Result trolol : result){
 				rp = trolol.getResultPoints();
-				res = res + "\n" + trolol.getText();
-				System.out.println("nb "+i);
-				checkOrientation(seuil,rp,trolol.getText());
+			//	res = res + "\n" + trolol.getText();
+				//System.out.println("nb "+i);
+				// Set the final datas 
+				QRDatas += checkOrientation(seuil,rp,trolol.getText())+"\n";
 				
 			}
-		return res; 
+	//	return res; 
 	}
 	
-	
-	public void checkOrientation(float seuil,ResultPoint[] rp,String QRName){
+	/**
+	 * Method that calculate the orientation of a given QRCode
+	 * @param seuil - Area of authorized variation of position.
+	 * @param rp - passed from another method
+	 * @param QRContent - ID of the QRCode (used in final object)
+	 * @return
+	 */
+	public String checkOrientation(float seuil,ResultPoint[] rp,String QRContent){
 		
+		String result=QRContent+":";
 		// Count each eye in the QR Code
 		int j= 1;
 		float xeye1 = 0;
@@ -138,6 +149,8 @@ private Map hintMap;
 		float ecartXhoriz;
 		float ecartYhaut;
 		float ecartYlarg;
+		// to calculate the center of QRCode
+		float xmid = 0, ymid = 0;
 		
 		// Calcul des positions des yeux
 		for(ResultPoint resp : rp){
@@ -157,7 +170,7 @@ private Map hintMap;
 				xeye4 = resp.getX();
 				yeye4 = resp.getY();
 			}
-			System.out.println("\t j="+j+" pos X : "+resp.getX() + "; pos Y : "+resp.getY());
+			//System.out.println("\t j="+j+" pos X : "+resp.getX() + "; pos Y : "+resp.getY());
 			j++;
 		}
 		j=1;
@@ -166,10 +179,10 @@ private Map hintMap;
 		
 		ecartYhaut=(yeye1 - yeye2);
 		ecartXhoriz=(xeye2 - xeye3);
-		System.out.println("\t On a donc un écart en largeur de X =  "+ecartXlarg+" et de Y = "+ecartYlarg);
-		System.out.println("\t On a donc un écart en hauteur de Y =  "+ecartYhaut+" et en horizontal de X = "+ecartXhoriz);
+		//System.out.println("\t On a donc un écart en largeur de X =  "+ecartXlarg+" et de Y = "+ecartYlarg);
+		//System.out.println("\t On a donc un écart en hauteur de Y =  "+ecartYhaut+" et en horizontal de X = "+ecartXhoriz);
 
-		System.out.print("Sur cette image, le QRcode "+QRName+" penche vers ... ");
+		//System.out.print("Sur cette image, le QRcode "+QRContent+" penche vers ... ");
 		
 		// RIght
 		if(ecartXlarg < (0-seuil) ){
@@ -178,64 +191,81 @@ private Map hintMap;
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						System.out.println("Le haut-droite n'est-ce pas ?");
+						//System.out.println("Le haut-droite n'est-ce pas ?");
+						result += "haut-droite" ;
 						
 					// Bottom
 					}else{
-						System.out.println("Le bas-droite n'est-ce pas ?");
+						//System.out.println("Le bas-droite n'est-ce pas ?");
+						result += "bas-droite" ;
 					}
 					
 				}else{
-					System.out.println("La droite n'est-ce pas ?");		
+					//System.out.println("La droite n'est-ce pas ?");	
+					result += "droite";
 				}
 			}else{
-				System.out.println("not found. ecart largeur anormal. ");
+				//System.out.println("le haut . ");
+				result += "haut" ;
 			}
 			// if X larg > 0  => Left
 		}else if(ecartXlarg > seuil){
 			if(ecartYlarg < (0-seuil)){
-				System.out.println("Le haut...");
+				//System.out.println("Le haut...");
+				result += "haut" ;
 			}else{
 				
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						System.out.println("Le haut-gauche n'est-ce pas ?");
+						//System.out.println("Le haut-gauche n'est-ce pas ?");
+						result += "haut-gauche" ;
 						
 					// Bottom
 					}else{
-						System.out.println("Le bas-gauche n'est-ce pas ?");
+						//System.out.println("Le bas-gauche n'est-ce pas ?");
+						result += "bas-gauche" ;
 					}
 					
 				}else{
-					System.out.println("La gauche n'est-ce pas ?");		
+					//System.out.println("La gauche n'est-ce pas ?");	
+					result += "gauche" ;
 				}
 				
 			}
 			//  Bottom
-		}else{
-			// Bottom
-			if(ecartYlarg < (0-seuil) || ecartYlarg > seuil){
-			//	System.out.println("not found. L'ecart vertical ne correspond pas");
-				System.out.println("Le bas.");
-			}else{
-				
+		}else{				
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						System.out.println("Le haut n'est-ce pas ?");
-						
+						//System.out.println("Le haut n'est-ce pas ?");
+						result += "haut" ;
 					// Bottom
 					}else{
-						System.out.println("Le bas n'est-ce pas ?");
+						//System.out.println("Le bas n'est-ce pas ?");
+						result += "bas" ;
 					}
 					// Left
 				}else{
-					System.out.println("La gauche n'est-ce pas ?");		
+					//System.out.println("La gauche n'est-ce pas ?");	
+					result += "gauche" ;
 				}
 				
-			}
+		
 		}
-		System.out.println();
+		
+		// Calcul of middle point : 
+		xmid = ((xeye3 - xeye2)/2) + xeye2;
+		ymid = ((yeye1 - yeye2)/2) + yeye2;
+		xmid = xmid < 0 ? -xmid : xmid;
+		ymid = ymid < 0 ? -ymid : ymid;
+		result+=":"+xmid+":"+ymid;
+		return result;
 	}
-}
+	
+	
+	public String getQRDatas(){
+		return QRDatas;
+	}
+	
+}// End of class
