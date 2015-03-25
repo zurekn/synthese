@@ -48,6 +48,29 @@ public class WindowGame extends BasicGame {
 		super(Data.NAME);
 		windowGame = this;
 	}
+	
+	private WindowGame(String title, GameContainer container,
+			MobHandler mobHandler, ArrayList<Mob> mobs,
+			game.playerHandler playerHandler, ArrayList<Player> players,
+			MovementHandler movementHandler, ArrayList<Event> events,
+			Character currentCharacter, int playerNumber, int turn,
+			int turnTimer, long timeStamp) {
+		super(title);
+		this.container = container;
+		this.mobHandler = mobHandler;
+		this.mobs = mobs;
+		this.playerHandler = playerHandler;
+		this.players = players;
+		this.movementHandler = movementHandler;
+		this.events = events;
+		this.currentCharacter = currentCharacter;
+		this.playerNumber = playerNumber;
+		this.turn = turn;
+		this.turnTimer = turnTimer;
+		this.timeStamp = timeStamp;
+	}
+
+
 
 	@Override
 	public void init(GameContainer container) throws SlickException {

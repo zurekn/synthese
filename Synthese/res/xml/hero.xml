@@ -3,56 +3,56 @@
 		<life>200</life>
 		<armor>0</armor>
 		<mana>100</mana>
-		<strength>5</strength>
+		<strength>2</strength>
 		<magicPower>10</magicPower>
 		<luck>7</luck>
-		<movementPoints>2</movementPoints>
-		<magicResist>5</magicResist>
+		<movementPoints>3</movementPoints>
+		<magicResist>6</magicResist>
 		<spells>
 			<spell id="s1"></spell>
 			<spell id="s4"></spell>
-		</spells>		
+		</spells>
 	</hero>
 	<hero id="rogue">
 		<life>200</life>
-		<armor>0</armor>
+		<armor>10</armor>
 		<mana>100</mana>
-		<strength>5</strength>
-		<magicPower>10</magicPower>
-		<luck>7</luck>
-		<movementPoints>2</movementPoints>
-		<magicResist>5</magicResist>
+		<strength>7</strength>
+		<magicPower>2</magicPower>
+		<luck>8</luck>
+		<movementPoints>4</movementPoints>
+		<magicResist>4</magicResist>
 		<spells>
 			<spell id="s5"></spell>
 			<spell id="s7"></spell>
-		</spells>		
+		</spells>
 	</hero>
 	<hero id="barbarian">
 		<life>200</life>
-		<armor>0</armor>
+		<armor>25</armor>
 		<mana>100</mana>
-		<strength>5</strength>
-		<magicPower>10</magicPower>
-		<luck>7</luck>
+		<strength>10</strength>
+		<magicPower>0</magicPower>
+		<luck>5</luck>
 		<movementPoints>2</movementPoints>
-		<magicResist>5</magicResist>
+		<magicResist>2</magicResist>
 		<spells>
 			<spell id="s5"></spell>
-		</spells>		
+		</spells>
 	</hero>
 	<hero id="cleric">
 		<life>200</life>
 		<armor>0</armor>
-		<mana>100</mana>
-		<strength>5</strength>
-		<magicPower>10</magicPower>
-		<luck>7</luck>
-		<movementPoints>2</movementPoints>
-		<magicResist>5</magicResist>
+		<mana>125</mana>
+		<strength>2</strength>
+		<magicPower>8</magicPower>
+		<luck>6</luck>
+		<movementPoints>3</movementPoints>
+		<magicResist>8</magicResist>
 		<spells>
 			<spell id="s2"></spell>
 			<spell id="s3"></spell>
 			<spell id="s6"></spell>
-		</spells>		
+		</spells>
 	</hero>
 </heros>
