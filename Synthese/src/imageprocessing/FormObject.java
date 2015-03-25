@@ -13,7 +13,10 @@ public class FormObject {
 	int[][] matrix;
 	int perimeter;
 	int surface;
-	Pixel gravityCenter;
+	int sigmaX;
+	int sigmaY;
+	Pixel gravityCenterCarre;
+	Pixel baryCenter;
 	typeForm myTypeForm;
 	
 	public enum typeForm{
@@ -30,7 +33,9 @@ public class FormObject {
 		this.imgWidth = imgWidth;
 		this.pixelList = pixelList;
 		this.surface = getSurface();
-		this.gravityCenter = getCenterForm(pixelList);
+		this.gravityCenterCarre = getCenterCarreForm(pixelList);
+		this.baryCenter = getBaryCenterForm(pixelList);
+		getEcartTypeForm(pixelList);
 		recreateMatrix();
 //		findObjectType();
 	}
@@ -99,9 +104,9 @@ public class FormObject {
 	}
 	
 	/*
-	 * Récupère le centre de gravité d'un ensemble de points désignés par une étiquette
+	 * Récupère le centre de gravité d'un ensemble de points désignés par une étiquette (par un carré théorique)
 	 */
-	public Pixel getCenterForm(List<Pixel>PointsInterests){
+	public Pixel getCenterCarreForm(List<Pixel>PointsInterests){
 		int up, down, left, right;
 		up = PointsInterests.get(0).getX();
 		down = PointsInterests.get(0).getX();
@@ -115,8 +120,36 @@ public class FormObject {
 			right = (right>pixel.getY())? right:pixel.getY();
 		}		
 		System.out.println("up : " + up + " down : " + down +" left : " + left +" right : " + right);
-		Pixel gravityGenter = new Pixel(((right+left)/2), ((down+up)/2));
-		return gravityGenter;
+		Pixel gravityCenterCarre = new Pixel(((right+left)/2), ((down+up)/2));
+		return gravityCenterCarre;
+	}
+	
+	/*
+	 * Récupère le centre de gravité
+	 */
+	public Pixel getBaryCenterForm(List<Pixel>PointsInterests){
+		int gx, gy;
+		gx = 0; gy = 0;
+		for (Pixel pixel : PointsInterests) {
+			gx += pixel.getX();
+			gy += pixel.getY();
+		}	
+		Pixel gravityBaryCenter = new Pixel((gy/PointsInterests.size()),(gx/PointsInterests.size()));
+		return gravityBaryCenter;
+	}
+	
+	/*
+	 * Calcul de l'écart Type
+	 */
+	public void getEcartTypeForm(List<Pixel>PointsInterests) {
+		int sX = 0;
+		int sY = 0;
+		for (Pixel pixel : PointsInterests) {
+			sX +=Math.pow((pixel.getY()-baryCenter.getY()),2);
+			sY += Math.pow((pixel.getX()-baryCenter.getX()),2);
+		}
+		this.sigmaX =  (int)Math.sqrt(sX/PointsInterests.size());
+		this.sigmaY =  (int)Math.sqrt(sY/PointsInterests.size());
 	}
 	
 	/*
@@ -184,19 +217,18 @@ public class FormObject {
 	public void setSurface(int surface) {
 		this.surface = surface;
 	}
-
+	public Pixel getBaryCenter() {
+		return baryCenter;
+	}
 	public Pixel getGravityCenter() {
-		return gravityCenter;
+		return gravityCenterCarre;
 	}
-
 	public void setGravityCenter(Pixel gravityCenter) {
-		this.gravityCenter = gravityCenter;
+		this.gravityCenterCarre = gravityCenter;
 	}
-
 	public typeForm getMyTypeForm() {
 		return myTypeForm;
 	}
-
 	public void setMyTypeForm(typeForm myTypeForm) {
 		this.myTypeForm = myTypeForm;
 	}

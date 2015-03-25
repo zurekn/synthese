@@ -30,6 +30,7 @@ public class Mob extends Character{
 		this.setStats(m.getStats());
 		this.setName(m.getName());
 		this.setSpells(m.getSpells());
+		this.setAiType(m.getAiType());
 		
 	}
 	

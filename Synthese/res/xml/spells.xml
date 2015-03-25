@@ -46,7 +46,7 @@
 		<damage>20</damage>
 		<heal>0</heal>
 		<mana>25</mana>
-		<name>Meteor</name>
+		<name>Water Wave</name>
 		<range>5</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/fireball.wav</sound>
@@ -101,6 +101,18 @@
 		<name>Shoot</name>
 		<range>5</range>
 		<type>physic</type>
+		<sound>Synthese/res/sounds/fireball.wav</sound>
+	</spell>
+	<spell id="s9">
+		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
+		<celX>36</celX>
+		<celY>36</celY>
+		<celNumber>7</celNumber>
+		<damage>20</damage>
+		<heal>0</heal>
+		<mana>25</mana>
+		<name>Meteor</name>
+		<range>5</range>
 		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
 </spells>

@@ -9,6 +9,7 @@ public class Stats {
 	private int luck = 1;
 	private int movementPoints = 1;
 	private int magicResist = 1;
+	private int eyeSight ;
 	private String characterClass = "";
 
 	public Stats(int life, int mana) {
@@ -18,7 +19,7 @@ public class Stats {
 	}
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
-			int luck, int movementPoints, int magicResist) {
+			int luck, int movementPoints, int magicResist, int eyeSight) {
 		super();
 		this.life = life;
 		this.armor = armor;
@@ -28,10 +29,11 @@ public class Stats {
 		this.luck = luck;
 		this.movementPoints = movementPoints;
 		this.magicResist = magicResist;
+		this.eyeSight = eyeSight;
 	}
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
-			int luck, int movementPoints, int magicResist, String caracterClass) {
+			int luck, int movementPoints, int magicResist, int eyeSight, String caracterClass) {
 		super();
 		this.life = life;
 		this.armor = armor;
@@ -41,6 +43,7 @@ public class Stats {
 		this.luck = luck;
 		this.movementPoints = movementPoints;
 		this.magicResist = magicResist;
+		this.eyeSight = eyeSight;
 		this.characterClass = caracterClass;
 	}
 
@@ -114,6 +117,14 @@ public class Stats {
 
 	public void setMovementPoints(int movementPoints) {
 		this.movementPoints = movementPoints;
+	}
+
+	public int getEyeSight() {
+		return eyeSight;
+	}
+
+	public void setEyeSight(int eyeSight) {
+		this.eyeSight = eyeSight;
 	}
 
 	@Override

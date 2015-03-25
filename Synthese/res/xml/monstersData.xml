@@ -16,7 +16,8 @@
 			<spell>s1</spell>
 			<spell>s3</spell>
 		</spells>
-		<iaLevel>3</iaLevel>
+		<aiType>goblin</aiType>
+		<eyeSight>6</eyeSight>
 	</monster>
 
 	<monster id="m2">
@@ -35,5 +36,7 @@
 		<spells>
 			<spell>s4</spell>
 		</spells>
+		<aiType>orc</aiType>
+		<eyeSight>4</eyeSight>
 	</monster>
 </monsters>

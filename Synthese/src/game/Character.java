@@ -13,6 +13,7 @@ import data.SpellD;
 import data.Stats;
 import exception.IllegalActionException;
 import exception.IllegalMovementException;
+
 /**
  * Class representing a character which can be either a player or a monster.
  * 
@@ -26,6 +27,8 @@ public abstract class Character {
 	private boolean myTurn = false;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private String name;
+	private String aiType;
+	private Character focusedOn;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -169,6 +172,22 @@ public void moveTo(String position) throws IllegalMovementException {
 		return myTurn;
 	}
 
+	public String getAiType() {
+		return aiType;
+	}
+
+	public void setAiType(String aiType) {
+		this.aiType = aiType;
+	}
+
+	public Character getFocusedOn() {
+		return focusedOn;
+	}
+
+	public void setFocusedOn(Character focusedOn) {
+		this.focusedOn = focusedOn;
+	}
+
 	/**
 	 * Add the spell s to this character.
 	 * 
@@ -223,5 +242,5 @@ public void moveTo(String position) throws IllegalMovementException {
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
 	}
-
+	
 }
