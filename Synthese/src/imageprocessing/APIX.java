@@ -7,7 +7,7 @@ public class APIX implements Runnable{
 	private String QRDatas;
 	private QRCam qrcam;
 	private final EventListenerList listeners = new EventListenerList();
-	private boolean isInit = false;
+	private boolean isInit = true;
 	private int relativeX;
 	private int relativeY;
 	
