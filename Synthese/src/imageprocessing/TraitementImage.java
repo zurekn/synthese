@@ -268,13 +268,22 @@ public class TraitementImage {
 		catch (Exception e) 
 		{	System.out.println("problème chargement des images");}
 		
-		imgHeight = imgCompare.getHeight();
-		imgWidth = imgCompare.getWidth();
-		int[][] subImgElements = new int[imgWidth][imgHeight];
+		int[][] subImgElements  = getGraySubstractAndBinaryImage(srcImg, webCamCaptureImg, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
-		subImgElements = getSubstractImg(imgCompare, imgSrcRef, seuil);
-
+		
+		BufferedImage imgRes = tableToBufferedImage(subImgElements);
+		
+		try {
+			ImageIO.write(imgRes, "bmp", new File(urlImage + "resultTest.bmp"));
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
 			subImgElements = getBinaryImage(imgCompare, seuil);
@@ -467,7 +476,7 @@ public class TraitementImage {
 		}
 	}
 	
-	public void errosion(String srcImg, int seuil, int degree) 
+	public void erosion(String srcImg, int seuil, int degree) 
 	{
 		BufferedImage imgSrcRef = null;
 		try 
@@ -534,79 +543,79 @@ public class TraitementImage {
 	
 	public void dilatation(String srcImg, int seuil, int degree) 
 	{
-		BufferedImage imgSrcRef = null;
-		try 
-		{
-			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
-		
-			int height = imgSrcRef.getHeight();
-			int width = imgSrcRef.getWidth();
-			int[][] subImgElements = new int[width][height];
-			int [][] resultErrosion = new int[width][height];
-
-			subImgElements = getBinaryImage(imgSrcRef, seuil);
-			
-			int up, down, right, left, upRight, upLeft, downLeft, downRight;
-			int elemBInit = 0;
-			int elemBRes = 0;
-			if(subImgElements!=null)
-			{
-//				display(subImgElements);
-				for(int y = 0; y < degree; y++)
-				{
-					for(int i = 1; i < width-1; i++)
-					{
-						for(int j = 1; j < height-1; j++)
-						{
-							left = subImgElements[i-1][j];
-							up = subImgElements[i][j-1];
-							right = subImgElements[i+1][j];
-							down = subImgElements[i][j+1];
-							
-							upLeft = subImgElements[i-1][j-1];
-							upRight = subImgElements[i+1][j-1];
-							downLeft = subImgElements[i-1][j+1];
-							downRight = subImgElements[i+1][j+1];
-							
-							if (subImgElements[i][j] == 255)
-								elemBInit ++;
-							
-							if( up != 0 || down != 0 || left != 0 || right != 0 ||downLeft != 0 || downRight != 0  || subImgElements[i][j] != 0)
-							{
-								resultErrosion[i][j] = 255;
-								elemBRes++;
-							}
-							else
-								resultErrosion[i][j] = 0;
-							
-						}
-					}
-					subImgElements = resultErrosion;
-//					display(resultErrosion);
-					System.out.println("elemBInit = " + elemBInit + " elemBRes = " + elemBRes);
-				}
-				
-				
-				for(int i = 1; i < width-1; i++)
-				{
-					for(int j = 1; j < height-1; j++)
-					{	
-						Color pixelcolor= new Color(imgSrcRef.getRGB(i, j));
-						if (resultErrosion[i][j] == 255)
-							pixelcolor = Color.BLACK;
-						else
-							pixelcolor = Color.WHITE;
-						imgSrcRef.setRGB(i, j, pixelcolor.getRGB());
-					}
-				}
-				
-				ImageIO.write(imgSrcRef, "jpg" , new File(urlImage + "toto2_dilatation.jpg"));
-			} 
-		}
-		catch (Exception e) 
-		{	System.out.println("problème d'images");}
-			
-		//display(resultErrosion);
+//		BufferedImage imgSrcRef = null;
+//		try 
+//		{
+//			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
+//		
+//			int height = imgSrcRef.getHeight();
+//			int width = imgSrcRef.getWidth();
+//			int[][] subImgElements = new int[width][height];
+//			int [][] resultErrosion = new int[width][height];
+//
+//			subImgElements = getBinaryImage(imgSrcRef, seuil);
+//			
+//			int up, down, right, left, upRight, upLeft, downLeft, downRight;
+//			int elemBInit = 0;
+//			int elemBRes = 0;
+//			if(subImgElements!=null)
+//			{
+////				display(subImgElements);
+//				for(int y = 0; y < degree; y++)
+//				{
+//					for(int i = 1; i < width-1; i++)
+//					{
+//						for(int j = 1; j < height-1; j++)
+//						{
+//							left = subImgElements[i-1][j];
+//							up = subImgElements[i][j-1];
+//							right = subImgElements[i+1][j];
+//							down = subImgElements[i][j+1];
+//							
+//							upLeft = subImgElements[i-1][j-1];
+//							upRight = subImgElements[i+1][j-1];
+//							downLeft = subImgElements[i-1][j+1];
+//							downRight = subImgElements[i+1][j+1];
+//							
+//							if (subImgElements[i][j] == 255)
+//								elemBInit ++;
+//							
+//							if( up != 0 || down != 0 || left != 0 || right != 0 ||downLeft != 0 || downRight != 0  || subImgElements[i][j] != 0)
+//							{
+//								resultErrosion[i][j] = 255;
+//								elemBRes++;
+//							}
+//							else
+//								resultErrosion[i][j] = 0;
+//							
+//						}
+//					}
+//					subImgElements = resultErrosion;
+////					display(resultErrosion);
+//					System.out.println("elemBInit = " + elemBInit + " elemBRes = " + elemBRes);
+//				}
+//				
+//				
+//				for(int i = 1; i < width-1; i++)
+//				{
+//					for(int j = 1; j < height-1; j++)
+//					{	
+//						Color pixelcolor= new Color(imgSrcRef.getRGB(i, j));
+//						if (resultErrosion[i][j] == 255)
+//							pixelcolor = Color.BLACK;
+//						else
+//							pixelcolor = Color.WHITE;
+//						imgSrcRef.setRGB(i, j, pixelcolor.getRGB());
+//					}
+//				}
+//				
+//				ImageIO.write(imgSrcRef, "jpg" , new File(urlImage + "toto2_dilatation.jpg"));
+//			} 
+//		}
+//		catch (Exception e) 
+//		{	System.out.println("problème d'images");}
+//			
+//		//display(resultErrosion);
 	}
 	
 	/*
@@ -765,7 +774,7 @@ public class TraitementImage {
 	            	}
 	            	else
 	            	{	
-	            		elementsSubImg [x][y] = elementsFirstImg[x][y];
+	            		elementsSubImg [x][y] = elementsSecondImg[x][y];
 	            		percentNotSame++;
 	            	}
 	            }
@@ -774,6 +783,77 @@ public class TraitementImage {
 	        System.out.println("there are "+percentNotSame+"px which are not same and "+percentComparision+" which are same.");
 	    } 
 		return elementsSubImg;
+	}
+	
+	/*
+	 * Transform two images RGB in Gray images,
+	 * Substract them,
+	 * Binary each pixels from substract image.
+	 */
+	public int[][] getGraySubstractAndBinaryImage(String srcImgNameRef, String srcImgNameCompare, int seuil) 
+	{
+		BufferedImage img1 = null;
+		BufferedImage img2 = null;
+		int[][] elements1 = null;
+		int[][] elements2 = null;
+		int[][] elementsRes = null;
+		
+		try {
+			img1 = ImageIO.read(new File(urlImage + srcImgNameRef));
+			img2 = ImageIO.read(new File(urlImage + srcImgNameCompare));
+			
+			imgHeight = img1.getHeight();
+			imgWidth = img1.getWidth();
+			elements1 = new int[img1.getWidth()][img1.getHeight()];
+			elements2 = new int[img1.getWidth()][img1.getHeight()];
+			elementsRes = new int[img1.getWidth()][img1.getHeight()];
+			
+			if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) 
+			{
+			    for (int x = 0; x < img1.getWidth(); ++x)
+				    for (int y = 0; y < img1.getHeight(); ++y)
+				    {
+			    		/*	Get gray color from RGB origin pixel image 1	*/
+				        Color pixelcolor1= new Color(img1.getRGB(x, y));
+				        int r1=pixelcolor1.getRed();
+				        int g1=pixelcolor1.getGreen();
+				        int b1=pixelcolor1.getBlue();
+				        
+				        int grayLevel1 = (r1 + g1 + b1) / 3;
+				        elements1[x][y] = grayLevel1;
+
+				        /*	Get gray color from RGB origin pixel image 2	*/
+				        Color pixelcolor= new Color(img2.getRGB(x, y));
+				        int r2=pixelcolor.getRed();
+				        int g2=pixelcolor.getGreen();
+				        int b2=pixelcolor.getBlue();
+			
+				        int grayLevel2 = (r2 + g2 + b2) / 3;
+				        elements2[x][y] = grayLevel2;
+				        
+				        /*		Substract images		*/
+				        elementsRes[x][y] = elements1[x][y]-elements2[x][y]<0 ? elements2[x][y]-elements1[x][y] : elements1[x][y]-elements2[x][y];
+				        
+				        /*		Binary pixel [x][y]		*/
+				        elementsRes[x][y] = binaryPixel(elementsRes[x][y], seuil);
+				        
+				    }
+			}
+			else
+				System.out.println("images non équivalentes en taille. Dommage!");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return elementsRes;
+	}
+	
+	/*
+	 * Binary a pixel
+	 */
+	public int binaryPixel(int pix, int seuil)
+	{
+		return pix < seuil ? 0 : 255;
 	}
 	
 	/*

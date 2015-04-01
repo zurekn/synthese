@@ -29,7 +29,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		//////////////////////////////////test//////////////////////////////////
 		String urlImage = "res"+File.separator;
 		BufferedImage img, imgVierge;
-		int seuil = 20;
+		int seuil = 200;
 		
 //		try {
 //			img = ImageIO.read(new File(pathToDir + "testmouvement.jpg"));
@@ -47,7 +47,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 //			e.printStackTrace();
 //		}
 //		ti.errosion("mini_carre.jpg", seuil, 1);
-		ti.dilatation("toto.jpg", seuil, 2);
+//		ti.dilatation("toto.jpg", seuil, 2);
 //		ti.dilatation("toto2_errosion.jpg", seuil, 1);
 	    ////////////////////////////////////////////////////////////////////////
 		
@@ -55,7 +55,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 //		Pixel p = ti.EtiquetageIntuitifImage("Manathan.jpg", "Manathan_vide.jpg");
 //		System.out.println("pixel centre gravité : "+p.getX()+" "+p.getY());
 		
-//		List<FormObject> lf = ti.etiquetageIntuitifImage2("testBlocPS.jpg", "testBlocPS.jpg",seuil);
+		List<FormObject> lf = ti.etiquetageIntuitifImage2("imgComp.jpg", "imgSrc.jpg",seuil);
 		
 //		System.out.println(System.currentTimeMillis()-time + " end time");
 	}
