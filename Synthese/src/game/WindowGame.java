@@ -2,7 +2,7 @@ package game;
 
 import imageprocessing.APIX;
 import imageprocessing.APIXListener;
-import imageprocessing.QRCodeAdapter;
+import imageprocessing.APIXAdapter;
 import imageprocessing.QRCodeEvent;
 
 import java.awt.List;
@@ -53,6 +53,7 @@ public class WindowGame extends BasicGame {
 	private long eventTimer = -1;
 
 	public static WindowGame windowGame;
+	
 
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
@@ -92,6 +93,7 @@ public class WindowGame extends BasicGame {
 		Data.loadMap();
 
 		initAPIX();
+
 		
 		// Create the player list
 		players = new ArrayList<Player>();
@@ -120,7 +122,7 @@ public class WindowGame extends BasicGame {
 		apix = new APIX();
 
 		movementHandler = new MovementHandler(this);
-		apix.addAPIXListener(new QRCodeAdapter() {
+		apix.addAPIXListener(new APIXAdapter() {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
 				System.out
@@ -135,6 +137,15 @@ public class WindowGame extends BasicGame {
 	 */
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
+		if(!apix.isInit()){
+			//TODO init de l'API avec les cube noir sur fond blanc
+			g.setColor(Color.black);
+			g.setBackground(Color.white);
+			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_Y_POS - 10, 20, 20);
+			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10, Data.RELATIVE_Y_POS - 10, 20, 20);
+			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10, 20, 20);
+			
+		}
 		g.scale(Data.SCALE, Data.SCALE);
 		Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
 		mobHandler.render(container, g);
@@ -143,7 +154,7 @@ public class WindowGame extends BasicGame {
 		playerHandler.render(container, g);
 		renderEvents(container, g);
 		renderDeckArea(container, g);
-		renderText(container, g);
+		renderText(container, g);		
 	}
 
 	/**
@@ -346,18 +357,22 @@ public class WindowGame extends BasicGame {
 	 */
 	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		System.out
-				.println("Search the first character range : " + e.toString());
+		 System.out.println("Search the first character range : " +
+		 e.toString());
 
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH
 					|| e.getDirection() == Data.SOUTH) {
-				int i = (Math.abs(c.getY() - e.getYOntBoard()));
+				int i = (Math.abs(c.getY() - (e.getYOnBoard()-1))) + 1;
+				System.out.println("c.getY() = ["+c.getY()+"], e.getXOnBoard = ["+(e.getYOnBoard()-1)+"], i = ["+i+"]");
+				
 				if (i < range)
 					range = i;
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
-				int i = (Math.abs(c.getX() - e.getXOnBoard()));
+				System.out.println("c.getX() = ["+c.getX()+"], e.getXOnBoard = ["+(e.getXOnBoard()-1)+"], i = ["+(c.getX() - e.getXOnBoard()-1)+"]");
+				int i = (Math.abs(c.getX() - (e.getXOnBoard()-1))) + 1;
+				
 				if (i < range)
 					range = i;
 			}
@@ -461,9 +476,7 @@ public class WindowGame extends BasicGame {
 	 */
 	private ArrayList<Character> getCharacterePositionOnLine(int x, int y,
 			int direction) {
-		System.out.println("[" + x + "" + y + "] Direction = " + direction
-				+ ", North = " + Data.NORTH + ", South = " + Data.SOUTH
-				+ ", East = " + Data.EAST + ", West = " + Data.WEST);
+
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
@@ -503,7 +516,7 @@ public class WindowGame extends BasicGame {
 					&& mobs.get(i).getX() < x)
 				c.add(mobs.get(i));
 		}
-		System.out.println(c.toString());
+		System.out.println("getCharacterePositionOnLine ["+x+", "+y+"]"+c.toString());
 		return c;
 	}
 

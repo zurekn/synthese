@@ -1,6 +1,6 @@
 package imageprocessing;
 
-public abstract class QRCodeAdapter implements APIXListener{
+public abstract class APIXAdapter implements APIXListener{
 
 	public void newQRCode(QRCodeEvent e){}
 }

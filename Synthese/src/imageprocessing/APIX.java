@@ -2,11 +2,15 @@ package imageprocessing;
 
 import javax.swing.event.EventListenerList;
 
-public class APIX {
+public class APIX implements Runnable{
 
 	private String QRDatas;
 	private QRCam qrcam;
 	private final EventListenerList listeners = new EventListenerList();
+	private boolean isInit = false;
+	private int relativeX;
+	private int relativeY;
+	
 	
 	public APIX(){
 		// qrcam.run();
@@ -17,7 +21,19 @@ public class APIX {
 	}
 
 	public void setQRDatas(String qRDatas) {
-		QRDatas = qRDatas;
+		this.QRDatas = qRDatas;
+		if (!qRDatas.equals(QRDatas)){
+			QRDatas = qRDatas;
+			dataChanged(QRDatas);	
+		}
+	}
+	
+	public boolean isInit(){
+		return isInit;
+	}
+	
+	public void setInit(boolean b){
+		isInit = b;
 	}
 
 	public void updateQR(){
@@ -40,6 +56,10 @@ public class APIX {
 		return listeners.getListeners(APIXListener.class);
 	}
 	
+	/**
+	 * Add a event to the listener when a the data is set
+	 * @param data, String
+	 */
 	protected void dataChanged(String data){
 		QRCodeEvent event = null;
 		for(APIXListener listener : getAPIXListener()){
@@ -47,6 +67,11 @@ public class APIX {
 				event = new QRCodeEvent(data);
 			listener.newQRCode(event);
 		}
+	}
+
+	public void run() {
+		//TODO
+		
 	}
 	
 }

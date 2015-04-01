@@ -85,7 +85,7 @@ public class Event {
 		return y;
 	}
 	
-	public int getYOntBoard(){
+	public int getYOnBoard(){
 		return (y - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_Y;
 	}
 
