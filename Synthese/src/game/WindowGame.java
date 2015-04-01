@@ -1,5 +1,10 @@
 package game;
 
+import imageprocessing.APIX;
+import imageprocessing.APIXListener;
+import imageprocessing.QRCodeAdapter;
+import imageprocessing.QRCodeEvent;
+
 import java.awt.List;
 import java.util.ArrayList;
 
@@ -27,6 +32,8 @@ import exception.IllegalMovementException;
  *
  */
 public class WindowGame extends BasicGame {
+
+	private APIX apix;
 
 	private GameContainer container;
 	private MobHandler mobHandler;
@@ -76,16 +83,17 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		this.container = container;
+
 		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
 		TrapData.loadTrap();
-
 		Data.loadMap();
 
-		movementHandler = new MovementHandler(this);
-
+		initAPIX();
+		
+		// Create the player list
 		players = new ArrayList<Player>();
 		try {
 			players.add(new Player(16, 14, "P1", "mage"));
@@ -95,6 +103,7 @@ public class WindowGame extends BasicGame {
 		}
 		playerHandler = new playerHandler(players);
 
+		// Create the monster list
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
@@ -107,9 +116,22 @@ public class WindowGame extends BasicGame {
 		currentCharacter = players.get(turn);
 	}
 
+	public void initAPIX() {
+		apix = new APIX();
+
+		movementHandler = new MovementHandler(this);
+		apix.addAPIXListener(new QRCodeAdapter() {
+			@Override
+			public void newQRCode(QRCodeEvent e) {
+				System.out
+						.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["
+								+ e.getData() + "]");
+			}
+		});
+	}
+
 	/**
-	 * The render function
-	 * Call all game's render
+	 * The render function Call all game's render
 	 */
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
@@ -126,6 +148,7 @@ public class WindowGame extends BasicGame {
 
 	/**
 	 * Render the Deck Area
+	 * 
 	 * @param container
 	 * @param g
 	 */
@@ -149,6 +172,7 @@ public class WindowGame extends BasicGame {
 
 	/**
 	 * Render the Game Text
+	 * 
 	 * @param container
 	 * @param g
 	 */
@@ -160,6 +184,7 @@ public class WindowGame extends BasicGame {
 
 	/**
 	 * Render all events in the game
+	 * 
 	 * @param container
 	 * @param g
 	 */
@@ -214,8 +239,9 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			String[] commands = AIHandler.getMobsMovements(new WindowGameData(mobs, players, currentCharacter, playerNumber, turn));
-			
+			String[] commands = AIHandler.getMobsMovements(new WindowGameData(
+					mobs, players, currentCharacter, playerNumber, turn));
+
 		}
 
 		// set to false the previous character turn
@@ -244,7 +270,6 @@ public class WindowGame extends BasicGame {
 		}
 
 	}
-
 
 	/**
 	 * decode a action and create associated event
@@ -279,7 +304,7 @@ public class WindowGame extends BasicGame {
 			int r = getFirstCharacterRange(
 					getCharacterePositionOnLine(currentCharacter.getX(),
 							currentCharacter.getY(), e.getDirection()), e);
-			r = r > e.getRange()? e.getRange() : r;
+			r = r > e.getRange() ? e.getRange() : r;
 			e.setRange(r);
 			events.add(e);
 
@@ -314,14 +339,16 @@ public class WindowGame extends BasicGame {
 
 	/**
 	 * Return the distance between the currentCharacter and the closer mob
+	 * 
 	 * @param chars
 	 * @param e
 	 * @return
 	 */
 	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		System.out.println("Search the first character range : "+e.toString());
-		
+		System.out
+				.println("Search the first character range : " + e.toString());
+
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH
 					|| e.getDirection() == Data.SOUTH) {
@@ -329,15 +356,14 @@ public class WindowGame extends BasicGame {
 				if (i < range)
 					range = i;
 			}
-			if (e.getDirection() == Data.EAST
-					|| e.getDirection() == Data.WEST) {
+			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
 				int i = (Math.abs(c.getX() - e.getXOnBoard()));
 				if (i < range)
 					range = i;
 			}
 		}
-		if(Data.debug)
-			System.out.println("The Range is : "+range);
+		if (Data.debug)
+			System.out.println("The Range is : " + range);
 		return range;
 	}
 
@@ -411,7 +437,8 @@ public class WindowGame extends BasicGame {
 	}
 
 	/**
-	 * 	Get all the Character positions
+	 * Get all the Character positions
+	 * 
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getAllPosition() {
@@ -425,8 +452,8 @@ public class WindowGame extends BasicGame {
 	}
 
 	/**
-	 * Get all character on a line 
-	 * 	line = Horizontal or Vertical
+	 * Get all character on a line line = Horizontal or Vertical
+	 * 
 	 * @param x
 	 * @param y
 	 * @param direction
@@ -434,7 +461,9 @@ public class WindowGame extends BasicGame {
 	 */
 	private ArrayList<Character> getCharacterePositionOnLine(int x, int y,
 			int direction) {
-		System.out.println("["+x+""+y+"] Direction = "+direction+", North = "+Data.NORTH+", South = "+Data.SOUTH+", East = "+Data.EAST+", West = "+Data.WEST);
+		System.out.println("[" + x + "" + y + "] Direction = " + direction
+				+ ", North = " + Data.NORTH + ", South = " + Data.SOUTH
+				+ ", East = " + Data.EAST + ", West = " + Data.WEST);
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
@@ -480,6 +509,7 @@ public class WindowGame extends BasicGame {
 
 	/**
 	 * Return the Character with have the x,y position
+	 * 
 	 * @param x
 	 * @param y
 	 * @return Character
