@@ -55,7 +55,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 //		Pixel p = ti.EtiquetageIntuitifImage("Manathan.jpg", "Manathan_vide.jpg");
 //		System.out.println("pixel centre gravité : "+p.getX()+" "+p.getY());
 		
-		List<FormObject> lf = ti.etiquetageIntuitifImage2("imgComp.jpg", "imgSrc.jpg",seuil);
+		List<FormObject> lf = ti.etiquetageIntuitifImage2("toto.jpg", "toto.jpg",seuil);
 		
 //		System.out.println(System.currentTimeMillis()-time + " end time");
 	}
