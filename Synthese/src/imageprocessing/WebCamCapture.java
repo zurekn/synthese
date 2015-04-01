@@ -217,24 +217,36 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		BufferedImage image = webcam.getImage();
 		// save image to PNG file
 		try {
-
 			ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
 			System.out.println("Image de dim : ["+image.getWidth()+", "+image.getHeight()+"]");
-
-			ImageIO.write(image, "png", new File("Synthese/res/testRes/QRCodes/QRCapture5.png"));
-
-		} catch (Exception e2) {
+		} 
+		catch (Exception e2) {
 			System.out.println(e2);
 		}
 		
-		TraitementImage ti = new TraitementImage();
-		//ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 80);
-//		int seuil = 110;
+//		TraitementImage ti = new TraitementImage();
+//		////////
+	}
+	
+	public void takePhoto()
+	{
+		// get image
+				BufferedImage image = webcam.getImage();
+				// save image to PNG file
+				try {
 
-		//ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
-
-		// ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
-
-		//List<FormObject> p = ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
+					ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
+					System.out.println("Image de dim : ["+image.getWidth()+", "+image.getHeight()+"]");
+					
+					long time = System.currentTimeMillis();
+					int seuil = 200;
+					TraitementImage ti = new TraitementImage();
+					List<FormObject> lf = ti.etiquetageIntuitifImage2("webcamCapture.jpg", "imageRef.jpg",seuil);
+					
+					System.out.println(System.currentTimeMillis()-time + " end time");
+				} 
+				catch (Exception e2) {
+					System.out.println(e2);
+				}		
 	}
 }
