@@ -125,9 +125,7 @@ public class WindowGame extends BasicGame {
 		apix.addAPIXListener(new APIXAdapter() {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
-				System.out
-						.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["
-								+ e.getData() + "]");
+				System.out.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["+ e.getData() + "]");
 			}
 		});
 	}
