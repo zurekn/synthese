@@ -31,6 +31,8 @@ import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
+import data.Data;
+
 
 public class QRCodeProcessing {
 	
@@ -39,6 +41,7 @@ private String filePath;
 private String charset;
 private Map hintMap;
 private String QRDatas;
+private QRCodeEvent qrCodeEvent;
 
 	public  QRCodeProcessing(){
 		super();
@@ -46,7 +49,6 @@ private String QRDatas;
 		hintMap = new HashMap();
 		hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 		filePath = "Synthese/res/testRes/QRcodes/";
-		System.out.println("main: " + "Program end.");
 		QRDatas = "";
 	    }
 	
@@ -112,7 +114,7 @@ private String QRDatas;
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 			
 			result = mdr.decodeMultiple(bitmap,hints);
-			System.out.println("Il y a "+result.length+" QR Codes.");
+
 			
 			for(Result trolol : result){
 				rp = trolol.getResultPoints();
@@ -120,9 +122,135 @@ private String QRDatas;
 				//System.out.println("nb "+i);
 				// Set the final datas 
 				QRDatas += checkOrientation(seuil,rp,trolol.getText())+"\n";
-				
+				qrCodeEvent = createQrCodeEvent(seuil, rp, trolol.getText()+"\n");
 			}
 	//	return res; 
+	}
+	
+	/**
+	 * Method that calculate the orientation of a given QRCode
+	 * @param seuil - Area of authorized variation of position.
+	 * @param rp - passed from another method
+	 * @param QRContent - ID of the QRCode (used in final object)
+	 * @return
+	 */
+	public QRCodeEvent createQrCodeEvent(float seuil,ResultPoint[] rp,String QRContent){
+		int direction;
+		String id = QRContent;
+		// Count each eye in the QR Code
+		int j= 1;
+		float xeye1 = 0;
+		float xeye2 = 0;
+		float xeye3 = 0;
+		float xeye4 = 0;
+		float yeye1 = 0;
+		float yeye2 = 0;
+		float yeye3 = 0;
+		float yeye4 = 0;
+		float ecartXlarg;
+		float ecartXhoriz;
+		float ecartYhaut;
+		float ecartYlarg;
+		// to calculate the center of QRCode
+		float xmid = 0, ymid = 0;
+		
+		// Calcul des positions des yeux
+		for(ResultPoint resp : rp){
+			if(j==1){
+				xeye1 = resp.getX();
+				yeye1 = resp.getY();
+			}
+			if(j==2){
+				xeye2 = resp.getX();
+				yeye2 = resp.getY();
+			}
+			if(j==3){
+				xeye3 = resp.getX();
+				yeye3 = resp.getY();
+			}
+			if(j==4){
+				xeye4 = resp.getX();
+				yeye4 = resp.getY();
+			}
+			//System.out.println("\t j="+j+" pos X : "+resp.getX() + "; pos Y : "+resp.getY());
+			j++;
+		}
+		j=1;
+		ecartXlarg=(xeye1 - xeye2);
+		ecartYlarg=(yeye2 - yeye3);
+		
+		ecartYhaut=(yeye1 - yeye2);
+		ecartXhoriz=(xeye2 - xeye3);
+		//System.out.println("\t On a donc un écart en largeur de X =  "+ecartXlarg+" et de Y = "+ecartYlarg);
+		//System.out.println("\t On a donc un écart en hauteur de Y =  "+ecartYhaut+" et en horizontal de X = "+ecartXhoriz);
+
+		//System.out.print("Sur cette image, le QRcode "+QRContent+" penche vers ... ");
+		
+		// RIght
+		if(ecartXlarg < (0-seuil) ){
+			if(ecartYlarg < (0-seuil)){
+				
+				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
+					// Top
+					if(ecartYhaut > seuil){
+						direction = Data.NORTH_EAST;
+						
+					// Bottom
+					}else{
+						direction = Data.SOUTH_EAST;
+					}
+					
+				}else{
+					direction = Data.EAST;
+				}
+			}else{
+				direction = Data.NORTH;
+			}
+			// if X larg > 0  => Left
+		}else if(ecartXlarg > seuil){
+			if(ecartYlarg < (0-seuil)){
+				direction = Data.NORTH;
+			}else{
+				
+				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
+					// Top
+					if(ecartYhaut > seuil){
+						direction = Data.NORTH_WEST;
+						
+					// Bottom
+					}else{
+						direction = Data.SOUTH_WEST;
+					}
+					
+				}else{
+					direction = Data.WEST;
+				}
+				
+			}
+			//  Bottom
+		}else{				
+				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
+					// Top
+					if(ecartYhaut > seuil){
+						direction = Data.NORTH;
+					// Bottom
+					}else{
+						direction = Data.SOUTH;
+					}
+					// Left
+				}else{
+					direction = Data.WEST;
+				}
+				
+		
+		}
+		
+		// Calcul of middle point : 
+		xmid = ((xeye3 - xeye2)/2) + xeye2;
+		ymid = ((yeye1 - yeye2)/2) + yeye2;
+		xmid = xmid < 0 ? -xmid : xmid;
+		ymid = ymid < 0 ? -ymid : ymid;
+		return new QRCodeEvent(id, direction, (int)xmid,(int)ymid);
 	}
 	
 	/**
@@ -266,6 +394,10 @@ private String QRDatas;
 	
 	public String getQRDatas(){
 		return QRDatas;
+	}
+	
+	public QRCodeEvent getQRCodeEvent(){
+		return qrCodeEvent;
 	}
 	
 }// End of class

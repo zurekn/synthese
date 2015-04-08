@@ -15,6 +15,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.lwjgl.Sys;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -76,6 +77,7 @@ public class Data {
 	public static TiledMap map;
 	public static MonsterData monsterData;
 	public static WindowGame game;
+	public static long beginTime;
 
 	/**
 	 * Load all game variables
@@ -85,6 +87,7 @@ public class Data {
 	public static void loadGame() throws SlickException {
 
 		System.out.println(" Begin data init ");
+		beginTime = System.currentTimeMillis();
 
 		map = new TiledMap(Data.MAP_FILE);
 
