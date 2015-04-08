@@ -1,5 +1,5 @@
 <spells>
-	<spell id="s1">
+	<spell id="s2">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
 		<celX>36</celX>
 		<celY>36</celY>
@@ -12,7 +12,7 @@
 		<type>magic</type>
 		<sound>Synthese/res/sounds/fireball.wav</sound>
 	</spell>
-	<spell id="s2">
+	<spell id="s1">
 		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
 		<celX>36</celX>
 		<celY>36</celY>

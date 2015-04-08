@@ -3,6 +3,7 @@ package game;
 import imageprocessing.APIX;
 import imageprocessing.APIXListener;
 import imageprocessing.APIXAdapter;
+import imageprocessing.MovementEvent;
 import imageprocessing.QRCodeEvent;
 
 import java.awt.List;
@@ -127,6 +128,22 @@ public class WindowGame extends BasicGame {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
 				System.out.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["+ e.toString() + "]");
+				try {
+					decodeAction(e.getId()+":"+e.getDirection());
+				} catch (IllegalActionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+
+			public void newMouvement(MovementEvent e) {
+				System.out.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["+e.toString()+"]");
+				try {
+					decodeAction("m:"+(e.getX()/Data.BLOCK_SIZE_X)+":"+(e.getY()/Data.BLOCK_SIZE_Y));
+				} catch (IllegalActionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 	}

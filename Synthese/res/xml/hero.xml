@@ -9,7 +9,7 @@
 		<movementPoints>3</movementPoints>
 		<magicResist>6</magicResist>
 		<spells>
-			<spell id="s1"></spell>
+			<spell id="s2"></spell>
 			<spell id="s4"></spell>
 		</spells>
 		<eyeSight>5</eyeSight>

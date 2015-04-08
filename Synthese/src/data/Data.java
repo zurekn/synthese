@@ -73,6 +73,7 @@ public class Data {
 	public static final HashMap<String, Event> eventMap = new HashMap<String, Event>();
 	public static final HashMap<String, Boolean> untraversableBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
+	public static final long WAINTING_TIME = 1000;
 
 	public static TiledMap map;
 	public static MonsterData monsterData;
