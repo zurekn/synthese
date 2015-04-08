@@ -1,11 +1,21 @@
 package imageprocessing;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
 import javax.swing.event.EventListenerList;
+
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
 
 public class APIX implements Runnable{
 
 	private String QRDatas;
 	private QRCam qrcam;
+	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
 	private boolean isInit = true;
 	private int relativeX;
@@ -13,19 +23,40 @@ public class APIX implements Runnable{
 	
 	
 	public APIX(){
-		// qrcam.run();
+		
+		Dimension size = WebcamResolution.QVGA.getSize();
+		webcam = Webcam.getWebcams().get(0);
+		webcam.setViewSize(size);
+		webcam.open();
+		qrcam = new QRCam(webcam);
+		qrcam.addQRCodeListener(new QRCodeAdapter(){
+			@Override
+			public void newQRCode(QRCodeEvent e) {addQREvent(e);}
+		});
+
+		//TODO need to create the TraitementImage part
+		
+//		qrcam.run();
 	}
 	
 	public String getQRDatas() {
 		return QRDatas;
 	}
 
+	protected void addQREvent(QRCodeEvent e){
+		for(APIXListener listener : getAPIXListener()){
+			listener.newQRCode(e);
+		}
+	}
+	
 	public void setQRDatas(String qRDatas) {
-		this.QRDatas = qRDatas;
 		if (!qRDatas.equals(QRDatas)){
+			System.out.println("New set dans setQRDatas");
 			QRDatas = qRDatas;
 			dataChanged(QRDatas);	
 		}
+		this.QRDatas = qRDatas;
+
 	}
 	
 	public boolean isInit(){

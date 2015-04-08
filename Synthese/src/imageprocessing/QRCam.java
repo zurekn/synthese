@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadFactory;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import javax.swing.event.EventListenerList;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
@@ -22,6 +23,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
+import data.Data;
 import imageprocessing. QRCodeProcessing;
 
 public class QRCam extends JFrame implements Runnable, ThreadFactory {
@@ -31,6 +33,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	private Webcam webcam = null;
 	private WebcamPanel panel = null;
 	private JTextArea textarea = null;
+	private final EventListenerList listeners = new EventListenerList();
 	// QR datas
 	private String QRDatas;
 	
@@ -39,9 +42,12 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		setLayout(new FlowLayout());
 		setTitle("Read QR / Bar Code With Webcam");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		Dimension size = WebcamResolution.QVGA.getSize();
 		webcam = Webcam.getWebcams().get(0);
 		webcam.setViewSize(size);
+		
+		//JFRAME
 		panel = new WebcamPanel(webcam);
 		panel.setPreferredSize(size);
 		textarea = new JTextArea();
@@ -51,7 +57,14 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		add(textarea);
 		pack();
 		setVisible(true);
+		
 		executor.execute(this);
+	}
+	
+	public QRCam(Webcam webcam){
+		this.webcam = webcam;
+		executor.execute(this);
+		System.out.println("QRcode initialized");
 	}
 	
 	public void run() {
@@ -62,7 +75,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 				e.printStackTrace();
 			}
 			// Those lines are for the multi QR code reader
-			String testMulti = null;
+			QRCodeEvent testMulti = null;
 			QRCodeProcessing tqr = new QRCodeProcessing();
 
 			Result result = null;
@@ -76,21 +89,24 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 				try {
 						// set seuil to 20 to ensure better results
 					tqr.findAllQR("",20, image);
-					testMulti = tqr.getQRDatas();
+					testMulti = tqr.getQRCodeEvent();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotFoundException e) {
 					// fall thru, it means there is no QR code in image
-					System.out.println("no QRCode in image");
+					System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
 				}
+			}else{
+				System.err.println("Webcam ["+webcam.getName()+"] is not open");
 			}
 
 			if(testMulti != null){
-				textarea.setText(testMulti);
-				setQRDatas(testMulti);
+//				textarea.setText(testMulti);
+				System.out.println("New QRCode find : "+testMulti);
+				newQRDatas(testMulti);
 			}else{
-				textarea.setText("");
+				//textarea.setText("");
 			}
 		} while (true);
 	}
@@ -101,16 +117,33 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		return t;
 	}
 	
-	
-	public static void main(String[] args) {
-		new QRCam();
-	}
-	
+
 	public String getQRDatas(){
 		return QRDatas;
 	}
 	
+	
+	public void newQRDatas(QRCodeEvent e){
+		for(QRCodeListener listerner : getQRCodeListener()){
+			listerner.newQRCode(e);
+		}
+	}
+	
 	public void setQRDatas(String QRDatas){
 		this.QRDatas = QRDatas;
+		QRCodeEvent event = null;
+		for(QRCodeListener listerner : getQRCodeListener()){
+			if(event == null)
+				event = new QRCodeEvent(QRDatas);
+			listerner.newQRCode(event);
+		}
+	}
+	
+	public void addQRCodeListener(QRCodeListener listener){
+		listeners.add(QRCodeListener.class, listener);
+	}
+	
+	public QRCodeListener[] getQRCodeListener(){
+		return listeners.getListeners(QRCodeListener.class);
 	}
 }

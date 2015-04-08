@@ -1,4 +1,5 @@
 package imageprocessing;
+
 /**
  * @site http://webcam-capture.sarxos.pl/
  */
@@ -28,21 +29,21 @@ import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamPicker;
 import com.github.sarxos.webcam.WebcamResolution;
 
-public class WebCamCapture extends JFrame implements Runnable, WebcamListener, WindowListener, UncaughtExceptionHandler, ActionListener , ItemListener, WebcamDiscoveryListener 
-{	
+public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
+		WindowListener, UncaughtExceptionHandler, ActionListener, ItemListener,
+		WebcamDiscoveryListener {
 	private static final long serialVersionUID = 1L;
 	private Webcam webcam = null;
 	private WebcamPanel panel = null;
 	private WebcamPicker picker = null;
 
-	
 	public void run() {
-
-		Webcam.addDiscoveryListener(this);
-
+		// JFRAME
 		setTitle("Java Webcam Capture POC");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+
+		Webcam.addDiscoveryListener(this);
 
 		addWindowListener(this);
 
@@ -51,24 +52,27 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 
 		JButton buttonCapture = new JButton();
 		buttonCapture.addActionListener(this);
-		
+
 		webcam = picker.getSelectedWebcam();
 
 		if (webcam == null) {
 			System.out.println("No webcams found...");
 			System.exit(1);
 		}
-		try{
+		try {
 			System.out.println(webcam.getCustomViewSizes().length);
-			System.out.println(webcam.getViewSizes()[0]+", "+webcam.getViewSizes()[1]+", "+webcam.getViewSizes()[2]);
-			
-			webcam.setCustomViewSizes(new Dimension [] {new Dimension(1920, 1080)});
+			System.out.println(webcam.getViewSizes()[0] + ", "
+					+ webcam.getViewSizes()[1] + ", "
+					+ webcam.getViewSizes()[2]);
+
+			webcam.setCustomViewSizes(new Dimension[] { new Dimension(1920,
+					1080) });
 			webcam.setViewSize(new Dimension(1920, 1080));
-			
+
 			System.out.println(webcam.getViewSize());
-			//webcam.setViewSize(WebcamResolution.HD720.getSize());
-			
-		}catch(java.lang.IllegalArgumentException e){
+			// webcam.setViewSize(WebcamResolution.HD720.getSize());
+
+		} catch (java.lang.IllegalArgumentException e) {
 			System.err.println(e);
 		}
 		System.out.println(webcam.getViewSize());
@@ -86,7 +90,6 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 
 		Thread t = new Thread() {
 
-			
 			public void run() {
 				panel.start();
 			}
@@ -97,66 +100,54 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		t.start();
 	}
 
-	
 	public void webcamOpen(WebcamEvent we) {
 		System.out.println("webcam open");
 	}
 
-	
 	public void webcamClosed(WebcamEvent we) {
 		System.out.println("webcam closed");
 	}
 
-	
 	public void webcamDisposed(WebcamEvent we) {
 		System.out.println("webcam disposed");
 	}
 
-	
 	public void webcamImageObtained(WebcamEvent we) {
 		// do nothing
 	}
 
-	
 	public void windowActivated(WindowEvent e) {
 	}
 
-	
 	public void windowClosed(WindowEvent e) {
 		webcam.close();
 	}
 
-	
 	public void windowClosing(WindowEvent e) {
 	}
 
-	
 	public void windowOpened(WindowEvent e) {
 	}
 
-	
 	public void windowDeactivated(WindowEvent e) {
 	}
 
-	
 	public void windowDeiconified(WindowEvent e) {
 		System.out.println("webcam viewer resumed");
 		panel.resume();
 	}
 
-	
 	public void windowIconified(WindowEvent e) {
 		System.out.println("webcam viewer paused");
 		panel.pause();
 	}
 
-	
 	public void uncaughtException(Thread t, Throwable e) {
-		System.err.println(String.format("Exception in thread %s", t.getName()));
+		System.err
+				.println(String.format("Exception in thread %s", t.getName()));
 		e.printStackTrace();
 	}
 
-	
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getItem() != webcam) {
 			if (webcam != null) {
@@ -169,9 +160,10 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 				webcam.close();
 
 				webcam = (Webcam) e.getItem();
-				webcam.setCustomViewSizes(new Dimension [] {new Dimension(1280, 1024)});
+				webcam.setCustomViewSizes(new Dimension[] { new Dimension(1280,
+						1024) });
 				webcam.setViewSize(new Dimension(1280, 1024));
-				
+
 				webcam.addWebcamListener(this);
 
 				System.out.println("selected " + webcam.getName());
@@ -184,7 +176,6 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 
 				Thread t = new Thread() {
 
-					
 					public void run() {
 						panel.start();
 					}
@@ -197,21 +188,18 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		}
 	}
 
-	
 	public void webcamFound(WebcamDiscoveryEvent event) {
 		if (picker != null) {
 			picker.addItem(event.getWebcam());
 		}
 	}
 
-	
 	public void webcamGone(WebcamDiscoveryEvent event) {
 		if (picker != null) {
 			picker.removeItem(event.getWebcam());
 		}
 	}
 
-	
 	public void actionPerformed(ActionEvent e) {
 		// get image
 		BufferedImage image = webcam.getImage();
@@ -219,22 +207,26 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 		try {
 
 			ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
-			System.out.println("Image de dim : ["+image.getWidth()+", "+image.getHeight()+"]");
+			System.out.println("Image de dim : [" + image.getWidth() + ", "
+					+ image.getHeight() + "]");
 
-			ImageIO.write(image, "png", new File("Synthese/res/testRes/QRCodes/QRCapture5.png"));
+			ImageIO.write(image, "png", new File(
+					"Synthese/res/testRes/QRCodes/QRCapture5.png"));
 
 		} catch (Exception e2) {
 			System.out.println(e2);
 		}
-		
-		TraitementImage ti = new TraitementImage();
-		//ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 80);
-//		int seuil = 110;
 
-		//ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
+		TraitementImage ti = new TraitementImage();
+		// ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg",
+		// "jpg", 80);
+		// int seuil = 110;
 
 		// ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
 
-		//List<FormObject> p = ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
+		// ti.makeBinaryImage("Manathan.jpg", "manathan_bin.jpg", "jpg", 110);
+
+		// List<FormObject> p =
+		// ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
 	}
 }
