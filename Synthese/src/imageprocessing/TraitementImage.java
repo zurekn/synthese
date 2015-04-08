@@ -569,9 +569,9 @@ public class TraitementImage {
 		int i;
 		int [][] resFermeture = elemFermeture;
 		for (i=0 ; i<10 ; i++)
-			resFermeture = erosion(resFermeture);
-		for (i=0 ; i<10 ; i++)
 			resFermeture = dilatation(resFermeture);
+		for (i=0 ; i<10 ; i++)
+			resFermeture = erosion(resFermeture);
 		
 		return resFermeture;
 	}
