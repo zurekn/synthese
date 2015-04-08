@@ -259,7 +259,7 @@ public class TraitementImage {
 	/*
 	 * Mise en place de l'algorithme d'étiquetage perso
 	 */
-	public List<FormObject> etiquetageIntuitifImage2(String webCamCaptureImg, String srcImg, int seuil)
+	public List<FormObject> etiquetageIntuitifImageGiveList(String webCamCaptureImg, String srcImg, int seuil)
 	{	
 		BufferedImage imgCompare = null;
 		BufferedImage imgSrcRef = null;

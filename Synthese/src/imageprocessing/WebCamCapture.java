@@ -241,7 +241,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener, W
 					long time = System.currentTimeMillis();
 					int seuil = 200;
 					TraitementImage ti = new TraitementImage();
-					List<FormObject> lf = ti.etiquetageIntuitifImage2("webcamCapture.jpg", "imageRef.jpg",seuil);
+					List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("webcamCapture.jpg", "imageRef.jpg",seuil);
 					
 					System.out.println(System.currentTimeMillis()-time + " end time");
 				} 

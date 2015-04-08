@@ -26,7 +26,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		long time = System.currentTimeMillis();
 		int seuil = 200;
 		TraitementImage ti = new TraitementImage();
-//		List<FormObject> lf = ti.etiquetageIntuitifImage2("toto.jpg", "toto.jpg",seuil);
+//		List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("toto.jpg", "toto.jpg",seuil);
 		
 		//////////////////////////////////test//////////////////////////////////
 
