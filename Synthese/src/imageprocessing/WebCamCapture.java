@@ -207,6 +207,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
 		try {
 
 			ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
+
 			System.out.println("Image de dim : [" + image.getWidth() + ", "
 					+ image.getHeight() + "]");
 
@@ -216,6 +217,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
 		} catch (Exception e2) {
 			System.out.println(e2);
 		}
+
 
 		TraitementImage ti = new TraitementImage();
 		// ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg",
@@ -228,5 +230,32 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
 
 		// List<FormObject> p =
 		// ti.etiquetageIntuitifImage("Manathan.jpg","Manathan_vide.jpg");
+
+		
+//		TraitementImage ti = new TraitementImage();
+//		////////
+	}
+
+	public void takePhoto()
+	{
+		// get image
+				BufferedImage image = webcam.getImage();
+				// save image to PNG file
+				try {
+
+					ImageIO.write(image, "jpg", new File("webcamCapture.jpg"));
+					System.out.println("Image de dim : ["+image.getWidth()+", "+image.getHeight()+"]");
+					
+					long time = System.currentTimeMillis();
+					int seuil = 200;
+					TraitementImage ti = new TraitementImage();
+					List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("webcamCapture.jpg", "imageRef.jpg",seuil);
+					
+					System.out.println(System.currentTimeMillis()-time + " end time");
+				} 
+				catch (Exception e2) {
+					System.out.println(e2);
+				}		
+
 	}
 }
