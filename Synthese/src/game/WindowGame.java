@@ -8,6 +8,8 @@ import imageprocessing.QRCodeEvent;
 
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -54,7 +56,6 @@ public class WindowGame extends BasicGame {
 	private long eventTimer = -1;
 
 	public static WindowGame windowGame;
-	
 
 	public WindowGame() throws SlickException {
 		super(Data.NAME);
@@ -95,22 +96,16 @@ public class WindowGame extends BasicGame {
 
 		initAPIX();
 
-		
 		// Create the player list
-		players = new ArrayList<Player>();
-		try {
-			players.add(new Player(16, 14, "P1", "mage"));
-		} catch (IllegalCaracterClassException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		initPlayers();
+
 		playerHandler = new playerHandler(players);
 
 		// Create the monster list
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
-		playerNumber = 1 + mobs.size();
+		playerNumber = players.size() + mobs.size();
 
 		turnTimer = Data.TURN_MAX_TIME;
 		new Thread(movementHandler).start();
@@ -119,17 +114,61 @@ public class WindowGame extends BasicGame {
 		currentCharacter = players.get(turn);
 	}
 
+	@SuppressWarnings("rawtypes")
+	public void initPlayers() {
+
+		players = new ArrayList<Player>();
+
+		Collection<String> pos = Data.departureBlocks.keySet();
+		Iterator it = pos.iterator();
+		String var;
+		String[] s;
+
+		if (Data.debug) {
+			int i = 0;
+			while (it.hasNext() && i < Data.DEBUG_PLAYER) {
+				var = (String) it.next();
+				addPlayer(var);
+				i++;
+			}
+		}
+
+	}
+
+	public void addPlayer(String position) {
+		if (!Data.departureBlocks.get(position)) {
+			String []s = position.split(":");
+			try {
+				players.add(new Player(Integer.parseInt(s[0]), Integer
+						.parseInt(s[1]), "P" + players.size(), "mage"));
+				Data.departureBlocks.remove(position);
+				Data.departureBlocks.put(position, true);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalCaracterClassException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
+	}
+
 	public void initAPIX() {
 		apix = new APIX();
+		if (!Data.RUN_APIX)
+			return;
 
 		movementHandler = new MovementHandler(this);
-		
+
 		apix.addAPIXListener(new APIXAdapter() {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
-				System.out.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["+ e.toString() + "]");
+				System.out
+						.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["
+								+ e.toString() + "]");
 				try {
-					decodeAction(e.getId()+":"+e.getDirection());
+					decodeAction(e.getId() + ":" + e.getDirection());
 				} catch (IllegalActionException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -137,9 +176,13 @@ public class WindowGame extends BasicGame {
 			}
 
 			public void newMouvement(MovementEvent e) {
-				System.out.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["+e.toString()+"]");
+				System.out
+						.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["
+								+ e.toString() + "]");
 				try {
-					decodeAction("m:"+(e.getX()/Data.BLOCK_SIZE_X)+":"+(e.getY()/Data.BLOCK_SIZE_Y));
+					// TODO check the available position
+					decodeAction("m:" + (e.getX() / Data.BLOCK_SIZE_X) + ":"
+							+ (e.getY() / Data.BLOCK_SIZE_Y));
 				} catch (IllegalActionException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -153,14 +196,17 @@ public class WindowGame extends BasicGame {
 	 */
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		if(!apix.isInit()){
-			//TODO init de l'API avec les cube noir sur fond blanc
+		if (!apix.isInit()) {
+			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
-			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_Y_POS - 10, 20, 20);
-			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10, Data.RELATIVE_Y_POS - 10, 20, 20);
-			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10, 20, 20);
-			
+			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_Y_POS - 10, 20,
+					20);
+			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10,
+					Data.RELATIVE_Y_POS - 10, 20, 20);
+			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_X_POS
+					+ Data.DECK_AREA_SIZE_X - 10, 20, 20);
+
 		}
 		g.scale(Data.SCALE, Data.SCALE);
 		Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
@@ -170,7 +216,7 @@ public class WindowGame extends BasicGame {
 		playerHandler.render(container, g);
 		renderEvents(container, g);
 		renderDeckArea(container, g);
-		renderText(container, g);		
+		renderText(container, g);
 	}
 
 	/**
@@ -373,22 +419,26 @@ public class WindowGame extends BasicGame {
 	 */
 	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		 System.out.println("Search the first character range : " +
-		 e.toString());
+		System.out
+				.println("Search the first character range : " + e.toString());
 
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH
 					|| e.getDirection() == Data.SOUTH) {
-				int i = (Math.abs(c.getY() - (e.getYOnBoard()-1))) + 1;
-				System.out.println("c.getY() = ["+c.getY()+"], e.getXOnBoard = ["+(e.getYOnBoard()-1)+"], i = ["+i+"]");
-				
+				int i = (Math.abs(c.getY() - (e.getYOnBoard() - 1))) + 1;
+				System.out.println("c.getY() = [" + c.getY()
+						+ "], e.getXOnBoard = [" + (e.getYOnBoard() - 1)
+						+ "], i = [" + i + "]");
+
 				if (i < range)
 					range = i;
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
-				System.out.println("c.getX() = ["+c.getX()+"], e.getXOnBoard = ["+(e.getXOnBoard()-1)+"], i = ["+(c.getX() - e.getXOnBoard()-1)+"]");
-				int i = (Math.abs(c.getX() - (e.getXOnBoard()-1))) + 1;
-				
+				System.out.println("c.getX() = [" + c.getX()
+						+ "], e.getXOnBoard = [" + (e.getXOnBoard() - 1)
+						+ "], i = [" + (c.getX() - e.getXOnBoard() - 1) + "]");
+				int i = (Math.abs(c.getX() - (e.getXOnBoard() - 1))) + 1;
+
 				if (i < range)
 					range = i;
 			}
@@ -532,7 +582,8 @@ public class WindowGame extends BasicGame {
 					&& mobs.get(i).getX() < x)
 				c.add(mobs.get(i));
 		}
-		System.out.println("getCharacterePositionOnLine ["+x+", "+y+"]"+c.toString());
+		System.out.println("getCharacterePositionOnLine [" + x + ", " + y + "]"
+				+ c.toString());
 		return c;
 	}
 

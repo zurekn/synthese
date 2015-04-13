@@ -10,6 +10,8 @@ import javax.swing.SwingUtilities;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
+import data.Data;
+
 import javax.swing.event.EventListenerList;
 
 public class APIX implements Runnable {
@@ -24,7 +26,8 @@ public class APIX implements Runnable {
 	private int relativeY = -1;
 
 	public APIX() {
-
+		if(!Data.RUN_APIX)
+			return;
 		Dimension size = WebcamResolution.QVGA.getSize();
 
 		webcam = Webcam.getWebcams().get(0);

@@ -1,60 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="25" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="001-G_Water01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/001-G_Water01.png" width="128" height="128"/>
+  <image source="tiles/Sprites/001-G_Water01.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="17" name="watergrass" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/watergrass.png" width="96" height="192"/>
+ <tileset firstgid="17" name="004-G_Ground02" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/004-G_Ground02.png" width="96" height="128"/>
  </tileset>
- <tileset firstgid="35" name="grass" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/grass.png" width="96" height="192"/>
+ <tileset firstgid="29" name="003-G_Ground01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/003-G_Ground01.png" width="96" height="128"/>
  </tileset>
- <tileset firstgid="53" name="004-G_Ground02" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/004-G_Ground02.png" width="96" height="128"/>
+ <tileset firstgid="41" name="007-Swamp01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/007-Swamp01.png" width="256" height="448"/>
  </tileset>
- <tileset firstgid="65" name="003-G_Ground01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/003-G_Ground01.png" width="96" height="128"/>
+ <tileset firstgid="153" name="004-Mountain01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/004-Mountain01.png" width="256" height="896"/>
  </tileset>
- <tileset firstgid="77" name="007-Swamp01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/007-Swamp01.png" width="256" height="448"/>
+ <tileset firstgid="377" name="032-Heaven01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/032-Heaven01.png" width="256" height="1024"/>
  </tileset>
- <tileset firstgid="189" name="004-Mountain01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/004-Mountain01.png" width="256" height="896"/>
+ <tileset firstgid="633" name="001-Grassland01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/001-Grassland01.png" width="256" height="576"/>
  </tileset>
- <tileset firstgid="413" name="032-Heaven01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/032-Heaven01.png" width="256" height="1024"/>
+ <tileset firstgid="777" name="001-G_Water01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/001-G_Water01.png" width="128" height="128"/>
  </tileset>
- <tileset firstgid="669" name="001-Grassland01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/001-Grassland01.png" width="256" height="576"/>
+ <tileset firstgid="793" name="005-Beach01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/005-Beach01.png" width="256" height="544"/>
  </tileset>
- <tileset firstgid="813" name="001-G_Water01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/001-G_Water01.png" width="128" height="128"/>
+ <tileset firstgid="929" name="lava" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/lava.png" width="96" height="192"/>
  </tileset>
- <tileset firstgid="829" name="005-Beach01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/005-Beach01.png" width="256" height="544"/>
+ <tileset firstgid="947" name="dirt" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/dirt.png" width="96" height="192"/>
  </tileset>
- <tileset firstgid="965" name="lava" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/lava.png" width="96" height="192"/>
- </tileset>
- <tileset firstgid="983" name="dirt" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/dirt.png" width="96" height="192"/>
- </tileset>
- <tileset firstgid="1001" name="009-CastleTown01" tilewidth="32" tileheight="32">
-  <image source="../../../../../Google Drive/Master1/Synthèse/ressources/Sprites/tiles/009-CastleTown01.png" width="256" height="960"/>
+ <tileset firstgid="965" name="009-CastleTown01" tilewidth="32" tileheight="32">
+  <image source="tiles/Sprites/009-CastleTown01.png" width="256" height="960"/>
  </tileset>
  <layer name="SousCouche" width="25" height="25">
-  <data encoding="base64" compression="zlib">
-   eJzt0UkKgCAUgGGh+9SqyeYDeMSmRXWCztGVeoKCCDY4gEHBR218f2ocIJRIUvpG+ipYfwhiBw25EwEsKSw0xE7I0Id/25gvdmzO+31T58E/+O4/Iz9kIGewo3spQMlUjvahapjshwhUDZ35RGE2PCs+Y7pojAYNPn8DvcMGXT9oNJ7cBZEa+02jBg3Tvrxf3ljAqkDP8gRH/pdT
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RSQqAIBSAYaFdOyubO4BHbFpUJ+gcXbInKIhggwMYtPgQAt+fiiOEEkXKVmSugv2HBHtoqB0CckXhoCF3Yk58jx3Nlzsu5/2+qQvgH0L331EYMkC43NO7FKDkKk/n0DVszkMluobJfKoxW96VmDFdNEaLhpi/gd5jg+0fDBpP3oIqjf2mUYOGa1++r2gsYNVgd3kCZGX+TsQJAAA=
   </data>
  </layer>
  <layer name="Surcouche" width="25" height="25">
-  <data encoding="base64" compression="zlib">
-   eJz7xMTA8BkJfwFiSsBFZgaG40B8FYivMUPEPkHN/k0lO04wI+yBgU9U9gcMwOy5wsxwgDomIgDQHwvQ7QGBCqDbK4G4ikp+eAp0+z2g2SB8H2pHA9DsRiBuQrMDZjcp9gPNTLgDNPcGED9hBtuHYsdEJDNBeAJUHGb/Xajb8GGY+U+ZUe3uAOrvxIJnoNnxGOo2QhjdfHwA2e4uKsXVKBgFo2AUkAKyB9oBgwxsQsL0AqlAnAZlJ1HR3Bgi1AAA0UxNjg==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACzvHxMBwHglfAGJKwFpmBobFQLwRiDcxQ8TOQc2+TiU7ljAj7IGBc1T2Bwwg+ecAdUzEbw8IhADdHgrEYVTyw06gubugeDfUjhig2bFAHIdmB8xuUuwHmb8DiLcA8QEgPohmRy6SmSCcAxWH2Y/sPlwYZv5BZlS7U4D6U7HgEjQ79kPdRgijm48PINudRqW4GgWjYBSMAlKA+0A7YJCBPiRML+AIxE5Qth0VzbUgQg0Au6PlIMQJAAA=
   </data>
  </layer>
  <layer name="Calque 3" width="25" height="25">
-  <data encoding="base64" compression="zlib">
-   eJxjYBh4sIgJlf+GGbfaS7R1yrAGR4HhehFP2I6CwQkMWRgYjFmIU4sv7+CTswSab02kHeQCetlhCsRGFGAQ2MWE3w5bIHaiABPjD1BYvSYxv64FunsdFBNrBzFgAxPC/B1AvA2KqWEHerrcimQ+texAB3uB5h6gsR0we/ZBMQy444jToZ4Hg5hpbwcMUMsOYFwsoLUd+AAhO7YTYQYA0zYnUg==
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGHhQx4TKP8GMW+062joFJ9iEx01DBSwE+mHtMPDHSAO8LAwM/CzEqcWXd/DJiQLNFyfSDnIBvewQBGI+CjAITGPCb4ckEMtRgInxByisjpOYXzuB7u6CYmLtIAb0MCHMnwLEk6CYGnagp8uJSOZTyw50MBNo7hwa2wGzZxYUw4Ayjjgd6nlQj5n2dsDASLFjMhFmAAARphUExAkAAA==
   </data>
  </layer>
 </map>

@@ -31,7 +31,9 @@ public class Data {
 
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
-
+	public static final boolean RUN_APIX = false;
+	public static final int DEBUG_PLAYER = 1;
+	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
 	public static int MAP_HEIGHT;
@@ -63,7 +65,7 @@ public class Data {
 
 	public static final int INF = 500;
 
-	public static final String MAP_FILE = "Synthese/res/images/map2.tmx";
+	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
@@ -72,6 +74,7 @@ public class Data {
 
 	public static final HashMap<String, Event> eventMap = new HashMap<String, Event>();
 	public static final HashMap<String, Boolean> untraversableBlocks = new HashMap<String, Boolean>();
+	public static final HashMap<String, Boolean> departureBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
 
@@ -137,6 +140,16 @@ public class Data {
 				if(debug)
 					System.out.println("New untravesable block at : ["+x+":"+y+"]");
 			}
+			
+			for(Iterator<Element> it = root.getChild("departure").getChildren().iterator(); it.hasNext();){
+				block = it.next();
+				x = block.getAttribute("x").getIntValue();
+				y = block.getAttribute("y").getIntValue();
+				departureBlocks.put(x + ":" + y, false);
+				if(debug)
+					System.out.println("New departure blok at : ["+x+":"+y+"]");
+			}
+			
 		} catch (DataConversionException e) {
 			e.printStackTrace();
 		}
