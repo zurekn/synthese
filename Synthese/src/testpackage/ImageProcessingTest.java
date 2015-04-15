@@ -31,15 +31,15 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		//////////////////////////////////test//////////////////////////////////
 
 		try {
-			BufferedImage img = ImageIO.read(new File(pathToDir + "toto.jpg"));
+			BufferedImage img = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
 			
 			
-			int [][] resErosion = ti.Ouverture(img, seuil);
+//			ti.getOneGrayImage(img);
 			
+			ti.etiquetageIntuitifImageGiveList2(img, img, 200);
 			
-			
-			BufferedImage imgRes = ti.intTableToBufferedImage(resErosion);
-			ImageIO.write(imgRes, "jpg", new File(pathToDir + "ouverture.jpg"));
+//			BufferedImage imgRes = ti.intTableToBufferedImage(temp);
+//			ImageIO.write(imgRes, "jpg", new File(pathToDir + "gray50.jpg"));
 		} 
 		catch (IOException e) {
 			e.printStackTrace();

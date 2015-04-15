@@ -400,15 +400,7 @@ public class TraitementImage {
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
 		if (Data.debug)
-		{
-			BufferedImage imgRes = intTableToBufferedImage(subImgElements);
-			try {
-				ImageIO.write(imgRes, "bmp", new File(urlImage + "resultTest.bmp"));
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		{		}
 		
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
@@ -510,8 +502,9 @@ public class TraitementImage {
 		}
 	}
 	
-
-	
+	/*
+	 * fonction permettant de faire une érosion sur une forme (forme noir sur fond blanc)
+	 */
 	public int[][] erosion(int[][] erosionElements) 
 	{
 
@@ -544,6 +537,9 @@ public class TraitementImage {
 		return resultErrosion;
 	}
 	
+	/*
+	 * fonction permettant de faire une dilatation sur une forme (forme noir sur fond blanc)
+	 */
 	public int[][] dilatation(int[][] dilatationElements) 
 	{
 
@@ -581,6 +577,9 @@ public class TraitementImage {
 		return resultDilatation;
 	}
 	
+	/*
+	 * fonction permettant de faire une érosion puis une dilatation sur une forme
+	 */
 	public int[][] Ouverture(BufferedImage img, int seuil) 
 	{
 		int [][] elemOuverture = getBinaryImage(img, seuil);		
@@ -594,6 +593,9 @@ public class TraitementImage {
 		return resOuverture;
 	}
 	
+	/*
+	 * fonction permettant de faire une dilatation puis une érosion sur une forme
+	 */
 	public int[][] fermeture(BufferedImage img, int seuil) 
 	{
 		int [][] elemFermeture = getBinaryImage(img, seuil);		
@@ -775,17 +777,14 @@ public class TraitementImage {
 	}
 	
 	/*
-     * Transform one image RGB in Gray images,
+     * Transform one RGB image in Gray image,
      * Binary each pixels from image.
      */
     public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
-        //BufferedImage img1 = null;
-        //BufferedImage img2 = null;
         int[][] elementsImg = null;
         int[][] elementsRes = null;
-
-            
+        BufferedImage imgRes = null;
         imgHeight = image.getHeight();
         imgWidth = image.getWidth();
         elementsImg = new int[image.getWidth()][image.getHeight()];
@@ -809,6 +808,46 @@ public class TraitementImage {
             }
 
         return elementsRes;
+    }
+    
+    /*
+     * Transform one RGB image in Gray image,
+     * Binary each pixels from image.
+     */
+    public void getOneGrayImage(BufferedImage img) 
+    {
+    	for (int x = 0; x < img.getWidth(); ++x)
+    	{
+    	    for (int y = 0; y < img.getHeight(); ++y)
+    	    {
+    	        int rgb = img.getRGB(x, y);
+    	        int r = (rgb >> 16) & 0xFF;
+    	        int g = (rgb >> 8) & 0xFF;
+    	        int b = (rgb & 0xFF);
+
+    	        int grayLevel = (r + g + b) / 3;
+    	        int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel; 
+    	        img.setRGB(x, y, grayLevel);
+    	        
+    	        /*
+    	         * Autre version plus lente mais utilisant des objets
+    	        Color pixelcolor= new Color(img.getRGB(x, y));
+    	        //int rgb = img.getRGB(x, y);
+    	        int r = pixelcolor.getRed();
+    	        int g = pixelcolor.getGreen();
+    	        int b = pixelcolor.getBlue();
+
+    	        int grayLevel = (r + g + b) / 3;
+    	        Color pixel = new Color(grayLevel, grayLevel, grayLevel);
+    	        img.setRGB(x, y, pixel.getRGB());
+    	         */
+    	    }
+    	}
+    	try {
+			ImageIO.write(img, "jpg", new File(urlImage + "gray50.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
 	/*
@@ -872,7 +911,7 @@ public class TraitementImage {
 	 */
 	public int binaryPixel(int pix, int seuil)
 	{
-		return pix < seuil ? 0 : 255;
+		return pix < seuil ? 255 : 0;
 	}
 	
 	/*
@@ -905,7 +944,7 @@ public class TraitementImage {
 	/*
 	 * Créer un BufferedImage à partir d'une matrice
 	 */
-	public BufferedImage intTableToBufferedImage(int[][] myEtiquetteImg) 
+	public BufferedImage intTableToBinaryBufferedImage(int[][] myEtiquetteImg) 
 	{
 		imgWidth = myEtiquetteImg.length;
 		imgHeight = myEtiquetteImg[0].length;
@@ -923,6 +962,18 @@ public class TraitementImage {
 		return image;  
 	}
 	
+	public BufferedImage intTableToBufferedImage(int[][] myEtiquetteImg) 
+	{
+		imgWidth = myEtiquetteImg.length;
+		imgHeight = myEtiquetteImg[0].length;
+		BufferedImage image = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		for(int i = 1; i < myEtiquetteImg.length; i++){
+			for(int j = 1; j < myEtiquetteImg[i].length; j++){
+				image.setRGB(i, j, myEtiquetteImg[i][j]);
+			}
+		}	
+		return image;  
+	}
 	/*
 	 * Récupérer les points d'intérêts
 	 */
