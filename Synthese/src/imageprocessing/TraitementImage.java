@@ -27,10 +27,9 @@ public class TraitementImage {
 	/*
 	 * Génère et sauvegarde une image binaire à partire d'une image normale
 	 */
-	public void makeBinaryImage(String srcImgName, String resultImgName, String formatSortie, int seuil)
+	public void makeBinaryImage(BufferedImage img, String resultImgName, String formatSortie, int seuil)
 	{
 		try {
-			BufferedImage img = ImageIO.read(new File(urlImage + srcImgName));
 		    System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
 //		    imgHeight = img.getHeight();
 //		    imgWidth = img.getWidth();
@@ -61,7 +60,7 @@ public class TraitementImage {
 		    ImageIO.write(img, formatSortie, new File(urlImage + resultImgName));   
 		} 
 		catch (IOException e) {
-			System.out.println("image " + srcImgName + " not found");
+			System.out.println("image not found");
 		}
 		System.out.println("Done");
 	}
@@ -70,15 +69,12 @@ public class TraitementImage {
 	 * Test si les images sont égales.
 	 * Retourne le nombre de pixels égaux
 	 */
-	public int pixelsBufferedImagesEqual(String srcImgName, String resultImgName)
+	public int pixelsBufferedImagesEqual(BufferedImage img1, BufferedImage img2)
 	{
 		int percentComparision = 0;
 		int percentNotSame = 0;
-
 		try 
 		{
-			BufferedImage img1 = ImageIO.read(new File(urlImage + srcImgName));
-			BufferedImage img2 = ImageIO.read(new File(urlImage + resultImgName));
 			BufferedImage imgRes = new BufferedImage(img1.getWidth(), img1.getHeight(), img1.getType()); 
 		    if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) {
 		        for (int x = 0; x < img1.getWidth(); x++) {
@@ -118,6 +114,7 @@ public class TraitementImage {
 			return percentComparision;
 	}
 
+/////////////////////////////////////	Fonctions non utilisées	//////////////////////////////////////////////////////
 	/*
 	 * Mise en place de l'algorithme d'étiquetage intuitif
 	 */
@@ -255,13 +252,150 @@ public class TraitementImage {
 			return null;
 		}
 	}
+	
+	/*
+	 * Mise en place de l'algorithme d'étiquetage perso
+	 */
+	public List<FormObject> etiquetageIntuitifImageGiveList(String webCamCaptureImg, String srcImg, int seuil)//Version non utilisée
+	{	
+		BufferedImage imgCompare = null;
+		BufferedImage imgSrcRef = null;
+		try {
+			imgCompare = ImageIO.read(new File(urlImage + webCamCaptureImg));
+			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
+		} 
+		catch (Exception e) 
+		{	System.out.println("problème chargement des images");}
+		
+		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgSrcRef, imgCompare, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
+		int [][] etiquettes = new int[imgWidth][imgHeight];
+		
+		if (Data.debug)
+		{
+			BufferedImage imgRes = intTableToBufferedImage(subImgElements);
+			try {
+				ImageIO.write(imgRes, "bmp", new File(urlImage + "resultTest.bmp"));
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//#debug
+		if(countPixelsNotNull(subImgElements) == 0)
+			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);//getBinaryImage(imgCompare, seuil);
+		//#debug
+		
+		int attA, attB,attC, temp = 1, numEt = 1;
+		List<Integer> T = new ArrayList<Integer>();
+		List<ArrayList<Pixel>> Num = new ArrayList<ArrayList<Pixel>>();
+		Num.add(new ArrayList<Pixel>());//pour etiquette 0
+		if(subImgElements!=null)
+		{
+			for(int j = 1; j < imgHeight; j++)
+			{
+				for(int i = 1; i < imgWidth; i++)
+				{
+					if(subImgElements[i][j]== 255)
+					{
+						attA = subImgElements[i-1][j];
+						attB = subImgElements[i][j-1];
+						attC = subImgElements[i][j];
+	
+						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
+						{
+							etiquettes[i][j] = numEt;
+							Num.add(new ArrayList<Pixel>());
+							Num.get(numEt).add(new Pixel(i, j));
+							T.add(temp);
+							numEt++;
+						}
+			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
+						{	
+			 				etiquettes[i][j] = etiquettes[i-1][j]; 
+			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+			 				temp++;
+						}
+						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
+						{
+							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
+							Num.get(etiquettes[i-1][j]).clear();
+							
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
+							temp++;
+				
+							for(int x=0;x<=i;x++)
+							{
+								for(int y=0;y<=j;y++)
+								{
+									if(etiquettes[x][y]==etiquettes[i-1][j])
+									{	
+										etiquettes[x][y]=etiquettes[i][j-1];
+										temp++;
+									}
+								}					
+							}
+						}
+						else {
+							System.out.println("pas passé");
+						}
+					}
+				}
+			}
+			List<FormObject> formList = new ArrayList<FormObject>();
+			System.out.println("num size = " +Num.size());
+			for (ArrayList<Pixel> OneArray : Num) {
+//				System.out.println("OneArray size = "+OneArray.size());
+				if(OneArray.size()>50)
+				{
+//					System.out.println("gagné !!");
 
+					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
+//					display(myForm.getMatrix());
+					formList.add(myForm);
+					filtreSobel(myForm);
+					myForm.findObjectType();
+				}
+			}		
+			displayListForm(formList);
+			return formList;
+		}
+		else
+		{
+			System.out.println("fail");
+			return null;
+		}
+	}
+	
+	/*
+	 * Mise en place de l'algorithme d'étiquetage avec tables de substitution
+	 */
+	public List<FormObject> etiquetageSubstitutionTableImage(String webCamCaptureImg, String srcImg, int seuil)
+	{			
+			return null;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/*
 	 * Mise en place de l'algorithme d'étiquetage perso
 	 */
 	public List<FormObject> etiquetageIntuitifImageGiveList2(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil)
 	{	
-		
 		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgSrcRef, imgCompare, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
@@ -376,231 +510,7 @@ public class TraitementImage {
 		}
 	}
 	
-	
-	/*
-	 * Mise en place de l'algorithme d'étiquetage perso
-	 */
-	public List<FormObject> etiquetageIntuitifImageGiveList(String webCamCaptureImg, String srcImg, int seuil)
-	{	
-		BufferedImage imgCompare = null;
-		BufferedImage imgSrcRef = null;
-		try {
-			imgCompare = ImageIO.read(new File(urlImage + webCamCaptureImg));
-			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
-		} 
-		catch (Exception e) 
-		{	System.out.println("problème chargement des images");}
-		
-		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgSrcRef, imgCompare, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
-		int [][] etiquettes = new int[imgWidth][imgHeight];
-		
-		if (Data.debug)
-		{
-			BufferedImage imgRes = intTableToBufferedImage(subImgElements);
-			try {
-				ImageIO.write(imgRes, "bmp", new File(urlImage + "resultTest.bmp"));
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
-		
-		
-		
-		
-		//#debug
-		if(countPixelsNotNull(subImgElements) == 0)
-			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);//getBinaryImage(imgCompare, seuil);
-		//#debug
-		
-		int attA, attB,attC, temp = 1, numEt = 1;
-		List<Integer> T = new ArrayList<Integer>();
-		List<ArrayList<Pixel>> Num = new ArrayList<ArrayList<Pixel>>();
-		Num.add(new ArrayList<Pixel>());//pour etiquette 0
-		if(subImgElements!=null)
-		{
-			for(int j = 1; j < imgHeight; j++)
-			{
-				for(int i = 1; i < imgWidth; i++)
-				{
-					if(subImgElements[i][j]== 255)
-					{
-						attA = subImgElements[i-1][j];
-						attB = subImgElements[i][j-1];
-						attC = subImgElements[i][j];
-	
-						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
-						{
-							etiquettes[i][j] = numEt;
-							Num.add(new ArrayList<Pixel>());
-							Num.get(numEt).add(new Pixel(i, j));
-							T.add(temp);
-							numEt++;
-						}
-			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
-						{	
-			 				etiquettes[i][j] = etiquettes[i-1][j]; 
-			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-			 				temp++;
-						}
-						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
-						{
-							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-							temp++;
-						}
-						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
-						{
-							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-							temp++;
-						}
-						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
-						{
-							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
-							Num.get(etiquettes[i-1][j]).clear();
-							
-							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
-							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
-							temp++;
-				
-							for(int x=0;x<=i;x++)
-							{
-								for(int y=0;y<=j;y++)
-								{
-									if(etiquettes[x][y]==etiquettes[i-1][j])
-									{	
-										etiquettes[x][y]=etiquettes[i][j-1];
-										temp++;
-									}
-								}					
-							}
-						}
-						else {
-							System.out.println("pas passé");
-						}
-					}
-				}
-			}
-			List<FormObject> formList = new ArrayList<FormObject>();
-			System.out.println("num size = " +Num.size());
-			for (ArrayList<Pixel> OneArray : Num) {
-//				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size()>50)
-				{
-//					System.out.println("gagné !!");
 
-					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
-//					display(myForm.getMatrix());
-					formList.add(myForm);
-					filtreSobel(myForm);
-					myForm.findObjectType();
-				}
-			}		
-			displayListForm(formList);
-			return formList;
-		}
-		else
-		{
-			System.out.println("fail");
-			return null;
-		}
-	}
-	
-	/*
-	 * Mise en place de l'algorithme d'étiquetage avec tables de substitution
-	 */
-	public List<FormObject> etiquetageSubstitutionTableImage(String webCamCaptureImg, String srcImg, int seuil)
-	{			
-		BufferedImage imgCompare = null;
-		BufferedImage imgSrcRef = null;
-		try {
-			imgCompare = ImageIO.read(new File(urlImage + webCamCaptureImg));
-			imgSrcRef = ImageIO.read(new File(urlImage + srcImg));
-		} 
-		catch (Exception e) 
-		{	System.out.println("problème chargement des images");}
-		
-		imgHeight = imgCompare.getHeight();
-		imgWidth = imgCompare.getWidth();
-		int[][] subImgElements = new int[imgWidth][imgHeight];
-		int [][] etiquettes = new int[imgWidth][imgHeight];
-		subImgElements = getSubstractImg(imgCompare, imgSrcRef, seuil);
-
-		int attA, attB,attC, numEt = 1;
-		
-		/* initialisation de T[i] = i */
-		List<Integer> T = new ArrayList<Integer>();
-		
-		
-		
-		if(subImgElements!=null)
-		{
-			for(int i = 1; i < imgWidth; i++)
-			{
-				for(int j = 1; j < imgHeight; j++)
-				{
-					if(subImgElements[i][j]== 255)
-					{
-						attA = subImgElements[i-1][j];
-						attB = subImgElements[i][j-1];
-						attC = subImgElements[i][j];
-	
-						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
-						{
-							etiquettes[i][j] = numEt;
-							T.add(numEt);
-							numEt++;
-						}
-			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
-						{	
-			 				etiquettes[i][j] = etiquettes[i-1][j]; 
-						}
-						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
-						{
-							//etiquettes[i][j] = T[etiquettes[i][j-1]];
-						}
-						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
-						{
-							etiquettes[i][j] = etiquettes[i][j-1];
-						}
-						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
-						{
-							etiquettes[i][j] = etiquettes[i][j-1];
-							
-						}
-						else {
-							System.out.println("pas passé");
-						}
-					}
-				}
-			}
-			int max=0;
-			for (Integer integer : T) {
-				if (integer>max)
-					max=integer;
-			}
-			System.out.println("numEt " + numEt + " max "+max);
-			
-			
-			List<FormObject> formList = new ArrayList<FormObject>();
-			FormObject myForm = etiquetteToForm(etiquettes, T.indexOf(max)+1);
-			formList.add(myForm);
-			filtreSobel(myForm);
-			
-			displayListForm(formList);
-			
-			return formList;
-		}
-		else
-		{
-			System.out.println("fail");
-			return null;
-		}
-	}
 	
 	public int[][] erosion(int[][] erosionElements) 
 	{
