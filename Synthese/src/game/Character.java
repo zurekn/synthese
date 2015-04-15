@@ -7,7 +7,9 @@ import java.util.Iterator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
+import ai.AStar;
 import data.Data;
 import data.SpellD;
 import data.Stats;
@@ -35,14 +37,14 @@ public abstract class Character {
 	public abstract void init();
 
 	/**
-	 * Move the caracter to the position x:y if it's possible
+	 * Move the character to the position x:y if it's possible
 	 * 
 	 * @param position
 	 * @throws IllegalMovementException
 	 */
 
 public void moveTo(String position) throws IllegalMovementException {
-		if(WindowGame.windowGame.getAllPosition().contains(position)){
+		if(WindowGame.windowGame.getAllPositions().contains(position)){
 			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
 		}
 
@@ -250,5 +252,5 @@ public void moveTo(String position) throws IllegalMovementException {
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
 	}
-	
+
 }

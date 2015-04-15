@@ -6,7 +6,9 @@ import java.awt.GraphicsEnvironment;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
+import ai.AStar;
 import data.Data;
+import game.Mob;
 import game.WindowGame;
 
 public class Main {
@@ -25,6 +27,7 @@ public class Main {
         AppGameContainer gameContaineur =  new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, fullScreen);
     	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
+    	
 	}
 
 }

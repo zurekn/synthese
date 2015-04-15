@@ -1,2 +1,5 @@
 /target/
 /bin/
+/Thumbs.db
+/README.md
+/pom.xml

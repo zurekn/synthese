@@ -21,6 +21,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import ai.AIHandler;
+import ai.AStar;
 import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
@@ -45,8 +46,12 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
+
 	private ArrayList<Event> eventsRemoved = new ArrayList<Event>();
 	// TODO add traps
+
+	private ArrayList<Trap> traps = new ArrayList<Trap>();
+
 	private Character currentCharacter;
 
 	private int playerNumber;
@@ -299,37 +304,45 @@ public class WindowGame extends BasicGame {
 		if (turnTimer < 0) {
 			switchTurn();
 		}
-		
-		for(Event e : eventsRemoved){
-			Character c = getCharacterByPosition(e.getXOnBoard(), e.getYOnBoard());
-			
-			if(c != null){
-				
-				if(Data.debug)
-					System.out.println("Find a character at the position ["+c.getX()+":"+c.getY()+"]");
-				
-				if(e.getDamage() > 0)
+
+		for (Event e : eventsRemoved) {
+			Character c = getCharacterByPosition(e.getXOnBoard(),
+					e.getYOnBoard());
+
+			if (c != null) {
+
+				if (Data.debug)
+					System.out.println("Find a character at the position ["
+							+ c.getX() + ":" + c.getY() + "]");
+
+				if (e.getDamage() > 0)
 					c.takeDamage(e.getDamage(), e.getType());
 				else
 					c.heal(e.getHeal());
-				
-				if(c.checkDeath()){
-				
-					if(Data.debug)
-						System.out.println(c.toString()+", take ["+e.getDamage()+"] damage");
-						
+
+				if (c.checkDeath()) {
+
+					if (Data.debug)
+						System.out.println(c.toString() + ", take ["
+								+ e.getDamage() + "] damage");
+
 					players.remove(c);
 					mobs.remove(c);
 				}
-					
-			}else{
-				if(Data.debug)
-					System.err.println("Didn't find a character at the position ["+e.getXOnBoard()+":"+e.getYOnBoard()+"]");
+
+			} else {
+				if (Data.debug)
+					System.err
+							.println("Didn't find a character at the position ["
+									+ e.getXOnBoard()
+									+ ":"
+									+ e.getYOnBoard()
+									+ "]");
 			}
-//			eventsRemoved.remove(e);
+			// eventsRemoved.remove(e);
 		}
 		eventsRemoved.clear();
-		
+
 	}
 
 	/**
@@ -348,8 +361,8 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			AIHandler.getMobsMovements(new WindowGameData(
-					mobs, players, currentCharacter, playerNumber, turn));
+			AIHandler.getMobsMovements(new WindowGameData(mobs, players,
+					currentCharacter, playerNumber, turn));
 
 		}
 
@@ -377,7 +390,6 @@ public class WindowGame extends BasicGame {
 			}
 			System.out.println("========================");
 		}
-
 	}
 
 	/**
@@ -424,19 +436,26 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		}
 
-		else if (action.startsWith("m")) {// Monster movement action
+		else if (action.startsWith("m")) {// Movement action
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
+
 				/*
+				 * 
+				 * /*String id = tokens[0];
+				 * 
+				 * 
 				 * if (!currentCharacter.getId().equals(id)) throw new
 				 * IllegalActionException( "Not your turn, try again later.");
 				 */
+
 				String position = tokens[1] + ":" + tokens[2];
 				currentCharacter.moveTo(position);
 				switchTurn();
+
 			} catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
 			}
@@ -525,6 +544,7 @@ public class WindowGame extends BasicGame {
 	 * @param str
 	 *            , x:y
 	 */
+	@Deprecated
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
 		if (turn < players.size()) {
@@ -557,13 +577,19 @@ public class WindowGame extends BasicGame {
 	 * 
 	 * @return ArrayList<String>
 	 */
-	public ArrayList<String> getAllPosition() {
-		System.out.println("Toto");
+	public ArrayList<String> getAllPositions() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < players.size(); i++)
 			list.add(players.get(i).getX() + ":" + players.get(i).getY());
 		for (int i = 0; i < mobs.size(); i++)
 			list.add(mobs.get(i).getX() + ":" + mobs.get(i).getY());
+		return list;
+	}
+
+	public ArrayList<String> getAllTraps() {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < traps.size(); i++)
+			list.add(traps.get(i).getX() + ":" + traps.get(i).getY());
 		return list;
 	}
 
