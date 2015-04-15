@@ -49,7 +49,7 @@ public class FormObject {
 		}
 		System.out.println("pixel list.size " + pixelList.size());
 		for (Pixel pixel : pixelList) {
-			matrix[pixel.getX()][pixel.getY()] = 255;	
+			matrix[pixel.getY()][pixel.getX()] = 255;	
 		}	
 	}
 	

@@ -35,7 +35,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		BufferedImage imgSrcRef = null;
 		try {
 			imgCompare = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
-			imgSrcRef = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
+			imgSrcRef = ImageIO.read(new File(pathToDir + "testBloc.jpg"));
 			
 			List<FormObject> lf = ti.etiquetageIntuitifImage2(imgCompare, imgSrcRef ,100);
 		} catch (IOException e) {}

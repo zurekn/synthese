@@ -1,4 +1,5 @@
 package imageprocessing;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -148,26 +149,26 @@ public class TraitementImage {
 						{
 							etiquettes[i][j] = numEt;
 							Num.add(new ArrayList<Pixel>());
-							Num.get(numEt).add(new Pixel(i, j));
+							Num.get(numEt).add(new Pixel(j, i));
 							T.add(temp);
 							numEt++;
 						}
 			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
 						{	
 			 				etiquettes[i][j] = etiquettes[i-1][j]; 
-			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+			 				Num.get(etiquettes[i][j]).add(new Pixel(j, i));
 			 				temp++;
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
 						{
 							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							Num.get(etiquettes[i][j]).add(new Pixel(j, i));
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
 						{
 							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							Num.get(etiquettes[i][j]).add(new Pixel(j, i));
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
@@ -176,7 +177,7 @@ public class TraitementImage {
 							Num.get(etiquettes[i-1][j]).clear();
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
-							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							Num.get(etiquettes[i][j]).add(new Pixel(j, i));
 							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
 							temp++;
 				
