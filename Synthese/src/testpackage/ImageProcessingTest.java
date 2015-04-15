@@ -38,14 +38,15 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 			imgSrcRef = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
 			
 			List<FormObject> lf = ti.etiquetageIntuitifImage2(imgCompare, imgSrcRef ,100);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) {}
+
 		
 		
 	    ////////////////////////////////////////////////////////////////////////
 		
-		System.out.println(System.currentTimeMillis()-time + " end time");
+			System.out.println(System.currentTimeMillis()-time + " end time");
+
+
 	}
 
 }

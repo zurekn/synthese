@@ -402,12 +402,15 @@ public class TraitementImage {
 		return resultDilatation;
 	}
 	
+
+
+
 	/*
 	 * fonction permettant de faire une érosion puis une dilatation sur une forme
 	 */
-	public int[][] Ouverture(BufferedImage img, int seuil) 
+	public int[][] Ouverture(int[][] elemOuverture, int seuil) 
 	{
-		int [][] elemOuverture = getBinaryImage(img, seuil);		
+		//int [][] elemOuverture = getBinaryImage(elemOuverture, seuil);		
 		int i;
 		int [][] resOuverture = elemOuverture;
 		for (i=0 ; i<10 ; i++)

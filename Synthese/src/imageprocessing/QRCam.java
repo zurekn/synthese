@@ -95,7 +95,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 					e.printStackTrace();
 				} catch (NotFoundException e) {
 					// fall thru, it means there is no QR code in image
-					System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
+					//System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
 				}
 			}else{
 				System.err.println("Webcam ["+webcam.getName()+"] is not open");
