@@ -30,18 +30,15 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		
 		//////////////////////////////////test//////////////////////////////////
 
+		
+		BufferedImage imgCompare = null;
+		BufferedImage imgSrcRef = null;
 		try {
-			BufferedImage img = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
+			imgCompare = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
+			imgSrcRef = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
 			
-			
-//			ti.getOneGrayImage(img);
-			
-			ti.etiquetageIntuitifImageGiveList2(img, img, 200);
-			
-//			BufferedImage imgRes = ti.intTableToBufferedImage(temp);
-//			ImageIO.write(imgRes, "jpg", new File(pathToDir + "gray50.jpg"));
-		} 
-		catch (IOException e) {
+			List<FormObject> lf = ti.etiquetageIntuitifImage2(imgCompare, imgSrcRef ,100);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
