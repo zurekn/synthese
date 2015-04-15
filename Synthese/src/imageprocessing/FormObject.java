@@ -24,7 +24,7 @@ public class FormObject {
 		rectangle,
 		triangle,
 		cercle,
-		otherForm;
+		obiwanKenobi;
 	}
 
 	public FormObject(List<Pixel> pixelList, int imgHeight, int imgWidth) {
@@ -84,29 +84,29 @@ public class FormObject {
 		if(compacite > 0.85)
 		{	
 			myTypeForm = typeForm.cercle;
-//			System.out.println("objet de type cercle");
 		}
 		else if (compacite <= 0.85 && compacite >0.65)
 		{	
 			myTypeForm = typeForm.rectangle;
-//			System.out.println("objet de type rectangle ou carre");
 		}
 		else if (compacite <= 0.65 && compacite >= 0.45)
 		{	
 			myTypeForm = typeForm.triangle;
-//			System.out.println("objet de type triangle");
 		}
 		else
 		{
-			myTypeForm = typeForm.otherForm;
-//			System.out.println("objet de type otherFotm");
+			myTypeForm = typeForm.obiwanKenobi;
 		}
+//		System.out.println("objet de type "+myTypeForm.toString());
+
 	}
 	
 	/*
-	 * Récupère le centre de gravité d'un ensemble de points désignés par une étiquette (par un carré théorique)
+	 * Récupère le centre de gravité d'un ensemble de points désignés par une étiquette. 
+	 * On représente un carré théorique dont on calcule le barycentre.
+	 * L'idée n'est pas bonne si un point de balade.
 	 */
-	public Pixel getCenterCarreForm(List<Pixel>PointsInterests){
+/*	public Pixel getCenterCarreForm(List<Pixel>PointsInterests){
 		int up, down, left, right;
 		up = PointsInterests.get(0).getX();
 		down = PointsInterests.get(0).getX();
@@ -123,6 +123,7 @@ public class FormObject {
 		Pixel gravityCenterCarre = new Pixel(((right+left)/2), ((down+up)/2));
 		return gravityCenterCarre;
 	}
+ */
 	
 	/*
 	 * Récupère le centre de gravité
@@ -155,6 +156,7 @@ public class FormObject {
 	/*
 	 * Affichage d'une matrice
 	 */
+	@SuppressWarnings("unused")
 	private void display(int[][] myMatrix) {
 		for(int i = 0; i < myMatrix.length; i++)
 		{
@@ -169,6 +171,7 @@ public class FormObject {
 	/*
 	 * Affiche tous les éléments d'une liste
 	 */
+	@SuppressWarnings("unused")
 	private void displayList(List<Pixel> myList) {
 		System.out.println("test");
 		for (Pixel pixel : myList) {
