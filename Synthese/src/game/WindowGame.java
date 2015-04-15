@@ -95,7 +95,7 @@ public class WindowGame extends BasicGame {
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
-		//TrapData.loadTrap();
+		// TrapData.loadTrap();
 		Data.loadMap();
 
 		initAPIX();
@@ -184,7 +184,7 @@ public class WindowGame extends BasicGame {
 			public void newMouvement(MovementEvent e) {
 				System.out
 						.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["
-								+ e.toString() + "]");
+								+ e.toString() + "], position sur le plateau ["+e.getX() / Data.BLOCK_SIZE_X+":"+e.getY() / Data.BLOCK_SIZE_Y+"]");
 				try {
 					// TODO check the available position
 					decodeAction("m:" + (e.getX() / Data.BLOCK_SIZE_X) + ":"
@@ -196,7 +196,9 @@ public class WindowGame extends BasicGame {
 			}
 		});
 	}
-int i=0;
+
+	int i = 0;
+
 	/**
 	 * The render function Call all game's render
 	 */
@@ -207,23 +209,21 @@ int i=0;
 			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
-			//TOP LEFT
+			// TOP LEFT
 			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS - 20, 40,
 					40);
-			//TOP RIGHT
-			// g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 20,
-			// Data.RELATIVE_Y_POS - 20, 40, 40);
+			// TOP RIGHT
+			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 20,
+					Data.RELATIVE_Y_POS - 20, 40, 40);
 			// //BOTTOM left
-			// g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS
-			//	+ Data.DECK_AREA_SIZE_X - 20, 40, 40);
+			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS
+					+ Data.DECK_AREA_SIZE_X - 20, 40, 40);
 			i++;
-			if  (i>60)
+			if (i > 60)
 				apix.initTI();
-			
-			
 
 		} else {
-			
+
 			Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
 			mobHandler.render(container, g);
 			// TODO
@@ -353,6 +353,10 @@ int i=0;
 		}
 		eventsRemoved.clear();
 
+		if (turn < players.size() && apix.isInit())
+			if(apix.getImageProcessing().getThread().isInterrupted())
+				apix.getImageProcessing().notify();
+
 	}
 
 	/**
@@ -420,7 +424,8 @@ int i=0;
 			int direction = Integer.parseInt(tokens[1]);
 
 			if (currentCharacter.getSpell(spellID) == null)
-				throw new IllegalActionException("Spell [" + spellID+ "] not found");
+				throw new IllegalActionException("Spell [" + spellID
+						+ "] not found");
 
 			Event e = currentCharacter.getSpell(spellID).getEvent()
 					.getCopiedEvent();

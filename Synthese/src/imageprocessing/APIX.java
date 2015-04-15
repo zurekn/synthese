@@ -196,9 +196,13 @@ public class APIX implements Runnable {
 		setRelativeValues(
 				ip.ti.etiquetageIntuitifImageGiveList2(image1, image1, 200),
 				image1.getHeight(), image1.getWidth());
-		if (relativeX == -1)
+		if(Data.debug)
+			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");
+		if (relativeX != -1){
 			isInit = true;
-		
+			ip.begin();
+		}
+			
 		System.out.println("Fin de la phase d'initialisation après "
 				+ (System.currentTimeMillis() - time) + " millisecondes");
 	}
@@ -295,16 +299,17 @@ public class APIX implements Runnable {
 
 			if (tempX <= separationX) {
 				if (tempY <= separationY)
-					BasGauche.add(formList);
-				else
-					BasDroite.add(formList);
-			} else {
-				if (tempY <= separationY)
 					HautGauche.add(formList);
 				else
+					BasGauche.add(formList);
+			} else {
+				if (tempY <= separationY)
 					HautDroite.add(formList);
+				else
+					BasDroite.add(formList);
 			}
 		}
+		System.out.println("BG = "+BasGauche.size()+", BD = "+BasDroite.size()+", HG = "+HautGauche.size()+", HD = "+HautDroite.size());
 
 		if (HautGauche.size() == 0 && BasDroite.size() == 1
 				&& (BasGauche.size() != 0 || HautDroite.size() != 0))
@@ -332,8 +337,7 @@ public class APIX implements Runnable {
 
 		if (pix == null)
 			return;
-		System.out
-				.println("skkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkpixel");
+
 		setRelativeX(pix.getX());
 		setRelativeY(pix.getY());
 	}
@@ -344,6 +348,11 @@ public class APIX implements Runnable {
 
 	public void setRelativeY(int valueY) {
 		this.relativeY = valueY;
+	}
+
+	public ImageProcessing getImageProcessing() {
+		return ip;
+		
 	}
 
 }

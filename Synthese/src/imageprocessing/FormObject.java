@@ -58,6 +58,8 @@ public class FormObject {
 	 */
 	public double calculCompacite(int perimeter, int surface) {
 		double compacite;
+		if(perimeter == 0)
+			return 0;
 		compacite = 4*Math.PI*(surface/(perimeter*perimeter));
 		double t = perimeter*perimeter;
 //		System.out.printf ("perimeter² = %f", t);
