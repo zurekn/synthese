@@ -95,7 +95,7 @@ public class WindowGame extends BasicGame {
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
-		TrapData.loadTrap();
+		//TrapData.loadTrap();
 		Data.loadMap();
 
 		initAPIX();
@@ -196,33 +196,43 @@ public class WindowGame extends BasicGame {
 			}
 		});
 	}
-
+int i=0;
 	/**
 	 * The render function Call all game's render
 	 */
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
+		g.scale(Data.SCALE, Data.SCALE);
 		if (!apix.isInit()) {
 			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
-			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_Y_POS - 10, 20,
-					20);
-			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 10,
-					Data.RELATIVE_Y_POS - 10, 20, 20);
-			g.fillRect(Data.RELATIVE_X_POS - 10, Data.RELATIVE_X_POS
-					+ Data.DECK_AREA_SIZE_X - 10, 20, 20);
+			//TOP LEFT
+			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS - 20, 40,
+					40);
+			//TOP RIGHT
+			// g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 20,
+			// Data.RELATIVE_Y_POS - 20, 40, 40);
+			// //BOTTOM left
+			// g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS
+			//	+ Data.DECK_AREA_SIZE_X - 20, 40, 40);
+			i++;
+			if  (i>60)
+				apix.initTI();
+			
+			
 
+		} else {
+			
+			Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
+			mobHandler.render(container, g);
+			// TODO
+			// Bug playerrender doesn't work every time
+			playerHandler.render(container, g);
+			renderEvents(container, g);
+			renderDeckArea(container, g);
+			renderText(container, g);
 		}
-		g.scale(Data.SCALE, Data.SCALE);
-		Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
-		mobHandler.render(container, g);
-		// TODO
-		// Bug playerrender doesn't work every time
-		playerHandler.render(container, g);
-		renderEvents(container, g);
-		renderDeckArea(container, g);
-		renderText(container, g);
 	}
 
 	/**
@@ -406,12 +416,11 @@ public class WindowGame extends BasicGame {
 				throw new IllegalActionException(
 						"Wrong number of arguments in action string");
 
-			String spellID = tokens[0];
+			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
 
 			if (currentCharacter.getSpell(spellID) == null)
-				throw new IllegalActionException("Spell " + spellID
-						+ " not found");
+				throw new IllegalActionException("Spell [" + spellID+ "] not found");
 
 			Event e = currentCharacter.getSpell(spellID).getEvent()
 					.getCopiedEvent();

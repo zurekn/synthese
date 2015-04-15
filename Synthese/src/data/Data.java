@@ -31,7 +31,7 @@ public class Data {
 
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
-	public static final boolean RUN_APIX = false;
+	public static final boolean RUN_APIX = true;
 	public static final int DEBUG_PLAYER = 1;
 	
 	public static String NAME = "Jeu de plateau";

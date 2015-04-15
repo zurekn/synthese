@@ -34,12 +34,12 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 			BufferedImage img = ImageIO.read(new File(pathToDir + "toto.jpg"));
 			
 			
-			int [][] resErosion = ti.Ouverture(img, seuil);
+			//int [][] resErosion = ti.Ouverture(img, seuil);
 			
 			
 			
-			BufferedImage imgRes = ti.intTableToBufferedImage(resErosion);
-			ImageIO.write(imgRes, "jpg", new File(pathToDir + "ouverture.jpg"));
+			//BufferedImage imgRes = ti.intTableToBufferedImage(resErosion);
+			//ImageIO.write(imgRes, "jpg", new File(pathToDir + "ouverture.jpg"));
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
