@@ -20,6 +20,7 @@ public class Event {
 	private int damage;
 	private int heal;
 	private String type;
+	private int spriteDirection;
 
 	public Event(String id) {
 		this.id = id;
@@ -41,7 +42,8 @@ public class Event {
 	}
 
 	public Event(String id, Animation[] animation, Music sound, int x, int y,
-			int direction, int duration, int range, int xRelative, int yRelative) {
+			int direction, int duration, int range, int xRelative,
+			int yRelative, int spriteDirection) {
 		super();
 		this.id = id;
 		this.animation = animation;
@@ -53,8 +55,17 @@ public class Event {
 		this.range = range;
 		this.xRelative = xRelative;
 		this.yRelative = yRelative;
+		this.spriteDirection = spriteDirection;
 		if (sound != null)
 			playSound = true;
+	}
+
+	public int getSpriteDirection() {
+		return spriteDirection;
+	}
+
+	public void setSpriteDirection(int spriteDirection) {
+		this.spriteDirection = spriteDirection;
 	}
 
 	public String getId() {
@@ -72,8 +83,8 @@ public class Event {
 	public int getX() {
 		return x;
 	}
-	
-	public int getXOnBoard(){
+
+	public int getXOnBoard() {
 		return (x - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_X;
 	}
 
@@ -84,8 +95,8 @@ public class Event {
 	public int getY() {
 		return y;
 	}
-	
-	public int getYOnBoard(){
+
+	public int getYOnBoard() {
 		return (y - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_Y;
 	}
 
@@ -175,7 +186,7 @@ public class Event {
 
 	public Event getCopiedEvent() {
 		Event e = new Event(id, animation, sound, x, y, direction, duration,
-				range, xRelative, yRelative);
+				range, xRelative, yRelative, spriteDirection);
 		e.setDamage(damage);
 		e.setHeal(heal);
 		e.setType(type);
@@ -189,26 +200,26 @@ public class Event {
 			break;
 
 		case Data.SOUTH:
-			dx = -Data.BLOCK_SIZE_X;
-			dy = -Data.BLOCK_SIZE_Y;
+			dx = -animation[0].getWidth();
+			dy = -animation[0].getHeight();
 			break;
 
 		case Data.EAST:
 			dx = 0;
-			dy = -Data.BLOCK_SIZE_Y;
+			dy = -animation[0].getHeight();
 			break;
 
 		case Data.WEST:
-			dx = -Data.BLOCK_SIZE_X;
+			dx = -animation[0].getWidth();
 			dy = 0;
 			break;
 		}
 
-		g.rotate(x, y, direction);
+		g.rotate(x, y, direction - spriteDirection);
 
 		g.drawAnimation(animation[0], x + dx, y + dy);
 
-		g.rotate(x, y, -direction);
+		g.rotate(x, y, -direction + spriteDirection);
 
 		if (playSound) {
 			playSound = false;
@@ -227,8 +238,5 @@ public class Event {
 				+ ", damage=" + damage + ", heal=" + heal + ", type=" + type
 				+ "]";
 	}
-	
-	
-	
 
 }

@@ -2,6 +2,8 @@ package data;
 
 public class Stats {
 	private int life = 1;
+	private int maxLife = 1;
+	private int maxMana = 1;
 	private int armor = 1;
 	private int mana = 1;
 	private int strength = 1;
@@ -9,21 +11,25 @@ public class Stats {
 	private int luck = 1;
 	private int movementPoints = 1;
 	private int magicResist = 1;
-	private int eyeSight ;
+	private int eyeSight;
 	private String characterClass = "";
 
 	public Stats(int life, int mana) {
 		super();
 		this.life = life;
 		this.mana = mana;
+		this.maxLife = life;
+		this.maxMana = mana;
 	}
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
 			int luck, int movementPoints, int magicResist, int eyeSight) {
 		super();
 		this.life = life;
+		this.maxLife = life;
 		this.armor = armor;
 		this.mana = mana;
+		this.maxMana = mana;
 		this.strength = strength;
 		this.magicPower = magicPower;
 		this.luck = luck;
@@ -33,11 +39,14 @@ public class Stats {
 	}
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
-			int luck, int movementPoints, int magicResist, int eyeSight, String caracterClass) {
+			int luck, int movementPoints, int magicResist, int eyeSight,
+			String caracterClass) {
 		super();
 		this.life = life;
+		this.maxLife = life;
 		this.armor = armor;
 		this.mana = mana;
+		this.maxMana = mana;
 		this.strength = strength;
 		this.magicPower = magicPower;
 		this.luck = luck;
@@ -69,10 +78,28 @@ public class Stats {
 
 	public void setLife(int life) {
 		this.life = life;
+		if (this.life > this.maxLife)
+			this.life = maxLife;
 	}
 
 	public int getArmor() {
 		return armor;
+	}
+
+	public int getMaxLife() {
+		return maxLife;
+	}
+
+	public void setMaxLife(int maxLife) {
+		this.maxLife = maxLife;
+	}
+
+	public int getMaxMana() {
+		return maxMana;
+	}
+
+	public void setMaxMana(int maxMana) {
+		this.maxMana = maxMana;
 	}
 
 	public void setArmor(int armor) {
@@ -85,6 +112,8 @@ public class Stats {
 
 	public void setMana(int mana) {
 		this.mana = mana;
+		if (this.mana > this.maxMana)
+			this.mana = maxMana;
 	}
 
 	public int getStrength() {
@@ -135,7 +164,5 @@ public class Stats {
 				+ ", magicResist=" + magicResist + ", characterClass="
 				+ characterClass + "]";
 	}
-
-
 
 }

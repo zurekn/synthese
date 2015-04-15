@@ -46,7 +46,7 @@ public class SpellData {
 		List monsters = root.getChildren("spell");
 
 		Iterator i = monsters.iterator();
-		int damage, heal, mana, celNumber, range;
+		int damage, heal, mana, celNumber, range, direction;
 		String id, name, type, file;
 		while (i.hasNext()) {
 			try {
@@ -59,6 +59,7 @@ public class SpellData {
 			id = el.getAttributeValue("id");
 			file = el.getChildText("file");
 			type = el.getChildText("type");
+			direction = Integer.parseInt(el.getChildText("direction"));
 			celNumber = Integer.parseInt(el.getChildText("celNumber"));
 			Music sound = new Music(el.getChildText("sound"));
 			SpriteSheet ss;
@@ -66,7 +67,7 @@ public class SpellData {
 				ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
-				SpellD spell = new SpellD(id, damage, heal, mana, range, name, celNumber, type, ss, sound);
+				SpellD spell = new SpellD(id, damage, heal, mana, range, name, celNumber, type, ss, sound, direction);
 			spells.add(spell);
 			System.out.println("	Spell : "+spell.toString());
 			} catch (NumberFormatException e) {

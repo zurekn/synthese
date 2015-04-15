@@ -1,9 +1,10 @@
 <spells>
 	<spell id="s2">
-		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
-		<celX>36</celX>
-		<celY>36</celY>
-		<celNumber>7</celNumber>
+		<file>Synthese/res/images/tiles/Spells/fireball.png</file>
+		<celX>75</celX>
+		<celY>58</celY>
+		<celNumber>4</celNumber>
+		<direction>90</direction>
 		<damage>10</damage>
 		<heal>0</heal>
 		<mana>10</mana>

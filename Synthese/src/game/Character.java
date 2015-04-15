@@ -86,12 +86,15 @@ public void moveTo(String position) throws IllegalMovementException {
 	 * @param spellID
 	 * @param direction
 	 * @throws IllegalActionException
+	 * @return damage
 	 */
-	public void useSpell(String spellID, int direction)
+	public String useSpell(String spellID, int direction)
 			throws IllegalActionException {
 		Spell spell = this.getSpell(spellID);
 		if (spell == null)
 			throw new IllegalActionException("Spell unkown");
+		//TODO handle the heal
+		return spell.getDamage()+":"+spell.getHeal();
 	}
 
 	/**
@@ -109,7 +112,12 @@ public void moveTo(String position) throws IllegalMovementException {
 		}
 		if (damage < 0)
 			damage = 0;
+		stats.setLife(stats.getLife() - damage);
 		System.out.println(id + " take : [" + damage + "] damage");
+	}
+	
+	public void heal(int heal){
+		stats.setLife(stats.getLife() + heal);
 	}
 
 	public boolean checkDeath() {

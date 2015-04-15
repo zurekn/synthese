@@ -14,9 +14,10 @@ public class SpellD {
 	private int range;
 	private String type;
 	private Event event;
+	private int spriteDirection;
 
 	public SpellD(String id, int damage, int heal, int mana, int range, String name,
-			int celNumber, String type, SpriteSheet ss, Music sound) {
+			int celNumber, String type, SpriteSheet ss, Music sound, int spriteDirection) {
 		this.id = id;
 		this.damage = damage;
 		this.heal = heal;
@@ -25,6 +26,7 @@ public class SpellD {
 		this.name = name;
 		this.type = type;
 		this.event = new Event(id,sound);
+		this.spriteDirection = spriteDirection;
 		initEventAnimation(celNumber, ss);
 	}
 
@@ -32,6 +34,7 @@ public class SpellD {
 		Animation[] a = new Animation[1];
 		a[0]= loadAnimation(ss, 0, n, 0);
 		this.event.setAnimation(a);
+		this.event.setSpriteDirection(spriteDirection);
 	}
 
 	private Animation loadAnimation(SpriteSheet spriteSheet, int startX,
@@ -41,6 +44,18 @@ public class SpellD {
 			animation.addFrame(spriteSheet.getSprite(x, y), 100);
 		}
 		return animation;
+	}
+
+	public int getSpriteDirection() {
+		return spriteDirection;
+	}
+
+	public void setSpriteDirection(int spriteDirection) {
+		this.spriteDirection = spriteDirection;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getId() {

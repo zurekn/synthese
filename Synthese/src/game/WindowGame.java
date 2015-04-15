@@ -45,6 +45,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
+	private ArrayList<Event> eventsRemoved = new ArrayList<Event>();
 	// TODO add traps
 	private Character currentCharacter;
 
@@ -53,8 +54,6 @@ public class WindowGame extends BasicGame {
 
 	private int turnTimer;
 	private long timeStamp = -1;
-	private long eventTimer = -1;
-
 	public static WindowGame windowGame;
 
 	public WindowGame() throws SlickException {
@@ -99,11 +98,10 @@ public class WindowGame extends BasicGame {
 		// Create the player list
 		initPlayers();
 
-		playerHandler = new playerHandler(players);
+		// init Mobs
+		initMobs();
 
-		// Create the monster list
-		mobs = MonsterData.initMobs();
-		mobHandler = new MobHandler(mobs);
+		playerHandler = new playerHandler(players);
 
 		playerNumber = players.size() + mobs.size();
 
@@ -114,6 +112,11 @@ public class WindowGame extends BasicGame {
 		currentCharacter = players.get(turn);
 	}
 
+	public void initMobs() {
+		mobs = MonsterData.initMobs();
+		mobHandler = new MobHandler(mobs);
+	}
+
 	@SuppressWarnings("rawtypes")
 	public void initPlayers() {
 
@@ -122,8 +125,6 @@ public class WindowGame extends BasicGame {
 		Collection<String> pos = Data.departureBlocks.keySet();
 		Iterator it = pos.iterator();
 		String var;
-		String[] s;
-
 		if (Data.debug) {
 			int i = 0;
 			while (it.hasNext() && i < Data.DEBUG_PLAYER) {
@@ -137,7 +138,7 @@ public class WindowGame extends BasicGame {
 
 	public void addPlayer(String position) {
 		if (!Data.departureBlocks.get(position)) {
-			String []s = position.split(":");
+			String[] s = position.split(":");
 			try {
 				players.add(new Player(Integer.parseInt(s[0]), Integer
 						.parseInt(s[1]), "P" + players.size(), "mage"));
@@ -275,12 +276,16 @@ public class WindowGame extends BasicGame {
 			e.setRange(e.getRange() - 1);
 			if (x < xMin || x > xMax || y < yMin || y > yMax
 					|| e.getRange() <= 0) {
+				eventsRemoved.add(e);
 				events.remove(i);
 			}
 
 		}
 	}
 
+	/**
+	 * The physics engine
+	 */
 	@Override
 	public void update(GameContainer container, int delta)
 			throws SlickException {
@@ -294,6 +299,37 @@ public class WindowGame extends BasicGame {
 		if (turnTimer < 0) {
 			switchTurn();
 		}
+		
+		for(Event e : eventsRemoved){
+			Character c = getCharacterByPosition(e.getXOnBoard(), e.getYOnBoard());
+			
+			if(c != null){
+				
+				if(Data.debug)
+					System.out.println("Find a character at the position ["+c.getX()+":"+c.getY()+"]");
+				
+				if(e.getDamage() > 0)
+					c.takeDamage(e.getDamage(), e.getType());
+				else
+					c.heal(e.getHeal());
+				
+				if(c.checkDeath()){
+				
+					if(Data.debug)
+						System.out.println(c.toString()+", take ["+e.getDamage()+"] damage");
+						
+					players.remove(c);
+					mobs.remove(c);
+				}
+					
+			}else{
+				if(Data.debug)
+					System.err.println("Didn't find a character at the position ["+e.getXOnBoard()+":"+e.getYOnBoard()+"]");
+			}
+//			eventsRemoved.remove(e);
+		}
+		eventsRemoved.clear();
+		
 	}
 
 	/**
@@ -312,7 +348,7 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			String[] commands = AIHandler.getMobsMovements(new WindowGameData(
+			AIHandler.getMobsMovements(new WindowGameData(
 					mobs, players, currentCharacter, playerNumber, turn));
 
 		}
@@ -394,7 +430,6 @@ public class WindowGame extends BasicGame {
 				if (tokens.length != 3)
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
-				String id = tokens[0];
 				/*
 				 * if (!currentCharacter.getId().equals(id)) throw new
 				 * IllegalActionException( "Not your turn, try again later.");
@@ -467,13 +502,13 @@ public class WindowGame extends BasicGame {
 					decodeAction("m:" + currentCharacter.getX() + ":"
 							+ (currentCharacter.getY() + 1));
 				if (Input.KEY_NUMPAD8 == key)
-					decodeAction("s1:" + Data.NORTH);
+					decodeAction("s2:" + Data.NORTH);
 				if (Input.KEY_NUMPAD6 == key)
-					decodeAction("s1:" + Data.EAST);
+					decodeAction("s2:" + Data.EAST);
 				if (Input.KEY_NUMPAD2 == key)
-					decodeAction("s1:" + Data.SOUTH);
+					decodeAction("s2:" + Data.SOUTH);
 				if (Input.KEY_NUMPAD4 == key)
-					decodeAction("s1:" + Data.WEST);
+					decodeAction("s2:" + Data.WEST);
 			} catch (IllegalActionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

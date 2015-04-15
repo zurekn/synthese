@@ -29,7 +29,7 @@ public class APIX implements Runnable {
 		if(!Data.RUN_APIX)
 			return;
 		Dimension size = WebcamResolution.QVGA.getSize();
-
+		
 		webcam = Webcam.getWebcams().get(0);
 		webcam.setViewSize(size);
 		webcam.open();
