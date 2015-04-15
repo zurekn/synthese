@@ -27,7 +27,8 @@ public class TraitementImage {
 	public void makeBinaryImage(BufferedImage img, String resultImgName, String formatSortie, int seuil)
 	{
 		try {
-		    System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
+			if(Data.tiDebug)
+				System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
 //		    imgHeight = img.getHeight();
 //		    imgWidth = img.getWidth();
 		    
@@ -59,7 +60,8 @@ public class TraitementImage {
 		catch (IOException e) {
 			System.out.println("image not found");
 		}
-		System.out.println("Done");
+		if(Data.tiDebug)
+			System.out.println("Done");
 	}
 	
 	/*
@@ -100,12 +102,14 @@ public class TraitementImage {
 		            }
 		        }
 		        ImageIO.write(imgRes, "jpg", new File(urlImage + "lineTest.jpg"));
-		        System.out.println("there are "+percentNotSame+"px which are not same.");
+		        if(Data.tiDebug)
+		        	System.out.println("there are "+percentNotSame+"px which are not same.");
 		    } 
 		} 
 		catch (Exception e) 
 		{
-			System.out.println("not enter");
+			if(Data.tiDebug)
+				System.out.println("not enter in try of pixelsBufferedImagesEqual()");
 			return 0;
 		}
 			return percentComparision;
@@ -189,13 +193,15 @@ public class TraitementImage {
 							}
 						}
 						else {
-							System.out.println("pas passé");
+							if(Data.tiDebug)
+								System.out.println("pas passé");
 						}
 					}
 				}
 			}
 			List<FormObject> formList = new ArrayList<FormObject>();
-			System.out.println("num size = " +Num.size());
+			if(Data.tiDebug)
+				System.out.println("num size = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
 				if(OneArray.size()>50)
@@ -208,13 +214,15 @@ public class TraitementImage {
 					filtreSobel(myForm);
 					myForm.findObjectType();
 				}
-			}		
-			displayListForm(formList);
+			}
+			if(Data.tiDebug)
+				displayListForm(formList);
 			return formList;
 		}
 		else
 		{
-			System.out.println("fail");
+			if(Data.tiDebug)
+				System.out.println("fail");
 			return null;
 		}
 	}
@@ -297,13 +305,15 @@ public class TraitementImage {
 							}
 						}
 						else {
-							System.out.println("pas passé");
+							if(Data.tiDebug)
+								System.out.println("pas passé");
 						}
 					}
 				}
 			}
 			List<FormObject> formList = new ArrayList<FormObject>();
-			System.out.println("num size = " +Num.size());
+			if(Data.tiDebug)
+				System.out.println("num size = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
 				if(OneArray.size()>50)
@@ -316,13 +326,15 @@ public class TraitementImage {
 					filtreSobel(myForm);
 					myForm.findObjectType();
 				}
-			}		
-			displayListForm(formList);
+			}
+			if(Data.tiDebug)
+				displayListForm(formList);
 			return formList;
 		}
 		else
 		{
-			System.out.println("fail");
+			if(Data.tiDebug)
+				System.out.println("fail");
 			return null;
 		}
 	}
@@ -477,9 +489,11 @@ public class TraitementImage {
 				}
 			}
 		}
-		System.out.println("le périmètre est de : " + perimetre);
+		if(Data.tiDebug)
+			System.out.println("le périmètre est de : " + perimetre);
 		// fin de mes tests
-		System.out.println("fin sobel");
+		if(Data.tiDebug)
+			System.out.println("fin sobel");
 		myForm.setPerimeter(perimetre);
     }
 
@@ -537,7 +551,8 @@ public class TraitementImage {
 	public int[][] getBinaryImage(BufferedImage img, int seuil)
 	{
 		int[][] elements = null;
-		System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
+		if(Data.tiDebug)
+			System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
 		elements = new int[img.getWidth()][img.getHeight()];
 		
 		for (int i=0;i<img.getWidth();i++)
@@ -599,7 +614,8 @@ public class TraitementImage {
 	            }
 	        }
 			//Display(elementsSubImg);
-	        System.out.println("there are "+percentNotSame+"px which are not same and "+percentComparision+" which are same.");
+			if(Data.tiDebug)
+				System.out.println("there are "+percentNotSame+"px which are not same and "+percentComparision+" which are same.");
 	    } 
 		return elementsSubImg;
 	}
@@ -729,7 +745,10 @@ public class TraitementImage {
 				    }
 			}
 			else
-				System.out.println("images non équivalentes en taille. Dommage!");
+			{
+				if(Data.tiDebug)
+					System.out.println("images non équivalentes en taille. Dommage!");
+			}
 
 		return elementsRes;
 	}
@@ -753,7 +772,8 @@ public class TraitementImage {
 		FormObject myForm;
 		if (pixelsByEtiquette.size()>50)
 		{
-			System.out.println("imgWidth " + imgWidth +" "+ "imgHeight "+imgHeight);
+			if(Data.tiDebug)
+				System.out.println("imgWidth " + imgWidth +" "+ "imgHeight "+imgHeight);
 			myForm = new FormObject(pixelsByEtiquette, this.imgHeight, this.imgWidth);
 		}
 		else
@@ -793,61 +813,6 @@ public class TraitementImage {
 			}
 		}	
 		return image;  
-	}
-
-	/*
-	 * Récupérer les points d'intérêts
-	 */
-	private Pixel getInterestPoints(int[][] myEtiquetteImg, int etiquetteMax) 
-	{
-//		List<Pixel> InterestPoints = new ArrayList<Pixel>();
-//		//Display(myEtiquetteImg);
-//		
-//		for(int i = 1; i < myEtiquetteImg.length; i++)
-//		{
-//			for(int j = 1; j < myEtiquetteImg[i].length; j++)
-//			{
-//				if (myEtiquetteImg[i][j] == etiquetteMax && (i == myEtiquetteImg.length-1 || j == myEtiquetteImg[i].length-1))
-//				{	
-//					if (i == myEtiquetteImg.length-1 && j == myEtiquetteImg[i].length-1)
-//						InterestPoints.add(new Pixel(i, j));
-//					else
-//					{
-//						if (i == myEtiquetteImg.length)
-//						{		
-//							if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i][j-1] != etiquetteMax)
-//								InterestPoints.add(new Pixel(i, j));
-//							if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i][j+1] != etiquetteMax)
-//								InterestPoints.add(new Pixel(i, j));
-//						}
-//						if (j == myEtiquetteImg[i].length)
-//						{		
-//							if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i-1][j] != etiquetteMax)
-//								InterestPoints.add(new Pixel(i, j));
-//							if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i+1][j] != etiquetteMax)
-//								InterestPoints.add(new Pixel(i, j));
-//						}
-//					}
-//				}
-//				else 
-//				{
-//					//get left up pixel
-//					if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i-1][j] != etiquetteMax && myEtiquetteImg[i][j-1] != etiquetteMax)
-//						InterestPoints.add(new Pixel(i, j));
-//					//get right up pixel
-//					if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i+1][j] != etiquetteMax && myEtiquetteImg[i][j+1] != etiquetteMax)
-//						InterestPoints.add(new Pixel(i, j));
-//					//get left down pixel
-//					if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i-1][j] != etiquetteMax && (myEtiquetteImg[i][j+1] != etiquetteMax))
-//						InterestPoints.add(new Pixel(i, j));
-//					//get right down pixel
-//					if (myEtiquetteImg[i][j] == etiquetteMax && myEtiquetteImg[i+1][j] != etiquetteMax && myEtiquetteImg[i][j+1] != etiquetteMax)
-//						InterestPoints.add(new Pixel(i, j));
-//				}
-//			}
-//		}
-//		return getCenterForm(InterestPoints);
-		return null;
 	}
 	
 	public int getImgHeight() 

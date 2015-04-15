@@ -29,6 +29,7 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 
+	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
 	public static final boolean RUN_APIX = true;
