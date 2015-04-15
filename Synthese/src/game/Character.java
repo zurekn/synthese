@@ -7,7 +7,9 @@ import java.util.Iterator;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
+import ai.AStar;
 import data.Data;
 import data.SpellD;
 import data.Stats;
@@ -160,7 +162,7 @@ public abstract class Character {
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
 	}
-	
+
 	/**
 	 * Move the caracter to the position x:y if it's possible
 	 * 
@@ -168,8 +170,9 @@ public abstract class Character {
 	 * @throws IllegalMovementException
 	 */
 
-	public void moveTo(String position) throws IllegalMovementException {
-		if (WindowGame.windowGame.getAllPosition().contains(position)) {
+	public int moveTo(String position) throws IllegalMovementException {
+		ArrayList<String> positions = WindowGame.windowGame.getAllPosition();
+		if (positions.contains(position)) {
 			throw new IllegalMovementException(
 					"Caracter already at the position [" + position + "]");
 		}
@@ -191,7 +194,6 @@ public abstract class Character {
 					throw new IllegalMovementException(
 							"Movement is out of the map");
 				} else {
-
 					int xTmp = this.x, yTmp = this.y;
 					int movePoints = this.stats.getMovementPoints();
 					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2)
@@ -200,9 +202,11 @@ public abstract class Character {
 						throw new IllegalMovementException(
 								"Not enough movements points");
 					} else {
+						AStar aStar = AStar.getInstance();
 						this.x = x;
 						this.y = y;
 						this.stats.setMovementPoints(movePoints - dist);
+						return 0;
 					}
 				}
 			}
@@ -238,7 +242,7 @@ public abstract class Character {
 			damage = damage - getStats().getArmor();
 		} else {
 			System.out.println("Wrong damage type : " + type);
-		} 
+		}
 		if (damage < 0)
 			damage = 0;
 		System.out.println(id + " take : [" + damage + "] damage");
@@ -247,6 +251,5 @@ public abstract class Character {
 	public boolean checkDeath() {
 		return stats.getLife() <= 0;
 	}
-
 
 }

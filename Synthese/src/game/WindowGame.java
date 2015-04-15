@@ -13,6 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import ai.AIHandler;
+import ai.AStar;
 import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
@@ -35,7 +36,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
-	// TODO add traps
+	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character currentCharacter;
 
 	private int playerNumber;
@@ -221,7 +222,6 @@ public class WindowGame extends BasicGame {
 			}
 			System.out.println("========================");
 		}
-
 	}
 
 	/**
@@ -262,20 +262,37 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		}
 
-		else if (action.startsWith("m")) {// Monster movement action
+		else if (action.startsWith("m")) {// Movement action
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
-				String id = tokens[0];
-				/*
+				/*String id = tokens[0];
+				 *
 				 * if (!currentCharacter.getId().equals(id)) throw new
 				 * IllegalActionException( "Not your turn, try again later.");
 				 */
+				
+				// TODO
+				// TODO
+				// TODO
+				AStar astar = AStar.getInstance();
+		    	Character c = players.get(0);
+		    	System.out.println("toto");
+		    	System.out.println(c.toString());
+		    	String[] path = astar.pathfinder(c, 18, 16);
+		    	for(int i=0;i<path.length;i++){
+		    		System.out.println(path[i]);
+		    	}
+		    	
+		    	// TODO
+		    	// TODO
+				
 				String position = tokens[1] + ":" + tokens[2];
 				currentCharacter.moveTo(position);
 				switchTurn();
+				
 			} catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
 			}
@@ -326,6 +343,7 @@ public class WindowGame extends BasicGame {
 	 * @param str
 	 *            , x:y
 	 */
+	@Deprecated
 	public void move(String str) {
 		System.out.println("WindowGame get new movement : " + str);
 		if (turn < players.size()) {
@@ -354,12 +372,18 @@ public class WindowGame extends BasicGame {
 	}
 
 	public ArrayList<String> getAllPosition() {
-		System.out.println("Toto");
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i = 0; i < players.size(); i++)
 			list.add(players.get(i).getX()+":"+players.get(i).getY());
 		for(int i = 0; i < mobs.size(); i ++)
 			list.add(mobs.get(i).getX()+":"+mobs.get(i).getY());
+		return list;
+	}
+	
+	public ArrayList<String> getAllTraps(){
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i =0; i < traps.size(); i++)
+			list.add(traps.get(i).getX() + ":" + traps.get(i).getY());
 		return list;
 	}
 }
