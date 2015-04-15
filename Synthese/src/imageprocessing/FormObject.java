@@ -33,7 +33,7 @@ public class FormObject {
 		this.imgWidth = imgWidth;
 		this.pixelList = pixelList;
 		this.surface = getSurface();
-		this.gravityCenterCarre = getCenterCarreForm(pixelList);
+		//this.gravityCenterCarre = getCenterCarreForm(pixelList);
 		this.baryCenter = getBaryCenterForm(pixelList);
 		getEcartTypeForm(pixelList);
 		recreateMatrix();

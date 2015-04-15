@@ -12,16 +12,18 @@ public class SpellD {
 	private int heal;
 	private int mana;
 	private int range;
+	private String type;
 	private Event event;
 
 	public SpellD(String id, int damage, int heal, int mana, int range, String name,
-			int celNumber, SpriteSheet ss, Music sound) {
+			int celNumber, String type, SpriteSheet ss, Music sound) {
 		this.id = id;
 		this.damage = damage;
 		this.heal = heal;
 		this.mana = mana;
 		this.range = range;
 		this.name = name;
+		this.type = type;
 		this.event = new Event(id,sound);
 		initEventAnimation(celNumber, ss);
 	}
@@ -96,5 +98,18 @@ public class SpellD {
 	public void setRange(int range) {
 		this.range = range;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	@Override
+	public String toString() {
+		return "SpellD [id=" + id + ", name=" + name + ", damage=" + damage
+				+ ", heal=" + heal + ", mana=" + mana + ", range=" + range
+				+ ", type=" + type + ", event=" + event + "]";
+	}
+	
+	
 
 }

@@ -1,0 +1,156 @@
+<map>
+	<mapInfo>
+		<background>Synthese/res/images/map2.tmx</background>
+		<x>25</x>
+		<y>25</y>
+		<RandomTraps>3</RandomTraps>
+	</mapInfo>
+
+	<blockInfo>
+		<size>32</size>
+		<numberX>25</numberX>
+		<numberY>25</numberY>
+	</blockInfo>
+
+	<!-- Blocks -->
+	<block x="12" y="0">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="1">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="2">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="3">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="4">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="5">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="6">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="7">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="9">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="10">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="11">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="12">
+		<untraversable></untraversable>
+	</block>
+	<block x="12" y="13">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="0">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="1">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="2">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="3">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="4">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="5">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="6">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="7">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="8">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="9">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="10">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="11">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="12">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="13">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="15">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="16">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="17">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="18">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="19">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="20">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="21">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="22">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="23">
+		<untraversable></untraversable>
+	</block>
+	<block x="13" y="24">
+		<untraversable></untraversable>
+	</block>
+
+
+	<block x="1" y="1">
+		<damage type="fire">10</damage>
+	</block>
+
+	<!-- Monsters -->
+	<monster id="m1">
+		<x>5</x>
+		<y>5</y>
+	</monster>
+	<monster id="m1">
+		<x>6</x>
+		<y>5</y>
+	</monster>
+	<monster id="m2">
+		<x>10</x>
+		<y>10</y>
+	</monster>
+	<monster id="m2">
+		<x>11</x>
+		<y>11</y>
+	</monster>
+
+	<!--Traps -->
+
+</map>

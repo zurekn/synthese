@@ -36,6 +36,88 @@ public abstract class Character {
 
 	public abstract void init();
 
+	/**
+	 * Move the character to the position x:y if it's possible
+	 * 
+	 * @param position
+	 * @throws IllegalMovementException
+	 */
+
+public void moveTo(String position) throws IllegalMovementException {
+		if(WindowGame.windowGame.getAllPositions().contains(position)){
+			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
+		}
+
+		if (Data.untraversableBlocks.containsKey(position)) {
+			throw new IllegalMovementException("Untraversable block at ["
+					+ position + "]");
+		} else {
+			String tokens[] = position.split(":");
+			if (tokens.length != 2) {
+				throw new IllegalMovementException("Invalid movement syntax ");
+			} else {
+
+				int x = Integer.parseInt(tokens[0]);
+				int y = Integer.parseInt(tokens[1]);
+
+				if (x < 0 || x > Data.BLOCK_NUMBER_X || y < 0
+						|| y > Data.BLOCK_NUMBER_Y) {
+					throw new IllegalMovementException(
+							"Movement is out of the map");
+				} else {
+
+					int xTmp = this.x, yTmp = this.y;
+					int movePoints = this.stats.getMovementPoints();
+					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2) + Math.pow(y - yTmp, 2));
+					if (dist > movePoints) {
+						throw new IllegalMovementException(
+								"Not enough movements points");
+					} else {
+						this.x = x;
+						this.y = y;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Use a spell given by its id, throws an {@link IllegalActionException}
+	 * otherwise.
+	 * 
+	 * @param spellID
+	 * @param direction
+	 * @throws IllegalActionException
+	 */
+	public void useSpell(String spellID, int direction)
+			throws IllegalActionException {
+		Spell spell = this.getSpell(spellID);
+		if (spell == null)
+			throw new IllegalActionException("Spell unkown");
+	}
+
+	/**
+	 * 
+	 * @param damage the damage value
+	 * @param type, type of damage (fire, ice, shock...)
+	 */
+	public void takeDamage(int damage, String type) {
+		if (type.equals("magic")) {
+			damage = damage - getStats().getMagicResist();
+		} else if (type.equals("physic")) {
+			damage = damage - getStats().getArmor();
+		} else {
+			System.out.println("Wrong damage type : " + type);
+		}
+		if (damage < 0)
+			damage = 0;
+		System.out.println(id + " take : [" + damage + "] damage");
+	}
+
+	public boolean checkDeath() {
+		return stats.getLife() <= 0;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -116,7 +198,7 @@ public abstract class Character {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getEvent()));
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getEvent()));
 	}
 
 	public ArrayList<Spell> getSpells() {
@@ -161,95 +243,6 @@ public abstract class Character {
 		return "Character [x=" + x + ", y=" + y + ", id=" + id + ", animation="
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
-	}
-
-	/**
-	 * Move the caracter to the position x:y if it's possible
-	 * 
-	 * @param position
-	 * @throws IllegalMovementException
-	 */
-
-	public int moveTo(String position) throws IllegalMovementException {
-		ArrayList<String> positions = WindowGame.windowGame.getAllPosition();
-		if (positions.contains(position)) {
-			throw new IllegalMovementException(
-					"Caracter already at the position [" + position + "]");
-		}
-
-		if (Data.untraversableBlocks.containsKey(position)) {
-			throw new IllegalMovementException("Untraversable block at ["
-					+ position + "]");
-		} else {
-			String tokens[] = position.split(":");
-			if (tokens.length != 2) {
-				throw new IllegalMovementException("Invalid movement syntax ");
-			} else {
-
-				int x = Integer.parseInt(tokens[0]);
-				int y = Integer.parseInt(tokens[1]);
-
-				if (x < 0 || x > Data.BLOCK_NUMBER_X || y < 0
-						|| y > Data.BLOCK_NUMBER_Y) {
-					throw new IllegalMovementException(
-							"Movement is out of the map");
-				} else {
-					int xTmp = this.x, yTmp = this.y;
-					int movePoints = this.stats.getMovementPoints();
-					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2)
-							+ Math.pow(y - yTmp, 2));
-					if (dist > movePoints) {
-						throw new IllegalMovementException(
-								"Not enough movements points");
-					} else {
-						AStar aStar = AStar.getInstance();
-						this.x = x;
-						this.y = y;
-						this.stats.setMovementPoints(movePoints - dist);
-						return 0;
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Use a spell given by its id, throws an {@link IllegalActionException}
-	 * otherwise.
-	 * 
-	 * @param spellID
-	 * @param direction
-	 * @throws IllegalActionException
-	 */
-	public void useSpell(String spellID, int direction)
-			throws IllegalActionException {
-		Spell spell = this.getSpell(spellID);
-		if (spell == null)
-			throw new IllegalActionException("Spell unkown");
-	}
-
-	/**
-	 * 
-	 * @param damage
-	 *            the damage value
-	 * @param type
-	 *            type of damage (fire, ice, shock...)
-	 */
-	public void takeDamage(int damage, String type) {
-		if (type.equals("magic")) {
-			damage = damage - getStats().getMagicResist();
-		} else if (type.equals("physic")) {
-			damage = damage - getStats().getArmor();
-		} else {
-			System.out.println("Wrong damage type : " + type);
-		}
-		if (damage < 0)
-			damage = 0;
-		System.out.println(id + " take : [" + damage + "] damage");
-	}
-
-	public boolean checkDeath() {
-		return stats.getLife() <= 0;
 	}
 
 }

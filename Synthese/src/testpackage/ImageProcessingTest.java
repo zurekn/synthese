@@ -23,36 +23,32 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		
 //		SwingUtilities.invokeLater(new WebCamCapture());
 		
-//		long time = System.currentTimeMillis();
+		long time = System.currentTimeMillis();
+		int seuil = 200;
 		TraitementImage ti = new TraitementImage();
+//		List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("toto.jpg", "toto.jpg",seuil);
 		
 		//////////////////////////////////test//////////////////////////////////
-		String urlImage = "res"+File.separator;
-		BufferedImage img, imgVierge;
-		int seuil = 20;
-//		try {
-//			img = ImageIO.read(new File(pathToDir + "premiere_im_refont.png"));
-//			imgVierge = ImageIO.read(new File(pathToDir + "premiere_im_refont_vierge.png"));
-//			
-//			int[][] elementsSubImg = new int[img.getWidth()][img.getHeight()];
-//			ti.setImgHeight(img.getHeight());
-//		    ti.setImgWidth(img.getWidth());
-//		    
-//		    elementsSubImg = ti.getSubstractImg(img, imgVierge, seuil);
-//		    
-//		    ImageIO.write(ti.tableToBufferedImage(elementsSubImg), "png", new File(pathToDir + "toto.png"));
-//		} 
-//		catch (IOException e) {
-//			e.printStackTrace();
-//		}
+
+		try {
+			BufferedImage img = ImageIO.read(new File(pathToDir + "toto.jpg"));
+			
+			
+			int [][] resErosion = ti.Ouverture(img, seuil);
+			
+			
+			
+			BufferedImage imgRes = ti.intTableToBufferedImage(resErosion);
+			ImageIO.write(imgRes, "jpg", new File(pathToDir + "ouverture.jpg"));
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	    ////////////////////////////////////////////////////////////////////////
 		
-//		int seuil = 110;
-//		Pixel p = ti.EtiquetageIntuitifImage("Manathan.jpg", "Manathan_vide.jpg");
-//		System.out.println("pixel centre gravité : "+p.getX()+" "+p.getY());
-		
-		List<FormObject> lf = ti.etiquetageIntuitifImage2("testBlocPS.jpg", "testBlocPS.jpg",seuil);
-//		System.out.println(System.currentTimeMillis()-time + " end time");
+		System.out.println(System.currentTimeMillis()-time + " end time");
 	}
 
 }

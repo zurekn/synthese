@@ -49,7 +49,7 @@ public class AStar {
 	}
 
 	public String[] pathfinder(Character c, int goalX, int goalY) {
-		positions = WindowGame.windowGame.getAllPosition();
+		positions = WindowGame.windowGame.getAllPositions();
 		goal = new Node(goalX, goalY);
 		int gMax = c.getStats().getMovementPoints()*WEIGHT;
 		String[] path = null;

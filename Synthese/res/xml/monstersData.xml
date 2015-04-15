@@ -13,7 +13,7 @@
 		<movementPoints>3</movementPoints>
 		<magicResist>10</magicResist>
 		<spells>
-			<spell>s1</spell>
+			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
 		<aiType>goblin</aiType>
