@@ -13,7 +13,7 @@ import data.Data;
 
 
 public class TraitementImage {
-	String urlImage = "Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
+	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
 
@@ -25,6 +25,7 @@ public class TraitementImage {
 	/*
 	 * Génère et sauvegarde une image binaire à partire d'une image normale
 	 */
+	@Deprecated
 	public void makeBinaryImage(BufferedImage img, String resultImgName, String formatSortie, int seuil)
 	{
 		try {
@@ -69,6 +70,7 @@ public class TraitementImage {
 	 * Test si les images sont égales.
 	 * Retourne le nombre de pixels égaux
 	 */
+	@Deprecated
 	public int pixelsBufferedImagesEqual(BufferedImage img1, BufferedImage img2)
 	{
 		int percentComparision = 0;
@@ -243,7 +245,8 @@ public class TraitementImage {
 		if(Data.debug)
 		{
 		    try
-		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction.jpg"));}
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction"+Data.getDate()
+		    		+".jpg"));}
 		    catch (IOException e) 
 			{	e.printStackTrace();}   
 		}
@@ -697,7 +700,7 @@ public class TraitementImage {
     	    }
     	}
     	try {
-			ImageIO.write(img, "jpg", new File(urlImage + "gray50.jpg"));
+			ImageIO.write(img, "jpg", new File(urlImage + "gray50"+Data.getDate()+".jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -763,8 +766,8 @@ public class TraitementImage {
 			{
 			    try
 			    {	
-			    	ImageIO.write(intTableToBinaryBufferedImage(elements1), "jpg", new File(urlImage + "image1_50NuancesDeGray.jpg"));
-			    	ImageIO.write(intTableToBinaryBufferedImage(elements2), "jpg", new File(urlImage + "image2_50NuancesDeGray.jpg"));
+			    	ImageIO.write(intTableToBinaryBufferedImage(elements1), "jpg", new File(urlImage + "image1_50NuancesDeGray"+Data.getDate()+".jpg"));
+			    	ImageIO.write(intTableToBinaryBufferedImage(elements2), "jpg", new File(urlImage + "image2_50NuancesDeGray"+Data.getDate()+".jpg"));
 			    }
 			    catch (IOException e) 
 				{	e.printStackTrace();}   

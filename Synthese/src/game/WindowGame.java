@@ -184,7 +184,13 @@ public class WindowGame extends BasicGame {
 			public void newMouvement(MovementEvent e) {
 				System.out
 						.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["
-								+ e.toString() + "], position sur le plateau ["+e.getX() / Data.BLOCK_SIZE_X+":"+e.getY() / Data.BLOCK_SIZE_Y+"]");
+								+ e.toString()
+								+ "], position sur le plateau ["
+								+ e.getX()
+								/ Data.BLOCK_SIZE_X
+								+ ":"
+								+ e.getY()
+								/ Data.BLOCK_SIZE_Y + "]");
 				try {
 					// TODO check the available position
 					decodeAction("m:" + (e.getX() / Data.BLOCK_SIZE_X) + ":"
@@ -353,9 +359,11 @@ public class WindowGame extends BasicGame {
 		}
 		eventsRemoved.clear();
 
-		if (turn < players.size() && apix.isInit())
-			if(apix.getImageProcessing().getThread().isInterrupted())
-				apix.getImageProcessing().notify();
+		//TODO retirer le if lors de la derniere release
+		if (Data.RUN_APIX)
+			if (turn < players.size() && apix.isInit())
+				if (apix.getImageProcessing().getThread().isInterrupted())
+					apix.getImageProcessing().notify();
 
 	}
 
