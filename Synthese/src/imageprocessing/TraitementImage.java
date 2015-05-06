@@ -135,15 +135,15 @@ public class TraitementImage {
 		Num.add(new ArrayList<Pixel>());//pour etiquette 0
 		if(subImgElements!=null)
 		{
-			for(int j = 1; j < imgHeight; j++)
+			for(int i = 1; i < imgWidth; i++)
 			{
-				for(int i = 1; i < imgWidth; i++)
+				for(int j = 1; j < imgHeight; j++)
 				{
 					if(subImgElements[i][j]== 255)
 					{
 						attA = subImgElements[i-1][j];
 						attB = subImgElements[i][j-1];
-						attC = subImgElements[i][j];
+						attC = subImgElements[i][j];					
 	
 						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
 						{
