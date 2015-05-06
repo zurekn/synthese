@@ -247,9 +247,9 @@ public class TraitementImage {
 		Num.add(new ArrayList<Pixel>());//pour etiquette 0
 		if(subImgElements!=null)
 		{
-			for(int j = 1; j < imgHeight; j++)
+			for(int i = 1; i < imgWidth; i++)
 			{
-				for(int i = 1; i < imgWidth; i++)
+				for(int j = 1; j < imgHeight; j++)
 				{
 					if(subImgElements[i][j]== 255)
 					{
