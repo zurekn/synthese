@@ -239,6 +239,14 @@ public class TraitementImage {
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
 			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);
+		
+		if(Data.debug)
+		{
+		    try
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction.jpg"));}
+		    catch (IOException e) 
+			{	e.printStackTrace();}   
+		}
 		//#debug
 		
 		int attA, attB,attC, temp = 1, numEt = 1;
@@ -749,6 +757,17 @@ public class TraitementImage {
 			{
 				if(Data.tiDebug)
 					System.out.println("images non équivalentes en taille. Dommage!");
+			}
+			
+			if(Data.debug)
+			{
+			    try
+			    {	
+			    	ImageIO.write(intTableToBinaryBufferedImage(elements1), "jpg", new File(urlImage + "image1_50NuancesDeGray.jpg"));
+			    	ImageIO.write(intTableToBinaryBufferedImage(elements2), "jpg", new File(urlImage + "image2_50NuancesDeGray.jpg"));
+			    }
+			    catch (IOException e) 
+				{	e.printStackTrace();}   
 			}
 
 		return elementsRes;
