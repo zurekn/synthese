@@ -1,8 +1,8 @@
 <spells>
 	<spell id="s2">
 		<file>Synthese/res/images/tiles/Spells/fireball.png</file>
-		<celX>75</celX>
-		<celY>58</celY>
+		<celX>64</celX>
+		<celY>51</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
 		<damage>10</damage>

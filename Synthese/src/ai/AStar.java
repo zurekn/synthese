@@ -1,3 +1,4 @@
+//TODO optimize a star
 package ai;
 
 import game.WindowGame;

@@ -195,24 +195,24 @@ public class Event {
 
 	public void render(GameContainer container, Graphics g) {
 		int dx = 0, dy = 0;
-		switch (direction) {
-		case Data.NORTH:
-			break;
+		int finalDirection = direction - spriteDirection;
 
-		case Data.SOUTH:
-			dx = -animation[0].getWidth();
-			dy = -animation[0].getHeight();
-			break;
+		if (spriteDirection == 90) {
+			if (finalDirection == Data.NORTH - spriteDirection) {
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
 
-		case Data.EAST:
-			dx = 0;
-			dy = -animation[0].getHeight();
-			break;
+			} else if (finalDirection == Data.SOUTH - spriteDirection) {
+				dx = (4*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
 
-		case Data.WEST:
-			dx = -animation[0].getWidth();
-			dy = 0;
-			break;
+			} else if (finalDirection == Data.EAST - spriteDirection) {
+				dx = (4*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+
+			} else if (finalDirection == Data.WEST - spriteDirection) {
+				dx = (2*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+			}
 		}
 
 		g.rotate(x, y, direction - spriteDirection);
