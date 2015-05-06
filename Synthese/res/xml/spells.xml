@@ -18,6 +18,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>0</damage>
 		<heal>15</heal>
 		<mana>10</mana>
@@ -31,6 +32,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>5</damage>
 		<heal>0</heal>
 		<mana>5</mana>
@@ -44,6 +46,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>20</damage>
 		<heal>0</heal>
 		<mana>25</mana>
@@ -57,6 +60,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>15</damage>
 		<heal>0</heal>
 		<mana>0</mana>
@@ -70,6 +74,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>0</damage>
 		<heal>10</heal>
 		<mana>5</mana>
@@ -83,6 +88,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>5</damage>
 		<heal>0</heal>
 		<mana>0</mana>
@@ -96,6 +102,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>7</damage>
 		<heal>0</heal>
 		<mana>0</mana>
@@ -109,6 +116,7 @@
 		<celX>36</celX>
 		<celY>36</celY>
 		<celNumber>7</celNumber>
+		<direction>90</direction>
 		<damage>20</damage>
 		<heal>0</heal>
 		<mana>25</mana>

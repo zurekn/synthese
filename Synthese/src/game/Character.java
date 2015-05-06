@@ -75,6 +75,8 @@ public abstract class Character {
 					} else {
 						this.x = x;
 						this.y = y;
+						if(Data.debug)
+							System.out.println("Current caractere move to ["+x+":"+y+"]");
 					}
 				}
 			}

@@ -30,25 +30,23 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		
 		//////////////////////////////////test//////////////////////////////////
 
+		
+		BufferedImage imgCompare = null;
+		BufferedImage imgSrcRef = null;
 		try {
-			BufferedImage img = ImageIO.read(new File(pathToDir + "toto.jpg"));
+			imgCompare = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
+			imgSrcRef = ImageIO.read(new File(pathToDir + "testBloc.jpg"));
 			
-			
-			int [][] resErosion = ti.Ouverture(img, seuil);
-			
-			
-			
-			BufferedImage imgRes = ti.intTableToBufferedImage(resErosion);
-			ImageIO.write(imgRes, "jpg", new File(pathToDir + "ouverture.jpg"));
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+			List<FormObject> lf = ti.etiquetageIntuitifImage2(imgCompare, imgSrcRef ,100);
+		} catch (IOException e) {}
+
 		
 		
 	    ////////////////////////////////////////////////////////////////////////
 		
-		System.out.println(System.currentTimeMillis()-time + " end time");
+			System.out.println(System.currentTimeMillis()-time + " end time");
+
+
 	}
 
 }

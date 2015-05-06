@@ -29,9 +29,12 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 
+	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
-	public static final boolean DISPLAY_PLAYER = true;
-	public static final boolean RUN_APIX = false;
+	public static final boolean DISPLAY_PLAYER = false;
+	public static final boolean RUN_APIX = true;
+	public static boolean debugPicture = false; 
+	public static final boolean inTest = true;
 	public static final int DEBUG_PLAYER = 1;
 	
 	public static String NAME = "Jeu de plateau";
@@ -51,7 +54,7 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 20;
+	public static int TURN_MAX_TIME = 20000;
 
 	public static final int SELF = 360;
 	public static final int NORTH = 0;

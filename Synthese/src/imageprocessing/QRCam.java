@@ -3,11 +3,13 @@ package imageprocessing;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.event.EventListenerList;
@@ -95,7 +97,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 					e.printStackTrace();
 				} catch (NotFoundException e) {
 					// fall thru, it means there is no QR code in image
-					System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
+					//System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
 				}
 			}else{
 				System.err.println("Webcam ["+webcam.getName()+"] is not open");
@@ -103,7 +105,22 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 
 			if(testMulti != null){
 //				textarea.setText(testMulti);
-				System.out.println("New QRCode find : "+testMulti);
+				if(Data.debug)
+					System.out.println("New QRCode find : "+testMulti);
+				if(Data.debug && Data.inTest && Data.debugPicture){
+					try {
+						System.out.println("=======================DEBUG============================");
+						ImageIO.write(
+								image,
+								"jpg",
+								new File(
+										"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/newQRCode.jpg"));
+						Data.debugPicture = false;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				newQRDatas(testMulti);
 			}else{
 				//textarea.setText("");

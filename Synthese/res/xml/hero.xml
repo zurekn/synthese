@@ -25,7 +25,7 @@
 		<magicResist>4</magicResist>
 		<spells>
 			<spell id="s5"></spell>
-			<spell id="s7"></spell>
+			<spell id="s2"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
 	</hero>
