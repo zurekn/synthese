@@ -5,7 +5,10 @@ import game.WindowGame;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,9 +36,11 @@ public class Data {
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
 	public static final boolean RUN_APIX = true;
-	public static boolean debugPicture = false; 
+	public static boolean debugPicture = true; 
 	public static final boolean inTest = true;
+	public static boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 1;
+	public static String IMAGE_DIR = "C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -81,11 +86,15 @@ public class Data {
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
 
+	private static boolean initImageDir = false;
+
 	public static TiledMap map;
 	public static MonsterData monsterData;
 	public static WindowGame game;
 	public static long beginTime;
 
+	
+	
 	/**
 	 * Load all game variables
 	 * 
@@ -157,5 +166,22 @@ public class Data {
 			e.printStackTrace();
 		}
 
+	}
+	
+	
+	public static String getImageDir(){
+		if(!initImageDir){
+			IMAGE_DIR += getDate()+"/"; 
+			new File(IMAGE_DIR).mkdir(); 
+			
+			initImageDir = true;
+		}
+		return IMAGE_DIR;
+	}
+	
+	public static String getDate(){
+		Date date = new Date();
+		DateFormat formater = new SimpleDateFormat("dd-MM-yy-hh-mm-ss");
+		return formater.format(date);
 	}
 }

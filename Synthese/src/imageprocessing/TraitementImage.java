@@ -13,7 +13,7 @@ import data.Data;
 
 
 public class TraitementImage {
-	String urlImage = "Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
+	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
 
@@ -25,6 +25,7 @@ public class TraitementImage {
 	/*
 	 * Génère et sauvegarde une image binaire à partire d'une image normale
 	 */
+	@Deprecated
 	public void makeBinaryImage(BufferedImage img, String resultImgName, String formatSortie, int seuil)
 	{
 		try {
@@ -69,6 +70,7 @@ public class TraitementImage {
 	 * Test si les images sont égales.
 	 * Retourne le nombre de pixels égaux
 	 */
+	@Deprecated
 	public int pixelsBufferedImagesEqual(BufferedImage img1, BufferedImage img2)
 	{
 		int percentComparision = 0;
@@ -119,6 +121,7 @@ public class TraitementImage {
 	/*
 	 * Mise en place de l'algorithme d'étiquetage intuitif
 	 */
+	@Deprecated
 	public List<FormObject> etiquetageIntuitifImage2(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil)
 	{	
 		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgCompare, imgSrcRef, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
@@ -243,7 +246,8 @@ public class TraitementImage {
 		if(Data.debug)
 		{
 		    try
-		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction.jpg"));}
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction"+Data.getDate()
+		    		+".jpg"));}
 		    catch (IOException e) 
 			{	e.printStackTrace();}   
 		}
@@ -422,9 +426,6 @@ public class TraitementImage {
 		} 
 		return resultDilatation;
 	}
-	
-
-
 
 	/*
 	 * fonction permettant de faire une érosion puis une dilatation sur une forme
@@ -633,11 +634,11 @@ public class TraitementImage {
      * Transform one RGB image in Gray image,
      * Binary each pixels from image.
      */
-    public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
+	public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
         int[][] elementsImg = null;
         int[][] elementsRes = null;
-        BufferedImage imgRes = null;
+        BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
         imgHeight = image.getHeight();
         imgWidth = image.getWidth();
         elementsImg = new int[image.getWidth()][image.getHeight()];
@@ -647,6 +648,7 @@ public class TraitementImage {
             for (int y = 0; y < image.getHeight(); ++y)
             {
                 /*    Get gray color from RGB origin pixel image 1    */
+                /*
                 Color pixelcolor1= new Color(image.getRGB(x, y));
                 int r1=pixelcolor1.getRed();
                 int g1=pixelcolor1.getGreen();
@@ -654,11 +656,28 @@ public class TraitementImage {
                 
                 int grayLevel1 = (r1 + g1 + b1) / 3;
                 elementsImg[x][y] = grayLevel1;
+                */
+                
+                int rgb = image.getRGB(x, y);
+                int r = (rgb >> 16) & 0xFF;
+                int g = (rgb >> 8) & 0xFF;
+                int b = (rgb & 0xFF);
+
+                int grayLevel = (r + g + b) / 3;
+                elementsImg[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+                imgRes.setRGB(x, y, elementsImg[x][y]);
+
 
                 /*        Binary pixel [x][y]        */
-                elementsRes[x][y] = elementsImg[x][y]< seuil ? 255 : 0;
+                elementsRes[x][y] = elementsImg[x][y] < seuil ? 255 : 0;
                 
             }
+        
+        try {
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         return elementsRes;
     }
@@ -697,7 +716,7 @@ public class TraitementImage {
     	    }
     	}
     	try {
-			ImageIO.write(img, "jpg", new File(urlImage + "gray50.jpg"));
+			ImageIO.write(img, "jpg", new File(urlImage + "gray50"+Data.getDate()+".jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -708,74 +727,94 @@ public class TraitementImage {
 	 * Substract them,
 	 * Binary each pixels from substract image.
 	 */
-	public int[][] getGraySubstractAndBinaryImage(BufferedImage img1, BufferedImage img2, int seuil) 
+    public int[][] getGraySubstractAndBinaryImage(BufferedImage img1, BufferedImage img2, int seuil) 
 	{
-
 		int[][] elements1 = null;
 		int[][] elements2 = null;
 		int[][] elementsRes = null;
 
-			
-			imgHeight = img1.getHeight();
-			imgWidth = img1.getWidth();
-			elements1 = new int[img1.getWidth()][img1.getHeight()];
-			elements2 = new int[img1.getWidth()][img1.getHeight()];
-			elementsRes = new int[img1.getWidth()][img1.getHeight()];
-			
-			if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) 
-			{
-			    for (int x = 0; x < img1.getWidth(); ++x)
-				    for (int y = 0; y < img1.getHeight(); ++y)
-				    {
-			    		/*	Get gray color from RGB origin pixel image 1	*/
-				        Color pixelcolor1= new Color(img1.getRGB(x, y));
-				        int r1=pixelcolor1.getRed();
-				        int g1=pixelcolor1.getGreen();
-				        int b1=pixelcolor1.getBlue();
-				        
-				        int grayLevel1 = (r1 + g1 + b1) / 3;
-				        elements1[x][y] = grayLevel1;
+		imgHeight = img1.getHeight();
+		imgWidth = img1.getWidth();
+		BufferedImage imgRes_1 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_2 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Sub= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Bin= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		elements1 = new int[img1.getWidth()][img1.getHeight()];
+		elements2 = new int[img1.getWidth()][img1.getHeight()];
+		elementsRes = new int[img1.getWidth()][img1.getHeight()];
+		
+		if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) 
+		{
+		    for (int x = 0; x < img1.getWidth(); ++x)
+			    for (int y = 0; y < img1.getHeight(); ++y)
+			    {
+		    		/*	Get gray color from RGB origin pixel image 1	*/
+			        /*Color pixelcolor1= new Color(img1.getRGB(x, y));
+			        int r1=pixelcolor1.getRed();
+			        int g1=pixelcolor1.getGreen();
+			        int b1=pixelcolor1.getBlue();
+			        
+			        int grayLevel1 = (r1 + g1 + b1) / 3;
+			        elements1[x][y] = grayLevel1;
+			        */
+			    	int rgb = img1.getRGB(x, y);
+	                int r = (rgb >> 16) & 0xFF;
+	                int g = (rgb >> 8) & 0xFF;
+	                int b = (rgb & 0xFF);
 
-				        /*	Get gray color from RGB origin pixel image 2	*/
-				        Color pixelcolor= new Color(img2.getRGB(x, y));
-				        int r2=pixelcolor.getRed();
-				        int g2=pixelcolor.getGreen();
-				        int b2=pixelcolor.getBlue();
-			
-				        int grayLevel2 = (r2 + g2 + b2) / 3;
-				        elements2[x][y] = grayLevel2;
-				        
-				        /*		Substract images		*/
-				        elementsRes[x][y] = elements1[x][y]-elements2[x][y]<0 ? elements2[x][y]-elements1[x][y] : elements1[x][y]-elements2[x][y];
-				        
-				        /*		Binary pixel [x][y]		*/
-				        elementsRes[x][y] = elementsRes[x][y]> seuil ? 255 : 0;
-				        
-				    }
+	                int grayLevel = (r + g + b) / 3;
+	                elements1[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+	                imgRes_1.setRGB(x, y, elements1[x][y]);
+			        
+			        
+
+			        /*	Get gray color from RGB origin pixel image 2	*/
+			        /*Color pixelcolor= new Color(img2.getRGB(x, y));
+			        int r2=pixelcolor.getRed();
+			        int g2=pixelcolor.getGreen();
+			        int b2=pixelcolor.getBlue();
+		
+			        int grayLevel2 = (r2 + g2 + b2) / 3;
+			        elements2[x][y] = grayLevel2;
+			        */
+	                
+	                int rgb2 = img1.getRGB(x, y);
+	                int r2 = (rgb2 >> 16) & 0xFF;
+	                int g2 = (rgb2 >> 8) & 0xFF;
+	                int b2 = (rgb2 & 0xFF);
+
+	                int grayLevel2 = (r2 + g2 + b2) / 3;
+	                elements2[x][y] = (grayLevel2 << 16) + (grayLevel2 << 8) + grayLevel2;
+	                imgRes_2.setRGB(x, y, elements2[x][y]);
+			        
+			        /*		Substract images		*/
+			        elementsRes[x][y] = elements1[x][y]-elements2[x][y]<0 ? elements2[x][y]-elements1[x][y] : elements1[x][y]-elements2[x][y];
+			        imgRes_Sub.setRGB(x, y, elementsRes[x][y]);
+			        
+			        /*		Binary pixel [x][y]		*/
+			        elementsRes[x][y] = elementsRes[x][y] > seuil ? 255 : 0;
+			        imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
+			        
+			    }
 			}
 			else
-			{
-				if(Data.tiDebug)
-					System.out.println("images non équivalentes en taille. Dommage!");
+				System.out.println("images non équivalentes en taille. Dommage!");
+		 try {
+				ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"));
+				ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			
-			if(Data.debug)
-			{
-			    try
-			    {	
-			    	ImageIO.write(intTableToBinaryBufferedImage(elements1), "jpg", new File(urlImage + "image1_50NuancesDeGray.jpg"));
-			    	ImageIO.write(intTableToBinaryBufferedImage(elements2), "jpg", new File(urlImage + "image2_50NuancesDeGray.jpg"));
-			    }
-			    catch (IOException e) 
-				{	e.printStackTrace();}   
-			}
-
+		
 		return elementsRes;
 	}
 		
 	/*
 	 * Crée un objet de type FormObject en fonction d'une liste de pixels pour l'étiquette sélectionnée
 	 */
+    @Deprecated
 	private FormObject etiquetteToForm(int[][] myEtiquetteImg, int etiquetteMax) 
 	{
 		List<Pixel> pixelsByEtiquette = new ArrayList<Pixel>();

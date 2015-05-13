@@ -38,7 +38,7 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 		if(Data.debugPicture){
 			try {
 				ImageIO.write(imageRef, "jpg", new File(
-									"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/imageRef.jpg"));
+									Data.getImageDir()+"imageRef"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -105,7 +105,7 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 			}
 			try {
 				ImageIO.write(image, "jpg", new File(
-						"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/traitementImage.jpg"));
+						Data.getImageDir()+"traitementImage"+Data.getDate()+".jpg"));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
