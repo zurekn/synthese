@@ -121,6 +121,7 @@ public class TraitementImage {
 	/*
 	 * Mise en place de l'algorithme d'étiquetage intuitif
 	 */
+	@Deprecated
 	public List<FormObject> etiquetageIntuitifImage2(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil)
 	{	
 		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgCompare, imgSrcRef, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
@@ -425,9 +426,6 @@ public class TraitementImage {
 		} 
 		return resultDilatation;
 	}
-	
-
-
 
 	/*
 	 * fonction permettant de faire une érosion puis une dilatation sur une forme
@@ -739,6 +737,8 @@ public class TraitementImage {
 		imgWidth = img1.getWidth();
 		BufferedImage imgRes_1 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imgRes_2 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Sub= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Bin= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
 		elements1 = new int[img1.getWidth()][img1.getHeight()];
 		elements2 = new int[img1.getWidth()][img1.getHeight()];
 		elementsRes = new int[img1.getWidth()][img1.getHeight()];
@@ -789,9 +789,11 @@ public class TraitementImage {
 			        
 			        /*		Substract images		*/
 			        elementsRes[x][y] = elements1[x][y]-elements2[x][y]<0 ? elements2[x][y]-elements1[x][y] : elements1[x][y]-elements2[x][y];
+			        imgRes_Sub.setRGB(x, y, elementsRes[x][y]);
 			        
 			        /*		Binary pixel [x][y]		*/
 			        elementsRes[x][y] = elementsRes[x][y] > seuil ? 255 : 0;
+			        imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
 			        
 			    }
 			}
@@ -800,6 +802,8 @@ public class TraitementImage {
 		 try {
 				ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"));
 				ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -810,6 +814,7 @@ public class TraitementImage {
 	/*
 	 * Crée un objet de type FormObject en fonction d'une liste de pixels pour l'étiquette sélectionnée
 	 */
+    @Deprecated
 	private FormObject etiquetteToForm(int[][] myEtiquetteImg, int etiquetteMax) 
 	{
 		List<Pixel> pixelsByEtiquette = new ArrayList<Pixel>();
