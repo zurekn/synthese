@@ -100,8 +100,10 @@ public class APIX implements Runnable {
                 /*        Binary pixel [x][y]        */
                 //System.out.println(elementsImg[x][y]+" ");
                 // 0 = white and 255 = black
-                elementsRes[x][y] =  elementsImg[x][y] < 180 ? 255 : 0;
-               
+                elementsRes[x][y] =  elementsImg[x][y] < 75 ? 255 : 0;
+               /*TODO
+                * Ajouter une popup pour demander le seuil en cas d'échec de la phase d'initialisation
+                */
                 
             }
            
@@ -182,12 +184,12 @@ public class APIX implements Runnable {
 						image,
 						"jpg",
 						new File(
-								"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/initialisationIT.jpg"));
+								Data.IMAGE_DIR + "initialisationIT"+Data.getDate()+".jpg"));
 				ImageIO.write(
 						image1,
 						"jpg",
 						new File(
-								"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/initialisationITout.jpg"));
+								Data.IMAGE_DIR + "initialisationITout_bin"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -638,9 +638,10 @@ public class TraitementImage {
     {
         int[][] elementsImg = null;
         int[][] elementsRes = null;
-        BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
         imgHeight = image.getHeight();
         imgWidth = image.getWidth();
+        BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+        BufferedImage imgRes_Bin = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
         elementsImg = new int[image.getWidth()][image.getHeight()];
         elementsRes = new int[image.getWidth()][image.getHeight()];
         
@@ -670,11 +671,12 @@ public class TraitementImage {
 
                 /*        Binary pixel [x][y]        */
                 elementsRes[x][y] = elementsImg[x][y] < seuil ? 255 : 0;
-                
+                imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
             }
         
         try {
-			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage.jpg"));
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage"+Data.getDate()+".jpg"));
+			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin"+Data.getDate()+".jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -800,10 +802,10 @@ public class TraitementImage {
 			else
 				System.out.println("images non équivalentes en taille. Dommage!");
 		 try {
-				ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"));
-				ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"));
-				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
-				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+				ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
