@@ -37,6 +37,7 @@ public class APIX implements Runnable {
 	private int relativeY = -1;
 	private int seuil = 100;
 	private boolean firstTry = true;
+	private boolean isRunning = false;
 	
 	public APIX() {
 		if (!Data.RUN_APIX){
@@ -75,6 +76,9 @@ public class APIX implements Runnable {
 	}
 
 	public void initTI() {
+		if(isRunning)
+			return;
+		isRunning = true;
 		System.out.println("Begin of the imageProcessing initialization");
 
 		long time = System.currentTimeMillis();
@@ -215,6 +219,7 @@ public class APIX implements Runnable {
 			
 		System.out.println("Fin de la phase d'initialisation après "
 				+ (System.currentTimeMillis() - time) + " millisecondes");
+		isRunning = false;
 	}
 
 	protected void addMovementEvent(MovementEvent e) {
