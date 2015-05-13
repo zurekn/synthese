@@ -155,7 +155,7 @@ public class APIX implements Runnable {
         }
 
 		TraitementImage ti = new TraitementImage();
-		//elementsRes = ti.Ouverture(elementsRes, 20);
+		elementsRes = ti.Ouverture(elementsRes, 20);
         
         
          
