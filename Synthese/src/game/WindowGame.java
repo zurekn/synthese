@@ -21,7 +21,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
 import ai.AIHandler;
+import ai.AIListener;
 import ai.AStar;
+import ai.ActionEvent;
 import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
@@ -48,6 +50,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character currentCharacter;
+	private AIHandler ai ;
 
 	private int playerNumber;
 	private int turn;
@@ -94,9 +97,10 @@ public class WindowGame extends BasicGame {
 		HeroData.loadHeros();
 		// TrapData.loadTrap();
 		Data.loadMap();
+		ai = new AIHandler();
 
 		initAPIX();
-
+		initAIHandler();
 		// Create the player list
 		initPlayers();
 
@@ -155,6 +159,22 @@ public class WindowGame extends BasicGame {
 		}
 	}
 
+	public void initAIHandler(){
+		ai.addAIListener(new AIListener() {
+			
+			public void newAction(ActionEvent e) {
+				System.out.println("Nouvelle action recup de AIHandler  : "+e.toString());
+				
+				try {
+					decodeAction(e.getId()+":"+e.getEvent());
+				} catch (IllegalActionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	public void initAPIX() {
 		apix = new APIX();
 		if (!Data.RUN_APIX)
@@ -307,10 +327,11 @@ public class WindowGame extends BasicGame {
 			timeStamp = time;
 		}
 
+		
+		
 		// Turn timer
 		if (turnTimer < 0) {
 			switchTurn();
-
 		}
 
 	}
@@ -346,6 +367,9 @@ public class WindowGame extends BasicGame {
 				mobs.get(turn - players.size() - 1).setMyTurn(false);
 			}
 		}
+		
+		//launch the new action loader
+		ai.loadAction(currentCharacter);
 
 		// print the current turn in the console
 		if (Data.debug) {
