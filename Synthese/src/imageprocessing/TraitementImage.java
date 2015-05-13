@@ -16,6 +16,8 @@ public class TraitementImage {
 	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
+	public static final int SEUIL_FORM = 50;
+	public static final int NIV_OUVERTURE = 20;
 
 	public TraitementImage() 
 	{
@@ -236,12 +238,17 @@ public class TraitementImage {
 	 */
 	public List<FormObject> etiquetageIntuitifImageGiveList2(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil)
 	{	
-		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgSrcRef, imgCompare, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
+		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgCompare, imgSrcRef, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
+		{	
+			if(APIX.isInit)
+				return null;
 			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);
+			
+		}
 		
 		if(Data.debug)
 		{
@@ -252,6 +259,14 @@ public class TraitementImage {
 			{	e.printStackTrace();}   
 		}
 		//#debug
+		if(Data.tiDebug)
+			System.out.println("Ouverture sur image : subImgElements");
+		
+		if(APIX.isInit)
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE);
+		
+		if(Data.tiDebug)
+			System.out.println("début étiquettage sur image : subImgElements");
 		
 		int attA, attB,attC, temp = 1, numEt = 1;
 		List<Integer> T = new ArrayList<Integer>();
@@ -326,17 +341,17 @@ public class TraitementImage {
 			}
 			List<FormObject> formList = new ArrayList<FormObject>();
 			if(Data.tiDebug)
-				System.out.println("num size = " +Num.size());
+				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size()>50)
+				if(OneArray.size() > SEUIL_FORM)
 				{
 //					System.out.println("gagné !!");
 
 					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
 //					display(myForm.getMatrix());
 					formList.add(myForm);
-					filtreSobel(myForm);
+					filtreSobel(myForm); //permet d'avoir le périmètre de l'objet
 					myForm.findObjectType();
 				}
 			}
@@ -636,6 +651,8 @@ public class TraitementImage {
      */
 	public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
+		if(Data.tiDebug)
+			System.out.println("mise en NG et binarisation d'une image");
         int[][] elementsImg = null;
         int[][] elementsRes = null;
         imgHeight = image.getHeight();
@@ -671,7 +688,12 @@ public class TraitementImage {
 
                 /*        Binary pixel [x][y]        */
                 elementsRes[x][y] = elementsImg[x][y] < seuil ? 255 : 0;
-                imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
+                Color pixelColor= new Color(0);
+				if (elementsRes[x][y] == 0)
+					pixelColor = Color.WHITE;
+				else
+					pixelColor = Color.BLACK;
+				imgRes_Bin.setRGB(x, y, pixelColor.getRGB());
             }
         
         try {
@@ -731,6 +753,8 @@ public class TraitementImage {
 	 */
     public int[][] getGraySubstractAndBinaryImage(BufferedImage img1, BufferedImage img2, int seuil) 
 	{
+    	if(Data.tiDebug)
+    		System.out.println("mise en NG, soustraction et binarisation de la soustraction, de deux images");
 		int[][] elements1 = null;
 		int[][] elements2 = null;
 		int[][] elementsRes = null;
@@ -767,6 +791,7 @@ public class TraitementImage {
 	                int grayLevel = (r + g + b) / 3;
 	                elements1[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
 	                imgRes_1.setRGB(x, y, elements1[x][y]);
+	               
 			        
 			        
 
@@ -780,7 +805,7 @@ public class TraitementImage {
 			        elements2[x][y] = grayLevel2;
 			        */
 	                
-	                int rgb2 = img1.getRGB(x, y);
+	                int rgb2 = img2.getRGB(x, y);
 	                int r2 = (rgb2 >> 16) & 0xFF;
 	                int g2 = (rgb2 >> 8) & 0xFF;
 	                int b2 = (rgb2 & 0xFF);
@@ -796,6 +821,9 @@ public class TraitementImage {
 			        /*		Binary pixel [x][y]		*/
 			        elementsRes[x][y] = elementsRes[x][y] > seuil ? 255 : 0;
 			        imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
+			        
+			        
+	                
 			        
 			    }
 			}

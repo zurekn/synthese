@@ -31,9 +31,10 @@ public class APIX implements Runnable {
 	private ImageProcessing ip;
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
-	private boolean isInit = false;
+	public static boolean isInit = false;
 	private int relativeX = -1;
 	private int relativeY = -1;
+	private int seuil = 100;
 
 	public APIX() {
 		if (!Data.RUN_APIX)
@@ -100,7 +101,7 @@ public class APIX implements Runnable {
                 /*        Binary pixel [x][y]        */
                 //System.out.println(elementsImg[x][y]+" ");
                 // 0 = white and 255 = black
-                elementsRes[x][y] =  elementsImg[x][y] < 75 ? 255 : 0;
+                elementsRes[x][y] =  elementsImg[x][y] < seuil ? 255 : 0;
                /*TODO
                 * Ajouter une popup pour demander le seuil en cas d'échec de la phase d'initialisation
                 */
@@ -152,7 +153,7 @@ public class APIX implements Runnable {
         }
 
 		TraitementImage ti = new TraitementImage();
-		elementsRes = ti.Ouverture(elementsRes, 20);
+		//elementsRes = ti.Ouverture(elementsRes, 20);
         
         
          
