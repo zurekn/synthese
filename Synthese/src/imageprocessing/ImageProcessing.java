@@ -124,4 +124,50 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 
 	}
 
+	public int[][] cutBlackBorder(int[][] elementsRes, int width, int height) {
+		 for (int x = 0; x <width; ++x)
+	        {
+	        	for (int y = 0; y < height; ++y)
+	            {
+	        		if(elementsRes[x][y]==255)
+	        			elementsRes[x][y] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        for (int x =width-1; x > 0 ; --x)
+	        {
+	        	for (int y = 0; y < height; ++y)
+	            {
+	        		if(elementsRes[x][y]==255)
+	        			elementsRes[x][y] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        
+	        for (int x = 0; x < height; ++x)
+	        {
+	        	for (int y = 0; y <width; ++y)
+	            {
+	        		if(elementsRes[y][x]==255)
+	        			elementsRes[y][x] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        for (int x = height-1; x > 0 ; --x)
+	        {
+	        	for (int y = 0; y <width; ++y)
+	            {
+	        		if(elementsRes[y][x]==255)
+	        			elementsRes[y][x] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+
+		return elementsRes ;
+	}
+
 }
