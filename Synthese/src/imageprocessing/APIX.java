@@ -36,8 +36,10 @@ public class APIX implements Runnable {
 	private int relativeY = -1;
 
 	public APIX() {
-		if (!Data.RUN_APIX)
-			return;
+		if (!Data.RUN_APIX){
+			isInit = true;
+			return;	
+		}
 		Dimension size = WebcamResolution.VGA.getSize();
 
 		webcam = Webcam.getWebcams().get(0);
