@@ -59,6 +59,7 @@ public class AStar {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = initMap[i][j];
 				if (initMap[i][j] != null)
+					//Making new references to nodes
 					initMap[i][j] = new Node(i, j);
 			}
 		}
@@ -120,6 +121,65 @@ public class AStar {
 		return path;
 	}
 
+	public LinkedList<int[]> getReachableNodes(Character c){
+		LinkedList<int[]> list = new LinkedList<int[]>();
+		positions = WindowGame.windowGame.getAllPositions();
+		int gMax = c.getStats().getMovementPoints()*WEIGHT;
+
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
+				map[i][j] = initMap[i][j];
+				if (initMap[i][j] != null)
+					initMap[i][j] = new Node(i, j);
+			}
+		}
+		for (String s : positions) {
+			String[] tokens = s.split(":");
+			map[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])] = null;
+		}
+		map[c.getX()][c.getY()] = new Node(c.getX(),c.getY());
+		openList.add(map[c.getX()][c.getY()]);
+
+		while (!openList.isEmpty()) {
+			Node currentNode = getLowestFInOpen();			
+			currentNode.setG(g(currentNode));
+			closedList.add(currentNode);
+			openList.remove(currentNode);
+			
+				// Different objects than in the Node matrices
+				ArrayList<Node> adjacentNodes = getAdjacentNodes(currentNode);
+				for (Node e : adjacentNodes) {
+					int ind = openList.indexOf(e);
+					int g = g(e);
+					if (g <= gMax) {
+						if (ind != -1) {//if it's in openList
+							Node tmp = openList.get(ind);
+							if (g < tmp.getG()) {
+								tmp.setParent(e.getParent());
+								tmp.setG(g);
+							}
+						} else {
+							int x = e.getX(), y = e.getY();
+							map[x][y].setG(g);
+							map[x][y].setParent(e.getParent());
+							openList.add(map[x][y]);
+						}
+					}
+				}
+
+			
+		}
+		
+		for(Node e : closedList){
+			int[] tab = new int[2];
+			tab[0]=e.getX();
+			tab[1]=e.getY();
+			list.add(tab);
+		}
+		
+		return list;
+	}
+	
 	public int f(Node nodeA, Node nodeB) {
 		return (h(nodeA, nodeB) + g(nodeA));
 	}
