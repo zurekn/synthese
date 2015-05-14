@@ -16,7 +16,7 @@
 			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>goblin</aiType>
+		<aiType>coward:3</aiType>
 		<eyeSight>6</eyeSight>
 	</monster>
 
@@ -36,7 +36,7 @@
 		<spells>
 			<spell>s2</spell>
 		</spells>
-		<aiType>orc</aiType>
+		<aiType>normal:4</aiType>
 		<eyeSight>4</eyeSight>
 	</monster>
 </monsters>

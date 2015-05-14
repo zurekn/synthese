@@ -14,8 +14,11 @@ import game.WindowGame;
  */
 public class AIHandler implements Runnable {
 
-	public AIHandler() {
-
+	private Thread thread ;
+	private static AIHandler aiHandler;
+	
+	private AIHandler(){
+		thread = new Thread(this);
 	}
 
 	/**
@@ -28,8 +31,33 @@ public class AIHandler implements Runnable {
 	}
 
 	public void run() {
-		// TODO Auto-generated method stub
+		System.out.println("AIHandler : DANS LE RUN");
+		PositionHandler.getInstance().begin();
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		while(true){
+			
+		}
 
+	}
+	
+	public Thread getThread(){
+		return thread;
+	}
+	
+	public static AIHandler getInstance(){
+		if(aiHandler == null){
+			aiHandler = new AIHandler();
+		}
+		return aiHandler;
+	}
+	
+	public void begin() {
+		System.out.println("Launch the AI Handler Thread");
+		thread.start();
 	}
 
 	public static String[] getMobsMovements(WindowGameData data) {

@@ -31,6 +31,7 @@ public abstract class Character {
 	private String name;
 	private String aiType;
 	private Character focusedOn;
+	private boolean npc = true;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -217,6 +218,14 @@ public abstract class Character {
 
 	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
+	}
+	
+	public boolean isNpc(){
+		return this.npc;
+	}
+	
+	public void setNpc(boolean npc){
+		this.npc = npc ;
 	}
 
 	/**

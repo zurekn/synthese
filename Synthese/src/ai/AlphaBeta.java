@@ -1,13 +1,17 @@
 package ai;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import game.Player;
+import game.Character;
 import game.WindowGame;
 
 
 public class AlphaBeta {
 	private static AlphaBeta alphaBeta;
+	//private static HashMap<String, LinkedList<int[]>>[] reachableBlocksMaps;
 	
 	private AlphaBeta(){
 		
@@ -21,7 +25,7 @@ public class AlphaBeta {
 	}
 	
 	
-	private float h(){
+	private float h(Character c){
 		return 0;
 	}
 	
@@ -33,8 +37,10 @@ public class AlphaBeta {
 		return 0 ;
 	}
 	
-	public LinkedList<String> getNpcCommands(Player p){
+	public LinkedList<String> getNpcCommands(ArrayList<Character> allies, ArrayList<Character> opponents){
 		LinkedList<String> commands = new LinkedList<String>();
+		AStar aStar = AStar.getInstance();
+		
 		
 		return commands;
 	}
