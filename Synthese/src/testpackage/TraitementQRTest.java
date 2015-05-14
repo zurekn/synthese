@@ -15,7 +15,7 @@ public class TraitementQRTest {
 		 QRCodeProcessing tqr = new  QRCodeProcessing();
 		 String QRes="";
 		 String QRImage = "Aero.png";
-		 String QRList[] = {"Aero.png","Attaque.png","Shuriken.png","Heal.png","Potion.png","Ice crush.png","Fire Ball.png","Lightning Bolt.png","Water Wave.png","Key.png","Fur.png","Meteor.png","Defense.png"}; 
+		 String QRList[] = {"DarkMatter.png","Shoot.png","LunarLight.png","Attaque.png","Heal.png","Potion.png","Ice crush.png","Fire Ball.png","Water Wave.png","Meteor.png"}; 
 		// error with 
 		 
 		 // ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 110);
@@ -34,10 +34,10 @@ public class TraitementQRTest {
 		//System.out.println("QRCODE Name - "+QRImage+" - ID QRCODE : "+QRes );
 			if(QRList != null){
 				for(String img : QRList){
-					System.out.println(img);
+					// System.out.println(img);
 					tqr.findAllQR(img,1,null);
 					QRes = tqr.getQRDatas();
-					System.out.println("QRCODE Name - "+QRImage+" - ID QRCODE : "+QRes );
+					System.out.println("QRCODE Name : "+img+" - datas : "+QRes );
 				}
 			}
 		 

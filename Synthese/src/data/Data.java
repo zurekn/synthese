@@ -36,11 +36,11 @@ public class Data {
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
 	public static final boolean RUN_APIX = true;
-	public static boolean debugPicture = true; 
+	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 1;
-	public static String IMAGE_DIR = "C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
+	public static String IMAGE_DIR =/*"C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";*/ "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;

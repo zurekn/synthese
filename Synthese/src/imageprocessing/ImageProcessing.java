@@ -64,7 +64,8 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 	}
 
 	public void addMovement(List<FormObject> lf) {
-
+		if(lf == null)
+			return;
 		for (FormObject o : lf) {
 			MovementEvent e = new MovementEvent(o.getBaryCenter().getX(), o
 					.getBaryCenter().getY());
@@ -77,7 +78,7 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 	public void run() {
 
 		BufferedImage image;
-		System.out.println("DANS LE RUN");
+		System.out.println("Image Processing running");
 		try {
 			Thread.sleep(4000);
 		} catch (InterruptedException e1) {
@@ -88,17 +89,21 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 
 		while (true) {
 			try {
+				if (Data.tiDebug)
+					System.out.println("lancement thread -----------------------------------------------------------------------");
 				thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println("commencement traitement image");
 			image = webcam.getImage();
 			List<FormObject> lf = ti.etiquetageIntuitifImageGiveList2(image,
 					imageRef, seuil);
 			addMovement(lf);
 			try {
-				thread.wait(0);
+				//thread.wait(0);
+				thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -117,6 +122,52 @@ public class ImageProcessing implements Runnable, ThreadFactory {
 		System.out.println("Launch the Image Processing Thread");
 		thread.start();
 
+	}
+
+	public int[][] cutBlackBorder(int[][] elementsRes, int width, int height) {
+		 for (int x = 0; x <width; ++x)
+	        {
+	        	for (int y = 0; y < height; ++y)
+	            {
+	        		if(elementsRes[x][y]==255)
+	        			elementsRes[x][y] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        for (int x =width-1; x > 0 ; --x)
+	        {
+	        	for (int y = 0; y < height; ++y)
+	            {
+	        		if(elementsRes[x][y]==255)
+	        			elementsRes[x][y] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        
+	        for (int x = 0; x < height; ++x)
+	        {
+	        	for (int y = 0; y <width; ++y)
+	            {
+	        		if(elementsRes[y][x]==255)
+	        			elementsRes[y][x] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+	        for (int x = height-1; x > 0 ; --x)
+	        {
+	        	for (int y = 0; y <width; ++y)
+	            {
+	        		if(elementsRes[y][x]==255)
+	        			elementsRes[y][x] = 0;
+	        		else
+	        			break;
+	            }
+	        }
+
+		return elementsRes ;
 	}
 
 }

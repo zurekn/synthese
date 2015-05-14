@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.DebugGraphics;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.github.sarxos.webcam.Webcam;
@@ -31,13 +32,18 @@ public class APIX implements Runnable {
 	private ImageProcessing ip;
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
-	private boolean isInit = false;
+	public static boolean isInit = false;
 	private int relativeX = -1;
 	private int relativeY = -1;
-
+	private int seuil = 100;
+	private boolean firstTry = true;
+	private boolean isRunning = false;
+	
 	public APIX() {
-		if (!Data.RUN_APIX)
-			return;
+		if (!Data.RUN_APIX){
+			isInit = true;
+			return;	
+		}
 		Dimension size = WebcamResolution.VGA.getSize();
 
 		webcam = Webcam.getWebcams().get(0);
@@ -70,6 +76,9 @@ public class APIX implements Runnable {
 	}
 
 	public void initTI() {
+		if(isRunning)
+			return;
+		isRunning = true;
 		System.out.println("Begin of the imageProcessing initialization");
 
 		long time = System.currentTimeMillis();
@@ -100,14 +109,18 @@ public class APIX implements Runnable {
                 /*        Binary pixel [x][y]        */
                 //System.out.println(elementsImg[x][y]+" ");
                 // 0 = white and 255 = black
-                elementsRes[x][y] =  elementsImg[x][y] < 180 ? 255 : 0;
-               
+                
+                if(!firstTry)
+                	seuil =Integer.parseInt( JOptionPane.showInputDialog("Nouveau seuil d'init [ancien : "+seuil+"]"));
+                elementsRes[x][y] =  elementsImg[x][y] < seuil ? 255 : 0;
+               firstTry = false;
                 
             }
            
         }
 //        // 4 boucles
-        for (int x = 0; x < image.getWidth(); ++x)
+        elementsRes = ip.cutBlackBorder(elementsRes, image.getWidth(), image.getHeight());
+       /* for (int x = 0; x < image.getWidth(); ++x)
         {
         	for (int y = 0; y < image.getHeight(); ++y)
             {
@@ -147,7 +160,8 @@ public class APIX implements Runnable {
         		else
         			break;
             }
-        }
+        }*/
+        
 
 		TraitementImage ti = new TraitementImage();
 		elementsRes = ti.Ouverture(elementsRes, 20);
@@ -182,12 +196,12 @@ public class APIX implements Runnable {
 						image,
 						"jpg",
 						new File(
-								"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/initialisationIT.jpg"));
+								Data.IMAGE_DIR + "initialisationIT"+Data.getDate()+".jpg"));
 				ImageIO.write(
 						image1,
 						"jpg",
 						new File(
-								"C:/Users/boby/Google Drive/Master1/Synthèse/Rapport/initialisationITout.jpg"));
+								Data.IMAGE_DIR + "initialisationITout_bin_"+seuil+"_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -205,6 +219,7 @@ public class APIX implements Runnable {
 			
 		System.out.println("Fin de la phase d'initialisation après "
 				+ (System.currentTimeMillis() - time) + " millisecondes");
+		isRunning = false;
 	}
 
 	protected void addMovementEvent(MovementEvent e) {
