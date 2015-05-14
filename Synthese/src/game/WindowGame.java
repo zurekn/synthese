@@ -48,6 +48,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character currentCharacter;
+	private Thread thread;
 
 	private int playerNumber;
 	private int turn;
@@ -87,7 +88,7 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		this.container = container;
-
+		thread = Thread.currentThread();
 		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
