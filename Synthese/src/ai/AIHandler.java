@@ -1,13 +1,12 @@
 package ai;
 
 import java.util.ArrayList;
-
 import javax.swing.event.EventListenerList;
 
+import data.Handler;
 import game.Character;
 import game.Mob;
 import game.Player;
-import game.WindowGame;
 
 /**
  * This class handle the ai for the game
@@ -15,13 +14,50 @@ import game.WindowGame;
  * @author bob
  *
  */
-public class AIHandler implements Runnable {
+public class AIHandler extends Handler {
 
-	private Thread thread;
 	private static AIHandler aiHandler;
 
 	private AIHandler() {
-		thread = new Thread(this);
+		super();
+	}
+
+	public static AIHandler getInstance() {
+		if (aiHandler == null) {
+			aiHandler = new AIHandler();
+		}
+		return aiHandler;
+	}
+
+	@Override
+	public void begin() {
+		System.out.println("Launch the AI Handler Thread");
+		getThread().start();
+	}
+
+	public void run() {
+		System.out.println("AIHandler : DANS LE RUN");
+		this.lock();
+		PositionHandler.getInstance().begin();
+		for (int j = 0; j < 1; j++) {
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			unlockTemporay(1);
+
+			for (int i = 0; i < 10; i++) {
+				System.out.println("AI :" + i);
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
 	}
 
 	/**
@@ -31,18 +67,6 @@ public class AIHandler implements Runnable {
 	public String getAction() {
 
 		return "";
-	}
-
-	public void run() {
-		System.out.println("AIHandler : DANS LE RUN");
-		PositionHandler.getInstance().begin();
-		synchronized (this.thread) {
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		}
 	}
 
 	private final EventListenerList listeners = new EventListenerList();
@@ -66,22 +90,6 @@ public class AIHandler implements Runnable {
 				event = new ActionEvent(id, data);
 			listener.newAction(event);
 		}
-	}
-
-	public Thread getThread() {
-		return thread;
-	}
-
-	public static AIHandler getInstance() {
-		if (aiHandler == null) {
-			aiHandler = new AIHandler();
-		}
-		return aiHandler;
-	}
-
-	public void begin() {
-		System.out.println("Launch the AI Handler Thread");
-		thread.start();
 	}
 
 	public static String[] getMobsMovements(WindowGameData data) {

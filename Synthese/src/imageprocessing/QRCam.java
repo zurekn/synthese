@@ -70,12 +70,17 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	}
 	
 	public void run() {
+		APIX apix = APIX.getInstance();
+		
 		do {
 			try {
 				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			//Wait APIX thread
+			apix.waitLock();
+			
 			// Those lines are for the multi QR code reader
 			QRCodeEvent testMulti = null;
 			QRCodeProcessing tqr = new QRCodeProcessing();

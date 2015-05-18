@@ -9,23 +9,26 @@ public class PositionHandler implements Runnable {
 		thread = new Thread(this);
 	}
 
-	public void run() {
+	public synchronized void run() {
 		System.out.println("PHandler : DANS LE RUN");
-		Thread aiThread = AIHandler.getInstance().getThread();
-
-		synchronized (aiThread) {
+		AIHandler ai = AIHandler.getInstance();
 			while (true) {
-				//Waiting ai thread to start working
-				try {
-					aiThread.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				System.out.println("Pos : j'attends");
+				//aiThread.wait();
+				ai.waitLock();
+				for(int i=0;i<10;i++){
+					System.out.println("Pos :"+i);
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				
 				//Calculation
 			}
-		}
+		
+		
 	}
 
 	public void begin() {

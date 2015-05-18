@@ -11,7 +11,7 @@ public class TraitementQRTest {
 
 
 		// SwingUtilities.invokeLater(new WebCamCapture());
-		 TraitementImage ti = new TraitementImage();
+		 ImageProcessing ti = new ImageProcessing();
 		 QRCodeProcessing tqr = new  QRCodeProcessing();
 		 String QRes="";
 		 String QRImage = "Aero.png";

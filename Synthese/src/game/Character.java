@@ -45,7 +45,7 @@ public abstract class Character {
 	 */
 
 	public void moveTo(String position) throws IllegalMovementException {
-		if(WindowGame.windowGame.getAllPositions().contains(position)){
+		if(WindowGame.getInstance().getAllPositions().contains(position)){
 			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
 		}
 

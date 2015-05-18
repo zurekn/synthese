@@ -219,7 +219,7 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
 		}
 
 
-		TraitementImage ti = new TraitementImage();
+		ImageProcessing ip = new ImageProcessing();
 		// ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg",
 		// "jpg", 80);
 		// int seuil = 110;
@@ -255,11 +255,11 @@ public class WebCamCapture extends JFrame implements Runnable, WebcamListener,
 					int seuil = 200;
 					
 					//TODO
-					TraitementImage ti = new TraitementImage();
+					ImageProcessing ip = new ImageProcessing();
 					
 					
 					
-					List<FormObject> lf = ti.etiquetageIntuitifImage2(image, image,seuil);
+					List<FormObject> lf = ip.etiquetageIntuitifImage2(image, image,seuil);
 					
 					System.out.println(System.currentTimeMillis()-time + " end time");
 				} 
