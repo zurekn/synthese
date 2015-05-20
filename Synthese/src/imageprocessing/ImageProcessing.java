@@ -16,8 +16,9 @@ public class ImageProcessing {
 	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
-	public static final int SEUIL_FORM = 50;
-	public static final int NIV_OUVERTURE = 20;
+	public static final int MIN_SEUIL_FORM = 50;
+	public static final int MAX_SEUIL_FORM = 5000;
+	public static final int NIV_OUVERTURE = 30;
 
 	public ImageProcessing() 
 	{
@@ -263,8 +264,19 @@ public class ImageProcessing {
 			System.out.println("Ouverture sur image : subImgElements");
 		
 		if(APIX.isInit)
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE);
+		{	
+			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+10);
+		}
 		
+		if(Data.tiDebug)
+		{
+			try
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageApresFermeture&Ouverture"+Data.getDate()
+		    		+".jpg"));}
+		    catch (IOException e) 
+			{	e.printStackTrace();} 
+		}
 		if(Data.tiDebug)
 			System.out.println("début étiquettage sur image : subImgElements");
 		
@@ -344,7 +356,7 @@ public class ImageProcessing {
 				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size() > SEUIL_FORM)
+				if(OneArray.size() < MAX_SEUIL_FORM && OneArray.size() > MIN_SEUIL_FORM )
 				{
 //					System.out.println("gagné !!");
 
@@ -461,9 +473,9 @@ public class ImageProcessing {
 	/*
 	 * fonction permettant de faire une dilatation puis une érosion sur une forme
 	 */
-	public int[][] fermeture(BufferedImage img, int seuil) 
+	public int[][] Fermeture(int [][] elemFermeture, int seuil) 
 	{
-		int [][] elemFermeture = getBinaryImage(img, seuil);		
+		//int [][] elemFermeture = getBinaryImage(img, seuil);		
 		int i;
 		int [][] resFermeture = elemFermeture;
 		for (i=0 ; i<10 ; i++)
@@ -695,9 +707,9 @@ public class ImageProcessing {
         /*	fin ajout */
         try 
         {
-			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG.jpg"));
-			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin.jpg"));
-			//ImageIO.write(imgRes_Bin_ouverture, "jpg", new File(urlImage + "test_getOneGrayImage_Bin_ouverture.jpg"));
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG"+Data.getDate()+".jpg"));
+			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin"+Data.getDate()+".jpg"));
+			//ImageIO.write(imgRes_Bin_ouverture, "jpg", new File(urlImage + "test_getOneGrayImage_Bin_ouverture"+Data.getDate()+".jpg"));
 		} 
         catch (IOException e) 
         {
@@ -797,9 +809,14 @@ public class ImageProcessing {
 	                */
 			        
 	                /*		Substract images		*/               
-	                elementsRes[x][y] = ((r-r2 < 0 ? r2-r : r-r2) ) +
-	                					((g-g2<0?g2-g:g-g2)) + 
-	                					(b-b2<0?b2-b:b-b2)/3;
+	                elementsRes[x][y] = ((r-r2 < 0 ? r2-r : r-r2)  +
+	                					(g-g2<0?g2-g:g-g2) + 
+	                					(b-b2<0?b2-b:b-b2))/3;
+	                /*					
+	                int graylevel1 = (r + g + b) / 3;
+	                int graylevel2 = (r2 + g2 + b2) / 3;
+	                elementsRes[x][y] = (graylevel1 - graylevel2) < 0 ? (graylevel2 - graylevel1) : (graylevel1 - graylevel2);
+	                */
 	                imgRes_Sub.setRGB(x, y, (elementsRes[x][y]));//<<16+elementsRes[x][y]<<8+elementsRes[x][y]));
 	        
 			        /*		Binary pixel [x][y]		*/
@@ -807,7 +824,7 @@ public class ImageProcessing {
 			        
    
 			    }
-		      System.out.println("toto binarisation");
+		      System.out.println("Les images sont identiques : début binarisation");
 		    for(int i = 1; i < elementsRes.length; i++)
 			{
 				for(int j = 1; j < elementsRes[i].length; j++)
@@ -825,10 +842,10 @@ public class ImageProcessing {
 			else
 				System.out.println("images non équivalentes en taille. Dommage!");
 		 try {
-				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"));
-				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"));
-				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
-				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"+Data.getDate()+""));
+				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"+Data.getDate()+""));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
