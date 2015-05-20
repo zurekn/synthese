@@ -561,7 +561,9 @@ public class ImageProcessing {
 	private void displayListForm(List<FormObject> myList) 
 	{
 		System.out.println("test");
-		System.out.println(" form list size " + myList.size());
+		System.out.println(" Nous avons trouvé : " + myList.size() +" objets");
+		if (myList.size() > 0)
+			System.out.println("Dont les caractéristiques sont :");
 		for (FormObject pixel : myList) {
 			//System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
 			System.out.println("bary center :  " + pixel.getBaryCenter().getX() + " : " + pixel.getBaryCenter().getY());
@@ -751,7 +753,7 @@ public class ImageProcessing {
 	 */
     public int[][] getGraySubstractAndBinaryImage(BufferedImage img1, BufferedImage img2, int seuil) 
 	{
-    	//if(Data.tiDebug)
+    	if(Data.tiDebug)
     		System.out.println("mise en NG, soustraction et binarisation de la soustraction, de deux images");
 		//int[][] elements1 = null;
 		//int[][] elements2 = null;

@@ -183,7 +183,7 @@ public class WindowGame extends BasicGame  {
 				}
 			}
 		});
-		ai.begin();
+		//ai.begin();
 	}
 	
 	public void initAPIX() {

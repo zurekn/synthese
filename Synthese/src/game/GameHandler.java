@@ -8,10 +8,10 @@ public class GameHandler extends Handler {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public void run() {}
 
-	@Override
+	//@Override
 	public void begin() {}
 
 }
