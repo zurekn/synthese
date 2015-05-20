@@ -651,58 +651,56 @@ public class ImageProcessing {
      */
 	public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
-		if(Data.tiDebug)
-			System.out.println("mise en NG et binarisation d'une image");
-        int[][] elementsImg = null;
+        //int[][] elementsImg = null;
         int[][] elementsRes = null;
-        imgHeight = image.getHeight();
-        imgWidth = image.getWidth();
         BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
         BufferedImage imgRes_Bin = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
-        elementsImg = new int[image.getWidth()][image.getHeight()];
+        imgHeight = image.getHeight();
+        imgWidth = image.getWidth();
+       // elementsImg = new int[image.getWidth()][image.getHeight()];
         elementsRes = new int[image.getWidth()][image.getHeight()];
         
         for (int x = 0; x < image.getWidth(); ++x)
             for (int y = 0; y < image.getHeight(); ++y)
-            {
-                /*    Get gray color from RGB origin pixel image 1    */
-                /*
-                Color pixelcolor1= new Color(image.getRGB(x, y));
-                int r1=pixelcolor1.getRed();
-                int g1=pixelcolor1.getGreen();
-                int b1=pixelcolor1.getBlue();
-                
-                int grayLevel1 = (r1 + g1 + b1) / 3;
-                elementsImg[x][y] = grayLevel1;
-                */
-                
+            {                
                 int rgb = image.getRGB(x, y);
                 int r = (rgb >> 16) & 0xFF;
                 int g = (rgb >> 8) & 0xFF;
                 int b = (rgb & 0xFF);
 
                 int grayLevel = (r + g + b) / 3;
-                elementsImg[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
-                imgRes.setRGB(x, y, elementsImg[x][y]);
+                elementsRes[x][y] = grayLevel ;
+                imgRes.setRGB(x, y, (grayLevel << 16) + (grayLevel << 8) + grayLevel);
 
-
-                /*        Binary pixel [x][y]        */
-                elementsRes[x][y] = elementsImg[x][y] < seuil ? 255 : 0;
-                Color pixelColor= new Color(0);
-				if (elementsRes[x][y] == 0)
-					pixelColor = Color.WHITE;
-				else
-					pixelColor = Color.BLACK;
-				imgRes_Bin.setRGB(x, y, pixelColor.getRGB());
+                /*       Affect Binary value to a pixel [x][y]        */
+                elementsRes[x][y] = elementsRes[x][y] < (seuil) ? 255 : 0;
+                
+                //imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
             }
-        
-        try {
-			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage"+Data.getDate()+".jpg"));
-			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin"+Data.getDate()+".jpg"));
-		} catch (IOException e) {
+		for(int i = 1; i < elementsRes.length; i++)
+		{
+			for(int j = 1; j < elementsRes[i].length; j++)
+			{
+				//Color pixelColor= new Color(0);
+				if (elementsRes[i][j] == 0)
+					imgRes_Bin.setRGB(i, j, ((255 << 16) + (255 << 8) + 255));//pixelColor = Color.WHITE;
+				else
+					imgRes_Bin.setRGB(i, j, ((0 << 16) + (0 << 8) + 0));//pixelColor = Color.BLACK;
+				//imgRes_Bin.setRGB(i, j, pixelColor.getRGB());
+			}
+		}
+		
+        /*	fin ajout */
+        try 
+        {
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG.jpg"));
+			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin.jpg"));
+			//ImageIO.write(imgRes_Bin_ouverture, "jpg", new File(urlImage + "test_getOneGrayImage_Bin_ouverture.jpg"));
+		} 
+        catch (IOException e) 
+        {
 			e.printStackTrace();
 		}
-
         return elementsRes;
     }
     
@@ -753,20 +751,20 @@ public class ImageProcessing {
 	 */
     public int[][] getGraySubstractAndBinaryImage(BufferedImage img1, BufferedImage img2, int seuil) 
 	{
-    	if(Data.tiDebug)
+    	//if(Data.tiDebug)
     		System.out.println("mise en NG, soustraction et binarisation de la soustraction, de deux images");
-		int[][] elements1 = null;
-		int[][] elements2 = null;
+		//int[][] elements1 = null;
+		//int[][] elements2 = null;
 		int[][] elementsRes = null;
 
 		imgHeight = img1.getHeight();
 		imgWidth = img1.getWidth();
-		BufferedImage imgRes_1 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
-		BufferedImage imgRes_2 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imgRes_1 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imgRes_2 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imgRes_Sub= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
 		BufferedImage imgRes_Bin= new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
-		elements1 = new int[img1.getWidth()][img1.getHeight()];
-		elements2 = new int[img1.getWidth()][img1.getHeight()];
+		//elements1 = new int[img1.getWidth()][img1.getHeight()];
+		//elements2 = new int[img1.getWidth()][img1.getHeight()];
 		elementsRes = new int[img1.getWidth()][img1.getHeight()];
 		
 		if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) 
@@ -774,66 +772,61 @@ public class ImageProcessing {
 		    for (int x = 0; x < img1.getWidth(); ++x)
 			    for (int y = 0; y < img1.getHeight(); ++y)
 			    {
-		    		/*	Get gray color from RGB origin pixel image 1	*/
-			        /*Color pixelcolor1= new Color(img1.getRGB(x, y));
-			        int r1=pixelcolor1.getRed();
-			        int g1=pixelcolor1.getGreen();
-			        int b1=pixelcolor1.getBlue();
-			        
-			        int grayLevel1 = (r1 + g1 + b1) / 3;
-			        elements1[x][y] = grayLevel1;
-			        */
 			    	int rgb = img1.getRGB(x, y);
 	                int r = (rgb >> 16) & 0xFF;
 	                int g = (rgb >> 8) & 0xFF;
 	                int b = (rgb & 0xFF);
 
+	                /* Mise en nuance de gris des images
 	                int grayLevel = (r + g + b) / 3;
 	                elements1[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
 	                imgRes_1.setRGB(x, y, elements1[x][y]);
-	               
-			        
-			        
-
-			        /*	Get gray color from RGB origin pixel image 2	*/
-			        /*Color pixelcolor= new Color(img2.getRGB(x, y));
-			        int r2=pixelcolor.getRed();
-			        int g2=pixelcolor.getGreen();
-			        int b2=pixelcolor.getBlue();
-		
-			        int grayLevel2 = (r2 + g2 + b2) / 3;
-			        elements2[x][y] = grayLevel2;
-			        */
+	               */
 	                
 	                int rgb2 = img2.getRGB(x, y);
 	                int r2 = (rgb2 >> 16) & 0xFF;
 	                int g2 = (rgb2 >> 8) & 0xFF;
 	                int b2 = (rgb2 & 0xFF);
 
+	                /* Mise en nuance de gris des images
 	                int grayLevel2 = (r2 + g2 + b2) / 3;
 	                elements2[x][y] = (grayLevel2 << 16) + (grayLevel2 << 8) + grayLevel2;
 	                imgRes_2.setRGB(x, y, elements2[x][y]);
+	                */
 			        
-			        /*		Substract images		*/
-			        elementsRes[x][y] = elements1[x][y]-elements2[x][y]<0 ? elements2[x][y]-elements1[x][y] : elements1[x][y]-elements2[x][y];
-			        imgRes_Sub.setRGB(x, y, elementsRes[x][y]);
-			        
+	                /*		Substract images		*/               
+	                elementsRes[x][y] = ((r-r2 < 0 ? r2-r : r-r2) ) +
+	                					((g-g2<0?g2-g:g-g2)) + 
+	                					(b-b2<0?b2-b:b-b2)/3;
+	                imgRes_Sub.setRGB(x, y, (elementsRes[x][y]));//<<16+elementsRes[x][y]<<8+elementsRes[x][y]));
+	        
 			        /*		Binary pixel [x][y]		*/
-			        elementsRes[x][y] = elementsRes[x][y] > seuil ? 255 : 0;
-			        imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
+			        elementsRes[x][y] = elementsRes[x][y] > (seuil) ? 255 : 0;
 			        
-			        
-	                
-			        
+   
 			    }
+		      System.out.println("toto binarisation");
+		    for(int i = 1; i < elementsRes.length; i++)
+			{
+				for(int j = 1; j < elementsRes[i].length; j++)
+				{
+					
+					//Color pixelColor= new Color(0);
+					if (elementsRes[i][j] == 0)
+						imgRes_Bin.setRGB(i, j, ((255 << 16) + (255 << 8) + 255));//pixelColor = Color.WHITE;
+					else
+						imgRes_Bin.setRGB(i, j, ((0 << 16) + (0 << 8) + 0));//pixelColor = Color.BLACK;
+					//imgRes_Bin.setRGB(i, j, pixelColor.getRGB());
+				}
+			}
 			}
 			else
 				System.out.println("images non équivalentes en taille. Dommage!");
 		 try {
-				ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1"+Data.getDate()+".jpg"));
-				ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2"+Data.getDate()+".jpg"));
-				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub"+Data.getDate()+".jpg"));
-				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin"+Data.getDate()+".jpg"));
+				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"));
+				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
