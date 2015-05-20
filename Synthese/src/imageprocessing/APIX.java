@@ -1,5 +1,8 @@
 package imageprocessing;
 
+import game.GameHandler;
+import game.WindowGame;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -20,16 +23,19 @@ import com.github.sarxos.webcam.WebcamResolution;
 import com.github.sarxos.webcam.ds.buildin.WebcamDefaultDriver;
 
 import data.Data;
+import data.Handler;
 
 import javax.swing.event.EventListenerList;
 
 import org.omg.CORBA.OMGVMCID;
 
-public class APIX implements Runnable {
+import sun.java2d.opengl.WGLGraphicsConfig;
+
+public class APIX extends Handler {
 
 	private String QRDatas;
 	private QRCam qrcam;
-	private ImageProcessing ip;
+	private ImageProcessingHandler imageHandler;
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
 	public static boolean isInit = false;
@@ -39,7 +45,10 @@ public class APIX implements Runnable {
 	private boolean firstTry = true;
 	private boolean isRunning = false;
 	
-	public APIX() {
+	private static APIX apix ;
+	
+	private APIX() {
+		super();
 		if (!Data.RUN_APIX){
 			isInit = true;
 			return;	
@@ -52,6 +61,13 @@ public class APIX implements Runnable {
 		webcam.setViewSize(new Dimension(1920, 1080));
 		webcam.open();
 		System.out.println("Launch on the [" + webcam.getName() + "]");
+
+	}
+	
+	public void run() {
+		GameHandler game = WindowGame.getInstance().getHandler();
+		lock(2);
+		
 		// Init the QRCode part
 		qrcam = new QRCam(webcam);
 		qrcam.addQRCodeListener(new QRCodeAdapter() {
@@ -63,8 +79,8 @@ public class APIX implements Runnable {
 
 		// init the ImageProcessing part
 
-		ip = new ImageProcessing(webcam);
-		ip.addMovementListener(new MovementAdapter() {
+		imageHandler = ImageProcessingHandler.getInstance(webcam);
+		imageHandler.addMovementListener(new MovementAdapter() {
 
 			public void newMovement(MovementEvent e) {
 
@@ -72,7 +88,19 @@ public class APIX implements Runnable {
 						.getY() - relativeY));
 			}
 		});
+		imageHandler.begin();
 
+		
+		do{
+			try {
+				Thread.sleep(15000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			unlockTemporay(2);
+		}while(true);
 	}
 
 	public void initTI() {
@@ -119,7 +147,7 @@ public class APIX implements Runnable {
            
         }
 //        // 4 boucles
-        elementsRes = ip.cutBlackBorder(elementsRes, image.getWidth(), image.getHeight());
+        elementsRes = imageHandler.cutBlackBorder(elementsRes, image.getWidth(), image.getHeight());
        /* for (int x = 0; x < image.getWidth(); ++x)
         {
         	for (int y = 0; y < image.getHeight(); ++y)
@@ -163,8 +191,8 @@ public class APIX implements Runnable {
         }*/
         
 
-		TraitementImage ti = new TraitementImage();
-		elementsRes = ti.Ouverture(elementsRes, 20);
+		ImageProcessing ip = new ImageProcessing();
+		elementsRes = ip.Ouverture(elementsRes, 20);
         
         
          
@@ -203,18 +231,17 @@ public class APIX implements Runnable {
 						new File(
 								Data.IMAGE_DIR + "initialisationITout_bin_"+seuil+"_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		setRelativeValues(
-				ip.ti.etiquetageIntuitifImageGiveList2(image1, image1, 200),
+				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, 200),
 				image1.getHeight(), image1.getWidth());
 		if(Data.debug)
 			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");
 		if (relativeX != -1){
 			isInit = true;
-			ip.begin();
+			imageHandler.begin();
 		}
 			
 		System.out.println("Fin de la phase d'initialisation après "
@@ -290,10 +317,6 @@ public class APIX implements Runnable {
 		}
 	}
 
-	public void run() {
-		// TODO
-
-	}
 
 	public void setRelativeValues(List<FormObject> listInit, int imgHeight,
 			int imgWidth) {
@@ -365,8 +388,16 @@ public class APIX implements Runnable {
 		this.relativeY = valueY;
 	}
 
-	public ImageProcessing getImageProcessing() {
-		return ip;
+	public static APIX getInstance() {
+		if(apix ==null)
+			apix = new APIX();
+		return apix;
+		
+	}
+
+	@Override
+	public void begin() {
+		getThread().start();
 		
 	}
 
