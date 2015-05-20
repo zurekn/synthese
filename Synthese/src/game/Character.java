@@ -32,6 +32,7 @@ public abstract class Character {
 	private String aiType;
 	private Character focusedOn;
 	private boolean npc = true;
+	protected boolean monster = false;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -226,6 +227,10 @@ public abstract class Character {
 	
 	public void setNpc(boolean npc){
 		this.npc = npc ;
+	}
+	
+	public boolean isMonster(){
+		return this.monster;
 	}
 
 	/**

@@ -372,7 +372,7 @@ public class WindowGame extends BasicGame  {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
 			String[] commands = AIHandler.getMobsMovements(new WindowGameData(
-					mobs, players, currentCharacter, playerNumber, turn));
+					players, mobs, currentCharacter, turn));
 
 		}
 

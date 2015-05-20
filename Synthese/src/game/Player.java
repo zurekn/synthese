@@ -38,6 +38,7 @@ public class Player extends Character {
 	}
 	
 	public Player(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
+		monster=false;
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);

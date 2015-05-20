@@ -13,9 +13,7 @@ public class AlphaBeta {
 	private static AlphaBeta alphaBeta;
 	//private static HashMap<String, LinkedList<int[]>>[] reachableBlocksMaps;
 	
-	private AlphaBeta(){
-		
-	}
+	private AlphaBeta(){}
 	
 	public static AlphaBeta getInstance(){
 		if (alphaBeta == null) {
@@ -29,11 +27,16 @@ public class AlphaBeta {
 		return 0;
 	}
 	
-	private float minValue(float alpha, float beta, int depth){
+	private float minValue(WindowGameData gameData, float alpha, float beta, int depth){
+		Character currentCharacter = gameData.getCurrentCharacter();
+		ArrayList<Character> characters = gameData.getCharacters();
+		for(Character c : characters)
+			System.out.print("");
+		
 		return 0 ;
 	}
 	
-	private float maxValue(float alpha, float beta, int depth){
+	private float maxValue(WindowGameData gameData, float alpha, float beta, int depth){
 		return 0 ;
 	}
 	
