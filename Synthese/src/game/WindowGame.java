@@ -1,28 +1,23 @@
 package game;
 
 import imageprocessing.APIX;
-import imageprocessing.APIXListener;
 import imageprocessing.APIXAdapter;
 import imageprocessing.MovementEvent;
 import imageprocessing.QRCodeEvent;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.tiled.TiledMap;
 
 import ai.AIHandler;
 import ai.AIListener;
-import ai.AStar;
 import ai.ActionEvent;
 import ai.WindowGameData;
 import data.*;
@@ -37,20 +32,24 @@ import exception.IllegalMovementException;
  * @author bob
  *
  */
-public class WindowGame extends BasicGame {
+public class WindowGame extends BasicGame  {
 
 	private APIX apix;
-
+	private Thread thread;
+	private AIHandler ai ;
+	private GameHandler handler;
+	
 	private GameContainer container;
 	private MobHandler mobHandler;
 	private ArrayList<Mob> mobs;
-	private playerHandler playerHandler;
+	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character currentCharacter;
-	private AIHandler ai ;
+
+
 
 	private int playerNumber;
 	private int turn;
@@ -59,16 +58,25 @@ public class WindowGame extends BasicGame {
 	private long timeStamp = -1;
 	private long eventTimer = -1;
 
-	public static WindowGame windowGame;
+	private static WindowGame windowGame = null;
 
-	public WindowGame() throws SlickException {
+	public static WindowGame getInstance(){
+		if(windowGame == null)
+			try {
+				windowGame = new WindowGame();
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		return windowGame;
+	}
+	
+	private WindowGame() throws SlickException {
 		super(Data.NAME);
-		windowGame = this;
 	}
 
 	private WindowGame(String title, GameContainer container,
 			MobHandler mobHandler, ArrayList<Mob> mobs,
-			game.playerHandler playerHandler, ArrayList<Player> players,
+			game.PlayerHandler playerHandler, ArrayList<Player> players,
 			MovementHandler movementHandler, ArrayList<Event> events,
 			Character currentCharacter, int playerNumber, int turn,
 			int turnTimer, long timeStamp) {
@@ -90,21 +98,22 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		this.container = container;
-
+		thread = Thread.currentThread();
+		handler = new GameHandler(thread);
+		
 		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
 		// TrapData.loadTrap();
 		Data.loadMap();
-		ai = new AIHandler();
 
 		initAPIX();
 		initAIHandler();
 		// Create the player list
 		initPlayers();
 
-		playerHandler = new playerHandler(players);
+		playerHandler = new PlayerHandler(players);
 
 		// Create the monster list
 		mobs = MonsterData.initMobs();
@@ -160,6 +169,7 @@ public class WindowGame extends BasicGame {
 	}
 
 	public void initAIHandler(){
+		ai = AIHandler.getInstance();
 		ai.addAIListener(new AIListener() {
 			
 			public void newAction(ActionEvent e) {
@@ -173,10 +183,11 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		});
+		ai.begin();
 	}
 	
 	public void initAPIX() {
-		apix = new APIX();
+		apix = APIX.getInstance();
 		if (!Data.RUN_APIX)
 			return;
 
@@ -216,6 +227,14 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		});
+		
+		apix.begin();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
 	}
 
 	int i = 0;
@@ -657,6 +676,10 @@ public class WindowGame extends BasicGame {
 				return mobs.get(i);
 
 		return null;
+	}
+
+	public GameHandler getHandler() {
+		return handler;
 	}
 
 }

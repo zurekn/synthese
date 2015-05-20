@@ -31,6 +31,7 @@ public abstract class Character {
 	private String name;
 	private String aiType;
 	private Character focusedOn;
+	private boolean npc = true;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -44,7 +45,7 @@ public abstract class Character {
 	 */
 
 	public void moveTo(String position) throws IllegalMovementException {
-		if(WindowGame.windowGame.getAllPositions().contains(position)){
+		if(WindowGame.getInstance().getAllPositions().contains(position)){
 			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
 		}
 
@@ -217,6 +218,14 @@ public abstract class Character {
 
 	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
+	}
+	
+	public boolean isNpc(){
+		return this.npc;
+	}
+	
+	public void setNpc(boolean npc){
+		this.npc = npc ;
 	}
 
 	/**

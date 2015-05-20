@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public class playerHandler {
+public class PlayerHandler {
 
 	private ArrayList<Player> player ;
 	
-	public playerHandler(ArrayList<Player> player2){
+	public PlayerHandler(ArrayList<Player> player2){
 		this.player = player2;
 	}
 

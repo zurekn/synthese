@@ -50,7 +50,7 @@ public class AStar {
 	}
 
 	public String[] pathfinder(Character c, int goalX, int goalY) {
-		positions = WindowGame.windowGame.getAllPositions();
+		positions = WindowGame.getInstance().getAllPositions();
 		goal = new Node(goalX, goalY);
 		int gMax = c.getStats().getMovementPoints()*WEIGHT;
 		String[] path = null;
@@ -123,7 +123,7 @@ public class AStar {
 
 	public LinkedList<int[]> getReachableNodes(Character c){
 		LinkedList<int[]> list = new LinkedList<int[]>();
-		positions = WindowGame.windowGame.getAllPositions();
+		positions = WindowGame.getInstance().getAllPositions();
 		int gMax = c.getStats().getMovementPoints()*WEIGHT;
 
 		for (int i = 0; i < map.length; i++) {

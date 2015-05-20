@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.List;
 
 import imageprocessing.FormObject;
+import imageprocessing.ImageProcessing;
 import imageprocessing.Pixel;
-import imageprocessing.TraitementImage;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
@@ -25,7 +25,7 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		
 		long time = System.currentTimeMillis();
 		int seuil = 200;
-		TraitementImage ti = new TraitementImage();
+		ImageProcessing ti = new ImageProcessing();
 //		List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("toto.jpg", "toto.jpg",seuil);
 		
 		//////////////////////////////////test//////////////////////////////////
