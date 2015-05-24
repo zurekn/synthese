@@ -57,6 +57,7 @@ public class MonsterData {
 		Iterator i = monsters.iterator();
 		int posX, posY;
 		String id;
+		int idCount=1;
 		List <Element> spells = new ArrayList<Element>();
 		while (i.hasNext()) {
 
@@ -64,8 +65,9 @@ public class MonsterData {
 			id = el.getAttributeValue("id");
 			posX = Integer.parseInt(el.getChildText("x"));
 			posY = Integer.parseInt(el.getChildText("y"));
-			Mob m = new Mob(posX, posY, id);
+			Mob m = new Mob(posX, posY, id,"m"+idCount);
 			mobs.add(m);
+			idCount++;
 		}
 		
 		

@@ -24,6 +24,8 @@ public abstract class Character {
 	private int x;
 	private int y;
 	private String id;
+	private String trueID;
+
 	private Animation[] animation;
 	private Stats stats;
 	private boolean myTurn = false;
@@ -32,7 +34,7 @@ public abstract class Character {
 	private String aiType;
 	private Character focusedOn;
 	private boolean npc = true;
-	protected boolean monster = false;
+	protected boolean monster = true;
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -46,8 +48,9 @@ public abstract class Character {
 	 */
 
 	public void moveTo(String position) throws IllegalMovementException {
-		if(WindowGame.getInstance().getAllPositions().contains(position)){
-			throw new IllegalMovementException("Caracter already at the position ["+position+"]");
+		if (WindowGame.getInstance().getAllPositions().contains(position)) {
+			throw new IllegalMovementException(
+					"Caracter already at the position [" + position + "]");
 		}
 
 		if (Data.untraversableBlocks.containsKey(position)) {
@@ -70,19 +73,33 @@ public abstract class Character {
 
 					int xTmp = this.x, yTmp = this.y;
 					int movePoints = this.stats.getMovementPoints();
-					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2) + Math.pow(y - yTmp, 2));
+					int dist = (int) Math.sqrt(Math.pow(x - xTmp, 2)
+							+ Math.pow(y - yTmp, 2));
 					if (dist > movePoints) {
 						throw new IllegalMovementException(
 								"Not enough movements points");
 					} else {
 						this.x = x;
 						this.y = y;
-						if(Data.debug)
-							System.out.println("Current caractere move to ["+x+":"+y+"]");
+						if (Data.debug)
+							System.out.println("Current character move to ["
+									+ x + ":" + y + "]");
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Is intended to be used with alpha beta
+	 * 
+	 * @param position
+	 * @throws IllegalMovementException
+	 */
+	public void moveAiTo(int x, int y) {
+		this.x = x;
+		this.y = y;
+
 	}
 
 	/**
@@ -99,14 +116,16 @@ public abstract class Character {
 		Spell spell = this.getSpell(spellID);
 		if (spell == null)
 			throw new IllegalActionException("Spell unkown");
-		//TODO handle the heal
-		return spell.getDamage()+":"+spell.getHeal();
+		// TODO handle the heal
+		return spell.getDamage() + ":" + spell.getHeal();
 	}
 
 	/**
 	 * 
-	 * @param damage the damage value
-	 * @param type, type of damage (fire, ice, shock...)
+	 * @param damage
+	 *            the damage value
+	 * @param type
+	 *            , type of damage (fire, ice, shock...)
 	 */
 	public void takeDamage(int damage, String type) {
 		if (type.equals("magic")) {
@@ -121,8 +140,8 @@ public abstract class Character {
 		stats.setLife(stats.getLife() - damage);
 		System.out.println(id + " take : [" + damage + "] damage");
 	}
-	
-	public void heal(int heal){
+
+	public void heal(int heal) {
 		stats.setLife(stats.getLife() + heal);
 	}
 
@@ -201,6 +220,15 @@ public abstract class Character {
 	public void setFocusedOn(Character focusedOn) {
 		this.focusedOn = focusedOn;
 	}
+	
+	public String getTrueID() {
+		return trueID;
+	}
+
+	public void setTrueID(String trueID) {
+		this.trueID = trueID;
+	}
+
 
 	/**
 	 * Add the spell s to this character.
@@ -210,7 +238,8 @@ public abstract class Character {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getEvent()));
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s
+						.getEvent()));
 	}
 
 	public ArrayList<Spell> getSpells() {
@@ -220,16 +249,16 @@ public abstract class Character {
 	public void setSpells(ArrayList<Spell> spells) {
 		this.spells = spells;
 	}
-	
-	public boolean isNpc(){
+
+	public boolean isNpc() {
 		return this.npc;
 	}
-	
-	public void setNpc(boolean npc){
-		this.npc = npc ;
+
+	public void setNpc(boolean npc) {
+		this.npc = npc;
 	}
-	
-	public boolean isMonster(){
+
+	public boolean isMonster() {
 		return this.monster;
 	}
 
@@ -260,6 +289,23 @@ public abstract class Character {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Character other = (Character) obj;
+		if (trueID == null) {
+			if (other.trueID != null)
+				return false;
+		} else if (!trueID.equals(other.trueID))
+			return false;
+		return true;
 	}
 
 	@Override

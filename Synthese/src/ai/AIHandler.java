@@ -1,12 +1,14 @@
 package ai;
 
 import java.util.ArrayList;
+
 import javax.swing.event.EventListenerList;
 
 import data.Handler;
 import game.Character;
 import game.Mob;
 import game.Player;
+import game.WindowGame;
 
 /**
  * This class handle the ai for the game
@@ -92,7 +94,7 @@ public class AIHandler extends Handler {
 		}
 	}
 
-	public static String[] getMobsMovements(WindowGameData data) {
+	/*public static String[] getMobsMovements(WindowGameData data) {
 		Mob mob = data.nextMob();
 		while (mob != null) {
 			ArrayList<Player> players = data.getNearPlayers(mob);
@@ -103,14 +105,16 @@ public class AIHandler extends Handler {
 		}
 
 		return null;
-	}
+	}*/
 
-	public void loadAction(Character currentCharacter) {
+	public void loadAction(Character currentCharacter, ArrayList<Player> players, ArrayList<Mob> mobs, int turn) {
 		// TODO mettre en place le systeme de recolte d'action et les faire dans
 		// l'ordre
+		Character c = WindowGame.getInstance().getMobById("m1");
+		AlphaBeta.getInstance().getNpcCommand(new WindowGameData(players, mobs, turn), c);
 
 		// FOR DEBUG !!
-		new ActionEvent(currentCharacter.getId(), "m:10:10");
+		newAction(currentCharacter.getId(), "m:10:10");
 
 	}
 }

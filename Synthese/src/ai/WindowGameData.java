@@ -1,5 +1,6 @@
 package ai;
 
+import exception.IllegalMovementException;
 import game.Character;
 import game.Mob;
 import game.Player;
@@ -8,26 +9,31 @@ import game.Trap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class WindowGameData {
-	private ArrayList<Character> characters;
-	private ArrayList<Trap> traps;
-	private Character currentCharacter;
-	private int turn;
-	private Iterator<Mob> mobIterator;
-	private Iterator<Player> playerIterator;
+public class WindowGameData implements Cloneable {
+	private ArrayList<Character> characters= new ArrayList<Character>();
+	private Iterator<Character> iterator;
 
 	public WindowGameData(ArrayList<Player> players, ArrayList<Mob> mobs,
-			Character currentCharacter, int turn) {
-		for (Player p : players)
-			characters.add(p);
-		for (Mob m : mobs)
-			characters.add(m);
+			int turn) {
+		int initTurn = turn;
+		int n =players.size() + mobs.size();
+		do {
+			if (turn < players.size()) {
+				characters.add(players.get(turn));
+			} else {
+				characters.add(mobs.get(turn - players.size()));
+			}
+			turn = (turn+1)%n;
+		} while (turn != initTurn);
+		
+		iterator = characters.iterator();
+	}
 
-		this.currentCharacter = currentCharacter;
-		this.turn = turn;
-		mobIterator = mobs.iterator();
-		playerIterator = players.iterator();
-
+	public WindowGameData(ArrayList<Character> characters,
+			Iterator<Character> iterator) {
+		super();
+		this.characters = characters;
+		this.iterator = iterator;
 	}
 
 	public ArrayList<Character> getCharacters() {
@@ -36,36 +42,6 @@ public class WindowGameData {
 
 	public void setCharacters(ArrayList<Character> characters) {
 		this.characters = characters;
-	}
-
-	public Character getCurrentCharacter() {
-		return currentCharacter;
-	}
-
-	public void setCurrentCharacter(Character currentCharacter) {
-		this.currentCharacter = currentCharacter;
-	}
-
-	public int getTurn() {
-		return turn;
-	}
-
-	public void setTurn(int turn) {
-		this.turn = turn;
-	}
-
-	public Mob nextMob() {
-		if (mobIterator.hasNext())
-			return mobIterator.next();
-		else
-			return null;
-	}
-
-	public Player nextPlayer() {
-		if (playerIterator.hasNext())
-			return playerIterator.next();
-		else
-			return null;
 	}
 
 	public ArrayList<Player> getNearPlayers(Mob mob) {
@@ -82,10 +58,22 @@ public class WindowGameData {
 		return players;
 	}
 
-	@Deprecated
+	public WindowGameData clone() {
+		return new WindowGameData(characters, iterator);
+	}
+
 	public Character nextCharacter() {
-		// TODO add something similar to switch turn to get the next character
-		return currentCharacter;
+		if (iterator.hasNext())
+			return iterator.next();
+		else {
+			iterator = characters.iterator();
+			return null;
+		}
+	}
+
+	public void move(Character character, int x, int y) {
+		int i = characters.indexOf(character);
+		characters.get(i).moveAiTo(x, y);
 	}
 
 }

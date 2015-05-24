@@ -176,7 +176,7 @@ public class WindowGame extends BasicGame  {
 				System.out.println("Nouvelle action recup de AIHandler  : "+e.toString());
 				
 				try {
-					decodeAction(e.getId()+":"+e.getEvent());
+					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -371,8 +371,8 @@ public class WindowGame extends BasicGame  {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			String[] commands = AIHandler.getMobsMovements(new WindowGameData(
-					players, mobs, currentCharacter, turn));
+			//String[] commands = AIHandler.getMobsMovements(new WindowGameData(
+				//	players, mobs, currentCharacter, turn));
 
 		}
 
@@ -388,7 +388,7 @@ public class WindowGame extends BasicGame  {
 		}
 		
 		//launch the new action loader
-		ai.loadAction(currentCharacter);
+		ai.loadAction(currentCharacter, players,mobs, turn);
 
 		// print the current turn in the console
 		if (Data.debug) {

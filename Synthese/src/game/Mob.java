@@ -12,10 +12,11 @@ import data.Stats;
 
 public class Mob extends Character{
 
-	public Mob(int x, int y, String id) {
+	public Mob(int x, int y, String id, String trueID) {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
+		this.setTrueID(trueID);
 
 		init();
 		

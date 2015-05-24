@@ -43,7 +43,7 @@
 	</spell>
 	<spell id="s4">
 		<file>Synthese/res/images/tiles/Spells/water wave.png</file>
-		<celX>326/4</celX>
+		<celX>81</celX>
 		<celY>37</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
@@ -57,7 +57,7 @@
 	</spell>
 	<spell id="s5">
 		<file>Synthese/res/images/tiles/Spells/sword slash.png</file>
-		<celX>474/3</celX>
+		<celX>158</celX>
 		<celY>75</celY>
 		<celNumber>3</celNumber>
 		<direction>90</direction>
@@ -71,7 +71,7 @@
 	</spell>
 	<spell id="s6">
 		<file>Synthese/res/images/tiles/Spells/Lunar Light.png</file>
-		<celX>552/3</celX>
+		<celX>184</celX>
 		<celY>183</celY>
 		<celNumber>3</celNumber>
 		<direction>90</direction>
@@ -99,7 +99,7 @@
 	</spell>
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
-		<celX>344/4</celX>
+		<celX>86</celX>
 		<celY>96</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
@@ -113,7 +113,7 @@
 	</spell>
 	<spell id="s9">
 		<file>Synthese/res/images/tiles/Spells/Meteor.png</file>
-		<celX>955/5</celX>
+		<celX>191</celX>
 		<celY>196</celY>
 		<celNumber>5</celNumber>
 		<direction>90</direction>

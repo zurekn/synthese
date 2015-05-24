@@ -43,6 +43,7 @@ public class Player extends Character {
 		this.setY(y);
 		this.setId(id);
 		this.setAiType("hero");
+		this.setTrueID(id);
 		Hero h = HeroData.getHeroByClass(caracterClass);
 		if(h == null){
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
