@@ -26,32 +26,35 @@ public class ImageProcessingHandler extends Handler {
 	private ImageProcessingHandler(Webcam webcam) {
 		super();
 		this.webcam = webcam;
-		seuil = 200;
+		seuil = 30;
 	}
 
 	/**
 	 * Is intended to be called just once
+	 * 
 	 * @param webcam
 	 * @return
 	 */
-	public static ImageProcessingHandler getInstance(Webcam webcam){
-		if(handler == null)
-			handler=new ImageProcessingHandler(webcam);
+	public static ImageProcessingHandler getInstance(Webcam webcam) {
+		if (handler == null)
+			handler = new ImageProcessingHandler(webcam);
 		return handler;
 	}
-	
-	public static ImageProcessingHandler getInstance(){
-		if(handler == null)
-			System.err.println("You need to call getInstance with Webcam parameter once before using it.");
+
+	public static ImageProcessingHandler getInstance() {
+		if (handler == null)
+			System.err
+					.println("You need to call getInstance with Webcam parameter once before using it.");
 		return handler;
 	}
-	
+
 	public void initImageRef() {
+		System.out.println("Image ref taken at "+System.currentTimeMillis());
 		imageRef = webcam.getImage();
-		if(Data.debugPicture){
+		if (Data.debugPicture) {
 			try {
-				ImageIO.write(imageRef, "jpg", new File(
-									Data.getImageDir()+"imageRef"+Data.getDate()+".jpg"));
+				ImageIO.write(imageRef, "jpg", new File(Data.getImageDir()
+						+ "imageRef" + Data.getDate() + ".jpg"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -68,11 +71,11 @@ public class ImageProcessingHandler extends Handler {
 	}
 
 	public void addMovement(List<FormObject> lf) {
-		if(lf == null)
+		if (lf == null)
 			return;
-		for (FormObject o : lf) {
-			MovementEvent e = new MovementEvent(o.getBaryCenter().getX(), o
-					.getBaryCenter().getY());
+		for (FormObject o : lf) 
+		{
+			MovementEvent e = new MovementEvent(o.getBaryCenter().getX(), o.getBaryCenter().getY());
 			for (MovementListener listener : getMouvementListener())
 				listener.newMovement(e);
 		}
@@ -84,46 +87,81 @@ public class ImageProcessingHandler extends Handler {
 		BufferedImage image;
 		System.out.println("Image Processing running");
 		try {
+			System.out.println("Waiting 4 sec");
 			Thread.sleep(4000);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		initImageRef();
-		
+
 		APIX apix = APIX.getInstance();
 
 		while (true) {
-			//Wait APIX thread
-			apix.waitLock();
+			// Wait APIX thread
+			//System.out.println("Lock ...");
 			
+			//apix.waitLock();
+
+			if (Data.tiDebug)
+				System.out.println("lancement du traitement dans 2 sec-----------------------------------------------------------------------");
 			try {
-				if (Data.tiDebug)
-					System.out.println("lancement thread -----------------------------------------------------------------------");
 				Thread.sleep(2000);
-			} catch (InterruptedException e) {
+			} catch (InterruptedException e2) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e2.printStackTrace();
 			}
-			System.out.println("commencement traitement image");
+			System.out.println("Image prise à "+System.currentTimeMillis());
 			image = webcam.getImage();
-			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(image,
-					imageRef, seuil);
-			addMovement(lf);
 			try {
-				//thread.wait(0);
+				ImageIO.write(image, "jpg", new File(Data.getImageDir()
+						+ "traitementImage" + Data.getDate() + ".jpg"));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(imageRef, image, seuil);
+			
+			/***********************************	debug	************************************************/
+			/*List<FormObject> lf = null;
+			try 
+			{
+				BufferedImage image1 = null;
+				BufferedImage image2 = null;
+				String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/TraitementImages/res/init/";
+				ImageIO.write(imageRef, "jpg", new File(urlImage+ "imageRef_test_" + Data.getDate() + ".jpg"));
+				System.out.println("-----");
+				System.out.println("-----");
+				System.out.println("-----");
+				System.out.println("-----");
+				System.out.println("lecture image 1");
+				image1 = ImageIO.read(new File(urlImage + "TI1.jpg"));
+				System.out.println("lecture image 2");
+				image2 = ImageIO.read(new File(urlImage + "TI2.jpg"));
+				
+				ip.imgWidth = image1.getWidth();
+				ip.imgHeight = image1.getHeight();
+
+				lf = ip.etiquetageIntuitifImageGiveList2(image1, image2, 40);
+			} 
+			catch (IOException e1) 
+			{
+				e1.printStackTrace();
+			}*/
+			
+			/**********************************	 fin debug	*************************************************/
+			
+			
+			addMovement(lf);
+			System.out.println("fin du traitement -----------------------------------------------");
+			try {
+				System.out.println("Attente de 10 sec pour le prochain traitement");
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			try {
-				ImageIO.write(image, "jpg", new File(
-						Data.getImageDir()+"traitementImage"+Data.getDate()+".jpg"));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 		}
 	}
 
@@ -134,49 +172,41 @@ public class ImageProcessingHandler extends Handler {
 	}
 
 	public int[][] cutBlackBorder(int[][] elementsRes, int width, int height) {
-		 for (int x = 0; x <width; ++x)
-	        {
-	        	for (int y = 0; y < height; ++y)
-	            {
-	        		if(elementsRes[x][y]==255)
-	        			elementsRes[x][y] = 0;
-	        		else
-	        			break;
-	            }
-	        }
-	        for (int x =width-1; x > 0 ; --x)
-	        {
-	        	for (int y = 0; y < height; ++y)
-	            {
-	        		if(elementsRes[x][y]==255)
-	        			elementsRes[x][y] = 0;
-	        		else
-	        			break;
-	            }
-	        }
-	        
-	        for (int x = 0; x < height; ++x)
-	        {
-	        	for (int y = 0; y <width; ++y)
-	            {
-	        		if(elementsRes[y][x]==255)
-	        			elementsRes[y][x] = 0;
-	        		else
-	        			break;
-	            }
-	        }
-	        for (int x = height-1; x > 0 ; --x)
-	        {
-	        	for (int y = 0; y <width; ++y)
-	            {
-	        		if(elementsRes[y][x]==255)
-	        			elementsRes[y][x] = 0;
-	        		else
-	        			break;
-	            }
-	        }
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				if (elementsRes[x][y] == 255)
+					elementsRes[x][y] = 0;
+				else
+					break;
+			}
+		}
+		for (int x = width - 1; x > 0; --x) {
+			for (int y = 0; y < height; ++y) {
+				if (elementsRes[x][y] == 255)
+					elementsRes[x][y] = 0;
+				else
+					break;
+			}
+		}
 
-		return elementsRes ;
+		for (int x = 0; x < height; ++x) {
+			for (int y = 0; y < width; ++y) {
+				if (elementsRes[y][x] == 255)
+					elementsRes[y][x] = 0;
+				else
+					break;
+			}
+		}
+		for (int x = height - 1; x > 0; --x) {
+			for (int y = 0; y < width; ++y) {
+				if (elementsRes[y][x] == 255)
+					elementsRes[y][x] = 0;
+				else
+					break;
+			}
+		}
+
+		return elementsRes;
 	}
 
 }

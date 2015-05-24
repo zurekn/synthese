@@ -88,17 +88,17 @@ public class APIX extends Handler {
 						.getY() - relativeY));
 			}
 		});
-		imageHandler.begin();
+		//imageHandler.begin();
 
 		
 		do{
 			try {
-				Thread.sleep(15000);
+				Thread.sleep(6000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			//System.out.println("6 sec passé unlock !!");
 			unlockTemporay(2);
 		}while(true);
 	}
@@ -141,7 +141,7 @@ public class APIX extends Handler {
                 if(!firstTry)
                 	seuil =Integer.parseInt( JOptionPane.showInputDialog("Nouveau seuil d'init [ancien : "+seuil+"]"));
                 elementsRes[x][y] =  elementsImg[x][y] < seuil ? 255 : 0;
-               firstTry = false;
+               firstTry = true;
                 
             }
            
