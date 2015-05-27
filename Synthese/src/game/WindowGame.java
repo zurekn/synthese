@@ -250,21 +250,21 @@ public class WindowGame extends BasicGame  {
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
 			// TOP LEFT
-			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS - 20, 40,
+			g.fillRect(Data.MAP_X - 20, Data.MAP_Y - 20, 40,
 					40);
 			// TOP RIGHT
-			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 20,
-					Data.RELATIVE_Y_POS - 20, 40, 40);
+			g.fillRect(Data.MAP_X + Data.MAP_WIDTH - 20,
+					Data.MAP_Y - 20, 40, 40);
 			// //BOTTOM left
-			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS
-					+ Data.DECK_AREA_SIZE_X - 20, 40, 40);
+			g.fillRect(Data.MAP_X - 20, Data.MAP_Y
+					+ Data.MAP_HEIGHT - 20, 40, 40);
 			i++;
 			if (i > 60)
 				apix.initTI();
 
 		} else {
 
-			Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
+			Data.map.render(Data.MAP_X, Data.MAP_Y);
 			mobHandler.render(container, g);
 			// TODO
 			// Bug playerrender doesn't work every time
@@ -284,17 +284,17 @@ public class WindowGame extends BasicGame  {
 	private void renderDeckArea(GameContainer container, Graphics g) {
 		g.setColor(Color.white);
 		// TOP
-		g.drawRect(Data.DECK_AREA_SIZE_Y, 0, Data.DECK_AREA_SIZE_X,
+		g.drawRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X,
 				Data.DECK_AREA_SIZE_Y);
 		// BOTTOM
-		g.drawRect(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y
+		g.drawRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y
 				+ Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X,
 				Data.DECK_AREA_SIZE_Y);
 		// LEFT
-		g.drawRect(0, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y,
+		g.drawRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y,
 				Data.DECK_AREA_SIZE_X);
 		// RIGHT
-		g.drawRect(Data.DECK_AREA_SIZE_X + Data.DECK_AREA_SIZE_Y,
+		g.drawRect(Data.MAP_X + Data.MAP_WIDTH,
 				Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y,
 				Data.DECK_AREA_SIZE_X);
 	}
@@ -320,7 +320,7 @@ public class WindowGame extends BasicGame  {
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
 		xMin = Data.RELATIVE_X_POS;
-		xMax = Data.RELATIVE_X_POS + Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
+		xMax = Data.RELATIVE_X_POS + Data.MAP_WIDTH;
 		yMin = Data.RELATIVE_Y_POS;
 		yMax = Data.RELATIVE_Y_POS + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		for (int i = 0; i < events.size(); i++) {

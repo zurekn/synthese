@@ -40,14 +40,16 @@ public class Data {
 	public static final boolean inTest = true;
 	public static boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 1;
-	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
-	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
+	//public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
 	public static int MAP_HEIGHT;
 	public static int BLOCK_SIZE_X;
 	public static int BLOCK_SIZE_Y;
+	public static int MAP_X;
+	public static int MAP_Y;
 	public static int BLOCK_NUMBER_X;
 	public static int BLOCK_NUMBER_Y;
 	public static int DECK_AREA_SIZE_X;
@@ -116,7 +118,10 @@ public class Data {
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
 		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X;
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
-		Data.RELATIVE_X_POS = Data.RELATIVE_Y_POS = Data.DECK_AREA_SIZE_Y;
+		Data.RELATIVE_X_POS = Data.DECK_AREA_SIZE_Y * 3;
+		Data.RELATIVE_Y_POS = 0;
+		Data.MAP_X = Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_Y;
+		Data.MAP_Y = Data.RELATIVE_Y_POS + Data.DECK_AREA_SIZE_Y;
 		Data.TOTAL_HEIGHT = Data.MAP_HEIGHT + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.TOTAL_WIDTH = Data.MAP_WIDTH + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.SCALE = (float) Data.SCREEN_HEIGHT / Data.TOTAL_HEIGHT;
