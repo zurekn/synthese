@@ -18,7 +18,7 @@ public class ImageProcessing {
 	int imgWidth;
 	public static final int MIN_SEUIL_FORM = 50;
 	public static final int MAX_SEUIL_FORM = 5000;
-	public static final int NIV_OUVERTURE = 30;
+	public static final int NIV_OUVERTURE = 10;
 
 	public ImageProcessing() 
 	{
@@ -388,12 +388,12 @@ public class ImageProcessing {
 		int height = erosionElements[0].length;
 		int width = erosionElements.length;
 		int [][] resultErrosion = new int[width][height];
-		for(int i = 1; i < width-1; i++)
+		for(int i = 0; i < width; i++)
 			resultErrosion[i][0] = 0;
-		for(int j = 1; j < height-1; j++)
+		for(int j = 0; j < height; j++)
 			resultErrosion[0][j] = 0;
 		
-		int up, down, right, left;
+		int up, down, right, left, upRight, upLeft, downRight, downLeft;
 		if(erosionElements!=null)
 		{
 			for(int i = 1; i < width-1; i++)
@@ -404,7 +404,12 @@ public class ImageProcessing {
 					up = erosionElements[i][j-1];
 					right = erosionElements[i+1][j];
 					down = erosionElements[i][j+1];
-					if( up != 0 && down != 0 && left != 0 && right != 0 && erosionElements[i][j] != 0)
+					upRight = erosionElements[i+1][j-1];
+				    upLeft = erosionElements[i-1][j-1];
+				    downRight = erosionElements[i+1][j+1];
+				    downLeft = erosionElements[i-1][j+1];
+				    
+				    if( up != 0 && down != 0 && left != 0 && right != 0 && upRight != 0 && upLeft != 0 && downRight != 0 && downLeft != 0 )
 						resultErrosion[i][j] = 255;
 					else
 						resultErrosion[i][j] = 0;
@@ -423,9 +428,9 @@ public class ImageProcessing {
 		int height = dilatationElements[0].length;
 		int width = dilatationElements.length;
 		int [][] resultDilatation = new int[width][height];
-		for(int i = 1; i < width-1; i++)
+		for(int i = 0; i < width; i++)
 			resultDilatation[i][0] = 0;
-		for(int j = 1; j < height-1; j++)
+		for(int j = 0; j < height; j++)
 			resultDilatation[0][j] = 0;
 		
 		int up, down, right, left, upRight, upLeft, downRight, downLeft;
@@ -462,9 +467,9 @@ public class ImageProcessing {
 		//int [][] elemOuverture = getBinaryImage(elemOuverture, seuil);		
 		int i;
 		int [][] resOuverture = elemOuverture;
-		for (i=0 ; i<10 ; i++)
+		for (i=0 ; i<seuil ; i++)
 			resOuverture = erosion(resOuverture);
-		for (i=0 ; i<10 ; i++)
+		for (i=0 ; i<seuil ; i++)
 			resOuverture = dilatation(resOuverture);
 		
 		return resOuverture;
@@ -478,9 +483,9 @@ public class ImageProcessing {
 		//int [][] elemFermeture = getBinaryImage(img, seuil);		
 		int i;
 		int [][] resFermeture = elemFermeture;
-		for (i=0 ; i<10 ; i++)
+		for (i=0 ; i<seuil ; i++)
 			resFermeture = dilatation(resFermeture);
-		for (i=0 ; i<10 ; i++)
+		for (i=0 ; i<seuil ; i++)
 			resFermeture = erosion(resFermeture);
 		
 		return resFermeture;

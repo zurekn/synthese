@@ -237,5 +237,12 @@ public class FormObject {
 	public void setMyTypeForm(typeForm myTypeForm) {
 		this.myTypeForm = myTypeForm;
 	}
-	
+	@Override
+	public String toString() {
+		return "FormObject [imgHeight=" + imgHeight + ", imgWidth=" + imgWidth
+				+ ", pixelList=" + pixelList + ", perimeter=" + perimeter
+				+ ", surface=" + surface + ", sigmaX=" + sigmaX + ", sigmaY="
+				+ sigmaY + ", baryCenter.X =" + baryCenter.getX() + ", baryCenter.Y =" + baryCenter.getY() 
+				+ ", myTypeForm=" + myTypeForm + "]";
+	}	
 }
