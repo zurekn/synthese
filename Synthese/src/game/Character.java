@@ -23,6 +23,8 @@ import exception.IllegalMovementException;
 public abstract class Character {
 	private int x;
 	private int y;
+	private int lastX;
+	private int lastY;
 	private String id;
 	private String trueID;
 
@@ -79,6 +81,8 @@ public abstract class Character {
 						throw new IllegalMovementException(
 								"Not enough movements points");
 					} else {
+						lastX = this.x;
+						lastY = this.y;
 						this.x = x;
 						this.y = y;
 						if (Data.debug)
@@ -97,11 +101,13 @@ public abstract class Character {
 	 * @throws IllegalMovementException
 	 */
 	public void moveAiTo(int x, int y) {
+		lastX = this.x;
+		lastY = this.y;
 		this.x = x;
 		this.y = y;
 
 	}
-
+	
 	/**
 	 * Use a spell given by its id, throws an {@link IllegalActionException}
 	 * otherwise.
@@ -118,6 +124,12 @@ public abstract class Character {
 			throw new IllegalActionException("Spell unkown");
 		// TODO handle the heal
 		return spell.getDamage() + ":" + spell.getHeal();
+	}
+	
+	public double distanceFrom(Character c){
+		int a = x - c.x;
+		int b = y - c.y;
+		return Math.sqrt(a*a +b*b);
 	}
 
 	/**
@@ -289,6 +301,14 @@ public abstract class Character {
 				return true;
 		}
 		return false;
+	}
+	
+	public int getLastX() {
+		return lastX;
+	}
+
+	public int getLastY() {
+		return lastY;
 	}
 
 	@Override
