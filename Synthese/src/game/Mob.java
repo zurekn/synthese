@@ -45,14 +45,14 @@ public class Mob extends Character {
 		// g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
 		// Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
-		animation[6].draw(Data.DECK_AREA_SIZE_Y + x * Data.BLOCK_SIZE_X,
-				Data.DECK_AREA_SIZE_Y + y * Data.BLOCK_SIZE_Y,
-				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		g.drawRect(Data.MAP_X - 10, Data.MAP_Y - 10, 20, 20);
+		animation[6].draw(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y
+				* Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (isMyTurn()) {
-			int posX = Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X
+			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X
 					+ Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints()
 					* Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
-			int posY = Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y
+			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y
 					+ Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints()
 					* Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
 			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X

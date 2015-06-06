@@ -41,6 +41,8 @@ public class APIX extends Handler {
 	public static boolean isInit = false;
 	private int relativeX = -1;
 	private int relativeY = -1;
+	private int blockSizeX = -1;
+	private int blockSizeY = -1;
 	private int seuil = 100;
 	private boolean firstTry = true;
 	private boolean isRunning = false;
@@ -64,6 +66,30 @@ public class APIX extends Handler {
 
 	}
 	
+	public int getBlockSizeX() {
+		return blockSizeX;
+	}
+
+	public void setBlockSizeX(int blockSizeX) {
+		this.blockSizeX = blockSizeX;
+	}
+
+	public int getBlockSizeY() {
+		return blockSizeY;
+	}
+
+	public void setBlockSizeY(int blockSizeY) {
+		this.blockSizeY = blockSizeY;
+	}
+
+	public int getRelativeX() {
+		return relativeX;
+	}
+
+	public int getRelativeY() {
+		return relativeY;
+	}
+
 	public void run() {
 		GameHandler game = WindowGame.getInstance().getHandler();
 		lock(2);
@@ -148,47 +174,6 @@ public class APIX extends Handler {
         }
 //        // 4 boucles
         elementsRes = imageHandler.cutBlackBorder(elementsRes, image.getWidth(), image.getHeight());
-       /* for (int x = 0; x < image.getWidth(); ++x)
-        {
-        	for (int y = 0; y < image.getHeight(); ++y)
-            {
-        		if(elementsRes[x][y]==255)
-        			elementsRes[x][y] = 0;
-        		else
-        			break;
-            }
-        }
-        for (int x = image.getWidth()-1; x > 0 ; --x)
-        {
-        	for (int y = 0; y < image.getHeight(); ++y)
-            {
-        		if(elementsRes[x][y]==255)
-        			elementsRes[x][y] = 0;
-        		else
-        			break;
-            }
-        }
-        
-        for (int x = 0; x < image.getHeight(); ++x)
-        {
-        	for (int y = 0; y < image.getWidth(); ++y)
-            {
-        		if(elementsRes[y][x]==255)
-        			elementsRes[y][x] = 0;
-        		else
-        			break;
-            }
-        }
-        for (int x = image.getHeight()-1; x > 0 ; --x)
-        {
-        	for (int y = 0; y < image.getWidth(); ++y)
-            {
-        		if(elementsRes[y][x]==255)
-        			elementsRes[y][x] = 0;
-        		else
-        			break;
-            }
-        }*/
         
 
 		ImageProcessing ip = new ImageProcessing();
@@ -250,8 +235,9 @@ public class APIX extends Handler {
 	}
 
 	protected void addMovementEvent(MovementEvent e) {
+		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY);
 		for (APIXListener listener : getAPIXListener())
-			listener.newMouvement(e);
+			listener.newMouvement(event);
 	}
 
 	public String getQRDatas() {
@@ -378,6 +364,12 @@ public class APIX extends Handler {
 
 		setRelativeX(pix.getX());
 		setRelativeY(pix.getY());
+		blockSizeX =HautDroite.get(0).getBaryCenter().getX() - HautGauche.get(0).getBaryCenter().getX();
+		blockSizeX = blockSizeX / Data.BLOCK_NUMBER_X;
+		
+		blockSizeY = BasGauche.get(0).getBaryCenter().getY() - HautGauche.get(0).getBaryCenter().getY();
+		blockSizeY = blockSizeY / Data.BLOCK_NUMBER_Y;
+		
 	}
 
 	public void setRelativeX(int valueX) {

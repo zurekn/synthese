@@ -73,12 +73,9 @@ public class WindowGame extends BasicGame {
 		super(Data.NAME);
 	}
 
-	private WindowGame(String title, GameContainer container,
-			MobHandler mobHandler, ArrayList<Mob> mobs,
-			game.PlayerHandler playerHandler, ArrayList<Player> players,
-			MovementHandler movementHandler, ArrayList<Event> events,
-			Character currentCharacter, int playerNumber, int turn,
-			int turnTimer, long timeStamp) {
+	private WindowGame(String title, GameContainer container, MobHandler mobHandler, ArrayList<Mob> mobs, game.PlayerHandler playerHandler,
+			ArrayList<Player> players, MovementHandler movementHandler, ArrayList<Event> events, Character currentCharacter, int playerNumber,
+			int turn, int turnTimer, long timeStamp) {
 		super(title);
 		this.container = container;
 		this.mobHandler = mobHandler;
@@ -152,8 +149,7 @@ public class WindowGame extends BasicGame {
 		if (!Data.departureBlocks.get(position)) {
 			String[] s = position.split(":");
 			try {
-				players.add(new Player(Integer.parseInt(s[0]), Integer
-						.parseInt(s[1]), "P" + players.size(), "mage"));
+				players.add(new Player(Integer.parseInt(s[0]), Integer.parseInt(s[1]), "P" + players.size(), "mage"));
 				Data.departureBlocks.remove(position);
 				Data.departureBlocks.put(position, true);
 			} catch (NumberFormatException e) {
@@ -171,11 +167,11 @@ public class WindowGame extends BasicGame {
 		commands = CommandHandler.getInstance();
 		commands.addCommandListener(new CommandListener() {
 
+
 			public void newAction(ActionEvent e) {
 				System.out
 						.println("Nouvelle action recup de CommandHandler  : "
 								+ e.toString());
-
 				try {
 					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
@@ -197,9 +193,7 @@ public class WindowGame extends BasicGame {
 		apix.addAPIXListener(new APIXAdapter() {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
-				System.out
-						.println("Un nouveau QRCode vien d'être recupèrer par WindowGame ["
-								+ e.toString() + "]");
+				System.out.println("Un nouveau QRCode vien d'être recupèrer par WindowGame [" + e.toString() + "]");
 				try {
 					decodeAction(e.getId() + ":" + e.getDirection());
 				} catch (IllegalActionException e1) {
@@ -209,19 +203,11 @@ public class WindowGame extends BasicGame {
 			}
 
 			public void newMouvement(MovementEvent e) {
-				System.out
-						.println("Un nouveau mouvement vient d'être récupèrer par WindowGame ["
-								+ e.toString()
-								+ "], position sur le plateau ["
-								+ e.getX()
-								/ Data.BLOCK_SIZE_X
-								+ ":"
-								+ e.getY()
-								/ Data.BLOCK_SIZE_Y + "]");
+				System.out.println("Un nouveau mouvement vient d'être récupèrer par WindowGame [" + e.toString() + "], position sur le plateau ["
+						+ e.getX() / apix.getBlockSizeX() + ":" + e.getY() / apix.getBlockSizeY() + "]");
 				try {
 					// TODO check the available position
-					decodeAction("m:" + (e.getX() / Data.BLOCK_SIZE_X) + ":"
-							+ (e.getY() / Data.BLOCK_SIZE_Y));
+					decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
 				} catch (IllegalActionException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -243,29 +229,25 @@ public class WindowGame extends BasicGame {
 	/**
 	 * The render function Call all game's render
 	 */
-	public void render(GameContainer container, Graphics g)
-			throws SlickException {
+	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
 		if (!apix.isInit()) {
 			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
 			// TOP LEFT
-			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS - 20, 40,
-					40);
+			g.fillRect(Data.MAP_X - 20, Data.MAP_Y - 20, 40, 40);
 			// TOP RIGHT
-			g.fillRect(Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_X - 20,
-					Data.RELATIVE_Y_POS - 20, 40, 40);
+			g.fillRect(Data.MAP_X + Data.MAP_WIDTH - 20, Data.MAP_Y - 20, 40, 40);
 			// //BOTTOM left
-			g.fillRect(Data.RELATIVE_X_POS - 20, Data.RELATIVE_Y_POS
-					+ Data.DECK_AREA_SIZE_X - 20, 40, 40);
+			g.fillRect(Data.MAP_X - 20, Data.MAP_Y + Data.MAP_HEIGHT - 20, 40, 40);
 			i++;
 			if (i > 60)
 				apix.initTI();
 
 		} else {
 
-			Data.map.render(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y);
+			Data.map.render(Data.MAP_X, Data.MAP_Y);
 			mobHandler.render(container, g);
 			// TODO
 			// Bug playerrender doesn't work every time
@@ -285,19 +267,13 @@ public class WindowGame extends BasicGame {
 	private void renderDeckArea(GameContainer container, Graphics g) {
 		g.setColor(Color.white);
 		// TOP
-		g.drawRect(Data.DECK_AREA_SIZE_Y, 0, Data.DECK_AREA_SIZE_X,
-				Data.DECK_AREA_SIZE_Y);
+		g.drawRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// BOTTOM
-		g.drawRect(Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y
-				+ Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X,
-				Data.DECK_AREA_SIZE_Y);
+		g.drawRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// LEFT
-		g.drawRect(0, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y,
-				Data.DECK_AREA_SIZE_X);
+		g.drawRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		// RIGHT
-		g.drawRect(Data.DECK_AREA_SIZE_X + Data.DECK_AREA_SIZE_Y,
-				Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y,
-				Data.DECK_AREA_SIZE_X);
+		g.drawRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 	}
 
 	/**
@@ -321,7 +297,7 @@ public class WindowGame extends BasicGame {
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
 		xMin = Data.RELATIVE_X_POS;
-		xMax = Data.RELATIVE_X_POS + Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
+		xMax = Data.RELATIVE_X_POS + Data.MAP_WIDTH;
 		yMin = Data.RELATIVE_Y_POS;
 		yMax = Data.RELATIVE_Y_POS + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		for (int i = 0; i < events.size(); i++) {
@@ -330,8 +306,7 @@ public class WindowGame extends BasicGame {
 			x = e.getX();
 			y = e.getY();
 			e.setRange(e.getRange() - 1);
-			if (x < xMin || x > xMax || y < yMin || y > yMax
-					|| e.getRange() <= 0) {
+			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 0) {
 				events.remove(i);
 			}
 
@@ -339,8 +314,7 @@ public class WindowGame extends BasicGame {
 	}
 
 	@Override
-	public void update(GameContainer container, int delta)
-			throws SlickException {
+	public void update(GameContainer container, int delta) throws SlickException {
 		long time = System.currentTimeMillis();
 		if (time - timeStamp > 1000) {
 			turnTimer--;
@@ -401,8 +375,7 @@ public class WindowGame extends BasicGame {
 				System.out.println("Player : " + players.get(turn).toString());
 			} else {
 				System.out.println("Tour du Monster" + (turn - players.size()));
-				System.out.println("Monster "
-						+ mobs.get(turn - players.size()).toString());
+				System.out.println("Monster " + mobs.get(turn - players.size()).toString());
 			}
 			System.out.println("========================");
 		}
@@ -419,27 +392,21 @@ public class WindowGame extends BasicGame {
 		if (action.startsWith("s")) { // Spell action
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
-				throw new IllegalActionException(
-						"Wrong number of arguments in action string");
+				throw new IllegalActionException("Wrong number of arguments in action string");
 
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
 
 			if (currentCharacter.getSpell(spellID) == null)
-				throw new IllegalActionException("Spell [" + spellID
-						+ "] not found");
+				throw new IllegalActionException("Spell [" + spellID + "] not found");
 
-			Event e = currentCharacter.getSpell(spellID).getEvent()
-					.getCopiedEvent();
+			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
 
 			e.setDirection(direction);
-			e.setX(Data.RELATIVE_X_POS + currentCharacter.getX()
-					* Data.BLOCK_SIZE_X);
-			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY()
-					* Data.BLOCK_SIZE_Y);
+			e.setX(Data.RELATIVE_X_POS + currentCharacter.getX() * Data.BLOCK_SIZE_X);
+			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
-			int r = getFirstCharacterRange(
-					getCharacterPositionOnLine(currentCharacter.getX(),
+			int r = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(),
 							currentCharacter.getY(), e.getDirection()), e);
 			r = r > e.getRange() ? e.getRange() : r;
 			e.setRange(r);
@@ -488,24 +455,19 @@ public class WindowGame extends BasicGame {
 	 */
 	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		System.out
-				.println("Search the first character range : " + e.toString());
+		System.out.println("Search the first character range : " + e.toString());
 
 		for (Character c : chars) {
-			if (e.getDirection() == Data.NORTH
-					|| e.getDirection() == Data.SOUTH) {
+			if (e.getDirection() == Data.NORTH || e.getDirection() == Data.SOUTH) {
 				int i = (Math.abs(c.getY() - (e.getYOnBoard() - 1))) + 1;
-				System.out.println("c.getY() = [" + c.getY()
-						+ "], e.getXOnBoard = [" + (e.getYOnBoard() - 1)
-						+ "], i = [" + i + "]");
+				System.out.println("c.getY() = [" + c.getY() + "], e.getXOnBoard = [" + (e.getYOnBoard() - 1) + "], i = [" + i + "]");
 
 				if (i < range)
 					range = i;
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
-				System.out.println("c.getX() = [" + c.getX()
-						+ "], e.getXOnBoard = [" + (e.getXOnBoard() - 1)
-						+ "], i = [" + (c.getX() - e.getXOnBoard() - 1) + "]");
+				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard() - 1) + "], i = ["
+						+ (c.getX() - e.getXOnBoard() - 1) + "]");
 				int i = (Math.abs(c.getX() - (e.getXOnBoard() - 1))) + 1;
 
 				if (i < range)
@@ -633,43 +595,34 @@ public class WindowGame extends BasicGame {
 
 		for (int i = 0; i < players.size(); i++) {
 			// above
-			if (direction == Data.NORTH && players.get(i).getY() < y
-					&& players.get(i).getX() == x)
+			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
 				c.add(mobs.get(i));
 			// bottom
-			if (direction == Data.SOUTH && players.get(i).getY() > y
-					&& players.get(i).getX() == x)
+			if (direction == Data.SOUTH && players.get(i).getY() > y && players.get(i).getX() == x)
 				c.add(mobs.get(i));
 			// on left
-			if (direction == Data.EAST && players.get(i).getY() == y
-					&& players.get(i).getX() > x)
+			if (direction == Data.EAST && players.get(i).getY() == y && players.get(i).getX() > x)
 				c.add(mobs.get(i));
 			// on right
-			if (direction == Data.WEST && players.get(i).getY() == y
-					&& players.get(i).getX() < x)
+			if (direction == Data.WEST && players.get(i).getY() == y && players.get(i).getX() < x)
 				c.add(mobs.get(i));
 		}
 
 		for (int i = 0; i < mobs.size(); i++) {
 			// above
-			if (direction == Data.NORTH && mobs.get(i).getY() < y
-					&& mobs.get(i).getX() == x)
+			if (direction == Data.NORTH && mobs.get(i).getY() < y && mobs.get(i).getX() == x)
 				c.add(mobs.get(i));
 			// bottom
-			if (direction == Data.SOUTH && mobs.get(i).getY() > y
-					&& mobs.get(i).getX() == x)
+			if (direction == Data.SOUTH && mobs.get(i).getY() > y && mobs.get(i).getX() == x)
 				c.add(mobs.get(i));
 			// on left
-			if (direction == Data.EAST && mobs.get(i).getY() == y
-					&& mobs.get(i).getX() > x)
+			if (direction == Data.EAST && mobs.get(i).getY() == y && mobs.get(i).getX() > x)
 				c.add(mobs.get(i));
 			// on right
-			if (direction == Data.WEST && mobs.get(i).getY() == y
-					&& mobs.get(i).getX() < x)
+			if (direction == Data.WEST && mobs.get(i).getY() == y && mobs.get(i).getX() < x)
 				c.add(mobs.get(i));
 		}
-		System.out.println("getCharacterePositionOnLine [" + x + ", " + y + "]"
-				+ c.toString());
+		System.out.println("getCharacterePositionOnLine [" + x + ", " + y + "]" + c.toString());
 		return c;
 	}
 
