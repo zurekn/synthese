@@ -5,7 +5,7 @@ import game.Player;
 
 import java.util.ArrayList;
 
-public class WindowGameData implements Cloneable {
+public class WindowGameData {
 	private ArrayList<CharacterData> characters = new ArrayList<CharacterData>();
 	private int index = 1;
 
@@ -44,7 +44,7 @@ public class WindowGameData implements Cloneable {
 
 	public ArrayList<CharacterData> getNearAllies(CharacterData character) {
 		ArrayList<CharacterData> allies = new ArrayList<CharacterData>();
-		CharacterData current = characters.get(characters.indexOf(character));	
+		CharacterData current = characters.get(characters.indexOf(character));
 		for (CharacterData c : characters)
 			if (!c.equals(current))
 				if (c.isMonster() == current.isMonster())
@@ -56,7 +56,7 @@ public class WindowGameData implements Cloneable {
 
 	public ArrayList<CharacterData> getNearEnemies(CharacterData character) {
 		ArrayList<CharacterData> enemies = new ArrayList<CharacterData>();
-		CharacterData current = characters.get(characters.indexOf(character));	
+		CharacterData current = characters.get(characters.indexOf(character));
 		for (CharacterData c : characters)
 			if (!c.equals(current))
 				if (c.isMonster() != current.isMonster())
@@ -65,8 +65,8 @@ public class WindowGameData implements Cloneable {
 						enemies.add(c);
 		return enemies;
 	}
-	
-	public CharacterData getCharacter(CharacterData c){
+
+	public CharacterData getCharacter(CharacterData c) {
 		int i = characters.indexOf(c);
 		return characters.get(i);
 	}
@@ -79,29 +79,23 @@ public class WindowGameData implements Cloneable {
 	}
 
 	public CharacterData nextCharacter() {
-		if(index >= characters.size()){
-			index = 0 ;
+		if (index >= characters.size()) {
+			index = 0;
 			return null;
 		}
 		CharacterData c = characters.get(index);
 		index++;
 		return c;
-		/*index++;
-		if(index >= characters.size()-1){
-			index = -1;
-			return null;
-		}
-		return characters.get(index);*/
-		/*if (index < characters.size() - 1) {
-			index++;
-			return characters.get(index);
-		} else if (index == characters.size() - 1) {
-			index++;
-			return characters.get(index - 1);
-		} else {
-			index = 0;
-			return null;
-		}*/
+		/*
+		 * index++; if(index >= characters.size()-1){ index = -1; return null; }
+		 * return characters.get(index);
+		 */
+		/*
+		 * if (index < characters.size() - 1) { index++; return
+		 * characters.get(index); } else if (index == characters.size() - 1) {
+		 * index++; return characters.get(index - 1); } else { index = 0; return
+		 * null; }
+		 */
 	}
 
 	public void move(CharacterData character, int x, int y) {
@@ -109,4 +103,12 @@ public class WindowGameData implements Cloneable {
 		characters.get(i).moveAiTo(x, y);
 	}
 
+	public void doCommand(String cmd) {
+		if (cmd.startsWith("m")) {// Movement action
+			String[] tokens = cmd.split(":");
+			characters.get(index).moveAiTo(Integer.parseInt(tokens[1]),
+					Integer.parseInt(tokens[2]));
+			//nextCharacter();
+		}
+	}
 }

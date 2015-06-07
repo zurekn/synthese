@@ -45,7 +45,7 @@ public class AIHandler extends Handler {
 		while(true){
 			commandHandler.waitLock();
 			try {
-				Thread.sleep(400);
+				Thread.sleep(200);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}

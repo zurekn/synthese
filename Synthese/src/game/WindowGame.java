@@ -48,6 +48,7 @@ public class WindowGame extends BasicGame {
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
+	private Character previousCharacter = null;
 	private Character currentCharacter;
 
 	private int playerNumber;
@@ -136,11 +137,18 @@ public class WindowGame extends BasicGame {
 
 		if (Data.debug) {
 			int i = 0;
-			while (it.hasNext() && i < Data.DEBUG_PLAYER) {
+			/*while (it.hasNext() && i < Data.DEBUG_PLAYER) {
 				var = (String) it.next();
 				addPlayer(var);
 				i++;
+			}*/
+			//TODO test
+			try {
+				players.add(new Player(2, 7, "P0", "mage"));
+			} catch (IllegalCaracterClassException e) {
+				e.printStackTrace();
 			}
+			
 		}
 
 	}
@@ -336,6 +344,7 @@ public class WindowGame extends BasicGame {
 		turnTimer = Data.TURN_MAX_TIME;
 		turn = (turn + 1) % playerNumber;
 
+		previousCharacter = currentCharacter;
 		// Switch the turn
 		// Set the new character turn
 		if (turn < players.size()) {
@@ -349,9 +358,11 @@ public class WindowGame extends BasicGame {
 			// players, mobs, currentCharacter, turn));
 
 		}
+		
 
 		// set to false the previous character turn
-		if (turn == 0) {
+		previousCharacter.setMyTurn(false);
+		/*if (turn == 0) {
 			mobs.get(mobs.size() - 1).setMyTurn(false);
 		} else {
 			if (turn <= players.size()) {
@@ -359,10 +370,10 @@ public class WindowGame extends BasicGame {
 			} else {
 				mobs.get(turn - players.size() - 1).setMyTurn(false);
 			}
-		}
+		}*/
 
-		if (currentCharacter.isNpc())
-			// launch the new action loader
+		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
+			// launch the new action loader only if it's there's no npc before it (reduce calculation in AIHandler)
 			// TODO
 			commands.startCommandsCalculation(currentCharacter, players, mobs,
 					turn);

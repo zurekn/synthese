@@ -1,22 +1,24 @@
 package ai;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
 import game.Character;
 import game.Spell;
 
 public class AlphaBeta {
+	// TODO debug
+	private static final int DEPTH_MAX = 2;
 	private static AlphaBeta alphaBeta;
 	private TreeNode root;
 	private int nodeCount = 0;
+	@SuppressWarnings("unused")
 	private long startTime;
 
 	// private static HashMap<String, LinkedList<int[]>>[] reachableBlocksMaps;
 
 	private AlphaBeta() {
-		root = new TreeNode(null, "root", 0.0f);
+		root = new TreeNode(null, "root", 0, 0.0f);
 	}
 
 	public static AlphaBeta getInstance() {
@@ -81,8 +83,6 @@ public class AlphaBeta {
 		float value;
 		// Ensure that the object is the one within the gameData
 		CharacterData character = gameData.getCharacter(characterData);
-		ArrayList<CharacterData> enemies = gameData.getNearEnemies(character);
-		ArrayList<CharacterData> allies = gameData.getNearAllies(character);
 
 		WindowGameData data = null;
 
@@ -110,12 +110,13 @@ public class AlphaBeta {
 
 				// Create node and add it to tree
 				nodeCount++;
-				TreeNode n = new TreeNode(node, "m:" + x + ":" + y);
+				TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
 				node.addSon(n);
 
-				if (depth >= depthMax)
+				if (depth >= depthMax) {
 					value = h(data, character);
-				else
+					n.setMaxDepthReached(true);
+				} else
 					value = evalNextCharacter(data, depth, depthMax, n, alpha,
 							beta, character, spell);
 
@@ -133,15 +134,15 @@ public class AlphaBeta {
 
 			// If none character is focused, random movement
 		} else {
-			ArrayList<int[]> positions = AStar.getInstance()
-					.getReachableNodes(gameData, character);
+			ArrayList<int[]> positions = AStar.getInstance().getReachableNodes(
+					gameData, character);
 			Random rand = new Random(System.nanoTime());
 			int[] position = positions.get(rand.nextInt(positions.size()));
 			int x = position[0], y = position[1];
 
 			// Create node and add it to tree
 			nodeCount++;
-			TreeNode n = new TreeNode(node, "m:" + x + ":" + y);
+			TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
 			node.addSon(n);
 
 			data = gameData.clone();
@@ -170,14 +171,12 @@ public class AlphaBeta {
 		float value;
 		// Ensure that the object is the one within the gameData
 		CharacterData character = gameData.getCharacter(characterData);
-		ArrayList<CharacterData> enemies = gameData.getNearEnemies(character);
-		ArrayList<CharacterData> allies = gameData.getNearAllies(character);
 
 		WindowGameData data = null;
 
 		detectFocus(gameData, character);
 		// TODO use spell
-		if (character.getFocusedOn() != null) {
+		if (character.getFocusedOn() != null) {// if a a character is focused
 			CharacterData focus = character.getFocusedOn();
 
 			// Move
@@ -199,12 +198,13 @@ public class AlphaBeta {
 
 				// Create node and add it to tree
 				nodeCount++;
-				TreeNode n = new TreeNode(node, "m:" + x + ":" + y);
+				TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
 				node.addSon(n);
 
-				if (depth >= depthMax)
+				if (depth >= depthMax) {
 					value = h(data, character);
-				else
+					n.setMaxDepthReached(true);
+				} else
 					value = evalNextCharacter(data, depth, depthMax, n, alpha,
 							beta, character, spell);
 
@@ -221,15 +221,15 @@ public class AlphaBeta {
 
 			// If none character is focused, random movement
 		} else {
-			ArrayList<int[]> positions = AStar.getInstance()
-					.getReachableNodes(gameData, character);
+			ArrayList<int[]> positions = AStar.getInstance().getReachableNodes(
+					gameData, character);
 			Random rand = new Random(System.nanoTime());
 			int[] position = positions.get(rand.nextInt(positions.size()));
 			int x = position[0], y = position[1];
 
 			// Create node and add it to tree
 			nodeCount++;
-			TreeNode n = new TreeNode(node, "m:" + x + ":" + y);
+			TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
 			node.addSon(n);
 
 			data = gameData.clone();
@@ -284,11 +284,18 @@ public class AlphaBeta {
 		}
 	}
 
-	public void calculateNpcCommands(WindowGameData gameData, Character character) {
-		root = new TreeNode(null, "root", 0.0f);
+	public void calculateNpcCommands(WindowGameData gameData,
+			Character character) {
 		startTime = System.currentTimeMillis();
-		maxValue(gameData, 0, 2, root, Float.MIN_VALUE, Float.MAX_VALUE,
-				new CharacterData(character), null);
+		calculateNpcCommands(gameData, new CharacterData(character));
+
+	}
+
+	private void calculateNpcCommands(WindowGameData gameData,
+			CharacterData character) {
+		root = new TreeNode(null, "root", 0, 0.0f);
+		maxValue(gameData, 0, DEPTH_MAX, root, Float.MIN_VALUE,
+				Float.MAX_VALUE, character, null);
 		String cmd = "";
 		float value = Float.MIN_VALUE;
 		for (TreeNode n : root.getSons()) {
@@ -298,5 +305,13 @@ public class AlphaBeta {
 			}
 		}
 		CommandHandler.getInstance().addCommand(cmd);
+
+		// if next character is npc, continue
+		gameData.doCommand(cmd);
+		CharacterData c = gameData.nextCharacter();
+		if (c.isNpc()) {
+			calculateNpcCommands(gameData, c);
+		}else
+			CommandHandler.getInstance().setCalculationDone(true);
 	}
 }
