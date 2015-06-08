@@ -15,13 +15,15 @@ public class AStar {
 	private Node map[][];
 	private ArrayList<String> positions = new ArrayList<String>();
 	private Node goal;
-	private LinkedList<Node> openList = new LinkedList<Node>();
-	private LinkedList<Node> closedList = new LinkedList<Node>();
+	private ArrayList<Node> openList = new ArrayList<Node>();
+	private ArrayList<Node> closedList = new ArrayList<Node>();
 	private static final int WEIGHT = 1000;
 
 	private static AStar aStar;
 
 	private AStar(Set<String> obstacles, int mapX, int mapY) {
+		// Set all the blocks'nodes that are either occupied or obstacles to
+		// null
 		this.map = new Node[mapX][mapY];
 		this.initMap = new Node[mapX][mapY];
 
@@ -49,7 +51,21 @@ public class AStar {
 		return aStar;
 	}
 
+	/**
+	 * Get the shortest path from a character to a destination
+	 * 
+	 * @param c
+	 *            the character to move
+	 * @param goalX
+	 *            x coordinate of destination
+	 * @param goalY
+	 *            y coordinate of destination
+	 * @return an array of String representing the path to the destination. Each
+	 *         String as the following format : "x_value:y_value"
+	 */
 	public String[] pathfinder(Character c, int goalX, int goalY) {
+		openList = new ArrayList<Node>();
+		closedList = new ArrayList<Node>();
 		positions = WindowGame.getInstance().getAllPositions();
 		goal = new Node(goalX, goalY);
 		int gMax = c.getStats().getMovementPoints() * WEIGHT;
@@ -59,12 +75,13 @@ public class AStar {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = initMap[i][j];
 				if (initMap[i][j] != null)
-					// Making new references to nodes
+					// Create copies of nodes
 					initMap[i][j] = new Node(i, j);
 			}
 		}
 		for (String s : positions) {
 			String[] tokens = s.split(":");
+			// Set nodes corresponding to characters locations to null
 			map[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])] = null;
 		}
 		map[c.getX()][c.getY()] = new Node(c.getX(), c.getY());
@@ -72,6 +89,7 @@ public class AStar {
 
 		boolean done = false;
 
+		// AStar algorithm
 		while (!done && !openList.isEmpty()) {
 			Node currentNode = getLowestFInOpen();
 			currentNode.setG(g(currentNode));
@@ -84,20 +102,22 @@ public class AStar {
 				// Different objects than in the Node matrices
 				ArrayList<Node> adjacentNodes = getAdjacentNodes(currentNode);
 				for (Node e : adjacentNodes) {
-					int ind = openList.indexOf(e);
-					int g = g(e);
-					if (g <= gMax) {
-						if (ind != -1) {// if it's in openList
-							Node tmp = openList.get(ind);
-							if (g < tmp.getG()) {
-								tmp.setParent(e.getParent());
-								tmp.setG(g);
+					if (!closedList.contains(e)) {
+						int ind = openList.indexOf(e);
+						int g = g(e);
+						if (g <= gMax) {
+							if (ind != -1) {// if it's in openList
+								Node tmp = openList.get(ind);
+								if (g < tmp.getG()) {
+									tmp.setParent(e.getParent());
+									tmp.setG(g);
+								}
+							} else {
+								int x = e.getX(), y = e.getY();
+								map[x][y].setG(g);
+								map[x][y].setParent(e.getParent());
+								openList.add(map[x][y]);
 							}
-						} else {
-							int x = e.getX(), y = e.getY();
-							map[x][y].setG(g);
-							map[x][y].setParent(e.getParent());
-							openList.add(map[x][y]);
 						}
 					}
 				}
@@ -106,6 +126,8 @@ public class AStar {
 		}
 
 		if (done) {
+			// If the goal is reached construct the path using the nodes'
+			// parents
 			LinkedList<Node> nodePath = new LinkedList<Node>();
 			while (goal != null) {
 				nodePath.add(goal);
@@ -121,20 +143,140 @@ public class AStar {
 		return path;
 	}
 
-	public LinkedList<int[]> getReachableNodes(Character c) {
-		LinkedList<int[]> list = new LinkedList<int[]>();
-		positions = WindowGame.getInstance().getAllPositions();
+	/**
+	 * Get all reachable nodes, restraining results to a vague destination
+	 * 
+	 * @param gameData
+	 *            the state of the game
+	 * @param c
+	 *            the current character
+	 * @param destX
+	 *            x coordinate of destination
+	 * @param destY
+	 *            y coordinate of destination
+	 * @return a list of all reachable coordinates
+	 */
+	public ArrayList<int[]> getReachableNodes(WindowGameData gameData,
+			CharacterData c, int destX, int destY) {
+		openList = new ArrayList<Node>();
+		closedList = new ArrayList<Node>();
+		goal = null;
+		ArrayList<int[]> list = new ArrayList<int[]>();
+		positions = gameData.getAllPositions();
+		int gMax = c.getStats().getMovementPoints() * WEIGHT;
+
+		int distX = Math.abs(destX - c.getX());
+		int distY = Math.abs(destY - c.getY());
+		int dist = (int) Math.sqrt(distX * distX + distY * distY) * WEIGHT;
+
+		// If the destination is too far, reduce the number of blocks
+		int xMax = (dist > gMax) ? distX : distX + 1;
+		int yMax = (dist > gMax) ? distY : distY + 1;
+
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[i].length; j++) {
+				map[i][j] = initMap[i][j];
+				if (initMap[i][j] != null)
+					// Create copies of nodes
+					initMap[i][j] = new Node(i, j);
+			}
+		}
+
+		// For each character set the corresponding node to null
+		for (String s : positions) {
+			String[] tokens = s.split(":");
+			map[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])] = null;
+		}
+		map[c.getX()][c.getY()] = new Node(c.getX(), c.getY());
+		// Reset the current character's node so that the algorithm can work
+		openList.add(map[c.getX()][c.getY()]);
+
+		while (!openList.isEmpty()) {
+			Node currentNode = getLowestFInOpen();
+			currentNode.setG(g(currentNode));
+			closedList.add(currentNode);
+			openList.remove(currentNode);
+
+			// Different objects than in the Node matrix
+			ArrayList<Node> adjacentNodes = getAdjacentNodes(currentNode);
+			for (Node e : adjacentNodes) {
+				int ind = openList.indexOf(e);
+				int g = g(e);
+				if (g <= gMax) {
+					if (closedList.contains(e)) {
+						Node tmp = closedList.get(closedList.indexOf(e));
+						if (g < tmp.getG()) {
+							int x = e.getX(), y = e.getY();
+							map[x][y].setG(g);
+							map[x][y].setParent(e.getParent());
+							openList.add(map[x][y]);
+							closedList.remove(e);
+						}
+					} else if (ind != -1) {// if it's in openList
+						Node tmp = openList.get(ind);
+						if (g < tmp.getG()) {
+							tmp.setParent(e.getParent());
+							tmp.setG(g);
+						}
+					} else {
+						int x = e.getX(), y = e.getY();
+						if (Math.abs(x - destX) <= xMax
+								&& Math.abs(y - destY) <= yMax) {
+							// Restraining condition, the nodes must be
+							// reachable and inside a rectangle delimited by the
+							// character and the destination
+							map[x][y].setG(g);
+							map[x][y].setParent(e.getParent());
+							openList.add(map[x][y]);
+						}
+					}
+				}
+			}
+
+		}
+
+		//Remove the initial position
+		Node n = new Node(c.getX(), c.getY());
+		closedList.remove(n);
+		for (Node e : closedList) {
+			int[] tab = new int[2];
+			tab[0] = e.getX();
+			tab[1] = e.getY();
+			list.add(tab);
+		}
+
+		return list;
+	}
+
+	/**
+	 * Get all reachable nodes of a character
+	 * 
+	 * @param gameData
+	 *            the state of the game
+	 * @param c
+	 *            the current character
+	 * @return a list of all reachable coordinates
+	 */
+	public ArrayList<int[]> getReachableNodes(WindowGameData gameData,
+			CharacterData c) {
+		openList = new ArrayList<Node>();
+		closedList = new ArrayList<Node>();
+		goal=null;
+		ArrayList<int[]> list = new ArrayList<int[]>();
+		positions = gameData.getAllPositions();
 		int gMax = c.getStats().getMovementPoints() * WEIGHT;
 
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = initMap[i][j];
 				if (initMap[i][j] != null)
+					// Create copies of nodes
 					initMap[i][j] = new Node(i, j);
 			}
 		}
 		for (String s : positions) {
 			String[] tokens = s.split(":");
+			// Set nodes corresponding to characters locations to null
 			map[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])] = null;
 		}
 		map[c.getX()][c.getY()] = new Node(c.getX(), c.getY());
@@ -152,7 +294,16 @@ public class AStar {
 				int ind = openList.indexOf(e);
 				int g = g(e);
 				if (g <= gMax) {
-					if (ind != -1) {// if it's in openList
+					if (closedList.contains(e)) {
+						Node tmp = closedList.get(closedList.indexOf(e));
+						if (g < tmp.getG()) {
+							int x = e.getX(), y = e.getY();
+							map[x][y].setG(g);
+							map[x][y].setParent(e.getParent());
+							openList.add(map[x][y]);
+							closedList.remove(e);
+						}
+					} else if (ind != -1) {// if it's in openList
 						Node tmp = openList.get(ind);
 						if (g < tmp.getG()) {
 							tmp.setParent(e.getParent());
@@ -169,6 +320,9 @@ public class AStar {
 
 		}
 
+		//Remove the initial position
+		Node n = new Node(c.getX(), c.getY());
+		closedList.remove(n);
 		for (Node e : closedList) {
 			int[] tab = new int[2];
 			tab[0] = e.getX();
@@ -219,6 +373,12 @@ public class AStar {
 		return 0;
 	}
 
+	/**
+	 * Get all the adjacent nodes
+	 * 
+	 * @param current
+	 * @return a list of all adjacent nodes
+	 */
 	private ArrayList<Node> getAdjacentNodes(Node current) {
 		ArrayList<Node> list = new ArrayList<Node>();
 		int x = current.getX();
@@ -229,8 +389,8 @@ public class AStar {
 				if (i >= 0 && i < map.length)
 					if (j >= 0 && j < map[i].length)
 						if (map[i][j] != null && (i != x || j != y))
-							if (!closedList.contains(map[i][j]))
-								list.add(new Node(map[i][j], current));
+							// if (!closedList.contains(map[i][j]))
+							list.add(new Node(map[i][j], current));
 			}
 		}
 		return list;

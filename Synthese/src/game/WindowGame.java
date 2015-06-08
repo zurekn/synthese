@@ -17,7 +17,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import ai.AIHandler;
-import ai.AIListener;
+import ai.CommandHandler;
+import ai.CommandListener;
 import ai.ActionEvent;
 import ai.WindowGameData;
 import data.*;
@@ -36,7 +37,7 @@ public class WindowGame extends BasicGame {
 
 	private APIX apix;
 	private Thread thread;
-	private AIHandler ai;
+	private CommandHandler commands;
 	private GameHandler handler;
 
 	private GameContainer container;
@@ -47,6 +48,7 @@ public class WindowGame extends BasicGame {
 	private MovementHandler movementHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
+	private Character previousCharacter = null;
 	private Character currentCharacter;
 
 	private int playerNumber;
@@ -104,7 +106,7 @@ public class WindowGame extends BasicGame {
 		Data.loadMap();
 
 		initAPIX();
-		initAIHandler();
+		initCommandHandler();
 		// Create the player list
 		initPlayers();
 
@@ -135,11 +137,18 @@ public class WindowGame extends BasicGame {
 
 		if (Data.debug) {
 			int i = 0;
-			while (it.hasNext() && i < Data.DEBUG_PLAYER) {
+			/*while (it.hasNext() && i < Data.DEBUG_PLAYER) {
 				var = (String) it.next();
 				addPlayer(var);
 				i++;
+			}*/
+			//TODO test
+			try {
+				players.add(new Player(2, 7, "P0", "mage"));
+			} catch (IllegalCaracterClassException e) {
+				e.printStackTrace();
 			}
+			
 		}
 
 	}
@@ -162,13 +171,15 @@ public class WindowGame extends BasicGame {
 		}
 	}
 
-	public void initAIHandler() {
-		ai = AIHandler.getInstance();
-		ai.addAIListener(new AIListener() {
+	public void initCommandHandler() {
+		commands = CommandHandler.getInstance();
+		commands.addCommandListener(new CommandListener() {
+
 
 			public void newAction(ActionEvent e) {
-				System.out.println("Nouvelle action recup de AIHandler  : " + e.toString());
-
+				System.out
+						.println("Nouvelle action recup de CommandHandler  : "
+								+ e.toString());
 				try {
 					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
@@ -177,7 +188,7 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		});
-		// ai.begin();
+		commands.begin();
 	}
 
 	public void initAPIX() {
@@ -333,6 +344,7 @@ public class WindowGame extends BasicGame {
 		turnTimer = Data.TURN_MAX_TIME;
 		turn = (turn + 1) % playerNumber;
 
+		previousCharacter = currentCharacter;
 		// Switch the turn
 		// Set the new character turn
 		if (turn < players.size()) {
@@ -346,9 +358,11 @@ public class WindowGame extends BasicGame {
 			// players, mobs, currentCharacter, turn));
 
 		}
+		
 
 		// set to false the previous character turn
-		if (turn == 0) {
+		previousCharacter.setMyTurn(false);
+		/*if (turn == 0) {
 			mobs.get(mobs.size() - 1).setMyTurn(false);
 		} else {
 			if (turn <= players.size()) {
@@ -356,10 +370,13 @@ public class WindowGame extends BasicGame {
 			} else {
 				mobs.get(turn - players.size() - 1).setMyTurn(false);
 			}
-		}
+		}*/
 
-		// launch the new action loader
-		ai.loadAction(currentCharacter, players, mobs, turn);
+		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
+			// launch the new action loader only if it's there's no npc before it (reduce calculation in AIHandler)
+			// TODO
+			commands.startCommandsCalculation(currentCharacter, players, mobs,
+					turn);
 
 		// print the current turn in the console
 		if (Data.debug) {
@@ -400,7 +417,8 @@ public class WindowGame extends BasicGame {
 			e.setX(Data.RELATIVE_X_POS + currentCharacter.getX() * Data.BLOCK_SIZE_X);
 			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
-			int r = getFirstCharacterRange(getCharacterePositionOnLine(currentCharacter.getX(), currentCharacter.getY(), e.getDirection()), e);
+			int r = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(),
+							currentCharacter.getY(), e.getDirection()), e);
 			r = r > e.getRange() ? e.getRange() : r;
 			e.setRange(r);
 			events.add(e);
@@ -417,7 +435,8 @@ public class WindowGame extends BasicGame {
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
-					throw new IllegalActionException("Wrong number of arguments in action string");
+					throw new IllegalActionException(
+							"Wrong number of arguments in action string");
 				/*
 				 * String id = tokens[0];
 				 * 
@@ -426,6 +445,7 @@ public class WindowGame extends BasicGame {
 				 */
 
 				String position = tokens[1] + ":" + tokens[2];
+				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				switchTurn();
 
@@ -473,27 +493,34 @@ public class WindowGame extends BasicGame {
 	@Override
 	public void keyReleased(int key, char c) {
 		if (Data.debug) {
-			System.out.println("WindowGame, keyReleased : " + key + ", char : " + c);
-			try {
-				if (Input.KEY_LEFT == key)
-					decodeAction("m:" + (currentCharacter.getX() - 1) + ":" + currentCharacter.getY());
-				if (Input.KEY_RIGHT == key)
-					decodeAction("m:" + (currentCharacter.getX() + 1) + ":" + currentCharacter.getY());
-				if (Input.KEY_UP == key)
-					decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() - 1));
-				if (Input.KEY_DOWN == key)
-					decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
-				if (Input.KEY_NUMPAD8 == key)
-					decodeAction("s2:" + Data.NORTH);
-				if (Input.KEY_NUMPAD6 == key)
-					decodeAction("s2:" + Data.EAST);
-				if (Input.KEY_NUMPAD2 == key)
-					decodeAction("s2:" + Data.SOUTH);
-				if (Input.KEY_NUMPAD4 == key)
-					decodeAction("s2:" + Data.WEST);
-			} catch (IllegalActionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!currentCharacter.isNpc()) {
+				System.out.println("WindowGame, keyReleased : " + key
+						+ ", char : " + c);
+				try {
+					if (Input.KEY_LEFT == key)
+						decodeAction("m:" + (currentCharacter.getX() - 1) + ":"
+								+ currentCharacter.getY());
+					if (Input.KEY_RIGHT == key)
+						decodeAction("m:" + (currentCharacter.getX() + 1) + ":"
+								+ currentCharacter.getY());
+					if (Input.KEY_UP == key)
+						decodeAction("m:" + currentCharacter.getX() + ":"
+								+ (currentCharacter.getY() - 1));
+					if (Input.KEY_DOWN == key)
+						decodeAction("m:" + currentCharacter.getX() + ":"
+								+ (currentCharacter.getY() + 1));
+					if (Input.KEY_NUMPAD8 == key)
+						decodeAction("s2:" + Data.NORTH);
+					if (Input.KEY_NUMPAD6 == key)
+						decodeAction("s2:" + Data.EAST);
+					if (Input.KEY_NUMPAD2 == key)
+						decodeAction("s2:" + Data.SOUTH);
+					if (Input.KEY_NUMPAD4 == key)
+						decodeAction("s2:" + Data.WEST);
+				} catch (IllegalActionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		if (Input.KEY_ESCAPE == key) {
@@ -556,6 +583,14 @@ public class WindowGame extends BasicGame {
 		return list;
 	}
 
+	public ArrayList<Mob> getMobs() {
+		return mobs;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
 	/**
 	 * Get all character on a line line = Horizontal or Vertical
 	 * 
@@ -564,7 +599,8 @@ public class WindowGame extends BasicGame {
 	 * @param direction
 	 * @return ArrayList<Character>
 	 */
-	private ArrayList<Character> getCharacterePositionOnLine(int x, int y, int direction) {
+	private ArrayList<Character> getCharacterPositionOnLine(int x, int y,
+			int direction) {
 
 		ArrayList<Character> c = new ArrayList<Character>();
 

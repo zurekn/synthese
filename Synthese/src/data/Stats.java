@@ -13,6 +13,7 @@ public class Stats {
 	private int magicResist = 1;
 	private int eyeSight;
 	private String characterClass = "";
+	private float lifePercentage = 1.f;
 
 	public Stats(int life, int mana) {
 		super();
@@ -80,6 +81,7 @@ public class Stats {
 		this.life = life;
 		if (this.life > this.maxLife)
 			this.life = maxLife;
+		this.lifePercentage = this.life / this.maxLife ;
 	}
 
 	public int getArmor() {
@@ -92,6 +94,10 @@ public class Stats {
 
 	public void setMaxLife(int maxLife) {
 		this.maxLife = maxLife;
+	}
+
+	public float getLifePercentage() {
+		return lifePercentage;
 	}
 
 	public int getMaxMana() {
@@ -156,6 +162,12 @@ public class Stats {
 		this.eyeSight = eyeSight;
 	}
 
+	public Stats clone(){
+		Stats s = new Stats(life,armor,mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight, characterClass);
+		s.setLife(life);
+		return s;
+	}
+	
 	@Override
 	public String toString() {
 		return "Stats [life=" + life + ", armor=" + armor + ", mana=" + mana

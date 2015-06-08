@@ -17,8 +17,10 @@ import game.WindowGame;
  *
  */
 public class AIHandler extends Handler {
-
 	private static AIHandler aiHandler;
+	private boolean start = false;
+	private WindowGameData gameData = null;
+	private Character character = null;
 
 	private AIHandler() {
 		super();
@@ -39,59 +41,25 @@ public class AIHandler extends Handler {
 
 	public void run() {
 		System.out.println("AIHandler : DANS LE RUN");
-		this.lock();
-		PositionHandler.getInstance().begin();
-		for (int j = 0; j < 1; j++) {
+		CommandHandler commandHandler = CommandHandler.getInstance();
+		while(true){
+			commandHandler.waitLock();
 			try {
-				Thread.sleep(400);
+				Thread.sleep(200);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			unlockTemporay(1);
-
-			for (int i = 0; i < 10; i++) {
-				System.out.println("AI :" + i);
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if(start){
+				AlphaBeta.getInstance().calculateNpcCommands(gameData, character);
+				start=false;
 			}
-
 		}
 	}
-
-	/**
-	 * 
-	 * @return the action for the current player turn
-	 */
-	public String getAction() {
-
-		return "";
-	}
-
-	private final EventListenerList listeners = new EventListenerList();
-
-	public void addAIListener(AIListener listener) {
-		listeners.add(AIListener.class, listener);
-	}
-
-	public void removeAIListener(AIListener listener) {
-		listeners.remove(AIListener.class, listener);
-	}
-
-	public AIListener[] getAIListener() {
-		return listeners.getListeners(AIListener.class);
-	}
-
-	protected void newAction(String id, String data) {
-		ActionEvent event = null;
-		for (AIListener listener : getAIListener()) {
-			if (event == null)
-				event = new ActionEvent(id, data);
-			listener.newAction(event);
-		}
+	
+	public void startCommandsCalculation(WindowGameData gameData, Character c){
+		this.gameData = gameData;
+		this.character = c;
+		start = true;		
 	}
 
 	/*public static String[] getMobsMovements(WindowGameData data) {
@@ -106,15 +74,4 @@ public class AIHandler extends Handler {
 
 		return null;
 	}*/
-
-	public void loadAction(Character currentCharacter, ArrayList<Player> players, ArrayList<Mob> mobs, int turn) {
-		// TODO mettre en place le systeme de recolte d'action et les faire dans
-		// l'ordre
-		Character c = WindowGame.getInstance().getMobById("m1");
-		AlphaBeta.getInstance().getNpcCommand(new WindowGameData(players, mobs, turn), c);
-
-		// FOR DEBUG !!
-		newAction(currentCharacter.getId(), "m:10:10");
-
-	}
 }
