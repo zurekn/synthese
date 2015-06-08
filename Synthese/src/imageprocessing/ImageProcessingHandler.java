@@ -26,7 +26,7 @@ public class ImageProcessingHandler extends Handler {
 	private ImageProcessingHandler(Webcam webcam) {
 		super();
 		this.webcam = webcam;
-		seuil = 30;
+		seuil = 50;
 	}
 
 	/**

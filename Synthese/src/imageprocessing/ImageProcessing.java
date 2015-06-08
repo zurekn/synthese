@@ -18,7 +18,7 @@ public class ImageProcessing {
 	int imgWidth;
 	public static final int MIN_SEUIL_FORM = 50;
 	public static final int MAX_SEUIL_FORM = 5000;
-	public static final int NIV_OUVERTURE = 10;
+	public static final int NIV_OUVERTURE = 5;
 
 	public ImageProcessing() 
 	{
@@ -266,7 +266,7 @@ public class ImageProcessing {
 		if(APIX.isInit)
 		{	
 			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+10);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+1);
 		}
 		
 		if(Data.tiDebug)
@@ -308,23 +308,39 @@ public class ImageProcessing {
 						{	
 			 				etiquettes[i][j] = etiquettes[i-1][j]; 
 			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+			 				// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+			 				if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 			 				temp++;
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
 						{
 							etiquettes[i][j] = etiquettes[i][j-1];
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
 						{
 							etiquettes[i][j] = etiquettes[i][j-1];
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+	 							return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
 						{
 							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 							Num.get(etiquettes[i-1][j]).clear();
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
@@ -696,6 +712,7 @@ public class ImageProcessing {
                 
                 //imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
             }
+        System.out.println("Les images sont identiques : début binarisation");
 		for(int i = 1; i < elementsRes.length; i++)
 		{
 			for(int j = 1; j < elementsRes[i].length; j++)
@@ -829,7 +846,7 @@ public class ImageProcessing {
 			        
    
 			    }
-		      System.out.println("Les images sont identiques : début binarisation");
+		      System.out.println("Les images ne sont pas identiques : début binarisation");
 		    for(int i = 1; i < elementsRes.length; i++)
 			{
 				for(int j = 1; j < elementsRes[i].length; j++)

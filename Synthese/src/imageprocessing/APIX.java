@@ -235,7 +235,7 @@ public class APIX extends Handler {
 	}
 
 	protected void addMovementEvent(MovementEvent e) {
-		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY);
+		MovementEvent event = new MovementEvent(e.getX() - relativeX, (e.getY() - relativeY));
 		for (APIXListener listener : getAPIXListener())
 			listener.newMouvement(event);
 	}

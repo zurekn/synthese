@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -44,6 +46,7 @@ public class Player extends Character {
 		this.setId(id);
 		this.setAiType("hero");
 		this.setTrueID(id);
+		this.setNpc(false);
 		Hero h = HeroData.getHeroByClass(caracterClass);
 		if(h == null){
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
@@ -73,6 +76,4 @@ public class Player extends Character {
 			g.drawOval(posX, posY, sizeX, sizeY);
 		}
 	}
-
-
 }
