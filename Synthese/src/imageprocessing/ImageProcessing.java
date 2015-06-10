@@ -239,6 +239,9 @@ public class ImageProcessing {
 	 */
 	public List<FormObject> etiquetageIntuitifImageGiveList2(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil)
 	{	
+		// Ajout d'une vérification : si les images ne sont pas de la même taille, il ne peut y avoir de traitement !!!!!
+		if (imgCompare.getWidth() != imgSrcRef.getWidth() || imgCompare.getHeight() != imgSrcRef.getHeight()) 
+			return null;
 		int[][] subImgElements  = getGraySubstractAndBinaryImage(imgCompare, imgSrcRef, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
 		int [][] etiquettes = new int[imgWidth][imgHeight];
 		
