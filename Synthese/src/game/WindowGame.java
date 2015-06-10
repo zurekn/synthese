@@ -99,6 +99,7 @@ public class WindowGame extends BasicGame {
 		handler = new GameHandler(thread);
 
 		Data.loadGame();
+		Data.loadMap();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
@@ -144,7 +145,7 @@ public class WindowGame extends BasicGame {
 			}*/
 			//TODO test
 			try {
-				players.add(new Player(2, 7, "P0", "mage"));
+				players.add(new Player(10, 12, "P0", "mage"));
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
