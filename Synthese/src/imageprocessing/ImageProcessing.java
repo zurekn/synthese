@@ -16,6 +16,10 @@ public class ImageProcessing {
 	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
 	int imgHeight;
 	int imgWidth;
+	int minX; 
+	int maxX; 
+	int minY; 
+	int maxY;
 	public static final int MIN_SEUIL_FORM = 50;
 	public static final int MAX_SEUIL_FORM = 5000;
 	public static final int NIV_OUVERTURE = 5;
@@ -23,6 +27,10 @@ public class ImageProcessing {
 	public ImageProcessing() 
 	{
 		super();
+		minX = 0; 
+		maxX = 0; 
+		minY = 0; 
+		maxY = 0;
 	}
 	
 	/*
@@ -398,6 +406,182 @@ public class ImageProcessing {
 		}
 	}
 	
+	public List<FormObject> etiquetageIntuitifImageGiveListOpti(BufferedImage imgCompare, BufferedImage imgSrcRef, int seuil, int min_X, int max_X, int min_Y, int max_Y)	
+	{
+		minX = min_X;
+		maxX = max_X;
+		minY = min_Y;
+		maxY = max_Y;
+		imgHeight = imgCompare.getHeight();
+		imgWidth = imgCompare.getWidth();
+		if(maxX <= 0 || maxX > imgWidth)
+			maxX = imgWidth;
+		if (maxY <= 0 || maxY > imgHeight)
+			maxY = imgHeight;
+		if(minX < 0)
+			minX = 0;
+		if(minY < 0)
+			minY = 0;
+		if (imgCompare.getWidth() != imgSrcRef.getWidth() || imgCompare.getHeight() != imgSrcRef.getHeight()) 
+			return null;
+		
+		int[][] subImgElements  = getGraySubstractAndBinaryImageOpti(imgCompare, imgSrcRef, seuil);//getSubstractImg(imgCompare, imgSrcRef, seuil);
+		int [][] etiquettes = new int[maxX][maxY];
+		
+		//#debug
+		if(countPixelsNotNull(subImgElements) == 0)
+		{	
+			System.out.println("pixels number : " + countPixelsNotNull(subImgElements));
+			if(!APIX.isInit)
+				return null;
+			subImgElements = getOneGrayAndBinaryImageOpti(imgCompare, seuil);
+			
+		}
+		
+		if(Data.tiDebug)
+		{
+		    try
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction"
+		    		+".jpg"));}
+		    catch (IOException e) 
+			{	e.printStackTrace();}   
+		}
+		//#debug
+		if(Data.tiDebug)
+			System.out.println("Ouverture sur image : subImgElements");
+		
+		if(APIX.isInit)
+		{	
+			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+1);
+		}
+		
+		if(Data.tiDebug)
+		{
+			try
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageApresFermeture&Ouverture"
+		    		+".jpg"));}
+		    catch (IOException e) 
+			{	e.printStackTrace();} 
+		}
+		if(Data.tiDebug)
+			System.out.println("début étiquettage sur image : subImgElements");
+		
+		int attA, attB,attC, temp = 1, numEt = 1;
+		List<Integer> T = new ArrayList<Integer>();
+		List<ArrayList<Pixel>> Num = new ArrayList<ArrayList<Pixel>>();
+		Num.add(new ArrayList<Pixel>());//pour etiquette 0
+		if(subImgElements!=null)
+		{
+			for(int i = minX+1; i < maxX; i++)
+			{
+				for(int j = minY+1; j < maxY; j++)
+				{
+					if(subImgElements[i][j]== 255)
+					{
+						attA = subImgElements[i-1][j];
+						attB = subImgElements[i][j-1];
+						attC = subImgElements[i][j];
+	
+						if((attC!=attA) && (attC!=attB))//si att(c) != att(a) et att(c) != att(b) => E(c) = nouvelle étiquette
+						{
+							etiquettes[i][j] = numEt;
+							Num.add(new ArrayList<Pixel>());
+							Num.get(numEt).add(new Pixel(i, j));
+							T.add(temp);
+							numEt++;
+						}
+			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
+						{	
+			 				etiquettes[i][j] = etiquettes[i-1][j]; 
+			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+			 				// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+			 				//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
+			 				temp++;
+						}
+						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
+						{
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+	 						//	return null;
+							temp++;
+						}
+						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
+						{
+							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
+							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
+			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
+							Num.get(etiquettes[i-1][j]).clear();
+							
+							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
+							temp++;
+				
+							for(int x=0;x<=i;x++)
+							{
+								for(int y=0;y<=j;y++)
+								{
+									if(etiquettes[x][y]==etiquettes[i-1][j])
+									{	
+										etiquettes[x][y]=etiquettes[i][j-1];
+										temp++;
+									}
+								}					
+							}
+						}
+						else {
+							if(Data.tiDebug)
+								System.out.println("pas passé");
+						}
+					}
+				}
+			}
+			List<FormObject> formList = new ArrayList<FormObject>();
+			if(Data.tiDebug)
+				System.out.println("Nombre Etiquettes = " +Num.size());
+			for (ArrayList<Pixel> OneArray : Num) {
+				System.out.println("OneArray size = "+OneArray.size());
+				if(OneArray.size() > MIN_SEUIL_FORM && OneArray.size() < MAX_SEUIL_FORM)
+				{
+//					System.out.println("gagné !!");
+
+					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
+//					display(myForm.getMatrix());
+					formList.add(myForm);
+					filtreSobel(myForm); //permet d'avoir le périmètre de l'objet
+					myForm.findObjectType();
+				}
+			}
+			if(Data.tiDebug)
+				displayListForm(formList);
+			return formList;
+		}
+		else
+		{
+			if(Data.tiDebug)
+				System.out.println("fail");
+			return null;
+		}
+	}
+	
 	/*
 	 * fonction permettant de faire une érosion sur une forme (forme noir sur fond blanc)
 	 */
@@ -743,6 +927,62 @@ public class ImageProcessing {
         return elementsRes;
     }
     
+	public int[][] getOneGrayAndBinaryImageOpti(BufferedImage image, int seuil) 
+    {
+        //int[][] elementsImg = null;
+        int[][] elementsRes = null;
+        BufferedImage imgRes = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+        BufferedImage imgRes_Bin = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+        //imgHeight = image.getHeight();
+        //imgWidth = image.getWidth();
+       // elementsImg = new int[image.getWidth()][image.getHeight()];
+        elementsRes = new int[maxX][maxY];
+        
+        for (int x = minX; x < maxX; ++x)
+		    for (int y = minY; y < maxY; ++y)
+		    {                
+                int rgb = image.getRGB(x, y);
+                int r = (rgb >> 16) & 0xFF;
+                int g = (rgb >> 8) & 0xFF;
+                int b = (rgb & 0xFF);
+
+                int grayLevel = (r + g + b) / 3;
+                elementsRes[x][y] = grayLevel ;
+                imgRes.setRGB(x, y, (grayLevel << 16) + (grayLevel << 8) + grayLevel);
+
+                /*       Affect Binary value to a pixel [x][y]        */
+                elementsRes[x][y] = elementsRes[x][y] < (seuil) ? 255 : 0;
+                
+                //imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
+            }
+        System.out.println("Les images sont identiques : début binarisation");
+		for(int i = 1; i < elementsRes.length; i++)
+		{
+			for(int j = 1; j < elementsRes[i].length; j++)
+			{
+				//Color pixelColor= new Color(0);
+				if (elementsRes[i][j] == 0)
+					imgRes_Bin.setRGB(i, j, ((255 << 16) + (255 << 8) + 255));//pixelColor = Color.WHITE;
+				else
+					imgRes_Bin.setRGB(i, j, ((0 << 16) + (0 << 8) + 0));//pixelColor = Color.BLACK;
+				//imgRes_Bin.setRGB(i, j, pixelColor.getRGB());
+			}
+		}
+		
+        /*	fin ajout */
+        try 
+        {
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG.jpg"));
+			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin.jpg"));
+			//ImageIO.write(imgRes_Bin_ouverture, "jpg", new File(urlImage + "test_getOneGrayImage_Bin_ouverture"+Data.getDate()+".jpg"));
+		} 
+        catch (IOException e) 
+        {
+			e.printStackTrace();
+		}
+        return elementsRes;
+    }
+	
     /*
      * Transform one RGB image in Gray image,
      * Binary each pixels from image.
@@ -878,6 +1118,94 @@ public class ImageProcessing {
 		return elementsRes;
 	}
 		
+    public int[][] getGraySubstractAndBinaryImageOpti(BufferedImage img1, BufferedImage img2, int seuil) 
+	{
+    	if(Data.tiDebug)
+    		System.out.println("mise en NG, soustraction et binarisation de la soustraction, de deux images");
+		//int[][] elements1 = null;
+		//int[][] elements2 = null;
+		int[][] elementsRes = null;
+
+		//BufferedImage imgRes_1 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		//BufferedImage imgRes_2 = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Sub= new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+		BufferedImage imgRes_Bin= new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_RGB);
+		//elements1 = new int[img1.getWidth()][img1.getHeight()];
+		//elements2 = new int[img1.getWidth()][img1.getHeight()];
+		elementsRes = new int[maxX][maxY];
+		
+		if (img1.getWidth() == img2.getWidth() && img1.getHeight() == img2.getHeight()) 
+		{
+		    for (int x = minX; x < maxX; ++x)
+			    for (int y = minY; y < maxY; ++y)
+			    {
+			    	int rgb = img1.getRGB(x, y);
+	                int r = (rgb >> 16) & 0xFF;
+	                int g = (rgb >> 8) & 0xFF;
+	                int b = (rgb & 0xFF);
+
+	                /* Mise en nuance de gris des images
+	                int grayLevel = (r + g + b) / 3;
+	                elements1[x][y] = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+	                imgRes_1.setRGB(x, y, elements1[x][y]);
+	               */
+	                
+	                int rgb2 = img2.getRGB(x, y);
+	                int r2 = (rgb2 >> 16) & 0xFF;
+	                int g2 = (rgb2 >> 8) & 0xFF;
+	                int b2 = (rgb2 & 0xFF);
+
+	                /* Mise en nuance de gris des images
+	                int grayLevel2 = (r2 + g2 + b2) / 3;
+	                elements2[x][y] = (grayLevel2 << 16) + (grayLevel2 << 8) + grayLevel2;
+	                imgRes_2.setRGB(x, y, elements2[x][y]);
+	                */
+			        
+	                /*		Substract images		*/               
+	                elementsRes[x][y] = ((r-r2 < 0 ? r2-r : r-r2)  +
+	                					(g-g2<0?g2-g:g-g2) + 
+	                					(b-b2<0?b2-b:b-b2))/3;
+	                /*					
+	                int graylevel1 = (r + g + b) / 3;
+	                int graylevel2 = (r2 + g2 + b2) / 3;
+	                elementsRes[x][y] = (graylevel1 - graylevel2) < 0 ? (graylevel2 - graylevel1) : (graylevel1 - graylevel2);
+	                */
+	                imgRes_Sub.setRGB(x, y, (elementsRes[x][y]));//<<16+elementsRes[x][y]<<8+elementsRes[x][y]));
+	        
+			        /*		Binary pixel [x][y]		*/
+			        elementsRes[x][y] = elementsRes[x][y] > (seuil) ? 255 : 0;
+			        
+   
+			    }
+		      System.out.println("Les images ne sont pas identiques : début binarisation");
+		    for(int i = 1; i < elementsRes.length; i++)
+			{
+				for(int j = 1; j < elementsRes[i].length; j++)
+				{
+					
+					//Color pixelColor= new Color(0);
+					if (elementsRes[i][j] == 0)
+						imgRes_Bin.setRGB(i, j, ((255 << 16) + (255 << 8) + 255));//pixelColor = Color.WHITE;
+					else
+						imgRes_Bin.setRGB(i, j, ((0 << 16) + (0 << 8) + 0));//pixelColor = Color.BLACK;
+					//imgRes_Bin.setRGB(i, j, pixelColor.getRGB());
+				}
+			}
+			}
+			else
+				System.out.println("images non équivalentes en taille. Dommage!");
+		 try {
+				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"+Data.getDate()+""));
+				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"+Data.getDate()+""));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
+		return elementsRes;
+	}
+    
 	/*
 	 * Crée un objet de type FormObject en fonction d'une liste de pixels pour l'étiquette sélectionnée
 	 */
