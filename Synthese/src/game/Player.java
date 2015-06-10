@@ -66,11 +66,12 @@ public class Player extends Character {
 
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.black);
-		if(Data.DISPLAY_PLAYER)	g.fillRect(Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X, Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y,
+		if(Data.DISPLAY_PLAYER)
+			g.fillRect(Data.MAP_X + getX() * Data.BLOCK_SIZE_X, Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (isMyTurn()) {
-			int posX = Data.DECK_AREA_SIZE_Y + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
-			int posY = Data.DECK_AREA_SIZE_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
+			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
+			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
 			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 			g.drawOval(posX, posY, sizeX, sizeY);
