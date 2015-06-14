@@ -99,6 +99,7 @@ public class WindowGame extends BasicGame {
 		handler = new GameHandler(thread);
 
 		Data.loadGame();
+		Data.loadMap();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
@@ -144,7 +145,7 @@ public class WindowGame extends BasicGame {
 			}*/
 			//TODO test
 			try {
-				players.add(new Player(2, 7, "P0", "mage"));
+				players.add(new Player(10, 12, "P0", "mage"));
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
@@ -304,10 +305,10 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
-		xMin = Data.RELATIVE_X_POS;
-		xMax = Data.RELATIVE_X_POS + Data.MAP_WIDTH;
-		yMin = Data.RELATIVE_Y_POS;
-		yMax = Data.RELATIVE_Y_POS + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
+		xMin = Data.MAP_X;
+		xMax = Data.MAP_X + Data.MAP_WIDTH;
+		yMin = Data.MAP_Y;
+		yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		for (int i = 0; i < events.size(); i++) {
 			Event e = events.get(i);
 			e.render(container, g);
@@ -414,8 +415,8 @@ public class WindowGame extends BasicGame {
 			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
 
 			e.setDirection(direction);
-			e.setX(Data.RELATIVE_X_POS + currentCharacter.getX() * Data.BLOCK_SIZE_X);
-			e.setY(Data.RELATIVE_Y_POS + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
+			e.setX(Data.MAP_X + currentCharacter.getX() * Data.BLOCK_SIZE_X);
+			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
 			int r = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(),
 							currentCharacter.getY(), e.getDirection()), e);

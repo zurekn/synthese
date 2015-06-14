@@ -12,9 +12,10 @@ public class WindowGameData {
 
 	public WindowGameData(ArrayList<Player> players, ArrayList<Mob> mobs,
 			int turn) {
-		index = turn;
-		int initTurn = turn;
 		int n = players.size() + mobs.size();
+		index = (turn - players.size() + 1)%n;
+		int initTurn = turn;
+
 		do {
 			if (turn < players.size()) {
 				characters.add(new CharacterData(players.get(turn)));
@@ -105,9 +106,12 @@ public class WindowGameData {
 	}
 
 	public void doCommand(String cmd) {
+		//index value is on next character
+		int i = (index-1)%characters.size();
+		
 		if (cmd.startsWith("m")) {// Movement action
 			String[] tokens = cmd.split(":");
-			characters.get(index).moveAiTo(Integer.parseInt(tokens[1]),
+			characters.get(i).moveAiTo(Integer.parseInt(tokens[1]),
 					Integer.parseInt(tokens[2]));
 			//nextCharacter();
 		}else if(cmd.startsWith("s")) {

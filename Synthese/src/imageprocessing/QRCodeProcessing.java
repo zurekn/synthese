@@ -86,6 +86,7 @@ private QRCodeEvent qrCodeEvent;
 	 * @throws NotFoundException (if no QR Code was found)
 	 */
 	public void findAllQR(String srcImgName,float seuil, BufferedImage imweb) throws IOException, NotFoundException{
+		System.out.println("findAllQR--------------------------------------+++++++++++");
 		QRDatas = ""; // reset final object
 		String res="";
 		

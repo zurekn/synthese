@@ -73,13 +73,15 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		APIX apix = APIX.getInstance();
 		
 		do {
+			System.out.println("run QRCode");
 			try {
 				Thread.sleep(900);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			//Wait APIX thread
-			apix.waitLock();
+			//apix.waitLock();
+			//System.out.println("QRCode after waitlock()");
 			
 			// Those lines are for the multi QR code reader
 			QRCodeEvent testMulti = null;
@@ -97,12 +99,13 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 						// set seuil to 20 to ensure better results
 					tqr.findAllQR("",20, image);
 					testMulti = tqr.getQRCodeEvent();
+					System.out.println("After getQRCodeEvent");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotFoundException e) {
 					// fall thru, it means there is no QR code in image
-					//System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
+					System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
 				}
 			}else{
 				System.err.println("Webcam ["+webcam.getName()+"] is not open");

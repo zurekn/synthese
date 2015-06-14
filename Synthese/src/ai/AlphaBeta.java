@@ -104,9 +104,10 @@ public class AlphaBeta {
 
 						// Create node and add it to tree
 						nodeCount++;
+						// TODO retrieve direction from coordinates
+						int direction = 90;
 						TreeNode n = new TreeNode(node, spell.getId() + ":"
-								+ target.getX() + ":" + target.getY(),
-								depth + 1);
+								+ direction, depth + 1);
 						node.addSon(n);
 
 						if (depth >= depthMax) {
@@ -258,8 +259,8 @@ public class AlphaBeta {
 							value = h(data, character);
 							n.setMaxDepthReached(true);
 						} else
-							value = maxValue(data, depth, depthMax, n, alpha, beta,
-									character, true);
+							value = maxValue(data, depth, depthMax, n, alpha,
+									beta, character, true);
 
 						n.setHeuristic(value);
 						if (value > alpha) {
@@ -281,7 +282,6 @@ public class AlphaBeta {
 			if (alpha >= beta) {
 				return beta;
 			}
-
 			return alpha;
 		} else {
 			// Movement part
@@ -336,6 +336,7 @@ public class AlphaBeta {
 						.getReachableNodes(gameData, character);
 				Random rand = new Random(System.nanoTime());
 				int[] position = positions.get(rand.nextInt(positions.size()));
+
 				int x = position[0], y = position[1];
 
 				// Create node and add it to tree
@@ -348,7 +349,6 @@ public class AlphaBeta {
 
 				value = h(data, character);
 				n.setHeuristic(value);
-
 				if (value > alpha) {
 					alpha = value;
 				}
