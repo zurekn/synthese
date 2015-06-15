@@ -370,6 +370,11 @@ public class APIX extends Handler {
 		blockSizeY = BasGauche.get(0).getBaryCenter().getY() - HautGauche.get(0).getBaryCenter().getY();
 		blockSizeY = blockSizeY / Data.BLOCK_NUMBER_Y;
 		
+		if(Data.tiDebug){
+			System.out.println("Les tailles des blocks : x = "+blockSizeX+", y = "+blockSizeY);
+			System.out.println("La map : mapX = "+relativeX+", mapY = "+relativeY);
+		}
+		
 	}
 
 	public void setRelativeX(int valueX) {

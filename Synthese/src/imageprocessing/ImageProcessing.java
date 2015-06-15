@@ -14,6 +14,7 @@ import data.Data;
 
 public class ImageProcessing {
 	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
+	//String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/TraitementImages/res/init/debug/";
 	int imgHeight;
 	int imgWidth;
 	int minX; 
@@ -277,7 +278,7 @@ public class ImageProcessing {
 		if(APIX.isInit)
 		{	
 			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+1);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+5);
 		}
 		
 		if(Data.tiDebug)
@@ -321,8 +322,8 @@ public class ImageProcessing {
 			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 			 				// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-			 				if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 					return null;
+			 				//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
 			 				temp++;
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
@@ -331,8 +332,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 					return null;
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
@@ -341,8 +342,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-	 							return null;
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+	 						//	return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
@@ -350,8 +351,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 					return null;
+							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 				//	return null;
 							Num.get(etiquettes[i-1][j]).clear();
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
@@ -873,6 +874,8 @@ public class ImageProcessing {
      */
 	public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
+    	if(Data.tiDebug)
+    		System.out.println("les deux images sont identiques");
         //int[][] elementsImg = null;
         int[][] elementsRes = null;
         BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
@@ -899,7 +902,6 @@ public class ImageProcessing {
                 
                 //imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
             }
-        System.out.println("Les images sont identiques : début binarisation");
 		for(int i = 1; i < elementsRes.length; i++)
 		{
 			for(int j = 1; j < elementsRes[i].length; j++)

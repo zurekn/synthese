@@ -47,6 +47,7 @@ public class AStar {
 		if (aStar == null) {
 			aStar = new AStar(Data.untraversableBlocks.keySet(),
 					Data.BLOCK_NUMBER_X, Data.BLOCK_NUMBER_Y);
+			// aStar = new AStar(Data.untraversableBlocks.keySet(), 25, 25);
 		}
 		return aStar;
 	}
@@ -144,7 +145,8 @@ public class AStar {
 	}
 
 	/**
-	 * Get all reachable nodes, restraining results to a vague destination
+	 * Get all reachable nodes, restraining results to a vague destination or
+	 * all the reachable nodes if none are reachable towards destination
 	 * 
 	 * @param gameData
 	 *            the state of the game
@@ -158,11 +160,7 @@ public class AStar {
 	 */
 	public ArrayList<int[]> getReachableNodes(WindowGameData gameData,
 			CharacterData c, int destX, int destY) {
-		openList = new ArrayList<Node>();
-		closedList = new ArrayList<Node>();
-		goal = null;
-		ArrayList<int[]> list = new ArrayList<int[]>();
-		positions = gameData.getAllPositions();
+		ArrayList<int[]> positions = getReachableNodes(gameData, c);
 		int gMax = c.getStats().getMovementPoints() * WEIGHT;
 
 		int distX = Math.abs(destX - c.getX());
@@ -173,79 +171,23 @@ public class AStar {
 		int xMax = (dist > gMax) ? distX : distX + 1;
 		int yMax = (dist > gMax) ? distY : distY + 1;
 
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map[i].length; j++) {
-				map[i][j] = initMap[i][j];
-				if (initMap[i][j] != null)
-					// Create copies of nodes
-					initMap[i][j] = new Node(i, j);
-			}
+		int x, y;
+		ArrayList<int[]> list = new ArrayList<int[]>();
+		for (int[] pos : positions) {
+			x = pos[0];
+			y = pos[1];
+
+			if (Math.abs(x - destX) <= xMax && Math.abs(y - destY) <= yMax)
+				// Restraining condition, the nodes must be
+				// reachable and inside a rectangle delimited by the
+				// character and the destination
+				list.add(pos);
 		}
-
-		// For each character set the corresponding node to null
-		for (String s : positions) {
-			String[] tokens = s.split(":");
-			map[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])] = null;
+		if (list.isEmpty()) {
+			return positions;
+		} else {
+			return list;
 		}
-		map[c.getX()][c.getY()] = new Node(c.getX(), c.getY());
-		// Reset the current character's node so that the algorithm can work
-		openList.add(map[c.getX()][c.getY()]);
-
-		while (!openList.isEmpty()) {
-			Node currentNode = getLowestFInOpen();
-			currentNode.setG(g(currentNode));
-			closedList.add(currentNode);
-			openList.remove(currentNode);
-
-			// Different objects than in the Node matrix
-			ArrayList<Node> adjacentNodes = getAdjacentNodes(currentNode);
-			for (Node e : adjacentNodes) {
-				int ind = openList.indexOf(e);
-				int g = g(e);
-				if (g <= gMax) {
-					if (closedList.contains(e)) {
-						Node tmp = closedList.get(closedList.indexOf(e));
-						if (g < tmp.getG()) {
-							int x = e.getX(), y = e.getY();
-							map[x][y].setG(g);
-							map[x][y].setParent(e.getParent());
-							openList.add(map[x][y]);
-							closedList.remove(e);
-						}
-					} else if (ind != -1) {// if it's in openList
-						Node tmp = openList.get(ind);
-						if (g < tmp.getG()) {
-							tmp.setParent(e.getParent());
-							tmp.setG(g);
-						}
-					} else {
-						int x = e.getX(), y = e.getY();
-						if (Math.abs(x - destX) <= xMax
-								&& Math.abs(y - destY) <= yMax) {
-							// Restraining condition, the nodes must be
-							// reachable and inside a rectangle delimited by the
-							// character and the destination
-							map[x][y].setG(g);
-							map[x][y].setParent(e.getParent());
-							openList.add(map[x][y]);
-						}
-					}
-				}
-			}
-
-		}
-
-		//Remove the initial position
-		Node n = new Node(c.getX(), c.getY());
-		closedList.remove(n);
-		for (Node e : closedList) {
-			int[] tab = new int[2];
-			tab[0] = e.getX();
-			tab[1] = e.getY();
-			list.add(tab);
-		}
-
-		return list;
 	}
 
 	/**
@@ -261,7 +203,7 @@ public class AStar {
 			CharacterData c) {
 		openList = new ArrayList<Node>();
 		closedList = new ArrayList<Node>();
-		goal=null;
+		goal = null;
 		ArrayList<int[]> list = new ArrayList<int[]>();
 		positions = gameData.getAllPositions();
 		int gMax = c.getStats().getMovementPoints() * WEIGHT;
@@ -320,7 +262,7 @@ public class AStar {
 
 		}
 
-		//Remove the initial position
+		// Remove the initial position
 		Node n = new Node(c.getX(), c.getY());
 		closedList.remove(n);
 		for (Node e : closedList) {

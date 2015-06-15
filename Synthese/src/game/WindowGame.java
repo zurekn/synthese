@@ -99,6 +99,7 @@ public class WindowGame extends BasicGame {
 		handler = new GameHandler(thread);
 
 		Data.loadGame();
+		Data.loadMap();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
@@ -144,7 +145,7 @@ public class WindowGame extends BasicGame {
 			}*/
 			//TODO test
 			try {
-				players.add(new Player(2, 7, "P0", "mage"));
+				players.add(new Player(10, 12, "P0", "mage"));
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
@@ -254,8 +255,16 @@ public class WindowGame extends BasicGame {
 				apix.initTI();
 
 		} else {
-
 			Data.map.render(Data.MAP_X, Data.MAP_Y);
+
+//			if(Data.tiDebug){
+//				g.setColor(Color.yellow);
+//				for(int i = 0; i < Data.MAP_WIDTH; i++)
+//					g.drawLine(Data.MAP_X + i * Data.BLOCK_SIZE_X, Data.MAP_Y, Data.MAP_X + i * Data.BLOCK_SIZE_X,  Data.MAP_Y + Data.MAP_HEIGHT);
+//				for(int i = 0; i < Data.MAP_HEIGHT; i++)
+//					g.drawLine(Data.MAP_X, Data.MAP_Y + i * Data.BLOCK_SIZE_Y, Data.MAP_X + Data.MAP_HEIGHT, Data.MAP_Y + i * Data.BLOCK_SIZE_Y);
+//				
+//			}
 			mobHandler.render(container, g);
 			// TODO
 			// Bug playerrender doesn't work every time

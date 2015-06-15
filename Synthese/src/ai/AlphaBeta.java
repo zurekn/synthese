@@ -101,6 +101,8 @@ public class AlphaBeta {
 				positions = AStar.getInstance().getReachableNodes(gameData,
 						character, focus.getLastX(), focus.getLastY());
 			}
+			if(positions.isEmpty())
+				System.out.print("");
 
 			for (int[] position : positions) {
 				value = Float.MAX_VALUE;
@@ -136,6 +138,8 @@ public class AlphaBeta {
 		} else {
 			ArrayList<int[]> positions = AStar.getInstance().getReachableNodes(
 					gameData, character);
+			if(positions.isEmpty())
+				System.out.print("");
 			Random rand = new Random(System.nanoTime());
 			int[] position = positions.get(rand.nextInt(positions.size()));
 			int x = position[0], y = position[1];
@@ -189,7 +193,8 @@ public class AlphaBeta {
 				positions = AStar.getInstance().getReachableNodes(gameData,
 						character, focus.getLastX(), focus.getLastY());
 			}
-
+			if(positions.isEmpty())
+				System.out.print("");
 			for (int[] position : positions) {
 				value = Float.MAX_VALUE;
 				int x = position[0], y = position[1];
@@ -224,6 +229,8 @@ public class AlphaBeta {
 			ArrayList<int[]> positions = AStar.getInstance().getReachableNodes(
 					gameData, character);
 			Random rand = new Random(System.nanoTime());
+			if(positions.isEmpty())
+				System.out.print("");
 			int[] position = positions.get(rand.nextInt(positions.size()));
 			int x = position[0], y = position[1];
 
@@ -237,7 +244,6 @@ public class AlphaBeta {
 
 			value = h(data, character);
 			n.setHeuristic(value);
-
 			if (value > alpha) {
 				alpha = value;
 			}

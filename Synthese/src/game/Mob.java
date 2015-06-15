@@ -27,6 +27,7 @@ public class Mob extends Character {
 		}
 	}
 
+
 	public void init() {
 		Monster m = MonsterData.getMonsterById(this.getId());
 		this.setAnimation(m.getAnimation());
