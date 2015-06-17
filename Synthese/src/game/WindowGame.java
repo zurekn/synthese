@@ -282,15 +282,16 @@ public class WindowGame extends BasicGame {
 	 * @param g
 	 */
 	private void renderDeckArea(GameContainer container, Graphics g) {
-		g.setColor(Color.white);
+		g.setColor(Color.magenta); // La coucleur a modifier
 		// TOP
-		g.drawRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+		g.fillRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// BOTTOM
-		g.drawRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+		g.fillRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// LEFT
-		g.drawRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+		g.fillRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		// RIGHT
-		g.drawRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+		g.fillRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+		g.setColor(Color.white);
 	}
 
 	/**

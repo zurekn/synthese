@@ -117,9 +117,9 @@ public class Data {
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
 		Data.MAP_HEIGHT = Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
-		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X;
+		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X ; // Voir pour la largeur de la surface des cartes
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
-		Data.RELATIVE_X_POS = Data.DECK_AREA_SIZE_Y * 3;
+		Data.RELATIVE_X_POS = 288;//Data.DECK_AREA_SIZE_Y * 3;
 		Data.RELATIVE_Y_POS = 0;
 		Data.MAP_X = Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_Y;
 		Data.MAP_Y = Data.RELATIVE_Y_POS + Data.DECK_AREA_SIZE_Y;

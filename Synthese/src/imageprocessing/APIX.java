@@ -44,6 +44,7 @@ public class APIX extends Handler {
 	private int blockSizeX = -1;
 	private int blockSizeY = -1;
 	private int seuil = 100;
+	private int seuilEtiquetage = 200;
 	private boolean firstTry = true;
 	private boolean isRunning = false;
 	
@@ -220,7 +221,7 @@ public class APIX extends Handler {
 			}
 		}
 		setRelativeValues(
-				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, 200),
+				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, seuilEtiquetage),
 				image1.getHeight(), image1.getWidth());
 		if(Data.debug)
 			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");

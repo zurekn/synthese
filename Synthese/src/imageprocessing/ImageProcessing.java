@@ -259,6 +259,7 @@ public class ImageProcessing {
 		{	
 			if(APIX.isInit)
 				return null;
+			System.out.println("images identiques mais phase d'initialisation");
 			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);
 			
 		}
@@ -322,8 +323,8 @@ public class ImageProcessing {
 			 				Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 			 				// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-			 				//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 				//	return null;
+			 				if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 			 				temp++;
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
@@ -332,8 +333,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 				//	return null;
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
@@ -342,8 +343,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-	 						//	return null;
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+	 							return null;
 							temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
@@ -351,8 +352,8 @@ public class ImageProcessing {
 							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
-							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
-			 				//	return null;
+							if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
+			 					return null;
 							Num.get(etiquettes[i-1][j]).clear();
 							
 							etiquettes[i][j] = etiquettes[i][j-1];
@@ -386,7 +387,7 @@ public class ImageProcessing {
 //				System.out.println("OneArray size = "+OneArray.size());
 				if(OneArray.size() < MAX_SEUIL_FORM && OneArray.size() > MIN_SEUIL_FORM )
 				{
-//					System.out.println("gagné !!");
+					//System.out.println("gagné !!");
 
 					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
 //					display(myForm.getMatrix());
@@ -789,6 +790,7 @@ public class ImageProcessing {
 			//System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
 			System.out.println("bary center :  " + pixel.getBaryCenter().getX() + " : " + pixel.getBaryCenter().getY());
 			System.out.println("ecart type : " + pixel.sigmaX + " : " + pixel.sigmaY);
+			System.out.println("La taille de l'objet est de : " + pixel.surface);
 		}
 	}
 	
@@ -1199,8 +1201,8 @@ public class ImageProcessing {
 		 try {
 				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"+Data.getDate()+""));
 				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"+Data.getDate()+""));
-				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
-				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub_"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
