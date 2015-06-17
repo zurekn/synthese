@@ -1,5 +1,6 @@
 <heros>
 	<hero id="mage">
+		<icon>Synthese/libs/res/images/titles/class/mage_icon.png</icon>
 		<life>200</life>
 		<armor>0</armor>
 		<mana>100</mana>
@@ -15,6 +16,7 @@
 		<eyeSight>5</eyeSight>
 	</hero>
 	<hero id="rogue">
+		<icon>Synthese/libs/res/images/titles/class/rogue_icon.png</icon>
 		<life>200</life>
 		<armor>10</armor>
 		<mana>100</mana>
@@ -30,6 +32,7 @@
 		<eyeSight>6</eyeSight>
 	</hero>
 	<hero id="barbarian">
+		<icon>Synthese/libs/res/images/titles/class/war_icon.png</icon>
 		<life>200</life>
 		<armor>25</armor>
 		<mana>100</mana>
@@ -44,6 +47,7 @@
 		<eyeSight>4</eyeSight>
 	</hero>
 	<hero id="cleric">
+		<icon>Synthese/libs/res/images/titles/class/priest_icon.png</icon>
 		<life>200</life>
 		<armor>0</armor>
 		<mana>125</mana>
