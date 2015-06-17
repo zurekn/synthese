@@ -22,6 +22,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.Sys;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -109,6 +110,7 @@ public class Data {
 	public static final HashMap<String, Boolean> departureBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
+	public static final Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .2f);
 
 	private static boolean initImageDir = false;
 
@@ -137,7 +139,7 @@ public class Data {
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
 		Data.MAP_HEIGHT = Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
-		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X ; // Voir pour la largeur de la surface des cartes
+		Data.DECK_AREA_SIZE_X = Data.MAP_WIDTH  / 2; // Voir pour la largeur de la surface des cartes
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
 		Data.RELATIVE_X_POS = 288;//Data.DECK_AREA_SIZE_Y * 3;
 		Data.RELATIVE_Y_POS = 0;

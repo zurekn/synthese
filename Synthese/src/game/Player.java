@@ -82,7 +82,7 @@ public class Player extends Character {
 			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
 			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
-			g.drawOval(posX, posY, sizeX, sizeY);
+//			g.drawOval(posX, posY, sizeX, sizeY);
 		}
 	}
 }
