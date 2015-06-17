@@ -1,6 +1,10 @@
 <heros>
 	<hero id="mage">
+<<<<<<< HEAD
 		<icon>Synthese/res/images/tiles/class/mage_icon.png</icon>
+=======
+		<icon>Synthese/libs/res/images/titles/class/mage_icon.png</icon>
+>>>>>>> branch 'master' of https://github.com/zurekn/synthese
 		<life>200</life>
 		<armor>0</armor>
 		<mana>100</mana>
@@ -16,7 +20,11 @@
 		<eyeSight>5</eyeSight>
 	</hero>
 	<hero id="rogue">
+<<<<<<< HEAD
 		<icon>Synthese/res/images/tiles/class/rogue_icon.png</icon>
+=======
+		<icon>Synthese/libs/res/images/titles/class/rogue_icon.png</icon>
+>>>>>>> branch 'master' of https://github.com/zurekn/synthese
 		<life>200</life>
 		<armor>10</armor>
 		<mana>100</mana>
@@ -32,7 +40,11 @@
 		<eyeSight>6</eyeSight>
 	</hero>
 	<hero id="barbarian">
+<<<<<<< HEAD
 		<icon>Synthese/res/images/tiles/class/war_icon.png</icon>
+=======
+		<icon>Synthese/libs/res/images/titles/class/war_icon.png</icon>
+>>>>>>> branch 'master' of https://github.com/zurekn/synthese
 		<life>200</life>
 		<armor>25</armor>
 		<mana>100</mana>
@@ -47,7 +59,11 @@
 		<eyeSight>4</eyeSight>
 	</hero>
 	<hero id="cleric">
+<<<<<<< HEAD
 		<icon>Synthese/res/images/tiles/class/priest_icon.png</icon>
+=======
+		<icon>Synthese/libs/res/images/titles/class/priest_icon.png</icon>
+>>>>>>> branch 'master' of https://github.com/zurekn/synthese
 		<life>200</life>
 		<armor>0</armor>
 		<mana>125</mana>
