@@ -412,13 +412,17 @@ public class APIX extends Handler {
 				    {
 				    	line = line.replaceAll(" ", "");
 				    	if(line.contains("seuilinit"))
-				    		Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
 				    	if(line.contains("seuiletiquetage"))
-				    		Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
 				    	if(line.contains("seuilmin"))
-				    		Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
 				    	if(line.contains("seuilmax"))
-				    		Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
 				    }
 				}
 				scanner.close();

@@ -58,7 +58,12 @@ public static String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/Tra
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("Current relative path is: " + s);
-
+		checkValuesIni("paramTI.ini");
+		
+		System.out.println(Data.SEUILINITTI);
+		System.out.println(Data.SEUILETI);
+		System.out.println(Data.MIN_SEUIL_FORM);
+		System.out.println(Data.MAX_SEUIL_FORM);
 
 	}
 	
@@ -66,6 +71,66 @@ public static String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/Tra
 	
 	
 	
-	
+	public static void checkValuesIni(String filePath)
+	{
+		Scanner scanner;
+		try {
+			File file = new File(filePath);
+			if(file.exists())
+			{
+				scanner = new Scanner(file);	
+				while (scanner.hasNextLine()) 
+				{
+				    String line = scanner.nextLine();
+				    if(line.contains("="))
+				    {
+				    	line = line.replaceAll(" ", "");
+				    	if(line.contains("seuilinit"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuiletiquetage"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmin"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmax"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    }
+				}
+				scanner.close();
+			}
+			else // file does not exist
+			{
+				try {
+					file.createNewFile();
+					FileWriter writer = new FileWriter(file, true);
+
+					String texte = "seuilinit="+Data.SEUILINITTI+"\n";
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuiletiquetage="+Data.SEUILETI;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmin="+Data.MIN_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmax="+Data.MAX_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					writer.close(); // fermer le fichier à la fin des traitements					
+				} 
+				catch (IOException e) 
+				{e.printStackTrace();} 
+			}
+		} 
+		catch (FileNotFoundException e) 
+		{e.printStackTrace();}
+	}
 
 }
