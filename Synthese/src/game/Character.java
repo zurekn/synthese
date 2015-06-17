@@ -123,6 +123,13 @@ public abstract class Character {
 		if (spell == null)
 			throw new IllegalActionException("Spell unkown");
 		// TODO handle the heal
+		if(spell.getMana() > stats.getMana())
+			throw new IllegalActionException("No Enough Mana");
+		else{
+			int newMana = stats.getMana() - spell.getMana();
+			stats.setMana(newMana);
+		}
+		//TODO Ajouter la magic power et le message non mana
 		return spell.getDamage() + ":" + spell.getHeal();
 	}
 	
@@ -333,6 +340,14 @@ public abstract class Character {
 		return "Character [x=" + x + ", y=" + y + ", id=" + id + ", animation="
 				+ Arrays.toString(animation) + ", stats=" + stats + ", myTurn="
 				+ myTurn + ", spells=" + spells + ", name=" + name + "]";
+	}
+
+	/**
+	 * Regen 10% of the maxMana + the magicPower stat
+	 */
+	public void regenMana() {
+
+		stats.setMana(stats.getMana() + stats.getMagicPower() + stats.getMaxMana() / 10);
 	}
 
 }

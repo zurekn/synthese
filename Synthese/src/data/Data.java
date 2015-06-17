@@ -36,13 +36,13 @@ public class Data {
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
 	public static final boolean runQRCam = false;
-	public static final boolean RUN_APIX = true;
+	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 1;
-	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
-	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	public static final int DEBUG_PLAYER = 4;
+	public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
+	//public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -63,8 +63,20 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 20000;
+	public static int TURN_MAX_TIME = 50; // in sec
 
+	//For the stat display
+	public static int PLAYER_LIFE_RECT_X_POS = 10;
+	public static int PLAYER_LIFE_RECT_Y_POS = 10;
+	public static int PLAYER_LIFE_RECT_X_SIZE = 100;
+	public static int PLAYER_LIFE_RECT_Y_SIZE = 10;
+	public static int PLAYER_MANA_RECT_X_POS = 10;
+	public static int PLAYER_MANA_RECT_Y_POS = 25;
+	public static int PLAYER_MANA_RECT_X_SIZE = 50;
+	public static int PLAYER_MANA_RECT_Y_SIZE = 10;
+	public static int PLAYER_ICON_X_POS = 50;
+	public static int PLAYER_ICON_Y_POS = 50;
+	
 	public static final int SELF = 360;
 	public static final int NORTH = 0;
 	public static final int NORTH_EAST = 45;
@@ -185,6 +197,7 @@ public class Data {
 		}
 		return IMAGE_DIR;
 	}
+	
 	
 	public static String getDate(){
 		Date date = new Date();

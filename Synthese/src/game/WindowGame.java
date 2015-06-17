@@ -146,6 +146,13 @@ public class WindowGame extends BasicGame {
 			//TODO test
 			try {
 				players.add(new Player(10, 12, "P0", "mage"));
+				if(Data.DEBUG_PLAYER > 1)
+					players.add(new Player(15, 15, "P1", "rogue"));
+				if(Data.DEBUG_PLAYER > 2)
+					players.add(new Player(16, 15, "P2", "barbarian"));
+				if(Data.DEBUG_PLAYER > 3)
+					players.add(new Player(7, 12, "P3", "cleric"));
+
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
@@ -268,9 +275,10 @@ public class WindowGame extends BasicGame {
 			mobHandler.render(container, g);
 			// TODO
 			// Bug playerrender doesn't work every time
-			playerHandler.render(container, g);
-			renderEvents(container, g);
 			renderDeckArea(container, g);
+			playerHandler.render(container, g);
+			playerHandler.renderPlayerStat(container, g);
+			renderEvents(container, g);
 			renderText(container, g);
 		}
 	}
@@ -293,6 +301,8 @@ public class WindowGame extends BasicGame {
 		g.fillRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		g.setColor(Color.white);
 	}
+	
+	
 
 	/**
 	 * Render the Game Text
@@ -355,6 +365,7 @@ public class WindowGame extends BasicGame {
 		turn = (turn + 1) % playerNumber;
 
 		previousCharacter = currentCharacter;
+		previousCharacter.regenMana();
 		// Switch the turn
 		// Set the new character turn
 		if (turn < players.size()) {
@@ -431,9 +442,13 @@ public class WindowGame extends BasicGame {
 							currentCharacter.getY(), e.getDirection()), e);
 			r = r > e.getRange() ? e.getRange() : r;
 			e.setRange(r);
-			events.add(e);
-
-			currentCharacter.useSpell(spellID, direction);
+			
+			try{
+				currentCharacter.useSpell(spellID, direction);
+				events.add(e);
+			}catch(IllegalActionException iae){
+				iae.printStackTrace();
+			}
 
 		}
 
