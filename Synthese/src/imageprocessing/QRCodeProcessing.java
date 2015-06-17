@@ -40,9 +40,13 @@ private String data;
 private String filePath;
 private String charset;
 private Map hintMap;
+/**
+ *  variable that will contain some datas in this form : ID:Orientation:CenterX:CenterY
+ */
 private String QRDatas;
 private QRCodeEvent qrCodeEvent;
 
+	
 	public  QRCodeProcessing(){
 		super();
 		charset = "UTF-8"; // or "ISO-8859-1"
@@ -79,14 +83,15 @@ private QRCodeEvent qrCodeEvent;
 	
 	/** Find all QR codes in an image
 	 * 
-	 * @param srcImgName : The image we want to test and decode if there is a QR Code in it.
-	 * @param seuil : the variation in pixel that filter the orientation of the QRCode
+	 * @param srcImgName : The name of the image we want to test and decode if there is a QR Code in it.
+	 * @param seuil : the variation in pixel that filter the orientation of the QRCode	
+	 * @param imweb : the buffered image to decode 
 	 * @return the ID coded into QRCode
 	 * @throws IOException
 	 * @throws NotFoundException (if no QR Code was found)
 	 */
 	public void findAllQR(String srcImgName,float seuil, BufferedImage imweb) throws IOException, NotFoundException{
-		System.out.println("findAllQR--------------------------------------+++++++++++");
+		System.out.println(" Lancement de : Détection QR Codes");
 		QRDatas = ""; // reset final object
 		String res="";
 		
@@ -109,27 +114,21 @@ private QRCodeEvent qrCodeEvent;
 	}else{
 		img = imweb;
 	}
-		// System.out.println("width " + img.getWidth() + " ::: height "+ img.getHeight());
-		
 		LuminanceSource source = new BufferedImageLuminanceSource(img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 			
 			result = mdr.decodeMultiple(bitmap,hints);
 
 			
-			for(Result trolol : result){
-				rp = trolol.getResultPoints();
-			//	res = res + "\n" + trolol.getText();
-				//System.out.println("nb "+i);
-				// Set the final datas 
-				QRDatas += checkOrientation(seuil,rp,trolol.getText())+"\n";
-				qrCodeEvent = createQrCodeEvent(seuil, rp, trolol.getText()+"\n");
+			for(Result rs : result){
+				rp = rs.getResultPoints();
+				QRDatas += checkOrientation(seuil, rp, rs.getText())+"\n";
+				qrCodeEvent = createQrCodeEvent(seuil, rp, rs.getText()+"\n");
 			}
-	//	return res; 
 	}
 	
 	/**
-	 * Method that calculate the orientation of a given QRCode
+	 * Method that put datas of QR Codes in events
 	 * @param seuil - Area of authorized variation of position.
 	 * @param rp - passed from another method
 	 * @param QRContent - ID of the QRCode (used in final object)
@@ -173,7 +172,6 @@ private QRCodeEvent qrCodeEvent;
 				xeye4 = resp.getX();
 				yeye4 = resp.getY();
 			}
-			//System.out.println("\t j="+j+" pos X : "+resp.getX() + "; pos Y : "+resp.getY());
 			j++;
 		}
 		j=1;
@@ -182,10 +180,7 @@ private QRCodeEvent qrCodeEvent;
 		
 		ecartYhaut=(yeye1 - yeye2);
 		ecartXhoriz=(xeye2 - xeye3);
-		//System.out.println("\t On a donc un écart en largeur de X =  "+ecartXlarg+" et de Y = "+ecartYlarg);
-		//System.out.println("\t On a donc un écart en hauteur de Y =  "+ecartYhaut+" et en horizontal de X = "+ecartXhoriz);
 
-		//System.out.print("Sur cette image, le QRcode "+QRContent+" penche vers ... ");
 		
 		// RIght
 		if(ecartXlarg < (0-seuil) ){
@@ -255,11 +250,11 @@ private QRCodeEvent qrCodeEvent;
 	}
 	
 	/**
-	 * Method that calculate the orientation of a given QRCode
+	 * Method that calculate the datas of a given QRCode and put them in a variable
 	 * @param seuil - Area of authorized variation of position.
 	 * @param rp - passed from another method
 	 * @param QRContent - ID of the QRCode (used in final object)
-	 * @return
+	 * @return result - All the datas put between ":"
 	 */
 	public String checkOrientation(float seuil,ResultPoint[] rp,String QRContent){
 		
@@ -299,7 +294,6 @@ private QRCodeEvent qrCodeEvent;
 				xeye4 = resp.getX();
 				yeye4 = resp.getY();
 			}
-			//System.out.println("\t j="+j+" pos X : "+resp.getX() + "; pos Y : "+resp.getY());
 			j++;
 		}
 		j=1;
@@ -308,10 +302,6 @@ private QRCodeEvent qrCodeEvent;
 		
 		ecartYhaut=(yeye1 - yeye2);
 		ecartXhoriz=(xeye2 - xeye3);
-		//System.out.println("\t On a donc un écart en largeur de X =  "+ecartXlarg+" et de Y = "+ecartYlarg);
-		//System.out.println("\t On a donc un écart en hauteur de Y =  "+ecartYhaut+" et en horizontal de X = "+ecartXhoriz);
-
-		//System.out.print("Sur cette image, le QRcode "+QRContent+" penche vers ... ");
 		
 		// RIght
 		if(ecartXlarg < (0-seuil) ){
@@ -320,44 +310,35 @@ private QRCodeEvent qrCodeEvent;
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						//System.out.println("Le haut-droite n'est-ce pas ?");
 						result += "haut-droite" ;
 						
 					// Bottom
 					}else{
-						//System.out.println("Le bas-droite n'est-ce pas ?");
 						result += "bas-droite" ;
 					}
 					
 				}else{
-					//System.out.println("La droite n'est-ce pas ?");	
 					result += "droite";
 				}
 			}else{
-				//System.out.println("le haut . ");
 				result += "haut" ;
 			}
-			// if X larg > 0  => Left
 		}else if(ecartXlarg > seuil){
 			if(ecartYlarg < (0-seuil)){
-				//System.out.println("Le haut...");
 				result += "haut" ;
 			}else{
 				
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						//System.out.println("Le haut-gauche n'est-ce pas ?");
 						result += "haut-gauche" ;
 						
 					// Bottom
 					}else{
-						//System.out.println("Le bas-gauche n'est-ce pas ?");
 						result += "bas-gauche" ;
 					}
 					
 				}else{
-					//System.out.println("La gauche n'est-ce pas ?");	
 					result += "gauche" ;
 				}
 				
@@ -367,16 +348,13 @@ private QRCodeEvent qrCodeEvent;
 				if(ecartXhoriz > seuil || ecartXhoriz < (0-seuil)){
 					// Top
 					if(ecartYhaut > seuil){
-						//System.out.println("Le haut n'est-ce pas ?");
 						result += "haut" ;
 					// Bottom
 					}else{
-						//System.out.println("Le bas n'est-ce pas ?");
 						result += "bas" ;
 					}
 					// Left
 				}else{
-					//System.out.println("La gauche n'est-ce pas ?");	
 					result += "gauche" ;
 				}
 				
