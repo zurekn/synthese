@@ -59,18 +59,16 @@ private QRCodeEvent qrCodeEvent;
 	
 	// encode
 	public void generateQR(String destFile, String data,int qrCodeheight, int qrCodewidth)throws WriterException, IOException {
-			
 				BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes(charset), charset),BarcodeFormat.QR_CODE, qrCodewidth, qrCodeheight, hintMap);
 				MatrixToImageWriter.writeToFile(matrix, filePath.substring(filePath.lastIndexOf('.') + 1), new File(filePath+destFile));
-			
 	}
 	
 	
 		
 	/** Find a QR code at any position in an image
 	 * 
-	 * @param srcQR
-	 * @return the ID coded into the QRCode
+	 * @param srcQR, String
+	 * @return the ID coded into the QRCode, String
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws NotFoundException (if no QR Code was found)
@@ -83,10 +81,9 @@ private QRCodeEvent qrCodeEvent;
 	
 	/** Find all QR codes in an image
 	 * 
-	 * @param srcImgName : The name of the image we want to test and decode if there is a QR Code in it.
-	 * @param seuil : the variation in pixel that filter the orientation of the QRCode	
-	 * @param imweb : the buffered image to decode 
-	 * @return the ID coded into QRCode
+	 * @param srcImgName : The name of the image we want to test and decode if there is a QR Code in it, String
+	 * @param seuil : the variation in pixel that filter the orientation of the QRCode, float
+	 * @param imweb : the buffered image to decode, BufferedImage
 	 * @throws IOException
 	 * @throws NotFoundException (if no QR Code was found)
 	 */
@@ -129,9 +126,9 @@ private QRCodeEvent qrCodeEvent;
 	
 	/**
 	 * Method that put datas of QR Codes in events
-	 * @param seuil - Area of authorized variation of position.
-	 * @param rp - passed from another method
-	 * @param QRContent - ID of the QRCode (used in final object)
+	 * @param seuil - Area of authorized variation of position, float
+	 * @param rp - passed from another method, ResultPoint[]
+	 * @param QRContent - ID of the QRCode (used in final object), String
 	 * @return
 	 */
 	public QRCodeEvent createQrCodeEvent(float seuil,ResultPoint[] rp,String QRContent){
@@ -251,10 +248,10 @@ private QRCodeEvent qrCodeEvent;
 	
 	/**
 	 * Method that calculate the datas of a given QRCode and put them in a variable
-	 * @param seuil - Area of authorized variation of position.
-	 * @param rp - passed from another method
-	 * @param QRContent - ID of the QRCode (used in final object)
-	 * @return result - All the datas put between ":"
+	 * @param seuil - Area of authorized variation of position, float
+	 * @param rp - passed from another method, ResultPoint[]
+	 * @param QRContent - ID of the QRCode (used in final object), String
+	 * @return result - All the datas put between ":", String
 	 */
 	public String checkOrientation(float seuil,ResultPoint[] rp,String QRContent){
 		
