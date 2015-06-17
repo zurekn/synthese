@@ -168,8 +168,32 @@ public class AStar {
 		int dist = (int) Math.sqrt(distX * distX + distY * distY) * WEIGHT;
 
 		// If the destination is too far, reduce the number of blocks
-		int xMax = (dist > gMax) ? distX : distX + 1;
-		int yMax = (dist > gMax) ? distY : distY + 1;
+		/*int xMax = (dist > gMax) ? distX : distX + 1;
+		int yMax = (dist > gMax) ? distY : distY + 1;*/
+		int xMin, xMax, yMin, yMax;
+		if(destX < c.getX()){
+			xMin = destX;
+			xMax = c.getX();
+			if(dist < gMax && xMin > 0)
+				xMin--;
+		}else{
+			xMin = c.getX();
+			xMax = destX;
+			if(dist < gMax && xMax < (map.length -1))
+				xMax++;
+		}
+		
+		if(destY < c.getY()){
+			yMin = destY;
+			yMax = c.getY();
+			if(dist < gMax && yMin > 0)
+				yMin--;
+		}else{
+			yMin = c.getY();
+			yMax = destY;
+			if(dist < gMax && yMax < (map[0].length -1))
+				yMax++;
+		}
 
 		int x, y;
 		ArrayList<int[]> list = new ArrayList<int[]>();
@@ -177,7 +201,7 @@ public class AStar {
 			x = pos[0];
 			y = pos[1];
 
-			if (Math.abs(x - destX) <= xMax && Math.abs(y - destY) <= yMax)
+			if (x >= xMin && x <= xMax && y >= yMin && y <=yMax)
 				// Restraining condition, the nodes must be
 				// reachable and inside a rectangle delimited by the
 				// character and the destination
@@ -341,7 +365,7 @@ public class AStar {
 	private Node getLowestFInOpen() {
 		Node n = openList.get(0);
 		for (int i = 1; i < openList.size(); i++) {
-			if (f(n, goal) < f(openList.get(i), goal))
+			if (f(n, goal) > f(openList.get(i), goal))
 				n = openList.get(i);
 		}
 		return n;

@@ -8,6 +8,7 @@ import imageprocessing.QRCodeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -16,11 +17,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import ai.AIHandler;
 import ai.CommandHandler;
 import ai.CommandListener;
 import ai.ActionEvent;
-import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
 import exception.IllegalCaracterClassException;
@@ -145,14 +144,14 @@ public class WindowGame extends BasicGame {
 			}*/
 			//TODO test
 			try {
-				players.add(new Player(10, 12, "P0", "mage"));
+				addChalenger(10, 12);
+				//players.add(new Player(10, 12, "P0", "mage"));
 				if(Data.DEBUG_PLAYER > 1)
 					players.add(new Player(15, 15, "P1", "rogue"));
 				if(Data.DEBUG_PLAYER > 2)
 					players.add(new Player(16, 15, "P2", "barbarian"));
 				if(Data.DEBUG_PLAYER > 3)
 					players.add(new Player(7, 12, "P3", "cleric"));
-
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
@@ -161,6 +160,18 @@ public class WindowGame extends BasicGame {
 
 	}
 
+	/**
+	 * Add a new player 
+	 * @param x
+	 * @param y
+	 * @throws IllegalCaracterClassException 
+	 */
+	public void addChalenger(int x, int y) throws IllegalCaracterClassException{
+		String id = "P"+players.size();
+		String type = HeroData.getRandomHero();
+		players.add(new Player(x, y, id, type));
+	}
+	
 	public void addPlayer(String position) {
 		if (!Data.departureBlocks.get(position)) {
 			String[] s = position.split(":");

@@ -36,6 +36,7 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
 				g.drawRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE);
+				player.get(i).getIcon().draw(Data.MAP_X + Data.PLAYER_ICON_X_POS, Data.PLAYER_ICON_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT);
 				break;
 			case 1: //left
 				//LIFE BAR*
@@ -51,6 +52,8 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
 				g.drawRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE);
+				player.get(i).getIcon().draw(Data.MAP_X + Data.PLAYER_ICON_X_POS, Data.PLAYER_ICON_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT);
+
 				g.rotate(Data.MAP_X + Data.MAP_WIDTH /2, Data.MAP_Y + Data.MAP_HEIGHT /2, -90);
 
 				break;
@@ -68,6 +71,7 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
 				g.drawRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE);
+				player.get(i).getIcon().draw(Data.MAP_X + Data.PLAYER_ICON_X_POS, Data.PLAYER_ICON_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT);
 				g.rotate(Data.MAP_X + Data.MAP_WIDTH /2, Data.MAP_Y + Data.MAP_HEIGHT /2, -180);
 
 				break;
@@ -85,6 +89,7 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
 				g.drawRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE);
+				player.get(i).getIcon().draw(Data.MAP_X + Data.PLAYER_ICON_X_POS, Data.PLAYER_ICON_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT);
 				g.rotate(Data.MAP_X + Data.MAP_WIDTH /2, Data.MAP_Y + Data.MAP_HEIGHT /2, 90);
 
 				break;
