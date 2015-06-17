@@ -76,6 +76,11 @@ public class Data {
 	public static final int NORTH_WEST = -45;
 
 	public static final int INF = 500;
+	
+	public static int SEUILINITTI = 100;
+	public static int SEUILETI = 200;
+	public static int MIN_SEUIL_FORM = 50;
+	public static int MAX_SEUIL_FORM = 5000;
 
 	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";

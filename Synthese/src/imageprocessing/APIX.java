@@ -8,9 +8,12 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.DebugGraphics;
@@ -43,9 +46,6 @@ public class APIX extends Handler {
 	private int relativeY = -1;
 	private int blockSizeX = -1;
 	private int blockSizeY = -1;
-	private int seuil = 100;
-	private int seuilEtiquetage = 200;
-	private boolean firstTry = true;
 	private boolean isRunning = false;
 	
 	private static APIX apix ;
@@ -131,6 +131,7 @@ public class APIX extends Handler {
 	}
 
 	public void initTI() {
+		checkValuesIni("paramTI.ini"); // Vérification des variables dans le fichier .ini
 		if(isRunning)
 			return;
 		isRunning = true;
@@ -165,10 +166,7 @@ public class APIX extends Handler {
                 //System.out.println(elementsImg[x][y]+" ");
                 // 0 = white and 255 = black
                 
-                if(!firstTry)
-                	seuil =Integer.parseInt( JOptionPane.showInputDialog("Nouveau seuil d'init [ancien : "+seuil+"]"));
-                elementsRes[x][y] =  elementsImg[x][y] < seuil ? 255 : 0;
-               firstTry = true;
+                elementsRes[x][y] =  elementsImg[x][y] < Data.SEUILINITTI ? 255 : 0;
                 
             }
            
@@ -215,13 +213,13 @@ public class APIX extends Handler {
 						image1,
 						"jpg",
 						new File(
-								Data.IMAGE_DIR + "initialisationITout_bin_"+seuil+"_"+Data.getDate()+".jpg"));
+								Data.IMAGE_DIR + "initialisationITout_bin_"+Data.SEUILINITTI+"_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		setRelativeValues(
-				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, seuilEtiquetage),
+				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI),
 				image1.getHeight(), image1.getWidth());
 		if(Data.debug)
 			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");
@@ -399,4 +397,61 @@ public class APIX extends Handler {
 		
 	}
 
+	public void checkValuesIni(String filePath)
+	{
+		Scanner scanner;
+		try {
+			File file = new File(filePath);
+			if(file.exists())
+			{
+				scanner = new Scanner(file);	
+				while (scanner.hasNextLine()) 
+				{
+				    String line = scanner.nextLine();
+				    if(line.contains("="))
+				    {
+				    	line = line.replaceAll(" ", "");
+				    	if(line.contains("seuilinit"))
+				    		Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuiletiquetage"))
+				    		Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmin"))
+				    		Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmax"))
+				    		Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    }
+				}
+				scanner.close();
+			}
+			else // file does not exist
+			{
+				try {
+					file.createNewFile();
+					FileWriter writer = new FileWriter(file, true);
+
+					String texte = "seuilinit="+Data.SEUILINITTI+"\n";
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuiletiquetage="+Data.SEUILETI;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmin="+Data.MIN_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmax="+Data.MAX_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					writer.close(); // fermer le fichier à la fin des traitements					
+				} 
+				catch (IOException e) 
+				{e.printStackTrace();} 
+			}
+		} 
+		catch (FileNotFoundException e) 
+		{e.printStackTrace();}
+	}
 }
