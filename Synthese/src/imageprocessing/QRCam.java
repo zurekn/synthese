@@ -71,11 +71,12 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	
 	public void run() {
 		APIX apix = APIX.getInstance();
-		
+		if(!Data.runQRCam)
+			return;
 		do {
 			System.out.println("run QRCode");
 			try {
-				Thread.sleep(900);
+				Thread.sleep(1500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -97,7 +98,12 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 				}
 				try {
 						// set seuil to 20 to ensure better results
+					
 					tqr.findAllQR("",20, image);
+					if(Data.debugQR){
+						System.out.println("Image taken for QRcode");
+						ImageIO.write(image, "jpg", new File(Data.getImageDir()+"QRCode.jpg"));
+					}
 					testMulti = tqr.getQRCodeEvent();
 					System.out.println("After getQRCodeEvent");
 				} catch (IOException e) {
@@ -113,7 +119,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 
 			if(testMulti != null){
 //				textarea.setText(testMulti);
-				if(Data.debug)
+				if(Data.debugQR)
 					System.out.println("New QRCode find : "+testMulti);
 				if(Data.debug && Data.inTest && Data.debugPicture){
 					try {

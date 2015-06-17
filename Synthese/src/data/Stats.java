@@ -16,7 +16,6 @@ public class Stats {
 	private float lifePercentage = 1.f;
 
 	public Stats(int life, int mana) {
-		super();
 		this.life = life;
 		this.mana = mana;
 		this.maxLife = life;
@@ -25,7 +24,6 @@ public class Stats {
 
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
 			int luck, int movementPoints, int magicResist, int eyeSight) {
-		super();
 		this.life = life;
 		this.maxLife = life;
 		this.armor = armor;
@@ -42,7 +40,6 @@ public class Stats {
 	public Stats(int life, int armor, int mana, int strength, int magicPower,
 			int luck, int movementPoints, int magicResist, int eyeSight,
 			String caracterClass) {
-		super();
 		this.life = life;
 		this.maxLife = life;
 		this.armor = armor;

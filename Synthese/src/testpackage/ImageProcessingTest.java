@@ -18,13 +18,14 @@ public static long time;
 public static String fileName = "IN.jpg";
 public static String outFileName = "OUT.jpg";
 public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
+public static String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/TraitementImages/res/init/debug/";
 
 	public static void main(String[] args) {
 		
 //		SwingUtilities.invokeLater(new WebCamCapture());
 		
 		long time = System.currentTimeMillis();
-		int seuil = 200;
+		int seuil = 100;
 		ImageProcessing ti = new ImageProcessing();
 //		List<FormObject> lf = ti.etiquetageIntuitifImageGiveList("toto.jpg", "toto.jpg",seuil);
 		
@@ -34,17 +35,20 @@ public static String pathToDir = "Synthese"+File.separator+"res"+File.separator+
 		BufferedImage imgCompare = null;
 		BufferedImage imgSrcRef = null;
 		try {
-			imgCompare = ImageIO.read(new File(pathToDir + "dilatation.jpg"));
-			imgSrcRef = ImageIO.read(new File(pathToDir + "testBloc.jpg"));
+			imgCompare = ImageIO.read(new File(urlImage + "testInit.jpg"));
+			//imgSrcRef = ImageIO.read(new File(pathToDir + "testBloc.jpg"));
+			//ti.getOneGrayAndBinaryImage(imgCompare, seuil);
 			
-			List<FormObject> lf = ti.etiquetageIntuitifImage2(imgCompare, imgSrcRef ,100);
+			List<FormObject> lf = ti.etiquetageIntuitifImageGiveList2(imgCompare, imgCompare ,seuil);
+			
+			System.out.println(System.currentTimeMillis()-time + " end time");
 		} catch (IOException e) {}
 
 		
 		
 	    ////////////////////////////////////////////////////////////////////////
 		
-			System.out.println(System.currentTimeMillis()-time + " end time");
+
 
 
 	}

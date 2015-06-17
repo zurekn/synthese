@@ -35,10 +35,11 @@ public class Data {
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
-	public static final boolean RUN_APIX = false;
+	public static final boolean runQRCam = false;
+	public static final boolean RUN_APIX = true;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
-	public static boolean debugQR = false;
+	public static final boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 1;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
@@ -116,9 +117,9 @@ public class Data {
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
 		Data.MAP_HEIGHT = Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
-		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X;
+		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X ; // Voir pour la largeur de la surface des cartes
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
-		Data.RELATIVE_X_POS = Data.DECK_AREA_SIZE_Y * 3;
+		Data.RELATIVE_X_POS = 288;//Data.DECK_AREA_SIZE_Y * 3;
 		Data.RELATIVE_Y_POS = 0;
 		Data.MAP_X = Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_Y;
 		Data.MAP_Y = Data.RELATIVE_Y_POS + Data.DECK_AREA_SIZE_Y;

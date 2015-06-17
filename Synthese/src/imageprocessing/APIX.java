@@ -44,6 +44,7 @@ public class APIX extends Handler {
 	private int blockSizeX = -1;
 	private int blockSizeY = -1;
 	private int seuil = 100;
+	private int seuilEtiquetage = 200;
 	private boolean firstTry = true;
 	private boolean isRunning = false;
 	
@@ -220,7 +221,7 @@ public class APIX extends Handler {
 			}
 		}
 		setRelativeValues(
-				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, 200),
+				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, seuilEtiquetage),
 				image1.getHeight(), image1.getWidth());
 		if(Data.debug)
 			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");
@@ -369,6 +370,11 @@ public class APIX extends Handler {
 		
 		blockSizeY = BasGauche.get(0).getBaryCenter().getY() - HautGauche.get(0).getBaryCenter().getY();
 		blockSizeY = blockSizeY / Data.BLOCK_NUMBER_Y;
+		
+		if(Data.tiDebug){
+			System.out.println("Les tailles des blocks : x = "+blockSizeX+", y = "+blockSizeY);
+			System.out.println("La map : mapX = "+relativeX+", mapY = "+relativeY);
+		}
 		
 	}
 

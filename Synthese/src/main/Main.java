@@ -23,7 +23,7 @@ public class Main {
 //		Data.SCREEN_WIDTH = 1920;
 //		Data.SCREEN_HEIGHT = 1080;
 	
-		boolean fullScreen = false;
+		boolean fullScreen = true;
         AppGameContainer gameContaineur =  new AppGameContainer(WindowGame.getInstance(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, fullScreen);
     	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
