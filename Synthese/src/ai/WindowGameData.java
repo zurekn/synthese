@@ -2,6 +2,7 @@ package ai;
 
 import game.Mob;
 import game.Player;
+import game.Spell;
 
 import java.util.ArrayList;
 
@@ -113,6 +114,47 @@ public class WindowGameData {
 			characters.get(i).moveAiTo(Integer.parseInt(tokens[1]),
 					Integer.parseInt(tokens[2]));
 			//nextCharacter();
+		}else if(cmd.startsWith("s")) {
+			String[] tokens = cmd.split(":");
 		}
+	}
+
+	public ArrayList<CharacterData> getTargetsInRange(CharacterData character,
+			int range, boolean damageSpell) {
+		//TODO take obstacles in count
+		ArrayList<CharacterData> targets = new ArrayList<CharacterData>();
+		if (range == 0) {
+			targets.add(character);
+		} else {
+			for (CharacterData c : characters) {
+				if (damageSpell && (character.isMonster() != c.isMonster()))
+					if (c.getX() == character.getX()
+							|| c.getY() == character.getY())
+						if (c.getX() == character.getX()) {
+							if (Math.abs((c.getX() - character.getX())) <= range) {
+								targets.add(c);
+							}
+						} else if (Math.abs((c.getY() - character.getY())) <= range)
+							targets.add(c);
+
+				if (!damageSpell && (character.isMonster() == c.isMonster())) {
+					if (c.getX() == character.getX()
+							|| c.getY() == character.getY())
+						if (c.getX() == character.getX()) {
+							if (Math.abs((c.getX() - character.getX())) <= range) {
+								targets.add(c);
+							}
+						} else if (Math.abs((c.getY() - character.getY())) <= range)
+							targets.add(c);
+				}
+			}
+		}
+		return targets;
+	}
+
+	public void useSpell(CharacterData character, Spell spell,
+			CharacterData target) {
+		// TODO Auto-generated method stub
+		
 	}
 }

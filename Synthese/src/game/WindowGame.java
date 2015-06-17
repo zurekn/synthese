@@ -16,11 +16,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import ai.AIHandler;
 import ai.CommandHandler;
 import ai.CommandListener;
 import ai.ActionEvent;
-import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
 import exception.IllegalCaracterClassException;
@@ -145,7 +143,7 @@ public class WindowGame extends BasicGame {
 			}*/
 			//TODO test
 			try {
-				players.add(new Player(10, 12, "P0", "mage"));
+				players.add(new Player(10, 13, "P0", "mage"));
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}

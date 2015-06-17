@@ -42,7 +42,7 @@ public class Mob extends Character {
 		Animation[] animation = this.getAnimation();
 		int x = this.getX();
 		int y = this.getY();
-		// g.setColor(Color.red);
+		g.setColor(Color.red);
 		// g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
 		// Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
@@ -61,6 +61,12 @@ public class Mob extends Character {
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y
 					+ Data.BLOCK_SIZE_Y;
 			g.drawOval(posX, posY, sizeX, sizeY);
+		}
+		if(Data.debug){
+			if(getFocusedOn()!=null)
+				g.drawLine(Data.MAP_X + x * Data.BLOCK_SIZE_X+ Data.BLOCK_SIZE_X / 2, Data.MAP_Y + y
+				* Data.BLOCK_SIZE_Y+ Data.BLOCK_SIZE_X / 2, Data.MAP_X + getFocusedOn().getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2, Data.MAP_Y + getFocusedOn().getY()
+				* Data.BLOCK_SIZE_Y+ Data.BLOCK_SIZE_X / 2);
 		}
 
 	}
