@@ -4,6 +4,8 @@ import game.Mob;
 import game.WindowGame;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
@@ -195,5 +198,67 @@ public class Data {
 		Date date = new Date();
 		DateFormat formater = new SimpleDateFormat("dd-MM-yy-hh-mm-ss");
 		return formater.format(date);
+	}
+	
+	public static void checkValuesIni(String filePath)
+	{
+		Scanner scanner;
+		try {
+			File file = new File(filePath);
+			if(file.exists())
+			{
+				scanner = new Scanner(file);	
+				while (scanner.hasNextLine()) 
+				{
+				    String line = scanner.nextLine();
+				    if(line.contains("="))
+				    {
+				    	line = line.replaceAll(" ", "");
+				    	if(line.contains("seuilinit"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuiletiquetage"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmin"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmax"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    }
+				}
+				scanner.close();
+			}
+			else // file does not exist
+			{
+				try {
+					file.createNewFile();
+					FileWriter writer = new FileWriter(file, true);
+
+					String texte = "seuilinit="+Data.SEUILINITTI+"\n";
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuiletiquetage="+Data.SEUILETI;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmin="+Data.MIN_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmax="+Data.MAX_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					writer.close(); // fermer le fichier à la fin des traitements					
+				} 
+				catch (IOException e) 
+				{e.printStackTrace();} 
+			}
+		} 
+		catch (FileNotFoundException e) 
+		{e.printStackTrace();}
 	}
 }
