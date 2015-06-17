@@ -1,5 +1,7 @@
 package ai;
 
+
+//TODO handle allies in spell trajectory
 import java.util.ArrayList;
 import java.util.Random;
 

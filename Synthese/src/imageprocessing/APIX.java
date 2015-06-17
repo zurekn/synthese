@@ -8,9 +8,12 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.DebugGraphics;
@@ -43,8 +46,6 @@ public class APIX extends Handler {
 	private int relativeY = -1;
 	private int blockSizeX = -1;
 	private int blockSizeY = -1;
-	private int seuil = 100;
-	private boolean firstTry = true;
 	private boolean isRunning = false;
 	
 	private static APIX apix ;
@@ -130,6 +131,7 @@ public class APIX extends Handler {
 	}
 
 	public void initTI() {
+		
 		if(isRunning)
 			return;
 		isRunning = true;
@@ -164,10 +166,7 @@ public class APIX extends Handler {
                 //System.out.println(elementsImg[x][y]+" ");
                 // 0 = white and 255 = black
                 
-                if(!firstTry)
-                	seuil =Integer.parseInt( JOptionPane.showInputDialog("Nouveau seuil d'init [ancien : "+seuil+"]"));
-                elementsRes[x][y] =  elementsImg[x][y] < seuil ? 255 : 0;
-               firstTry = true;
+                elementsRes[x][y] =  elementsImg[x][y] < Data.SEUILINITTI ? 255 : 0;
                 
             }
            
@@ -214,13 +213,13 @@ public class APIX extends Handler {
 						image1,
 						"jpg",
 						new File(
-								Data.IMAGE_DIR + "initialisationITout_bin_"+seuil+"_"+Data.getDate()+".jpg"));
+								Data.IMAGE_DIR + "initialisationITout_bin_"+Data.SEUILINITTI+"_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		setRelativeValues(
-				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, 200),
+				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI),
 				image1.getHeight(), image1.getWidth());
 		if(Data.debug)
 			System.out.println("Relative position found at : ["+relativeX+":"+relativeY+"]");
@@ -369,6 +368,11 @@ public class APIX extends Handler {
 		
 		blockSizeY = BasGauche.get(0).getBaryCenter().getY() - HautGauche.get(0).getBaryCenter().getY();
 		blockSizeY = blockSizeY / Data.BLOCK_NUMBER_Y;
+		
+		if(Data.tiDebug){
+			System.out.println("Les tailles des blocks : x = "+blockSizeX+", y = "+blockSizeY);
+			System.out.println("La map : mapX = "+relativeX+", mapY = "+relativeY);
+		}
 		
 	}
 

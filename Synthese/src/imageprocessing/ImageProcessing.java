@@ -14,6 +14,7 @@ import data.Data;
 
 public class ImageProcessing {
 	String urlImage = Data.getImageDir();//"Synthese"+File.separator+"res"+File.separator+"testRes"+File.separator;
+	//String urlImage = "C:/Users/frédéric/Desktop/eclipse/workspace/TraitementImages/res/init/debug/";
 	int imgHeight;
 	int imgWidth;
 	int minX; 
@@ -258,6 +259,7 @@ public class ImageProcessing {
 		{	
 			if(APIX.isInit)
 				return null;
+			System.out.println("images identiques mais phase d'initialisation");
 			subImgElements = getOneGrayAndBinaryImage(imgCompare, seuil);
 			
 		}
@@ -277,7 +279,7 @@ public class ImageProcessing {
 		if(APIX.isInit)
 		{	
 			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+1);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+5);
 		}
 		
 		if(Data.tiDebug)
@@ -383,9 +385,9 @@ public class ImageProcessing {
 				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size() < MAX_SEUIL_FORM && OneArray.size() > MIN_SEUIL_FORM )
+				if(OneArray.size() < Data.MAX_SEUIL_FORM && OneArray.size() > Data.MIN_SEUIL_FORM )
 				{
-//					System.out.println("gagné !!");
+					//System.out.println("gagné !!");
 
 					FormObject myForm = new FormObject(OneArray, this.imgHeight, this.imgWidth);
 //					display(myForm.getMatrix());
@@ -559,7 +561,7 @@ public class ImageProcessing {
 				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size() > MIN_SEUIL_FORM && OneArray.size() < MAX_SEUIL_FORM)
+				if(OneArray.size() > Data.MIN_SEUIL_FORM && OneArray.size() < Data.MAX_SEUIL_FORM)
 				{
 //					System.out.println("gagné !!");
 
@@ -788,6 +790,7 @@ public class ImageProcessing {
 			//System.out.println("form gravity center : " + pixel.getGravityCenter().getX() + " : "+pixel.getGravityCenter().getY());
 			System.out.println("bary center :  " + pixel.getBaryCenter().getX() + " : " + pixel.getBaryCenter().getY());
 			System.out.println("ecart type : " + pixel.sigmaX + " : " + pixel.sigmaY);
+			System.out.println("La taille de l'objet est de : " + pixel.surface);
 		}
 	}
 	
@@ -873,6 +876,8 @@ public class ImageProcessing {
      */
 	public int[][] getOneGrayAndBinaryImage(BufferedImage image, int seuil) 
     {
+    	if(Data.tiDebug)
+    		System.out.println("les deux images sont identiques");
         //int[][] elementsImg = null;
         int[][] elementsRes = null;
         BufferedImage imgRes = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
@@ -899,7 +904,6 @@ public class ImageProcessing {
                 
                 //imgRes_Bin.setRGB(x, y, elementsRes[x][y]);
             }
-        System.out.println("Les images sont identiques : début binarisation");
 		for(int i = 1; i < elementsRes.length; i++)
 		{
 			for(int j = 1; j < elementsRes[i].length; j++)
@@ -1197,8 +1201,8 @@ public class ImageProcessing {
 		 try {
 				//ImageIO.write(imgRes_1, "jpg", new File(urlImage + "test_getGrayImage_Res_1.jpg"+Data.getDate()+""));
 				//ImageIO.write(imgRes_2, "jpg", new File(urlImage + "test_getGrayImage_Res_2.jpg"+Data.getDate()+""));
-				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub.jpg"));
-				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin.jpg"));
+				ImageIO.write(imgRes_Sub, "jpg", new File(urlImage + "test_getGrayImage_Res_Sub_"+Data.getDate()+".jpg"));
+				ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getGrayImage_Res_Bin_"+Data.getDate()+".jpg"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

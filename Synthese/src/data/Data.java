@@ -4,6 +4,8 @@ import game.Mob;
 import game.WindowGame;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
@@ -35,10 +38,11 @@ public class Data {
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = true;
+	public static final boolean runQRCam = false;
 	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
-	public static boolean debugQR = false;
+	public static final boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 1;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
@@ -75,6 +79,11 @@ public class Data {
 	public static final int NORTH_WEST = -45;
 
 	public static final int INF = 500;
+	
+	public static int SEUILINITTI = 100;
+	public static int SEUILETI = 200;
+	public static int MIN_SEUIL_FORM = 50;
+	public static int MAX_SEUIL_FORM = 5000;
 
 	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
@@ -116,9 +125,9 @@ public class Data {
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
 		Data.MAP_HEIGHT = Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
-		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X;
+		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X ; // Voir pour la largeur de la surface des cartes
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
-		Data.RELATIVE_X_POS = Data.DECK_AREA_SIZE_Y * 3;
+		Data.RELATIVE_X_POS = 288;//Data.DECK_AREA_SIZE_Y * 3;
 		Data.RELATIVE_Y_POS = 0;
 		Data.MAP_X = Data.RELATIVE_X_POS + Data.DECK_AREA_SIZE_Y;
 		Data.MAP_Y = Data.RELATIVE_Y_POS + Data.DECK_AREA_SIZE_Y;
@@ -189,5 +198,67 @@ public class Data {
 		Date date = new Date();
 		DateFormat formater = new SimpleDateFormat("dd-MM-yy-hh-mm-ss");
 		return formater.format(date);
+	}
+	
+	public static void checkValuesIni(String filePath)
+	{
+		Scanner scanner;
+		try {
+			File file = new File(filePath);
+			if(file.exists())
+			{
+				scanner = new Scanner(file);	
+				while (scanner.hasNextLine()) 
+				{
+				    String line = scanner.nextLine();
+				    if(line.contains("="))
+				    {
+				    	line = line.replaceAll(" ", "");
+				    	if(line.contains("seuilinit"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILINITTI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuiletiquetage"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.SEUILETI = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmin"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MIN_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    	if(line.contains("seuilmax"))
+				    		if(!line.substring(line.lastIndexOf("=")+1).equals(""))
+				    			Data.MAX_SEUIL_FORM = Integer.parseInt(line.substring(line.lastIndexOf("=")+1));
+				    }
+				}
+				scanner.close();
+			}
+			else // file does not exist
+			{
+				try {
+					file.createNewFile();
+					FileWriter writer = new FileWriter(file, true);
+
+					String texte = "seuilinit="+Data.SEUILINITTI+"\n";
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuiletiquetage="+Data.SEUILETI;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmin="+Data.MIN_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					texte = "seuilmax="+Data.MAX_SEUIL_FORM;
+					writer.write(texte,0,texte.length());
+					writer.write("\r\n");
+					
+					writer.close(); // fermer le fichier à la fin des traitements					
+				} 
+				catch (IOException e) 
+				{e.printStackTrace();} 
+			}
+		} 
+		catch (FileNotFoundException e) 
+		{e.printStackTrace();}
 	}
 }

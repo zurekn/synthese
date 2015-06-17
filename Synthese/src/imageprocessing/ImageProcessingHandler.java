@@ -26,7 +26,7 @@ public class ImageProcessingHandler extends Handler {
 	private ImageProcessingHandler(Webcam webcam) {
 		super();
 		this.webcam = webcam;
-		seuil = 50;
+		seuil = 25;
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class ImageProcessingHandler extends Handler {
 	public void initImageRef() {
 		System.out.println("Image ref taken at "+System.currentTimeMillis());
 		imageRef = webcam.getImage();
-		if (Data.debugPicture) {
+		if (Data.tiDebug) {
 			try {
 				ImageIO.write(imageRef, "jpg", new File(Data.getImageDir()
 						+ "imageRef" + Data.getDate() + ".jpg"));
@@ -120,8 +120,10 @@ public class ImageProcessingHandler extends Handler {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(imageRef, image, seuil);
-			
+			//Test de version opti
+//			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(imageRef, image, seuil);
+			List<FormObject> lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 0, 0, 0, 0);
+
 			/***********************************	debug	************************************************/
 			/*List<FormObject> lf = null;
 			try 
