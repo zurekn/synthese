@@ -1,11 +1,18 @@
 package data;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 public class HeroData {
 
@@ -22,6 +29,18 @@ public class HeroData {
 				return heros.get(i);
 		}
 		return null;
+	}
+	
+	public static String getRandomHero(){
+		String result = "";
+		Random rand = new Random();
+		int n = rand.nextInt((HeroData.getHeroNumber() - 0)) + 0;
+		
+		return heros.get(n).getCaracterClass();
+	}
+	
+	public static int getHeroNumber(){
+		return heros.size();
 	}
 	
 	public static void loadHeros(){
@@ -50,7 +69,14 @@ public class HeroData {
 			movementPoints = Integer.parseInt(el.getChildText("movementPoints"));
 			magicResist = Integer.parseInt(el.getChildText("magicResist"));
 			eyeSight = Integer.parseInt(el.getChildText("eyeSight"));
-			Hero h = new Hero(id, new Stats(life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight ,id));
+			Image icon = null;
+			try {
+				icon = new Image(el.getChildText("icon"));
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Hero h = new Hero(id, icon, new Stats(life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight ,id));
 			Iterator<Element> ii =  el.getChild("spells").getChildren("spell").iterator();
 			
 			while(ii.hasNext()){

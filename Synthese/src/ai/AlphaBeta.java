@@ -1,5 +1,7 @@
 package ai;
 
+
+//TODO handle allies in spell trajectory
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,6 +50,33 @@ public class AlphaBeta {
 		ArrayList<CharacterData> enemies = gameData.getNearEnemies(c);
 		ArrayList<CharacterData> allies = gameData.getNearAllies(c);
 
+		/*
+		float enemiesThreat, careForAllies, backUpAllies;
+		
+		String type = c.getAiType().split(":")[0];
+		switch(type){
+		case "coward":
+			enemiesThreat =2.f;
+			careForAllies = 2.f;
+			backUpAllies = 1.f;
+			break;
+		case "normal":
+			enemiesThreat =1.f;
+			careForAllies = 1.f;
+			backUpAllies = 1.f;
+			break;
+		case "lonewolf":
+			enemiesThreat =1.f;
+			careForAllies = 0.2f;
+			backUpAllies = 0.35f;
+			break;
+		default:
+			enemiesThreat =1.f;
+			careForAllies = 1.f;
+			backUpAllies = 1.f;
+		}
+		
+		*/
 		if (c.getFocusedOn() == null) {
 			if (!enemies.isEmpty()) {
 				CharacterData nearest = enemies.get(0);
@@ -104,8 +133,8 @@ public class AlphaBeta {
 
 						// Create node and add it to tree
 						nodeCount++;
-						// TODO retrieve direction from coordinates
-						int direction = 90;
+						int direction = character.getSpellDirection(
+								target.getX(), target.getY());
 						TreeNode n = new TreeNode(node, spell.getId() + ":"
 								+ direction, depth + 1);
 						node.addSon(n);
@@ -250,9 +279,10 @@ public class AlphaBeta {
 
 						// Create node and add it to tree
 						nodeCount++;
+						int direction = character.getSpellDirection(
+								target.getX(), target.getY());
 						TreeNode n = new TreeNode(node, spell.getId() + ":"
-								+ target.getX() + ":" + target.getY(),
-								depth + 1);
+								+ direction, depth + 1);
 						node.addSon(n);
 
 						if (depth >= depthMax) {
@@ -365,8 +395,6 @@ public class AlphaBeta {
 			int depthMax, TreeNode node, float alpha, float beta,
 			CharacterData character, boolean spellDone) {
 		CharacterData c = gameData.nextCharacter();
-		if (nodeCount % 20000 == 0)
-			System.out.println(nodeCount);
 		try {
 			/*
 			 * System.out .println(character.getId() + "\t" +
@@ -399,15 +427,22 @@ public class AlphaBeta {
 	public void calculateNpcCommands(WindowGameData gameData,
 			Character character) {
 		startTime = System.currentTimeMillis();
-		calculateNpcCommands(gameData, new CharacterData(character));
+		calculateNpcCommands(gameData, new CharacterData(character),false);
 
 	}
 
+	/**
+	 * if spellDone is set to true, the algorithm will not search for a movement
+	 * @param gameData
+	 * @param character
+	 * @param spellDone
+	 */
 	private void calculateNpcCommands(WindowGameData gameData,
-			CharacterData character) {
+			CharacterData character, boolean spellDone) {
 		root = new TreeNode(null, "root", 0, 0.0f);
-		maxValue(gameData, 0, DEPTH_MAX, root, Float.MIN_VALUE,
-				Float.MAX_VALUE, character, false);
+		int depthMax = Integer.parseInt(character.getAiType().split(":")[1]);
+		maxValue(gameData, 0, depthMax, root, Float.MIN_VALUE, Float.MAX_VALUE,
+				character, spellDone);
 		String cmd = "";
 		float value = Float.MIN_VALUE;
 		for (TreeNode n : root.getSons()) {
@@ -417,13 +452,19 @@ public class AlphaBeta {
 			}
 		}
 		CommandHandler.getInstance().addCommand(cmd);
+		System.out.println("Noeuds : " + nodeCount);
 
-		// if next character is npc, continue
+		
 		gameData.doCommand(cmd);
-		CharacterData c = gameData.nextCharacter();
-		if (c.isNpc()) {
-			calculateNpcCommands(gameData, c);
-		} else
-			CommandHandler.getInstance().setCalculationDone(true);
+		if (cmd.startsWith("m")) { //If command is a movement go to next character
+			CharacterData c = gameData.nextCharacter();
+			if (c.isNpc()) {// if next character is npc, continue
+				nodeCount = 0;
+				calculateNpcCommands(gameData, c, false);
+			} else
+				CommandHandler.getInstance().setCalculationDone(true);
+		} else {//else search another command for the current character
+			calculateNpcCommands(gameData, character, true);
+		}
 	}
 }

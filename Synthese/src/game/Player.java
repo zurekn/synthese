@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 import data.Data;
 import data.Hero;
@@ -17,6 +18,8 @@ import exception.IllegalCaracterClassException;
 import exception.IllegalMovementException;
 
 public class Player extends Character {
+	
+	private Image icon;
 	
 	/**
 	 * This constructor is not available
@@ -48,6 +51,7 @@ public class Player extends Character {
 		this.setTrueID(id);
 		this.setNpc(false);
 		Hero h = HeroData.getHeroByClass(caracterClass);
+		icon = h.getIcon();
 		if(h == null){
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
 		}
@@ -64,6 +68,10 @@ public class Player extends Character {
 
 	}
 
+	public Image getIcon(){
+		return icon;
+	}
+	
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.black);
 		if(Data.DISPLAY_PLAYER)
@@ -74,7 +82,7 @@ public class Player extends Character {
 			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
 			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
-			g.drawOval(posX, posY, sizeX, sizeY);
+//			g.drawOval(posX, posY, sizeX, sizeY);
 		}
 	}
 }

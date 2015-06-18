@@ -385,7 +385,7 @@ public class ImageProcessing {
 				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 //				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size() < MAX_SEUIL_FORM && OneArray.size() > MIN_SEUIL_FORM )
+				if(OneArray.size() < Data.MAX_SEUIL_FORM && OneArray.size() > Data.MIN_SEUIL_FORM )
 				{
 					//System.out.println("gagné !!");
 
@@ -561,7 +561,7 @@ public class ImageProcessing {
 				System.out.println("Nombre Etiquettes = " +Num.size());
 			for (ArrayList<Pixel> OneArray : Num) {
 				System.out.println("OneArray size = "+OneArray.size());
-				if(OneArray.size() > MIN_SEUIL_FORM && OneArray.size() < MAX_SEUIL_FORM)
+				if(OneArray.size() > Data.MIN_SEUIL_FORM && OneArray.size() < Data.MAX_SEUIL_FORM)
 				{
 //					System.out.println("gagné !!");
 

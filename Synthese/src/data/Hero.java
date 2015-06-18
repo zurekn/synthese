@@ -2,20 +2,29 @@ package data;
 
 import game.Spell;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import org.newdawn.slick.Image;
 
 public class Hero {
 
 	private String caracterClass;
 	private Stats stat;
+	private Image icon;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 
-	public Hero(String caracterClass, Stats stat) {
+	public Hero(String caracterClass, Image icon, Stats stat) {
 		super();
+		this.icon = icon;
 		this.caracterClass = caracterClass;
 		this.stat = stat;
 	}
 
+	public Image getIcon(){
+		return icon;
+	}
+	
 	public String getCaracterClass() {
 		return caracterClass;
 	}

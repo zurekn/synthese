@@ -6,6 +6,7 @@ import game.Spell;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import data.Data;
 import data.Stats;
 import exception.IllegalActionException;
 import exception.IllegalMovementException;
@@ -49,12 +50,12 @@ public class CharacterData {
 		this.stats = c.getStats().clone();
 		this.spells = c.getSpells();
 		this.aiType = c.getAiType();
-		this.focusedOn = (c.getFocusedOn() != null) ? new CharacterData(c.getFocusedOn())
-				: null;
+		this.focusedOn = (c.getFocusedOn() != null) ? new CharacterData(
+				c.getFocusedOn()) : null;
 		this.npc = c.isNpc();
 		this.monster = c.isMonster();
 	}
-	
+
 	public CharacterData(CharacterData c) {
 		this.id = c.getId();
 		this.x = c.getX();
@@ -64,8 +65,8 @@ public class CharacterData {
 		this.stats = c.getStats().clone();
 		this.spells = c.getSpells();
 		this.aiType = c.getAiType();
-		this.focusedOn = (c.getFocusedOn() != null) ? new CharacterData(c.getFocusedOn())
-				: null;
+		this.focusedOn = (c.getFocusedOn() != null) ? new CharacterData(
+				c.getFocusedOn()) : null;
 		this.npc = c.isNpc();
 		this.monster = c.isMonster();
 	}
@@ -164,6 +165,38 @@ public class CharacterData {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Return the direction of the spell based of the coordinates given in
+	 * parameter
+	 * 
+	 * @param x
+	 * @param y
+	 * @return the direction if the coordinates correspond to lines from
+	 *         character
+	 */
+	public int getSpellDirection(int x, int y) {
+		x = this.x - x;
+		y = this.y - y;
+		if (x == 0) {
+			if (y > 0) {
+				return Data.NORTH;
+			}
+			if (y < 0) {
+				return Data.SOUTH;
+			}
+		}
+		if (y == 0) {
+			if (x > 0) {
+				return Data.EAST;
+			}
+			if (x < 0) {
+				return Data.WEST;
+			}
+		}
+		return Data.SELF;
+
 	}
 
 	public String getId() {

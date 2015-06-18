@@ -8,6 +8,7 @@ import imageprocessing.QRCodeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -16,7 +17,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import ai.AIHandler;
+import ai.AStar;
+import ai.CharacterData;
 import ai.CommandHandler;
 import ai.CommandListener;
 import ai.ActionEvent;
@@ -50,6 +52,8 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character previousCharacter = null;
 	private Character currentCharacter;
+	private ArrayList<int[]> reachableBlock = new ArrayList<int[]>();
+
 
 	private int playerNumber;
 	private int turn;
@@ -117,13 +121,21 @@ public class WindowGame extends BasicGame {
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
-		playerNumber = players.size() + mobs.size();
-
-		turnTimer = Data.TURN_MAX_TIME;
 		new Thread(movementHandler).start();
+		
+		start();
+	}
+	
+	private void start(){
+		playerNumber = players.size() + mobs.size();
+		
+		turnTimer = Data.TURN_MAX_TIME;
 		turn = 0;
 		players.get(turn).setMyTurn(true);
 		currentCharacter = players.get(turn);
+		
+		reachableBlock  = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -143,9 +155,16 @@ public class WindowGame extends BasicGame {
 				addPlayer(var);
 				i++;
 			}*/
-			//TODO test
+			//TODO test add chalenger
 			try {
-				players.add(new Player(10, 12, "P0", "mage"));
+				addChalenger(10, 12);
+				//players.add(new Player(10, 12, "P0", "mage"));
+				if(Data.DEBUG_PLAYER > 1)
+					players.add(new Player(15, 15, "P1", "rogue"));
+				if(Data.DEBUG_PLAYER > 2)
+					players.add(new Player(16, 15, "P2", "barbarian"));
+				if(Data.DEBUG_PLAYER > 3)
+					players.add(new Player(7, 12, "P3", "cleric"));
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			}
@@ -154,6 +173,18 @@ public class WindowGame extends BasicGame {
 
 	}
 
+	/**
+	 * Add a new player 
+	 * @param x
+	 * @param y
+	 * @throws IllegalCaracterClassException 
+	 */
+	public void addChalenger(int x, int y) throws IllegalCaracterClassException{
+		String id = "P"+players.size();
+		String type = HeroData.getRandomHero();
+		players.add(new Player(x, y, id, type));
+	}
+	
 	public void addPlayer(String position) {
 		if (!Data.departureBlocks.get(position)) {
 			String[] s = position.split(":");
@@ -162,10 +193,8 @@ public class WindowGame extends BasicGame {
 				Data.departureBlocks.remove(position);
 				Data.departureBlocks.put(position, true);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalCaracterClassException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.exit(1);
 			}
@@ -184,7 +213,6 @@ public class WindowGame extends BasicGame {
 				try {
 					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -206,7 +234,6 @@ public class WindowGame extends BasicGame {
 				try {
 					decodeAction(e.getId() + ":" + e.getDirection());
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -218,7 +245,6 @@ public class WindowGame extends BasicGame {
 					// TODO check the available position
 					decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -234,14 +260,12 @@ public class WindowGame extends BasicGame {
 	}
 
 	int i = 0;
-
 	/**
 	 * The render function Call all game's render
 	 */
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
 		if (!apix.isInit()) {
-			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
 			// TOP LEFT
@@ -257,24 +281,29 @@ public class WindowGame extends BasicGame {
 		} else {
 			Data.map.render(Data.MAP_X, Data.MAP_Y);
 
-//			if(Data.tiDebug){
-//				g.setColor(Color.yellow);
-//				for(int i = 0; i < Data.MAP_WIDTH; i++)
-//					g.drawLine(Data.MAP_X + i * Data.BLOCK_SIZE_X, Data.MAP_Y, Data.MAP_X + i * Data.BLOCK_SIZE_X,  Data.MAP_Y + Data.MAP_HEIGHT);
-//				for(int i = 0; i < Data.MAP_HEIGHT; i++)
-//					g.drawLine(Data.MAP_X, Data.MAP_Y + i * Data.BLOCK_SIZE_Y, Data.MAP_X + Data.MAP_HEIGHT, Data.MAP_Y + i * Data.BLOCK_SIZE_Y);
-//				
-//			}
 			mobHandler.render(container, g);
-			// TODO
-			// Bug playerrender doesn't work every time
-			playerHandler.render(container, g);
-			renderEvents(container, g);
 			renderDeckArea(container, g);
+			playerHandler.render(container, g);
+			playerHandler.renderPlayerStat(container, g);
+			renderReachableBlocks(container, g);
+			renderEvents(container, g);
 			renderText(container, g);
 		}
 	}
 
+	/**
+	 *  Display the reachables blocks of the current caracter
+	 * @param container
+	 * @param g
+	 */
+	private void renderReachableBlocks(GameContainer container, Graphics g){
+		g.setColor(Data.BLOCK_REACHABLE_COLOR);
+		for(int[] var : reachableBlock){
+			g.fillRect(Data.MAP_X + var[0] * Data.BLOCK_SIZE_X, Data.MAP_Y + var[1] * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		}
+		g.setColor(Color.black);
+	}
+	
 	/**
 	 * Render the Deck Area
 	 * 
@@ -286,14 +315,14 @@ public class WindowGame extends BasicGame {
 		// TOP
 		g.fillRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// BOTTOM
-		g.fillRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+		g.fillRect(Data.MAP_X + Data.DECK_AREA_SIZE_X, Data.MAP_HEIGHT + Data.MAP_Y, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// LEFT
-		g.fillRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+		g.fillRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.MAP_Y + Data.MAP_WIDTH / 2, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		// RIGHT
 		g.fillRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		g.setColor(Color.white);
 	}
-
+	
 	/**
 	 * Render the Game Text
 	 * 
@@ -355,6 +384,7 @@ public class WindowGame extends BasicGame {
 		turn = (turn + 1) % playerNumber;
 
 		previousCharacter = currentCharacter;
+		previousCharacter.regenMana();
 		// Switch the turn
 		// Set the new character turn
 		if (turn < players.size()) {
@@ -363,24 +393,13 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			// String[] commands = AIHandler.getMobsMovements(new
-			// WindowGameData(
-			// players, mobs, currentCharacter, turn));
-
 		}
 		
 
 		// set to false the previous character turn
 		previousCharacter.setMyTurn(false);
-		/*if (turn == 0) {
-			mobs.get(mobs.size() - 1).setMyTurn(false);
-		} else {
-			if (turn <= players.size()) {
-				players.get(turn - 1).setMyTurn(false);
-			} else {
-				mobs.get(turn - players.size() - 1).setMyTurn(false);
-			}
-		}*/
+
+		reachableBlock  = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
 
 		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
 			// launch the new action loader only if it's there's no npc before it (reduce calculation in AIHandler)
@@ -431,9 +450,13 @@ public class WindowGame extends BasicGame {
 							currentCharacter.getY(), e.getDirection()), e);
 			r = r > e.getRange() ? e.getRange() : r;
 			e.setRange(r);
-			events.add(e);
-
-			currentCharacter.useSpell(spellID, direction);
+			
+			try{
+				currentCharacter.useSpell(spellID, direction);
+				events.add(e);
+			}catch(IllegalActionException iae){
+				iae.printStackTrace();
+			}
 
 		}
 
@@ -447,12 +470,6 @@ public class WindowGame extends BasicGame {
 				if (tokens.length != 3)
 					throw new IllegalActionException(
 							"Wrong number of arguments in action string");
-				/*
-				 * String id = tokens[0];
-				 * 
-				 * if (!currentCharacter.getId().equals(id)) throw new
-				 * IllegalActionException( "Not your turn, try again later.");
-				 */
 
 				String position = tokens[1] + ":" + tokens[2];
 				// TODO call aStar and check if character don't fall into trap
