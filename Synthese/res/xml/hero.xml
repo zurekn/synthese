@@ -10,8 +10,14 @@
 		<movementPoints>3</movementPoints>
 		<magicResist>6</magicResist>
 		<spells>
+			<spell id="s1"></spell>
 			<spell id="s2"></spell>
+			<spell id="s3"></spell>
 			<spell id="s4"></spell>
+			<spell id="s5"></spell>
+			<spell id="s6"></spell>
+			<spell id="s8"></spell>
+			<spell id="s9"></spell>
 		</spells>
 		<eyeSight>5</eyeSight>
 	</hero>
@@ -59,7 +65,7 @@
 		<spells>
 			<spell id="s2"></spell>
 			<spell id="s3"></spell>
-			<spell id="s6"></spell>
+			<spell id="s1"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
 	</hero>
