@@ -125,6 +125,7 @@ public class Data {
 	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
+	public static final long REFRESH_TIME_EVENT = 500;//in milli
 
 	
 	/**

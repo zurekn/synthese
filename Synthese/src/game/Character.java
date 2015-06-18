@@ -161,6 +161,7 @@ public abstract class Character {
 	}
 
 	public void heal(int heal) {
+		System.out.println(id + "take : ["+heal+"] heal");
 		stats.setLife(stats.getLife() + heal);
 	}
 
