@@ -147,20 +147,25 @@ public abstract class Character {
 	 *            , type of damage (fire, ice, shock...)
 	 */
 	public void takeDamage(int damage, String type) {
+		
+		System.out.println("Icoming : "+damage+", "+type+", counterP " +getStats().getArmor()+", counterM " +getStats().getMagicResist());
+		
 		if (type.equals("magic")) {
-			damage = damage - getStats().getMagicResist();
+			damage = damage - getStats().getMagicResist()/2;
 		} else if (type.equals("physic")) {
-			damage = damage - getStats().getArmor();
+			damage = damage - getStats().getArmor()/2;
 		} else {
 			System.out.println("Wrong damage type : " + type);
 		}
 		if (damage < 0)
 			damage = 0;
 		stats.setLife(stats.getLife() - damage);
-		System.out.println(id + " take : [" + damage + "] damage");
+		System.out.println(id + " take : [" + damage + "] damage, remaining ["+stats.getLife()+"] HP");
+		
 	}
 
 	public void heal(int heal) {
+		System.out.println(id + "take : ["+heal+"] heal");
 		stats.setLife(stats.getLife() + heal);
 	}
 

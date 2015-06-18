@@ -110,10 +110,11 @@ public class Data {
 	public static final HashMap<String, Boolean> departureBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
-	public static  Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .2f);
+	public static  Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .1f);
+	public static final Color TEXT_COLOR = new Color(Color.black);
 	public static  boolean SHOW_MOB_REACHABLE_BLOCKS = false;
 	public static int MAX_PLAYER = 4;
-	public static int INIT_MAX_TIME = 20;
+	public static int INIT_MAX_TIME = 40;
 
 	private static boolean initImageDir = false;
 
@@ -125,6 +126,7 @@ public class Data {
 	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
+	public static final long REFRESH_TIME_EVENT = 500;//in milli
 
 	
 	/**
