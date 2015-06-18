@@ -372,7 +372,7 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderText(GameContainer container, Graphics g) {
 		// render text
-		g.setColor(Color.white);
+		g.setColor(Data.TEXT_COLOR);
 		g.drawString(Data.MAIN_TEXT, 10, 20);
 	}
 
@@ -532,6 +532,15 @@ public class WindowGame extends BasicGame {
 						focus.character.takeDamage(e.getDamage(), e.getType());
 				else
 					focus.character.takeDamage(e.getDamage(), e.getType());
+				if(focus.character.checkDeath()){
+					//TODO ADD a textual event
+					System.out.println("-----------------------------------------");
+					System.out.println("DEATH FOR"+focus.character.toString());
+					System.out.println("-----------------------------------------");
+					players.remove(focus.character);;
+					mobs.remove(focus.character);
+					playerNumber--;
+				}
 				events.add(e);
 				System.out.println("Created "+e.toString());
 			} catch (IllegalActionException iae) {

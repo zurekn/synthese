@@ -5,7 +5,7 @@
 		<celY>51</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
-		<damage>10</damage>
+		<damage>50</damage>
 		<heal>0</heal>
 		<mana>10</mana>
 		<name>Fire Ball</name>
