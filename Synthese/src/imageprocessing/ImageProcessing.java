@@ -433,11 +433,10 @@ public class ImageProcessing {
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
 		{	
-			System.out.println("pixels number : " + countPixelsNotNull(subImgElements));
 			if(!APIX.isInit)
 				return null;
+			System.out.println("images identiques mais phase d'initialisation");
 			subImgElements = getOneGrayAndBinaryImageOpti(imgCompare, seuil);
-			
 		}
 		
 		if(Data.tiDebug)
@@ -455,7 +454,7 @@ public class ImageProcessing {
 		if(APIX.isInit)
 		{	
 			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+1);
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+5);
 		}
 		
 		if(Data.tiDebug)
@@ -470,7 +469,7 @@ public class ImageProcessing {
 			System.out.println("début étiquettage sur image : subImgElements");
 		
 		int attA, attB,attC, temp = 1, numEt = 1;
-		List<Integer> T = new ArrayList<Integer>();
+		//List<Integer> T = new ArrayList<Integer>();
 		List<ArrayList<Pixel>> Num = new ArrayList<ArrayList<Pixel>>();
 		Num.add(new ArrayList<Pixel>());//pour etiquette 0
 		if(subImgElements!=null)
@@ -490,7 +489,7 @@ public class ImageProcessing {
 							etiquettes[i][j] = numEt;
 							Num.add(new ArrayList<Pixel>());
 							Num.get(numEt).add(new Pixel(i, j));
-							T.add(temp);
+							//T.add(temp);
 							numEt++;
 						}
 			 			else if(attC == attA && attC != attB)//si att(c) = att(a) et att(c) != att(b) => E(c) = E(a)
@@ -501,7 +500,7 @@ public class ImageProcessing {
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
 			 				//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
 			 				//	return null;
-			 				temp++;
+			 				//temp++;
 						}
 						else if(attC != attA && attC == attB)//si att(c) != att(a) et att(c) = att(b) => E(c) = E(b)
 						{
@@ -511,7 +510,7 @@ public class ImageProcessing {
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
 							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
 			 				//	return null;
-							temp++;
+							//temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]==etiquettes[i][j-1])//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(a)
 						{
@@ -521,23 +520,31 @@ public class ImageProcessing {
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
 							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
 	 						//	return null;
-							temp++;
+							//temp++;
 						}
 						else if(attC == attA && attC == attB && etiquettes[i-1][j]!=etiquettes[i][j-1])	//si att(c) = att(a) et att(c) != att(b)  et E(a) = E(b) => E(c) = E(b) et on change toutes E(a) en E(b)
 						{
-							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j]));
+							Num.get(etiquettes[i][j-1]).addAll(Num.get(etiquettes[i-1][j])); // on change toutes E(a) en E(b)
 							// Si on dépasse la taille maximale d'une forme, on arrête le traitement
 			 				// Cela signifie que on a détecté une main ou tout autre objet trop gros
 							//if(Num.get(etiquettes[i][j]).size()>MAX_SEUIL_FORM)
 			 				//	return null;
-							Num.get(etiquettes[i-1][j]).clear();
 							
-							etiquettes[i][j] = etiquettes[i][j-1];
+							Num.get(etiquettes[i-1][j]).clear(); // on vide liste E(a)
+							
+							etiquettes[i][j] = etiquettes[i][j-1]; // E(c) = E(b)
 							Num.get(etiquettes[i][j]).add(new Pixel(i, j));
+							
+							for (Pixel pixel : Num.get(etiquettes[i][j-1])) 
+							{
+								//if(etiquettes[pixel.getX()][pixel.getY()] == etiquettes[i-1][j])
+									etiquettes[pixel.getX()][pixel.getY()] = etiquettes[i][j-1];
+							}
+							
 							//System.out.println("position : [" +i+","+j +"] clear de l'etiquette courante c : " + etiquettes[i][j] + " , b : "+etiquettes[i][j-1] +" , a : "+etiquettes[i-1][j] );
-							temp++;
+							//temp++;
 				
-							for(int x=0;x<=i;x++)
+							/*for(int x=0;x<=i;x++)
 							{
 								for(int y=0;y<=j;y++)
 								{
@@ -547,7 +554,7 @@ public class ImageProcessing {
 										temp++;
 									}
 								}					
-							}
+							}*/
 						}
 						else {
 							if(Data.tiDebug)
@@ -614,10 +621,28 @@ public class ImageProcessing {
 				    downRight = erosionElements[i+1][j+1];
 				    downLeft = erosionElements[i-1][j+1];
 				    
-				    if( up != 0 && down != 0 && left != 0 && right != 0 && upRight != 0 && upLeft != 0 && downRight != 0 && downLeft != 0 )
+				    /*
+				    if( up != 0 || down != 0 || left != 0 || right != 0 || upRight != 0 || upLeft != 0 || downRight != 0 || downLeft != 0 )
 						resultErrosion[i][j] = 255;
 					else
 						resultErrosion[i][j] = 0;
+					*/	
+				    
+				    int cpt = 0;
+				    if (erosionElements[i][j] != 0 )
+		            {
+		                if (up == 255)  cpt++;
+		                if (down == 255)    cpt++;
+		                if (left == 255)  cpt++;
+		                if (right == 255)    cpt++;
+		                if (upLeft == 255)    cpt++;
+		                if (upRight == 255)  cpt++;
+		                if (downLeft == 255)    cpt++;
+		                if (downRight == 255)  cpt++;
+		                
+		                if (cpt >= 8)
+		                	resultErrosion[i][j] = 255;
+		            }
 				}
 			}
 		} 
@@ -654,10 +679,23 @@ public class ImageProcessing {
 				    downRight = dilatationElements[i+1][j+1];
 				    downLeft = dilatationElements[i-1][j+1];
 
-					if( up != 0 || down != 0 || left != 0 || right != 0 || upRight != 0 || upLeft != 0 || downRight != 0 || downLeft != 0 )
-						resultDilatation[i][j] = 255;
-					else
-						resultDilatation[i][j] = 0;
+				    /*if( up != 0 || down != 0 || left != 0 || right != 0 || upRight != 0 || upLeft != 0 || downRight != 0 || downLeft != 0 )
+					resultDilatation[i][j] = 255;
+				else
+					resultDilatation[i][j] = 0;*/
+			    if (dilatationElements[i][j] != 0)
+	            {
+			    	resultDilatation[i-1][j-1] = 255;
+			    	resultDilatation[i-1][j]   = 255;
+			    	resultDilatation[i-1][j+1] = 255;
+			    	resultDilatation[i][j-1]   = 255;
+			    	resultDilatation[i][j+1]   = 255;
+			    	resultDilatation[i+1][j-1] = 255;
+			    	resultDilatation[i+1][j]   = 255;
+			    	resultDilatation[i+1][j+1] = 255;
+	            }
+	            if (resultDilatation[i][j] != 255)
+	            	resultDilatation[i][j] = dilatationElements[i][j];
 				}
 			}
 		} 
