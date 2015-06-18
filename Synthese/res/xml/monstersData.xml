@@ -39,4 +39,196 @@
 		<aiType>normal:4</aiType>
 		<eyeSight>4</eyeSight>
 	</monster>
+	
+	<monster id="m3">
+		<name>Slime</name>
+		<file>Synthese/res/images/tiles/Monsters/slime.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>32</celDimensionY>
+		<life>200</life>
+		<strength>15</strength>
+		<mana>50</mana>
+		<armor>70</armor>
+		<magicPower>3</magicPower>
+		<luck>10</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>2</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s4</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m4">
+		<name>Eye seeyou</name>
+		<file>Synthese/res/images/tiles/Monsters/eyeball.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>38</celDimensionY>
+		<life>200</life>
+		<strength>15</strength>
+		<mana>50</mana>
+		<armor>10</armor>
+		<magicPower>3</magicPower>
+		<luck>20</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>20</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s4</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>42</eyeSight>
+	</monster>
+	
+	<monster id="m5">
+		<name>Burned head</name>
+		<file>Synthese/res/images/tiles/Monsters/fire_skull.png</file>
+		<celDimensionX>50</celDimensionX>
+		<celDimensionY>50</celDimensionY>
+		<life>400</life>
+		<strength>25</strength>
+		<mana>50</mana>
+		<armor>35</armor>
+		<magicPower>16</magicPower>
+		<luck>2</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>20</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s9</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m6">
+		<name>Bold-smile</name>
+		<file>Synthese/res/images/tiles/Monsters/bat.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>34</celDimensionY>
+		<life>310</life>
+		<strength>25</strength>
+		<mana>50</mana>
+		<armor>25</armor>
+		<magicPower>16</magicPower>
+		<luck>10</luck>
+		<movementPoints>4</movementPoints>
+		<magicResist>20</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s3</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>2</eyeSight>
+	</monster>
+	
+	<monster id="m7">
+		<name>Zig Bee</name>
+		<file>Synthese/res/images/tiles/Monsters/bee.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>34</celDimensionY>
+		<life>210</life>
+		<strength>25</strength>
+		<mana>50</mana>
+		<armor>25</armor>
+		<magicPower>16</magicPower>
+		<luck>10</luck>
+		<movementPoints>4</movementPoints>
+		<magicResist>20</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s4</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m8">
+		<name>Sneaky snake</name>
+		<file>Synthese/res/images/tiles/Monsters/snake.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>34</celDimensionY>
+		<life>350</life>
+		<strength>30</strength>
+		<mana>50</mana>
+		<armor>25</armor>
+		<magicPower>16</magicPower>
+		<luck>10</luck>
+		<movementPoints>3</movementPoints>
+		<magicResist>20</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s3</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m9">
+		<name>Manhunting Flower</name>
+		<file>Synthese/res/images/tiles/Monsters/man_eater_flower.png</file>
+		<celDimensionX>60</celDimensionX>
+		<celDimensionY>78</celDimensionY>
+		<life>550</life>
+		<strength>35</strength>
+		<mana>90</mana>
+		<armor>35</armor>
+		<magicPower>26</magicPower>
+		<luck>10</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>30</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s4</spell>
+			<spell>s7</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m10">
+		<name>Whorm</name>
+		<file>Synthese/res/images/tiles/Monsters/small_worm.png</file>
+		<celDimensionX>32</celDimensionX>
+		<celDimensionY>34</celDimensionY>
+		<life>250</life>
+		<strength>15</strength>
+		<mana>40</mana>
+		<armor>15</armor>
+		<magicPower>16</magicPower>
+		<luck>10</luck>
+		<movementPoints>3</movementPoints>
+		<magicResist>15</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s7</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
+	<monster id="m11">
+		<name>Big whorm</name>
+		<file>Synthese/res/images/tiles/Monsters/big_worm.png</file>
+		<celDimensionX>35</celDimensionX>
+		<celDimensionY>50</celDimensionY>
+		<life>550</life>
+		<strength>35</strength>
+		<mana>90</mana>
+		<armor>35</armor>
+		<magicPower>26</magicPower>
+		<luck>10</luck>
+		<movementPoints>2</movementPoints>
+		<magicResist>30</magicResist>
+		<spells>
+			<spell>s2</spell>
+			<spell>s4</spell>
+			<spell>s3</spell>
+		</spells>
+		<aiType>normal:4</aiType>
+		<eyeSight>3</eyeSight>
+	</monster>
+	
 </monsters>
