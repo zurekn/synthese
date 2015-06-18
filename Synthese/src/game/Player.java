@@ -42,6 +42,7 @@ public class Player extends Character {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public Player(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
 		monster=false;
 		this.setX(x);

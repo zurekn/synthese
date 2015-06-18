@@ -44,7 +44,7 @@ public class Data {
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 4;
+	public static final int DEBUG_PLAYER = 0;
 	public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	//public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
@@ -110,7 +110,10 @@ public class Data {
 	public static final HashMap<String, Boolean> departureBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
-	public static final Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .2f);
+	public static  Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .2f);
+	public static  boolean SHOW_MOB_REACHABLE_BLOCKS = false;
+	public static int MAX_PLAYER = 4;
+	public static int INIT_MAX_TIME = 20;
 
 	private static boolean initImageDir = false;
 
@@ -118,8 +121,11 @@ public class Data {
 	public static MonsterData monsterData;
 	public static WindowGame game;
 	public static long beginTime;
-
 	
+	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
+	public static final String TURN_TEXT = "End of turn in : ";
+	public static  String MAIN_TEXT = "";
+
 	
 	/**
 	 * Load all game variables

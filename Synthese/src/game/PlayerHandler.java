@@ -102,6 +102,11 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 		for(int i = 0; i < player.size(); i++)
 			player.get(i).render(container , g);		
 	}
+
+	public void renderInitBlock(GameContainer container, Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
