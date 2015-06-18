@@ -453,8 +453,9 @@ public class ImageProcessing {
 		
 		if(APIX.isInit)
 		{	
-			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE+5);
+			
+			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE);
+			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE+5);
 		}
 		
 		if(Data.tiDebug)

@@ -137,7 +137,7 @@ public class FormObject {
 			gx += pixel.getX();
 			gy += pixel.getY();
 		}	
-		Pixel gravityBaryCenter = new Pixel((gy/PointsInterests.size()),(gx/PointsInterests.size()));
+		Pixel gravityBaryCenter = new Pixel((gx/PointsInterests.size()),(gy/PointsInterests.size()));
 		return gravityBaryCenter;
 	}
 	
