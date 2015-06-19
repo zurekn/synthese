@@ -161,6 +161,7 @@ public class ImageProcessingHandler extends Handler {
 			try {
 				System.out.println("Attente de "+Data.WAIT_TI/1000+" sec pour le prochain traitement");
 				Thread.sleep(Data.WAIT_TI);
+				imageRef = image; // permet de faire un traitement de l'image t-1 à t et non imageInit à image t
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
