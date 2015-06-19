@@ -39,7 +39,7 @@ public class Data {
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
-	public static final boolean runQRCam = false;
+	public static final boolean runQRCam = true;
 	public static final boolean RUN_APIX = true;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;

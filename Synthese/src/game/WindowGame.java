@@ -830,4 +830,9 @@ public class WindowGame extends BasicGame {
 			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
 	}
+	
+	public Character getCurrentPlayer()
+	{
+		return currentCharacter;
+	}
 }

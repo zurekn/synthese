@@ -23,7 +23,7 @@ public class ImageProcessing {
 	int maxY;
 	public static final int MIN_SEUIL_FORM = 50;
 	public static final int MAX_SEUIL_FORM = 5000;
-	public static final int NIV_OUVERTURE = 5;
+	public static final int NIV_OUVERTURE = 2;
 
 	public ImageProcessing() 
 	{
@@ -451,8 +451,7 @@ public class ImageProcessing {
 		if(Data.tiDebug)
 		{
 		    try
-		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction"
-		    		+".jpg"));}
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageSoustraction_"+Data.getDate()+".jpg"));}
 		    catch (IOException e) 
 			{	e.printStackTrace();}   
 		}
@@ -464,14 +463,13 @@ public class ImageProcessing {
 		{	
 			
 			subImgElements = Ouverture(subImgElements, NIV_OUVERTURE);
-			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE+5);
+			subImgElements = Fermeture(subImgElements, NIV_OUVERTURE+1);
 		}
 		
 		if(Data.tiDebug)
 		{
 			try
-		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageApresFermeture&Ouverture"
-		    		+".jpg"));}
+		    {	ImageIO.write(intTableToBinaryBufferedImage(subImgElements), "jpg", new File(urlImage + "imageApresFermeture&Ouverture_"+Data.getDate()+".jpg"));}
 		    catch (IOException e) 
 			{	e.printStackTrace();} 
 		}
@@ -1024,8 +1022,8 @@ public class ImageProcessing {
         /*	fin ajout */
         try 
         {
-			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG.jpg"));
-			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin.jpg"));
+			ImageIO.write(imgRes, "jpg", new File(urlImage + "test_getOneGrayImage_NG"+Data.getDate()+".jpg"));
+			ImageIO.write(imgRes_Bin, "jpg", new File(urlImage + "test_getOneGrayImage_Bin"+Data.getDate()+".jpg"));
 			//ImageIO.write(imgRes_Bin_ouverture, "jpg", new File(urlImage + "test_getOneGrayImage_Bin_ouverture"+Data.getDate()+".jpg"));
 		} 
         catch (IOException e) 
