@@ -1,16 +1,36 @@
 package ai;
 
-
 //TODO handle allies in spell trajectory
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import data.HeroData;
 import game.Character;
 import game.Spell;
 
 public class AlphaBeta {
 	// TODO debug
 	private static final int DEPTH_MAX = 2;
+	private static final float[][] AI_FACTORS = {
+			{ 2.f, 1.5f, 0.75f, 0.2f, 0.50f, 0.3f }, // coward
+			{ 1.f, 0.5f, 0.40f, 0.3f, 0.70f, 0.9f }, // lonewolf
+			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f }, // normal
+			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f } // player
+	};
+
+	private static final int COWARD = 0;
+	private static final int LONEWOLF = 1;
+	private static final int NORMAL = 2;
+	private static final int PLAYER = 3;
+
+	private static final int ENEMIES_DETECTION = 0; 
+	private static final int ALLIES_DETECTION = 1;
+	private static final int MIN_LIFE = 2; //min percentage life before unfocus
+	private static final int BACKUP_ALLIES = 3; //min percentage of allies' life to heal them
+	private static final int RUNAWAY = 4; // min danger level to run away
+	private static final int STICK_TO_ALLIES = 5; //min danger level to go near allies 
+
 	private static AlphaBeta alphaBeta;
 	private TreeNode root;
 	private int nodeCount = 0;
@@ -21,6 +41,7 @@ public class AlphaBeta {
 
 	private AlphaBeta() {
 		root = new TreeNode(null, "root", 0, 0.0f);
+
 	}
 
 	public static AlphaBeta getInstance() {
@@ -47,62 +68,93 @@ public class AlphaBeta {
 	}
 
 	private void detectFocus(WindowGameData gameData, CharacterData c) {
-		ArrayList<CharacterData> enemies = gameData.getNearEnemies(c);
-		ArrayList<CharacterData> allies = gameData.getNearAllies(c);
-
-		/*
-		float enemiesThreat, careForAllies, backUpAllies;
-		
-		String type = c.getAiType().split(":")[0];
-		switch(type){
+		String aiType = c.getAiType().split(":")[0];
+		int type = 3;
+		switch (aiType) {
 		case "coward":
-			enemiesThreat =2.f;
-			careForAllies = 2.f;
-			backUpAllies = 1.f;
-			break;
-		case "normal":
-			enemiesThreat =1.f;
-			careForAllies = 1.f;
-			backUpAllies = 1.f;
+			type = 0;
 			break;
 		case "lonewolf":
-			enemiesThreat =1.f;
-			careForAllies = 0.2f;
-			backUpAllies = 0.35f;
+			type = 1;
 			break;
-		default:
-			enemiesThreat =1.f;
-			careForAllies = 1.f;
-			backUpAllies = 1.f;
+		case "normal":
+			type = 2;
+			break;
+		case "player":
+			type = 3;
 		}
-		
-		*/
-		if (c.getFocusedOn() == null) {
-			if (!enemies.isEmpty()) {
-				CharacterData nearest = enemies.get(0);
-				double d = c.distanceFrom(nearest);
-				for (CharacterData e : enemies) {
-					if (d <= e.distanceFrom(c)) {
-						d = e.distanceFrom(c);
-						nearest = e;
+
+		if (c.getStats().getLifePercentage() < AI_FACTORS[type][MIN_LIFE]) {
+			c.setFocusedOn(null);
+		} else {
+			ArrayList<CharacterData> enemies = gameData.getNearEnemies(c);
+			ArrayList<CharacterData> allies = gameData.getNearAllies(c);
+			CharacterData focus = null;
+
+			if (c.getFocusedOn() == null) {
+				// search to heal an ally
+				for (CharacterData a : allies) {
+					if (a.getStats().getLifePercentage() < AI_FACTORS[type][BACKUP_ALLIES]) {
+						focus = a;
+						break;
 					}
 				}
-				c.setFocusedOn(nearest);
-			} else {
-				if (!allies.isEmpty()) {
-					CharacterData nearest = allies.get(0);
-					double d = c.distanceFrom(nearest);
-					for (CharacterData a : allies) {
-						CharacterData focus = a.getFocusedOn();
-						if (focus != null) {
-							if (d <= focus.distanceFrom(c)) {
-								d = focus.distanceFrom(c);
-								nearest = focus;
+
+				if (focus == null) {
+					float alliesFactor = allies.size()
+							* AI_FACTORS[type][ALLIES_DETECTION];
+					float enemiesFactor = enemies
+							.size() * AI_FACTORS[type][ENEMIES_DETECTION];
+					float sum = alliesFactor + enemiesFactor;
+					float dangerFactor = (sum!=0) ? enemiesFactor/sum : 0;
+
+					if (dangerFactor <= AI_FACTORS[type][RUNAWAY] && !enemies.isEmpty()) {
+						int xMean = 0, yMean = 0;
+						for (CharacterData e : enemies) {
+							xMean += e.getX();
+							yMean += e.getY();
+						}
+						xMean /= enemies.size();
+						yMean /= enemies.size();
+						focus = new CharacterData("point", -xMean, -yMean);
+					} else if (dangerFactor > AI_FACTORS[type][RUNAWAY]
+							&& dangerFactor <= AI_FACTORS[type][STICK_TO_ALLIES] && !allies.isEmpty()) {
+						int xMean = 0, yMean = 0;
+						for (CharacterData a : allies) {
+							xMean += a.getX();
+							yMean += a.getY();
+						}
+						xMean /= allies.size();
+						yMean /= allies.size();
+						focus = new CharacterData("point", xMean, yMean);
+					} else {
+						if (!enemies.isEmpty()) {
+							CharacterData nearest = enemies.get(0);
+							double d = c.distanceFrom(nearest);
+							for (CharacterData e : enemies) {
+								double dist = c.distanceFrom(e);
+								if (e.isMonster() && d > dist) {
+									d = dist;
+									nearest = e;
+								} else {// if it's a hero
+									if (HeroData.CLASSES_VALUES.get(nearest
+											.getStats().getCharacterClass()) < HeroData.CLASSES_VALUES
+											.get(nearest.getStats()
+													.getCharacterClass())
+											&& dist < d) {
+										d = dist;
+										nearest = e;
+									}
+								}
 							}
 						}
 					}
 				}
+				c.setFocusedOn(focus);
+			} else { // if there's already a character focused
+				// TODO handle unfocus cases
 			}
+
 		}
 	}
 
@@ -115,9 +167,9 @@ public class AlphaBeta {
 
 		WindowGameData data = null;
 
-		detectFocus(gameData, character);
-
 		if (!spellDone) {
+			detectFocus(gameData, character);
+
 			// Spell Part
 			ArrayList<Spell> spells = characterData.getSpells();
 
@@ -218,34 +270,32 @@ public class AlphaBeta {
 				}
 				return beta;
 
-				// If none character is focused, random movement
+				// If none character is focused, single movement
 			} else {
 				ArrayList<int[]> positions = AStar.getInstance()
 						.getReachableNodes(gameData, character);
-				Random rand = new Random(System.nanoTime());
-				int[] position = positions.get(rand.nextInt(positions.size()));
-				int x = position[0], y = position[1];
+				for (int[] position : positions) {
+					value = Float.MAX_VALUE;
+					int x = position[0], y = position[1];
+					data = gameData.clone();
+					data.move(character, x, y);
 
-				// Create node and add it to tree
-				nodeCount++;
-				TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
-				node.addSon(n);
+					// Create node and add it to tree
+					nodeCount++;
+					TreeNode n = new TreeNode(node, "m:" + x + ":" + y,
+							depth + 1);
+					node.addSon(n);
 
-				data = gameData.clone();
-				data.move(character, x, y);
+					value = h(data, character);
+					n.setHeuristic(value);
+					if (value < beta) {
+						beta = value;
 
-				value = h(data, character);
-				n.setHeuristic(value);
-
-				value = h(data, character);
-
-				if (value < beta) {
-					beta = value;
-
-				}
-				if (beta <= alpha) {
-					node.cut(n);
-					return alpha;
+					}
+					if (beta <= alpha) {
+						node.cut(n);
+						return alpha;
+					}
 				}
 				return beta;
 			}
@@ -261,9 +311,9 @@ public class AlphaBeta {
 
 		WindowGameData data = null;
 
-		detectFocus(gameData, character);
-
 		if (!spellDone) {
+			detectFocus(gameData, character);
+
 			// Spell Part
 			ArrayList<Spell> spells = characterData.getSpells();
 
@@ -276,7 +326,7 @@ public class AlphaBeta {
 					for (CharacterData target : targets) {
 						data = gameData.clone();
 						data.useSpell(character, spell, target);
-
+						
 						// Create node and add it to tree
 						nodeCount++;
 						int direction = character.getSpellDirection(
@@ -332,7 +382,7 @@ public class AlphaBeta {
 				}
 
 				for (int[] position : positions) {
-					value = Float.MAX_VALUE;
+					value = Float.MIN_VALUE;
 					int x = position[0], y = position[1];
 					data = gameData.clone();
 					data.move(character, x, y);
@@ -361,30 +411,34 @@ public class AlphaBeta {
 				}
 				return alpha;
 
-				// If none character is focused, random movement
+				// If none character is focused, single movement
 			} else {
 				ArrayList<int[]> positions = AStar.getInstance()
 						.getReachableNodes(gameData, character);
-				Random rand = new Random(System.nanoTime());
-				int[] position = positions.get(rand.nextInt(positions.size()));
-				int x = position[0], y = position[1];
+				for (int[] position : positions) {
+					
+					value = Float.MIN_VALUE;
+					int x = position[0], y = position[1];
+					data = gameData.clone();
+					data.move(character, x, y);
 
-				// Create node and add it to tree
-				nodeCount++;
-				TreeNode n = new TreeNode(node, "m:" + x + ":" + y, depth + 1);
-				node.addSon(n);
+					// Create node and add it to tree
+					nodeCount++;
+					TreeNode n = new TreeNode(node, "m:" + x + ":" + y,
+							depth + 1);
+					node.addSon(n);
 
-				data = gameData.clone();
-				data.move(character, x, y);
-
-				value = h(data, character);
-				n.setHeuristic(value);
-				if (value > alpha) {
-					alpha = value;
-				}
-				if (alpha >= beta) {
-					node.cut(n);
-					return beta;
+					value = h(data, character);
+					n.setMaxDepthReached(true);
+					
+					n.setHeuristic(value);
+					if (value > alpha) {
+						alpha = value;
+					}
+					if (alpha >= beta) {
+						node.cut(n);
+						return beta;
+					}
 				}
 				return alpha;
 			}
@@ -419,20 +473,23 @@ public class AlphaBeta {
 			 * startTime));
 			 */
 			// nodeCount = 0;
+			CharacterData next = gameData.nextCharacter();
+			next = gameData.nextCharacter();
 			return maxValue(gameData, depth + 1, depthMax, node, alpha, beta,
-					gameData.nextCharacter(), spellDone);
+					next, false);
 		}
 	}
 
 	public void calculateNpcCommands(WindowGameData gameData,
 			Character character) {
 		startTime = System.currentTimeMillis();
-		calculateNpcCommands(gameData, new CharacterData(character),false);
+		calculateNpcCommands(gameData, new CharacterData(character), false);
 
 	}
 
 	/**
 	 * if spellDone is set to true, the algorithm will not search for a movement
+	 * 
 	 * @param gameData
 	 * @param character
 	 * @param spellDone
@@ -454,16 +511,17 @@ public class AlphaBeta {
 		CommandHandler.getInstance().addCommand(cmd);
 		System.out.println("Noeuds : " + nodeCount);
 
-		
 		gameData.doCommand(cmd);
-		if (cmd.startsWith("m")) { //If command is a movement go to next character
+		if (cmd.startsWith("m")) { // If command is a movement go to next
+									// character
 			CharacterData c = gameData.nextCharacter();
 			if (c.isNpc()) {// if next character is npc, continue
 				nodeCount = 0;
 				calculateNpcCommands(gameData, c, false);
 			} else
 				CommandHandler.getInstance().setCalculationDone(true);
-		} else {//else search another command for the current character
+
+		} else {// else search another command for the current character
 			calculateNpcCommands(gameData, character, true);
 		}
 	}

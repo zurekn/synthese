@@ -48,7 +48,7 @@ public class Player extends Character {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
-		this.setAiType("hero");
+		this.setAiType("player");
 		this.setTrueID(id);
 		this.setNpc(false);
 		Hero h = HeroData.getHeroByClass(caracterClass);
@@ -57,7 +57,7 @@ public class Player extends Character {
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
 		}
 			
-		this.setStats(h.getStat());
+		this.setStats(h.getStat().clone());
 		this.setSpells(h.getSpells());
 		
 		if (Data.debug) {
@@ -79,10 +79,10 @@ public class Player extends Character {
 			g.fillRect(Data.MAP_X + getX() * Data.BLOCK_SIZE_X, Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (isMyTurn()) {
-			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
-			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
-			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
-			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
+//			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
+//			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
+//			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
+//			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 //			g.drawOval(posX, posY, sizeX, sizeY);
 		}
 	}

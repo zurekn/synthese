@@ -39,8 +39,8 @@ public class Data {
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
-	public static final boolean runQRCam = true;
-	public static final boolean RUN_APIX = true;
+	public static final boolean runQRCam = false;
+	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
@@ -54,6 +54,7 @@ public class Data {
 	public static int SEUILETI = 200;
 	public static int MIN_SEUIL_FORM = 50;
 	public static int MAX_SEUIL_FORM = 5000;
+	public static final int QRCamSeuil = 60;//Data.SEUILETI;
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -87,6 +88,8 @@ public class Data {
 	public static int PLAYER_MANA_RECT_Y_SIZE = 10;
 	public static int PLAYER_ICON_X_POS = 10;
 	public static int PLAYER_ICON_Y_POS = 50;
+	public static int PLAYER_MESSAGE_X_POS = 120;
+	public static int PLAYER_MESSAGE_Y_POS = 10;
 	
 	public static final int SELF = 360;
 	public static final int NORTH = 0;
@@ -129,7 +132,14 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
+	public static final long MESSAGE_DURATION = 2000;
 	
+	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	public static final int ACTION_PER_TURN = 1;
+	
+	//ERROR MESSAGES
+	public static final String ERROR_TOO_MUCH_ACTION = "Une seul action par tour !";
 
 	
 	/**
@@ -286,5 +296,32 @@ public class Data {
 		} 
 		catch (FileNotFoundException e) 
 		{e.printStackTrace();}
+	}
+
+	public static Color getColorMessage(int type) {
+		Color color;
+		switch(type){
+		case 0:
+			color = MESSAGE_COLOR_TYPE_0;
+			break;
+		case 1:
+			color = MESSAGE_COLOR_TYPE_1;
+			break;
+		default:
+			color = MESSAGE_COLOR_TYPE_0;
+			break;
+		}
+		return color;
+	}
+
+	public static long getDurationMessage(int type) {
+		switch (type){
+		case 0:
+			return MESSAGE_DURATION;
+		case 1:
+			return MESSAGE_DURATION * 2;
+		default:
+			return MESSAGE_DURATION;
+		}
 	}
 }

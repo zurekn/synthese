@@ -21,6 +21,8 @@ public class CharacterData {
 	private ArrayList<Spell> spells;
 	private String aiType;
 	private CharacterData focusedOn;
+	private int destX;
+	private int destY;
 	private boolean npc;
 	private boolean monster;
 
@@ -57,18 +59,26 @@ public class CharacterData {
 	}
 
 	public CharacterData(CharacterData c) {
-		this.id = c.getId();
-		this.x = c.getX();
-		this.y = c.getY();
-		this.lastX = c.getLastX();
-		this.lastY = c.getLastY();
-		this.stats = c.getStats().clone();
-		this.spells = c.getSpells();
-		this.aiType = c.getAiType();
-		this.focusedOn = (c.getFocusedOn() != null) ? new CharacterData(
-				c.getFocusedOn()) : null;
-		this.npc = c.isNpc();
-		this.monster = c.isMonster();
+		this.id = c.id;
+		this.x = c.x;
+		this.y = c.y;
+		this.lastX = c.lastX;
+		this.lastY = c.lastY;
+		this.destX = c.destX;
+		this.destY = c.destY;
+		this.stats = (c.stats != null) ? c.stats.clone() : null;;
+		this.spells = c.spells;
+		this.aiType = c.aiType;
+		this.focusedOn = (c.focusedOn != null) ? new CharacterData(
+				c.focusedOn) : null;
+		this.npc = c.npc;
+		this.monster = c.monster;
+	}
+
+	public CharacterData(String id, int x, int y) {
+		this.id = id;
+		this.x = x;
+		this.y = y;
 	}
 
 	/**
@@ -179,6 +189,10 @@ public class CharacterData {
 	public int getSpellDirection(int x, int y) {
 		x = this.x - x;
 		y = this.y - y;
+		
+		if(x == 0 && y == 0)
+			return Data.SELF;
+		
 		if (x == 0) {
 			if (y > 0) {
 				return Data.NORTH;
@@ -189,14 +203,13 @@ public class CharacterData {
 		}
 		if (y == 0) {
 			if (x > 0) {
-				return Data.EAST;
-			}
-			if (x < 0) {
 				return Data.WEST;
 			}
+			if (x < 0) {
+				return Data.EAST;
+			}
 		}
-		return Data.SELF;
-
+		return -1;
 	}
 
 	public String getId() {
@@ -285,6 +298,38 @@ public class CharacterData {
 
 	public void setMonster(boolean monster) {
 		this.monster = monster;
+	}
+	
+	public void setDestination(int x, int y){
+		destX =x;
+		destY =y;
+	}
+	
+	public void setDestination(int[] destination){
+		if(destination == null){
+			destX = -1;
+			destY = -1;
+		}else
+			setDestination(destination[0],destination[1]);		
+	}
+	
+	public int getDestX(){
+		return destX;
+	}
+	
+	public int getDestY(){
+		return destY;
+	}
+	
+	public int[] getDestination(){
+		int[] dest = {x,y};
+		return dest;
+	}
+	
+	public boolean hasDestination(){
+		if(x==-1 || y ==-1)
+			return false;
+		return true;
 	}
 
 	@Override

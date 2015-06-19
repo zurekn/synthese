@@ -3,6 +3,7 @@ package data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +19,7 @@ public class HeroData {
 
 	public static ArrayList<Hero> heros = new ArrayList<Hero>();
 	public static ArrayList<String> caraClass = new ArrayList<String>();
+	public static final HashMap<String, Integer> CLASSES_VALUES = new HashMap<String, Integer>(); 
 	
 	public void addHero(Hero h) {
 		heros.add(h);
@@ -32,6 +34,8 @@ public class HeroData {
 	}
 	
 	public static String getRandomHero(){
+		if(Data.debug)
+			return "mage";
 		String result = "";
 		Random rand = new Random();
 		int n = rand.nextInt((HeroData.getHeroNumber() - 0)) + 0;
@@ -89,6 +93,11 @@ public class HeroData {
 			caraClass.add(h.getCaracterClass());
 			System.out.println("	Hero : "+h.getCaracterClass());
 		}
+		//TODO 
+		CLASSES_VALUES.put("mage", 0);
+		CLASSES_VALUES.put("barbarian", 10);
+		CLASSES_VALUES.put("rogue", 5);
+		CLASSES_VALUES.put("cleric", 0);
 	}
 
 }
