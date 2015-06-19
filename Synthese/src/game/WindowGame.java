@@ -606,7 +606,7 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		}
-		if (Data.debug)
+		if (Data.debug && focus != null)
 			System.out.println("The Range is : " + range+", focus is "+focus.toString());
 		return new Focus(range, focus);
 	}

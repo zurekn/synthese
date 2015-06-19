@@ -54,6 +54,7 @@ public class Data {
 	public static int SEUILETI = 200;
 	public static int MIN_SEUIL_FORM = 50;
 	public static int MAX_SEUIL_FORM = 5000;
+	public static final int QRCamSeuil = Data.SEUILETI;
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -129,6 +130,7 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
+	
 	
 
 	

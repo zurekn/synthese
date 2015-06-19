@@ -98,7 +98,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 				try {
 						// set seuil to 20 to ensure better results
 					
-					tqr.findAllQR("",20, image);
+					tqr.findAllQR("",Data.QRCamSeuil, image);
 					if(Data.debugQR){
 						System.out.println("Image taken for QRcode");
 						ImageIO.write(image, "jpg", new File(Data.getImageDir()+"QRCode.jpg"));
