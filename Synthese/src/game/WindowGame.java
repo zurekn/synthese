@@ -272,7 +272,10 @@ public class WindowGame extends BasicGame {
 						+ e.getX() / apix.getBlockSizeX() + ":" + e.getY() / apix.getBlockSizeY() + "]");
 				try {
 					if (gameOn)
-						decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
+						if(!currentCharacter.isMonster())
+							decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
+						else
+							System.err.println("Récupération d'une valeur de l'apix durant le tour de l'ia");
 					else
 						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY());
 				} catch (IllegalActionException e1) {
@@ -633,9 +636,12 @@ public class WindowGame extends BasicGame {
 							decodeAction("s2:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
-						System.err.println("Yolo" +e.getMessage());
+						System.err.println(e.getMessage());
 					}
 				}
+		}
+		if(Input.KEY_DIVIDE == key){
+			currentCharacter.takeDamage(20, "magic");
 		}
 		if (Input.KEY_SUBTRACT == key) {
 			start();
