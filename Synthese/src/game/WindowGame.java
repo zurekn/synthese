@@ -525,7 +525,7 @@ public class WindowGame extends BasicGame {
 			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
 			Focus focus = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(), currentCharacter.getY(), e.getDirection()), e);
-			System.out.println("get focus : " + focus.toString());
+			//System.out.println("get focus : " + focus.toString());
 			int r = focus.range > e.getRange() ? e.getRange() : focus.range;
 			e.setRange(r);
 
