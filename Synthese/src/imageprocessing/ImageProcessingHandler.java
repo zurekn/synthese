@@ -122,7 +122,9 @@ public class ImageProcessingHandler extends Handler {
 			}
 			//Test de version opti
 //			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(imageRef, image, seuil);
-			List<FormObject> lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 0, 0, 0, 0);
+			List<FormObject> lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 
+																		APIX.relativeX, Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX, 
+																		APIX.relativeY, Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY);
 
 			/***********************************	debug	************************************************/
 			/*List<FormObject> lf = null;
@@ -157,8 +159,8 @@ public class ImageProcessingHandler extends Handler {
 			addMovement(lf);
 			System.out.println("fin du traitement -----------------------------------------------");
 			try {
-				System.out.println("Attente de 10 sec pour le prochain traitement");
-				Thread.sleep(10000);
+				System.out.println("Attente de "+Data.WAIT_TI/1000+" sec pour le prochain traitement");
+				Thread.sleep(Data.WAIT_TI);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -38,15 +38,22 @@ public class Data {
 
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
-	public static final boolean DISPLAY_PLAYER = true;
-	public static final boolean runQRCam = false;
-	public static final boolean RUN_APIX = false;
+	public static final boolean DISPLAY_PLAYER = false;
+	public static final boolean runQRCam = true;
+	public static final boolean RUN_APIX = true;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
 	public static final int DEBUG_PLAYER = 0;
-	public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
-	//public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
+	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	
+	// Const TI Part
+	public static final long WAIT_TI = 5000;
+	public static int SEUILINITTI = 100;
+	public static int SEUILETI = 200;
+	public static int MIN_SEUIL_FORM = 50;
+	public static int MAX_SEUIL_FORM = 5000;
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -92,11 +99,6 @@ public class Data {
 	public static final int NORTH_WEST = -45;
 
 	public static final int INF = 500;
-	
-	public static int SEUILINITTI = 100;
-	public static int SEUILETI = 200;
-	public static int MIN_SEUIL_FORM = 50;
-	public static int MAX_SEUIL_FORM = 5000;
 
 	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
@@ -127,6 +129,7 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
+	
 
 	
 	/**

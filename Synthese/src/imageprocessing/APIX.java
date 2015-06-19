@@ -42,10 +42,10 @@ public class APIX extends Handler {
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
 	public static boolean isInit = false;
-	private int relativeX = -1;
-	private int relativeY = -1;
-	private int blockSizeX = -1;
-	private int blockSizeY = -1;
+	public static int relativeX = -1;
+	public static int relativeY = -1;
+	public static int blockSizeX = -1;
+	public static int blockSizeY = -1;
 	private boolean isRunning = false;
 	
 	private static APIX apix ;
@@ -111,8 +111,7 @@ public class APIX extends Handler {
 
 			public void newMovement(MovementEvent e) {
 
-				addMovementEvent(new MovementEvent(e.getX() - relativeX, e
-						.getY() - relativeY));
+				addMovementEvent(new MovementEvent(e.getX(), e.getY()));
 			}
 		});
 		//imageHandler.begin();
@@ -241,7 +240,7 @@ public class APIX extends Handler {
 	 * @param e - event of the movement to add, MovementEvent
 	 */
 	protected void addMovementEvent(MovementEvent e) {
-		MovementEvent event = new MovementEvent(e.getX() - relativeX, (e.getY() - relativeY));
+		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY); // pour relative, inversion du X Y
 		for (APIXListener listener : getAPIXListener())
 			listener.newMouvement(event);
 	}

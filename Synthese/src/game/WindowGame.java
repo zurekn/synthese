@@ -161,7 +161,8 @@ public class WindowGame extends BasicGame {
 			 */
 			// TODO test add chalenger
 			try {
-				addChalenger(10, 12);
+				if(Data.DEBUG_PLAYER > 0)
+					addChalenger(10, 12);
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
 					addChalenger(15, 15);
@@ -202,6 +203,7 @@ public class WindowGame extends BasicGame {
 
 		if (Data.untraversableBlocks.containsKey(position))
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
+		//TODO ajout du message erreur dans renderText
 
 		if (Data.MAX_PLAYER <= players.size())
 			return;
