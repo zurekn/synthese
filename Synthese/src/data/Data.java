@@ -132,7 +132,8 @@ public class Data {
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
 	public static final long MESSAGE_DURATION = 2000;
 	
-	
+	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.black);
 
 	
 	/**
@@ -294,10 +295,27 @@ public class Data {
 	public static Color getColorMessage(int type) {
 		Color color;
 		switch(type){
+		case 0:
+			color = MESSAGE_COLOR_TYPE_0;
+			break;
+		case 1:
+			color = MESSAGE_COLOR_TYPE_1;
+			break;
 		default:
-			color = new Color(Color.black);
+			color = MESSAGE_COLOR_TYPE_0;
 			break;
 		}
 		return color;
+	}
+
+	public static long getDurationMessage(int type) {
+		switch (type){
+		case 0:
+			return MESSAGE_DURATION;
+		case 1:
+			return MESSAGE_DURATION * 2;
+		default:
+			return MESSAGE_DURATION;
+		}
 	}
 }

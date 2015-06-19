@@ -201,11 +201,13 @@ public class WindowGame extends BasicGame {
 		String position = x + ":" + y;
 
 		if (WindowGame.getInstance().getAllPositions().contains(position)) {
+			//messageHandler.addMessage(new Message("Position ["+position+"] non disponible", 1));
+
 			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
 		}
 
 		if (Data.untraversableBlocks.containsKey(position)){
-			messageHandler.addMessage(new Message(10, 10, "Position ["+position+"] non disponible"));//TODO
+			messageHandler.addMessage(new Message("Position ["+position+"] non disponible", 1));
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
 		//TODO ajout du message erreur dans renderText
@@ -384,6 +386,8 @@ public class WindowGame extends BasicGame {
 		// render text
 		g.setColor(Data.TEXT_COLOR);
 		g.drawString(Data.MAIN_TEXT, 10, 20);
+		messageHandler.render(container, g);
+		
 	}
 
 	/**
@@ -557,6 +561,8 @@ public class WindowGame extends BasicGame {
 						messageHandler.addMessage(new Message(focus.character.getName()+"Died "));	
 
 					}
+				}else{
+					messageHandler.addMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"));
 				}
 				events.add(e);
 				System.out.println("Created " + e.toString());
