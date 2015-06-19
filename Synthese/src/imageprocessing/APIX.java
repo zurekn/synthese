@@ -42,10 +42,10 @@ public class APIX extends Handler {
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
 	public static boolean isInit = false;
-	private int relativeX = -1;
-	private int relativeY = -1;
-	private int blockSizeX = -1;
-	private int blockSizeY = -1;
+	public static int relativeX = -1;
+	public static int relativeY = -1;
+	public static int blockSizeX = -1;
+	public static int blockSizeY = -1;
 	private boolean isRunning = false;
 	
 	private static APIX apix ;
@@ -57,7 +57,6 @@ public class APIX extends Handler {
 			return;	
 		}
 		Dimension size = WebcamResolution.VGA.getSize();
-
 		webcam = Webcam.getWebcams().get(0);
 		// webcam.setViewSize(size);
 		webcam.setCustomViewSizes(new Dimension[] { new Dimension(1920, 1080) });
@@ -91,6 +90,9 @@ public class APIX extends Handler {
 		return relativeY;
 	}
 
+	/**
+	 * Launch the webcam for QR Code detection and Image processing
+	 */
 	public void run() {
 		GameHandler game = WindowGame.getInstance().getHandler();
 		lock(2);
@@ -104,15 +106,12 @@ public class APIX extends Handler {
 			}
 		});
 
-		// init the ImageProcessing part
-
 		imageHandler = ImageProcessingHandler.getInstance(webcam);
 		imageHandler.addMovementListener(new MovementAdapter() {
 
 			public void newMovement(MovementEvent e) {
 
-				addMovementEvent(new MovementEvent(e.getX() - relativeX, e
-						.getY() - relativeY));
+				addMovementEvent(new MovementEvent(e.getX(), e.getY()));
 			}
 		});
 		//imageHandler.begin();
@@ -129,7 +128,10 @@ public class APIX extends Handler {
 			unlockTemporay(2);
 		}while(true);
 	}
-
+	
+	/**
+	 * Init the ImageProcessing part
+	 */
 	public void initTI() {
 		
 		if(isRunning)
@@ -233,8 +235,12 @@ public class APIX extends Handler {
 		isRunning = false;
 	}
 
+	/**
+	 * A new movement was detected
+	 * @param e - event of the movement to add, MovementEvent
+	 */
 	protected void addMovementEvent(MovementEvent e) {
-		MovementEvent event = new MovementEvent(e.getX() - relativeX, (e.getY() - relativeY));
+		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY); // pour relative, inversion du X Y
 		for (APIXListener listener : getAPIXListener())
 			listener.newMouvement(event);
 	}
@@ -243,12 +249,20 @@ public class APIX extends Handler {
 		return QRDatas;
 	}
 
+	/**
+	 * A new QRCode was detected
+	 * @param e - event of the QR Code to add, QRCodeEvent
+	 */
 	protected void addQREvent(QRCodeEvent e) {
 		for (APIXListener listener : getAPIXListener()) {
 			listener.newQRCode(e);
 		}
 	}
 
+	/**
+	 * Check if parameter is different to the already stocked datas
+	 * @param qRDatas - New datas to check, String
+	 */
 	public void setQRDatas(String qRDatas) {
 		if (!qRDatas.equals(QRDatas)) {
 			System.out.println("New set dans setQRDatas");
@@ -258,7 +272,11 @@ public class APIX extends Handler {
 		this.QRDatas = qRDatas;
 
 	}
-
+	
+	/**
+	 * Return if APIX was initialize but is not running
+	 * @return isInit 
+	 */
 	public boolean isInit() {
 		return isInit;
 	}
@@ -267,6 +285,9 @@ public class APIX extends Handler {
 		isInit = b;
 	}
 
+	/**
+	 *  Stock the datas obtained in qr cam then check if datas has changed
+	 */
 	public void updateQR() {
 		String s = qrcam.getQRDatas();
 		if (!s.equals(QRDatas)) {
@@ -290,8 +311,7 @@ public class APIX extends Handler {
 	/**
 	 * Add a event to the listener when a the data is set
 	 * 
-	 * @param data
-	 *            , String
+	 * @param data, String
 	 */
 	protected void dataChanged(String data) {
 		QRCodeEvent event = null;
@@ -302,7 +322,11 @@ public class APIX extends Handler {
 		}
 	}
 
-
+	/**
+	 * @param listInit, List<FormObject>
+	 * @param imgHeight, int
+	 * @param imgWidth, int
+	 */
 	public void setRelativeValues(List<FormObject> listInit, int imgHeight,
 			int imgWidth) {
 		int separationX = imgHeight / 2;

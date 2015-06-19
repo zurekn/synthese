@@ -74,7 +74,6 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		if(!Data.runQRCam)
 			return;
 		do {
-			System.out.println("run QRCode");
 			try {
 				Thread.sleep(1500);
 			} catch (InterruptedException e) {
@@ -99,7 +98,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 				try {
 						// set seuil to 20 to ensure better results
 					
-					tqr.findAllQR("",20, image);
+					tqr.findAllQR("",Data.QRCamSeuil, image);
 					if(Data.debugQR){
 						System.out.println("Image taken for QRcode");
 						ImageIO.write(image, "jpg", new File(Data.getImageDir()+"QRCode.jpg"));
@@ -111,7 +110,8 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 					e.printStackTrace();
 				} catch (NotFoundException e) {
 					// fall thru, it means there is no QR code in image
-					System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
+					if(Data.debugQR)
+						System.out.println("no QRCode in image at "+(System.currentTimeMillis() - Data.beginTime));
 				}
 			}else{
 				System.err.println("Webcam ["+webcam.getName()+"] is not open");

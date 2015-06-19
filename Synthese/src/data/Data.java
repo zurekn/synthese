@@ -22,6 +22,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.Sys;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -37,15 +38,23 @@ public class Data {
 
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
-	public static final boolean DISPLAY_PLAYER = true;
+	public static final boolean DISPLAY_PLAYER = false;
 	public static final boolean runQRCam = false;
 	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 1;
+	public static final int DEBUG_PLAYER = 0;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	
+	// Const TI Part
+	public static final long WAIT_TI = 5000;
+	public static int SEUILINITTI = 100;
+	public static int SEUILETI = 200;
+	public static int MIN_SEUIL_FORM = 50;
+	public static int MAX_SEUIL_FORM = 5000;
+	public static final int QRCamSeuil = 60;//Data.SEUILETI;
 	
 	public static String NAME = "Jeu de plateau";
 	public static int MAP_WIDTH;
@@ -66,8 +75,22 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 20000;
+	public static int TURN_MAX_TIME = 50; // in sec
 
+	//For the stat display
+	public static int PLAYER_LIFE_RECT_X_POS = 10;
+	public static int PLAYER_LIFE_RECT_Y_POS = 10;
+	public static int PLAYER_LIFE_RECT_X_SIZE = 100;
+	public static int PLAYER_LIFE_RECT_Y_SIZE = 10;
+	public static int PLAYER_MANA_RECT_X_POS = 10;
+	public static int PLAYER_MANA_RECT_Y_POS = 25;
+	public static int PLAYER_MANA_RECT_X_SIZE = 50;
+	public static int PLAYER_MANA_RECT_Y_SIZE = 10;
+	public static int PLAYER_ICON_X_POS = 10;
+	public static int PLAYER_ICON_Y_POS = 50;
+	public static int PLAYER_MESSAGE_X_POS = 120;
+	public static int PLAYER_MESSAGE_Y_POS = 10;
+	
 	public static final int SELF = 360;
 	public static final int NORTH = 0;
 	public static final int NORTH_EAST = 45;
@@ -79,11 +102,6 @@ public class Data {
 	public static final int NORTH_WEST = -45;
 
 	public static final int INF = 500;
-	
-	public static int SEUILINITTI = 100;
-	public static int SEUILETI = 200;
-	public static int MIN_SEUIL_FORM = 50;
-	public static int MAX_SEUIL_FORM = 5000;
 
 	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
@@ -97,6 +115,11 @@ public class Data {
 	public static final HashMap<String, Boolean> departureBlocks = new HashMap<String, Boolean>();
 	public static final int MAX_RANGE = Integer.MAX_VALUE;
 	public static final long WAINTING_TIME = 1000;
+	public static  Color BLOCK_REACHABLE_COLOR = new Color(1f, 0f, 0f, .1f);
+	public static final Color TEXT_COLOR = new Color(Color.black);
+	public static  boolean SHOW_MOB_REACHABLE_BLOCKS = false;
+	public static int MAX_PLAYER = 4;
+	public static int INIT_MAX_TIME = 40;
 
 	private static boolean initImageDir = false;
 
@@ -104,8 +127,20 @@ public class Data {
 	public static MonsterData monsterData;
 	public static WindowGame game;
 	public static long beginTime;
-
 	
+	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
+	public static final String TURN_TEXT = "End of turn in : ";
+	public static  String MAIN_TEXT = "";
+	public static final long REFRESH_TIME_EVENT = 500;//in milli
+	public static final long MESSAGE_DURATION = 2000;
+	
+	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	public static final int ACTION_PER_TURN = 1;
+	
+	//ERROR MESSAGES
+	public static final String ERROR_TOO_MUCH_ACTION = "Une seul action par tour !";
+
 	
 	/**
 	 * Load all game variables
@@ -125,7 +160,7 @@ public class Data {
 		Data.BLOCK_SIZE_Y = map.getTileWidth();
 		Data.MAP_HEIGHT = Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
 		Data.MAP_WIDTH = Data.BLOCK_NUMBER_X * Data.BLOCK_SIZE_X;
-		Data.DECK_AREA_SIZE_X = Data.BLOCK_SIZE_X * Data.BLOCK_NUMBER_X ; // Voir pour la largeur de la surface des cartes
+		Data.DECK_AREA_SIZE_X = Data.MAP_WIDTH  / 2; // Voir pour la largeur de la surface des cartes
 		Data.DECK_AREA_SIZE_Y = Data.BLOCK_SIZE_Y * 3;
 		Data.RELATIVE_X_POS = 288;//Data.DECK_AREA_SIZE_Y * 3;
 		Data.RELATIVE_Y_POS = 0;
@@ -194,6 +229,7 @@ public class Data {
 		return IMAGE_DIR;
 	}
 	
+	
 	public static String getDate(){
 		Date date = new Date();
 		DateFormat formater = new SimpleDateFormat("dd-MM-yy-hh-mm-ss");
@@ -260,5 +296,32 @@ public class Data {
 		} 
 		catch (FileNotFoundException e) 
 		{e.printStackTrace();}
+	}
+
+	public static Color getColorMessage(int type) {
+		Color color;
+		switch(type){
+		case 0:
+			color = MESSAGE_COLOR_TYPE_0;
+			break;
+		case 1:
+			color = MESSAGE_COLOR_TYPE_1;
+			break;
+		default:
+			color = MESSAGE_COLOR_TYPE_0;
+			break;
+		}
+		return color;
+	}
+
+	public static long getDurationMessage(int type) {
+		switch (type){
+		case 0:
+			return MESSAGE_DURATION;
+		case 1:
+			return MESSAGE_DURATION * 2;
+		default:
+			return MESSAGE_DURATION;
+		}
 	}
 }

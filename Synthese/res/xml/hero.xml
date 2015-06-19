@@ -1,6 +1,6 @@
 <heros>
 	<hero id="mage">
-		<icon>Synthese/libs/res/images/titles/class/mage_icon.png</icon>
+		<icon>Synthese/res/images/tiles/class/mage_icon.png</icon>
 		<life>200</life>
 		<armor>0</armor>
 		<mana>100</mana>
@@ -10,13 +10,20 @@
 		<movementPoints>3</movementPoints>
 		<magicResist>6</magicResist>
 		<spells>
+			<spell id="s1"></spell>
 			<spell id="s2"></spell>
+			<spell id="s3"></spell>
 			<spell id="s4"></spell>
+			<spell id="s5"></spell>
+			<spell id="s6"></spell>
+			<spell id="s7"></spell>
+			<spell id="s8"></spell>
+			<spell id="s9"></spell>
 		</spells>
 		<eyeSight>5</eyeSight>
 	</hero>
 	<hero id="rogue">
-		<icon>Synthese/libs/res/images/titles/class/rogue_icon.png</icon>
+		<icon>Synthese/res/images/tiles/class/rogue_icon.png</icon>
 		<life>200</life>
 		<armor>10</armor>
 		<mana>100</mana>
@@ -32,7 +39,7 @@
 		<eyeSight>6</eyeSight>
 	</hero>
 	<hero id="barbarian">
-		<icon>Synthese/libs/res/images/titles/class/war_icon.png</icon>
+		<icon>Synthese/res/images/tiles/class/war_icon.png</icon>
 		<life>200</life>
 		<armor>25</armor>
 		<mana>100</mana>
@@ -47,7 +54,7 @@
 		<eyeSight>4</eyeSight>
 	</hero>
 	<hero id="cleric">
-		<icon>Synthese/libs/res/images/titles/class/priest_icon.png</icon>
+		<icon>Synthese/res/images/tiles/class/priest_icon.png</icon>
 		<life>200</life>
 		<armor>0</armor>
 		<mana>125</mana>
@@ -59,7 +66,7 @@
 		<spells>
 			<spell id="s2"></spell>
 			<spell id="s3"></spell>
-			<spell id="s6"></spell>
+			<spell id="s1"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
 	</hero>

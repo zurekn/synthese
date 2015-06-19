@@ -130,15 +130,15 @@
 		<x>5</x>
 		<y>5</y>
 	</monster>
-	<monster id="m1">
+	<monster id="m2">
 		<x>6</x>
 		<y>5</y>
 	</monster>
-	<monster id="m2">
+	<monster id="m3">
 		<x>10</x>
 		<y>10</y>
 	</monster>
-	<monster id="m2">
+	<monster id="m4">
 		<x>11</x>
 		<y>11</y>
 	</monster>

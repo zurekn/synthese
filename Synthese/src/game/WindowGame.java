@@ -8,6 +8,7 @@ import imageprocessing.QRCodeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -16,9 +17,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import ai.AStar;
+import ai.CharacterData;
 import ai.CommandHandler;
 import ai.CommandListener;
 import ai.ActionEvent;
+import ai.WindowGameData;
 import data.*;
 import exception.IllegalActionException;
 import exception.IllegalCaracterClassException;
@@ -44,13 +48,19 @@ public class WindowGame extends BasicGame {
 	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
+	private MessageHandler messageHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character previousCharacter = null;
 	private Character currentCharacter;
+	private ArrayList<int[]> reachableBlock = new ArrayList<int[]>();
 
 	private int playerNumber;
 	private int turn;
+	private int actionLeft = Data.ACTION_PER_TURN;
+	
+	private boolean gameOn = false;
+	private int timerInitPlayer;
 
 	private int turnTimer;
 	private long timeStamp = -1;
@@ -106,22 +116,35 @@ public class WindowGame extends BasicGame {
 
 		initAPIX();
 		initCommandHandler();
-		// Create the player list
-		initPlayers();
-
-		playerHandler = new PlayerHandler(players);
 
 		// Create the monster list
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
+		messageHandler = new MessageHandler();
+		
+		// Create the player list
+		initPlayers();
+
+		playerHandler = new PlayerHandler(players);
+
+		new Thread(movementHandler).start();
+		// Set the timer
+		timerInitPlayer = Data.INIT_MAX_TIME;
+
+		// start();
+	}
+
+	private void start() {
 		playerNumber = players.size() + mobs.size();
 
 		turnTimer = Data.TURN_MAX_TIME;
-		new Thread(movementHandler).start();
 		turn = 0;
 		players.get(turn).setMyTurn(true);
 		currentCharacter = players.get(turn);
+
+		reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
+		gameOn = true;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -136,20 +159,70 @@ public class WindowGame extends BasicGame {
 
 		if (Data.debug) {
 			int i = 0;
-			/*while (it.hasNext() && i < Data.DEBUG_PLAYER) {
-				var = (String) it.next();
-				addPlayer(var);
-				i++;
-			}*/
-			//TODO test
+			/*
+			 * while (it.hasNext() && i < Data.DEBUG_PLAYER) { var = (String)
+			 * it.next(); addPlayer(var); i++; }
+			 */
+			// TODO test add chalenger
 			try {
-				players.add(new Player(10, 13, "P0", "mage"));
+				if(Data.DEBUG_PLAYER > 0)
+					addChalenger(10, 12);
+				// players.add(new Player(10, 12, "P0", "mage"));
+				if (Data.DEBUG_PLAYER > 1)
+					addChalenger(15, 15);
+				if (Data.DEBUG_PLAYER > 2)
+					addChalenger(16, 15);
+				if (Data.DEBUG_PLAYER > 3)
+					addChalenger(7, 12);
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
+			} catch (IllegalMovementException e) {
+				e.printStackTrace();
+			} catch (IllegalActionException e) {
+				e.printStackTrace();
 			}
-			
+
 		}
 
+	}
+
+	/**
+	 * Add a new player
+	 * 
+	 * @param x
+	 * @param y
+	 * @throws IllegalCaracterClassException
+	 * @throws IllegalMovementException
+	 * @throws IllegalActionException
+	 */
+	public void addChalenger(int x, int y) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
+		if (gameOn)
+			throw new IllegalActionException("Can not add player when game is on!");
+
+		String position = x + ":" + y;
+
+		if (WindowGame.getInstance().getAllPositions().contains(position)) {
+			//messageHandler.addMessage(new Message("Position ["+position+"] non disponible", 1));
+
+			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
+		}
+
+		if (Data.untraversableBlocks.containsKey(position)){
+			messageHandler.addGlobalMessage(new Message("Position ["+position+"] non disponible", 1));
+			throw new IllegalMovementException("Untraversable block at [" + position + "]");
+		}
+		//TODO ajout du message erreur dans renderText
+
+		if (Data.MAX_PLAYER <= players.size())
+			return;
+		String id = "P" + players.size();
+		String type = HeroData.getRandomHero();
+		players.add(new Player(x, y, id, type));
+		timerInitPlayer = Data.INIT_MAX_TIME;
+		if (players.size() >= Data.MAX_PLAYER) {
+			System.out.println(" ----Max player reached ----");
+			start();
+		}
 	}
 
 	public void addPlayer(String position) {
@@ -160,10 +233,8 @@ public class WindowGame extends BasicGame {
 				Data.departureBlocks.remove(position);
 				Data.departureBlocks.put(position, true);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalCaracterClassException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.exit(1);
 			}
@@ -174,16 +245,12 @@ public class WindowGame extends BasicGame {
 		commands = CommandHandler.getInstance();
 		commands.addCommandListener(new CommandListener() {
 
-
 			public void newAction(ActionEvent e) {
-				System.out
-						.println("Nouvelle action recup de CommandHandler  : "
-								+ e.toString());
+				System.out.println("Nouvelle action recup de CommandHandler  : " + e.toString());
 				try {
 					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 		});
@@ -204,20 +271,27 @@ public class WindowGame extends BasicGame {
 				try {
 					decodeAction(e.getId() + ":" + e.getDirection());
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 
 			public void newMouvement(MovementEvent e) {
-				System.out.println("Un nouveau mouvement vient d'être récupèrer par WindowGame [" + e.toString() + "], position sur le plateau ["
+				System.out.println("Une nouvelle position  vient d'être récupèrée par WindowGame [" + e.toString() + "], position sur le plateau ["
 						+ e.getX() / apix.getBlockSizeX() + ":" + e.getY() / apix.getBlockSizeY() + "]");
 				try {
-					// TODO check the available position
-					decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
+					if (gameOn)
+						if(!currentCharacter.isMonster())
+							decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
+						else
+							System.err.println("Récupération d'une valeur de l'apix durant le tour de l'ia");
+					else
+						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY());
 				} catch (IllegalActionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
+				} catch (IllegalCaracterClassException e1) {
+					System.err.println(e1.getLocalizedMessage());
+				} catch (IllegalMovementException e1) {
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 		});
@@ -239,7 +313,6 @@ public class WindowGame extends BasicGame {
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
 		if (!apix.isInit()) {
-			// TODO init de l'API avec les cube noir sur fond blanc
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
 			// TOP LEFT
@@ -251,26 +324,38 @@ public class WindowGame extends BasicGame {
 			i++;
 			if (i > 60)
 				apix.initTI();
+			// Reset the timer unteal the paix init is over
+			timerInitPlayer = Data.INIT_MAX_TIME;
 
 		} else {
 			Data.map.render(Data.MAP_X, Data.MAP_Y);
 
-//			if(Data.tiDebug){
-//				g.setColor(Color.yellow);
-//				for(int i = 0; i < Data.MAP_WIDTH; i++)
-//					g.drawLine(Data.MAP_X + i * Data.BLOCK_SIZE_X, Data.MAP_Y, Data.MAP_X + i * Data.BLOCK_SIZE_X,  Data.MAP_Y + Data.MAP_HEIGHT);
-//				for(int i = 0; i < Data.MAP_HEIGHT; i++)
-//					g.drawLine(Data.MAP_X, Data.MAP_Y + i * Data.BLOCK_SIZE_Y, Data.MAP_X + Data.MAP_HEIGHT, Data.MAP_Y + i * Data.BLOCK_SIZE_Y);
-//				
-//			}
-			mobHandler.render(container, g);
-			// TODO
-			// Bug playerrender doesn't work every time
-			playerHandler.render(container, g);
-			renderEvents(container, g);
-			renderDeckArea(container, g);
+			if (gameOn) {
+				mobHandler.render(container, g);
+				renderDeckArea(container, g);
+				playerHandler.render(container, g);
+				renderReachableBlocks(container, g);
+				renderEvents(container, g);
+			} else {
+				playerHandler.renderInitBlock(container, g);
+			}
+			playerHandler.renderPlayerStat(container, g);
 			renderText(container, g);
 		}
+	}
+
+	/**
+	 * Display the reachables blocks of the current caracter
+	 * 
+	 * @param container
+	 * @param g
+	 */
+	private void renderReachableBlocks(GameContainer container, Graphics g) {
+		g.setColor(Data.BLOCK_REACHABLE_COLOR);
+		for (int[] var : reachableBlock) {
+			g.fillRect(Data.MAP_X + var[0] * Data.BLOCK_SIZE_X, Data.MAP_Y + var[1] * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		}
+		g.setColor(Color.black);
 	}
 
 	/**
@@ -284,9 +369,9 @@ public class WindowGame extends BasicGame {
 		// TOP
 		g.fillRect(Data.MAP_X, Data.RELATIVE_Y_POS, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// BOTTOM
-		g.fillRect(Data.MAP_X, Data.DECK_AREA_SIZE_Y + Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
+		g.fillRect(Data.MAP_X + Data.DECK_AREA_SIZE_X, Data.MAP_HEIGHT + Data.MAP_Y, Data.DECK_AREA_SIZE_X, Data.DECK_AREA_SIZE_Y);
 		// LEFT
-		g.fillRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
+		g.fillRect(Data.MAP_X - Data.DECK_AREA_SIZE_Y, Data.MAP_Y + Data.MAP_WIDTH / 2, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		// RIGHT
 		g.fillRect(Data.MAP_X + Data.MAP_WIDTH, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_Y, Data.DECK_AREA_SIZE_X);
 		g.setColor(Color.white);
@@ -300,8 +385,10 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderText(GameContainer container, Graphics g) {
 		// render text
-		g.setColor(Color.white);
-		g.drawString("End of turn in : " + turnTimer, 10, 20);
+		g.setColor(Data.TEXT_COLOR);
+		g.drawString(Data.MAIN_TEXT, 10, 20);
+		messageHandler.render(container, g);
+		
 	}
 
 	/**
@@ -322,26 +409,41 @@ public class WindowGame extends BasicGame {
 			x = e.getX();
 			y = e.getY();
 			e.setRange(e.getRange() - 1);
-			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 0) {
+			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
 				events.remove(i);
 			}
 
 		}
 	}
 
+	long eventTime = 0;
+
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		long time = System.currentTimeMillis();
 		if (time - timeStamp > 1000) {
-			turnTimer--;
-			timeStamp = time;
+			if (gameOn) {
+				turnTimer--;
+				timeStamp = time;
+				Data.MAIN_TEXT = Data.TURN_TEXT + turnTimer;
+			} else {
+				timerInitPlayer--;
+				timeStamp = time;
+				Data.MAIN_TEXT = Data.INIT_PLAYER_TEXT + timerInitPlayer;
+			}
 		}
 
 		// Turn timer
-		if (turnTimer < 0) {
-			switchTurn();
+		if (gameOn) {
+			if (turnTimer < 0) {
+				switchTurn();
+			}
+		} else {
+			if (timerInitPlayer < 0)
+				start();
 		}
 
+		messageHandler.update();
 	}
 
 	/**
@@ -349,10 +451,13 @@ public class WindowGame extends BasicGame {
 	 */
 	public void switchTurn() {
 		// Reset the timer
+		System.out.println("turn = " + turn + ", playerNumber = " + playerNumber + ", turnTimer = " + turnTimer);
+		messageHandler.addGlobalMessage(new Message("Next turn"));
 		turnTimer = Data.TURN_MAX_TIME;
 		turn = (turn + 1) % playerNumber;
 
 		previousCharacter = currentCharacter;
+		previousCharacter.regenMana();
 		// Switch the turn
 		// Set the new character turn
 		if (turn < players.size()) {
@@ -361,30 +466,20 @@ public class WindowGame extends BasicGame {
 		} else {
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
-			// String[] commands = AIHandler.getMobsMovements(new
-			// WindowGameData(
-			// players, mobs, currentCharacter, turn));
-
 		}
-		
 
 		// set to false the previous character turn
 		previousCharacter.setMyTurn(false);
-		/*if (turn == 0) {
-			mobs.get(mobs.size() - 1).setMyTurn(false);
-		} else {
-			if (turn <= players.size()) {
-				players.get(turn - 1).setMyTurn(false);
-			} else {
-				mobs.get(turn - players.size() - 1).setMyTurn(false);
-			}
-		}*/
+		if (currentCharacter.isMonster() && !Data.SHOW_MOB_REACHABLE_BLOCKS)
+			reachableBlock = new ArrayList<int[]>();
+		else
+			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
 
+		messageHandler.addGlobalMessage(new Message("Turn of "+currentCharacter.getName()));
+		actionLeft = Data.ACTION_PER_TURN;
+		
 		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
-			// launch the new action loader only if it's there's no npc before it (reduce calculation in AIHandler)
-			// TODO
-			commands.startCommandsCalculation(currentCharacter, players, mobs,
-					turn);
+			commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
 
 		// print the current turn in the console
 		if (Data.debug) {
@@ -409,6 +504,11 @@ public class WindowGame extends BasicGame {
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
 		if (action.startsWith("s")) { // Spell action
+			if(actionLeft <= 0){
+				messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
+				return;
+			}
+			actionLeft --;
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
 				throw new IllegalActionException("Wrong number of arguments in action string");
@@ -425,13 +525,50 @@ public class WindowGame extends BasicGame {
 			e.setX(Data.MAP_X + currentCharacter.getX() * Data.BLOCK_SIZE_X);
 			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
-			int r = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(),
-							currentCharacter.getY(), e.getDirection()), e);
-			r = r > e.getRange() ? e.getRange() : r;
-			e.setRange(r);
-			events.add(e);
+			Focus focus = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(), currentCharacter.getY(), e.getDirection()), e);
+			//System.out.println("get focus : " + focus.toString());
+			if (focus.range > e.getRange()) {
+				focus.range = e.getRange();
+				focus.character = null;
+			}
+			e.setRange(focus.range);
 
-			currentCharacter.useSpell(spellID, direction);
+			try {
+				int damage = 0;
+				currentCharacter.useSpell(spellID, direction);
+				if (focus.character != null) {
+					if (currentCharacter.isMonster() == focus.character.isMonster())
+						if (e.getHeal() > 0){
+							focus.character.heal(e.getHeal());
+							messageHandler.addPlayerMessage(new Message("Heal "+e.getHeal()+" to the "+focus.character.getName()+""), turn);
+						}else{
+							damage = focus.character.takeDamage(e.getDamage(), e.getType());
+							messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
+						}
+					else{
+						damage = focus.character.takeDamage(e.getDamage(), e.getType());
+						messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
+
+					}
+					if (focus.character.checkDeath()) {
+						// TODO ADD a textual event
+						System.out.println("-----------------------------------------");
+						System.out.println("DEATH FOR" + focus.character.toString());
+						System.out.println("-----------------------------------------");
+						players.remove(focus.character);
+						mobs.remove(focus.character);
+						playerNumber--;
+						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+
+					}
+				}else{
+					messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
+				}
+				events.add(e);
+				System.out.println("Created " + e.toString());
+			} catch (IllegalActionException iae) {
+				iae.printStackTrace();
+			}
 
 		}
 
@@ -443,14 +580,7 @@ public class WindowGame extends BasicGame {
 			try {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
-					throw new IllegalActionException(
-							"Wrong number of arguments in action string");
-				/*
-				 * String id = tokens[0];
-				 * 
-				 * if (!currentCharacter.getId().equals(id)) throw new
-				 * IllegalActionException( "Not your turn, try again later.");
-				 */
+					throw new IllegalActionException("Wrong number of arguments in action string");
 
 				String position = tokens[1] + ":" + tokens[2];
 				// TODO call aStar and check if character don't fall into trap
@@ -472,63 +602,83 @@ public class WindowGame extends BasicGame {
 	 * @param e
 	 * @return
 	 */
-	private int getFirstCharacterRange(ArrayList<Character> chars, Event e) {
+	private Focus getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		System.out.println("Search the first character range : " + e.toString());
-
+		System.out.println("Search the first character range : " + e.toString() + ", " + chars.toString());
+		Character focus = null;
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH || e.getDirection() == Data.SOUTH) {
 				int i = (Math.abs(c.getY() - (e.getYOnBoard() - 1))) + 1;
 				System.out.println("c.getY() = [" + c.getY() + "], e.getXOnBoard = [" + (e.getYOnBoard() - 1) + "], i = [" + i + "]");
 
-				if (i < range)
+				if (i < range) {
 					range = i;
+					focus = c;
+				}
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
 				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard() - 1) + "], i = ["
 						+ (c.getX() - e.getXOnBoard() - 1) + "]");
 				int i = (Math.abs(c.getX() - (e.getXOnBoard() - 1))) + 1;
 
-				if (i < range)
+				if (i < range) {
 					range = i;
+					focus = c;
+				}
 			}
 		}
-		if (Data.debug)
-			System.out.println("The Range is : " + range);
-		return range;
+		if (Data.debug && focus != null)
+			System.out.println("The Range is : " + range+", focus is "+focus.toString());
+		return new Focus(range, focus);
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
 		if (Data.debug) {
-			if (!currentCharacter.isNpc()) {
-				System.out.println("WindowGame, keyReleased : " + key
-						+ ", char : " + c);
-				try {
-					if (Input.KEY_LEFT == key)
-						decodeAction("m:" + (currentCharacter.getX() - 1) + ":"
-								+ currentCharacter.getY());
-					if (Input.KEY_RIGHT == key)
-						decodeAction("m:" + (currentCharacter.getX() + 1) + ":"
-								+ currentCharacter.getY());
-					if (Input.KEY_UP == key)
-						decodeAction("m:" + currentCharacter.getX() + ":"
-								+ (currentCharacter.getY() - 1));
-					if (Input.KEY_DOWN == key)
-						decodeAction("m:" + currentCharacter.getX() + ":"
-								+ (currentCharacter.getY() + 1));
-					if (Input.KEY_NUMPAD8 == key)
-						decodeAction("s2:" + Data.NORTH);
-					if (Input.KEY_NUMPAD6 == key)
-						decodeAction("s2:" + Data.EAST);
-					if (Input.KEY_NUMPAD2 == key)
-						decodeAction("s2:" + Data.SOUTH);
-					if (Input.KEY_NUMPAD4 == key)
-						decodeAction("s2:" + Data.WEST);
-				} catch (IllegalActionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if (gameOn)
+				if (!currentCharacter.isNpc()) {
+					System.out.println("WindowGame, keyReleased : " + key + ", char : " + c);
+					try {
+						if (Input.KEY_LEFT == key)
+							decodeAction("m:" + (currentCharacter.getX() - 1) + ":" + currentCharacter.getY());
+						if (Input.KEY_RIGHT == key)
+							decodeAction("m:" + (currentCharacter.getX() + 1) + ":" + currentCharacter.getY());
+						if (Input.KEY_UP == key)
+							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() - 1));
+						if (Input.KEY_DOWN == key)
+							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
+						if (Input.KEY_NUMPAD8 == key)
+							decodeAction("s2:" + Data.NORTH);
+						if (Input.KEY_NUMPAD6 == key)
+							decodeAction("s2:" + Data.EAST);
+						if (Input.KEY_NUMPAD2 == key)
+							decodeAction("s2:" + Data.SOUTH);
+						if (Input.KEY_NUMPAD4 == key)
+							decodeAction("s2:" + Data.WEST);
+					} catch (IllegalActionException e) {
+						// TODO Auto-generated catch block
+						System.err.println(e.getMessage());
+					}
 				}
+		}
+		if(Input.KEY_DIVIDE == key){
+			currentCharacter.takeDamage(20, "magic");
+		}
+		if (Input.KEY_SUBTRACT == key) {
+			start();
+		}
+		if (Input.KEY_ADD == key) {
+			try {
+				Random rand = new Random();
+				int x = rand.nextInt(Data.BLOCK_NUMBER_X - 0) + 0;
+				int y = rand.nextInt(Data.BLOCK_NUMBER_Y - 0) + 0;
+				addChalenger(x, y);
+			} catch (IllegalCaracterClassException e) {
+				e.printStackTrace();
+			} catch (IllegalMovementException e) {
+				e.printStackTrace();
+			} catch (IllegalActionException e) {
+				e.printStackTrace();
 			}
 		}
 		if (Input.KEY_ESCAPE == key) {
@@ -607,8 +757,7 @@ public class WindowGame extends BasicGame {
 	 * @param direction
 	 * @return ArrayList<Character>
 	 */
-	private ArrayList<Character> getCharacterPositionOnLine(int x, int y,
-			int direction) {
+	private ArrayList<Character> getCharacterPositionOnLine(int x, int y, int direction) {
 
 		ArrayList<Character> c = new ArrayList<Character>();
 
@@ -641,7 +790,7 @@ public class WindowGame extends BasicGame {
 			if (direction == Data.WEST && mobs.get(i).getY() == y && mobs.get(i).getX() < x)
 				c.add(mobs.get(i));
 		}
-		System.out.println("getCharacterePositionOnLine [" + x + ", " + y + "]" + c.toString());
+		System.out.println("getCharacterePositionOnLine From [" + x + ", " + y + "], Found" + c.toString());
 		return c;
 	}
 
@@ -668,4 +817,17 @@ public class WindowGame extends BasicGame {
 		return handler;
 	}
 
+	private class Focus {
+		protected int range;
+		protected Character character;
+
+		public Focus(int range, Character character) {
+			this.range = range;
+			this.character = character;
+		}
+
+		public String toString() {
+			return "Focus [ range, " + range + ", " + character.toString() + "]";
+		}
+	}
 }

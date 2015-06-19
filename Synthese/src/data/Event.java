@@ -85,7 +85,7 @@ public class Event {
 	}
 
 	public int getXOnBoard() {
-		return (x - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_X;
+		return (x - Data.MAP_X) / Data.BLOCK_SIZE_X;
 	}
 
 	public void setX(int x) {
@@ -97,7 +97,7 @@ public class Event {
 	}
 
 	public int getYOnBoard() {
-		return (y - Data.RELATIVE_X_POS) / Data.BLOCK_NUMBER_Y;
+		return (y - Data.MAP_Y) / Data.BLOCK_SIZE_Y;
 	}
 
 	public void setY(int y) {

@@ -42,11 +42,9 @@ public class Mob extends Character {
 		Animation[] animation = this.getAnimation();
 		int x = this.getX();
 		int y = this.getY();
-		g.setColor(Color.red);
 		// g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
 		// Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
-		g.drawRect(Data.MAP_X - 10, Data.MAP_Y - 10, 20, 20);
 		animation[6].draw(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y
 				* Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		if (isMyTurn()) {
@@ -60,7 +58,7 @@ public class Mob extends Character {
 					+ Data.BLOCK_SIZE_X;
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y
 					+ Data.BLOCK_SIZE_Y;
-			g.drawOval(posX, posY, sizeX, sizeY);
+//			g.drawOval(posX, posY, sizeX, sizeY);
 		}
 		if(Data.debug){
 			if(getFocusedOn()!=null)
