@@ -1,6 +1,7 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class HeroData {
 
 	public static ArrayList<Hero> heros = new ArrayList<Hero>();
 	public static ArrayList<String> caraClass = new ArrayList<String>();
+	public static final HashMap<String, Integer> CLASSES_VALUES = new HashMap<String, Integer>(); 
 	
 	public void addHero(Hero h) {
 		heros.add(h);
@@ -63,6 +65,11 @@ public class HeroData {
 			caraClass.add(h.getCaracterClass());
 			System.out.println("	Hero : "+h.getCaracterClass());
 		}
+		//TODO 
+		CLASSES_VALUES.put("mage", 0);
+		CLASSES_VALUES.put("barbarian", 10);
+		CLASSES_VALUES.put("rogue", 5);
+		CLASSES_VALUES.put("cleric", 0);
 	}
 
 }
