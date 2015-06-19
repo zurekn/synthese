@@ -136,6 +136,10 @@ public class Data {
 	
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	public static final int ACTION_PER_TURN = 1;
+	
+	//ERROR MESSAGES
+	public static final String ERROR_TOO_MUCH_ACTION = "Une seul action par tour !";
 
 	
 	/**

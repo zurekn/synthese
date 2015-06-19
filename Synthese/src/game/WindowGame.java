@@ -57,7 +57,8 @@ public class WindowGame extends BasicGame {
 
 	private int playerNumber;
 	private int turn;
-
+	private int actionLeft = Data.ACTION_PER_TURN;
+	
 	private boolean gameOn = false;
 	private int timerInitPlayer;
 
@@ -443,16 +444,6 @@ public class WindowGame extends BasicGame {
 		}
 
 		messageHandler.update();
-		
-		// Update event
-		/*
-		 * if(time - eventTime > Data.REFRESH_TIME_EVENT){ int x, y, xMin, yMin,
-		 * xMax, yMax; xMin = Data.MAP_X; xMax = Data.MAP_X + Data.MAP_WIDTH;
-		 * yMin = Data.MAP_Y; yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y *
-		 * Data.BLOCK_SIZE_Y; for (Event e : events) { x = e.getX(); y =
-		 * e.getY(); e.setRange(e.getRange() - 1); if (x < xMin || x > xMax || y
-		 * < yMin || y > yMax || e.getRange() < 1) { events.remove(i); } } }
-		 */
 	}
 
 	/**
@@ -461,6 +452,7 @@ public class WindowGame extends BasicGame {
 	public void switchTurn() {
 		// Reset the timer
 		System.out.println("turn = " + turn + ", playerNumber = " + playerNumber + ", turnTimer = " + turnTimer);
+		messageHandler.addGlobalMessage(new Message("Next turn"));
 		turnTimer = Data.TURN_MAX_TIME;
 		turn = (turn + 1) % playerNumber;
 
@@ -483,10 +475,10 @@ public class WindowGame extends BasicGame {
 		else
 			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
 
+		messageHandler.addGlobalMessage(new Message("Turn of "+currentCharacter.getName()));
+		actionLeft = Data.ACTION_PER_TURN;
+		
 		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
-			// launch the new action loader only if it's there's no npc before
-			// it (reduce calculation in AIHandler)
-			// TODO
 			commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
 
 		// print the current turn in the console
@@ -512,6 +504,11 @@ public class WindowGame extends BasicGame {
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
 		if (action.startsWith("s")) { // Spell action
+			if(actionLeft <= 0){
+				messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
+				return;
+			}
+			actionLeft --;
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
 				throw new IllegalActionException("Wrong number of arguments in action string");
