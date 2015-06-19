@@ -32,6 +32,8 @@ public class HeroData {
 	}
 	
 	public static String getRandomHero(){
+		if(Data.debug)
+			return "mage";
 		String result = "";
 		Random rand = new Random();
 		int n = rand.nextInt((HeroData.getHeroNumber() - 0)) + 0;
