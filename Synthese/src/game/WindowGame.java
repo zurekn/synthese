@@ -207,7 +207,7 @@ public class WindowGame extends BasicGame {
 		}
 
 		if (Data.untraversableBlocks.containsKey(position)){
-			messageHandler.addMessage(new Message("Position ["+position+"] non disponible", 1));
+			messageHandler.addGlobalMessage(new Message("Position ["+position+"] non disponible", 1));
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
 		//TODO ajout du message erreur dans renderText
@@ -530,8 +530,11 @@ public class WindowGame extends BasicGame {
 			// Get the range to the next character to hit
 			Focus focus = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(), currentCharacter.getY(), e.getDirection()), e);
 			//System.out.println("get focus : " + focus.toString());
-			int r = focus.range > e.getRange() ? e.getRange() : focus.range;
-			e.setRange(r);
+			if (focus.range > e.getRange()) {
+				focus.range = e.getRange();
+				focus.character = null;
+			}
+			e.setRange(focus.range);
 
 			try {
 				int damage = 0;
@@ -540,14 +543,14 @@ public class WindowGame extends BasicGame {
 					if (currentCharacter.isMonster() == focus.character.isMonster())
 						if (e.getHeal() > 0){
 							focus.character.heal(e.getHeal());
-							messageHandler.addMessage(new Message("Heal "+e.getHeal()+" to the "+focus.character.getName()+""));
+							messageHandler.addPlayerMessage(new Message("Heal "+e.getHeal()+" to the "+focus.character.getName()+""), turn);
 						}else{
 							damage = focus.character.takeDamage(e.getDamage(), e.getType());
-							messageHandler.addMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage));	
+							messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
 						}
 					else{
 						damage = focus.character.takeDamage(e.getDamage(), e.getType());
-						messageHandler.addMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage));	
+						messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
 
 					}
 					if (focus.character.checkDeath()) {
@@ -558,11 +561,11 @@ public class WindowGame extends BasicGame {
 						players.remove(focus.character);
 						mobs.remove(focus.character);
 						playerNumber--;
-						messageHandler.addMessage(new Message(focus.character.getName()+"Died "));	
+						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 
 					}
 				}else{
-					messageHandler.addMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"));
+					messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 				}
 				events.add(e);
 				System.out.println("Created " + e.toString());

@@ -88,6 +88,8 @@ public class Data {
 	public static int PLAYER_MANA_RECT_Y_SIZE = 10;
 	public static int PLAYER_ICON_X_POS = 10;
 	public static int PLAYER_ICON_Y_POS = 50;
+	public static int PLAYER_MESSAGE_X_POS = 120;
+	public static int PLAYER_MESSAGE_Y_POS = 10;
 	
 	public static final int SELF = 360;
 	public static final int NORTH = 0;
@@ -133,7 +135,7 @@ public class Data {
 	public static final long MESSAGE_DURATION = 2000;
 	
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
-	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.black);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
 
 	
 	/**
