@@ -242,7 +242,7 @@ public class WindowGame extends BasicGame {
 				try {
 					decodeAction(e.getEvent());
 				} catch (IllegalActionException e1) {
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 		});
@@ -263,7 +263,7 @@ public class WindowGame extends BasicGame {
 				try {
 					decodeAction(e.getId() + ":" + e.getDirection());
 				} catch (IllegalActionException e1) {
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 
@@ -276,11 +276,11 @@ public class WindowGame extends BasicGame {
 					else
 						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY());
 				} catch (IllegalActionException e1) {
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				} catch (IllegalCaracterClassException e1) {
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				} catch (IllegalMovementException e1) {
-					e1.printStackTrace();
+					System.err.println(e1.getLocalizedMessage());
 				}
 			}
 		});
@@ -636,7 +636,7 @@ public class WindowGame extends BasicGame {
 							decodeAction("s2:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.err.println(e.getLocalizedMessage());
 					}
 				}
 		}

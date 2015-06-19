@@ -84,18 +84,18 @@
 		<sound>Synthese/res/sounds/Lunar_light.wav</sound>
 	</spell>
 	<spell id="s7">
-		<file>Synthese/res/images/tiles/Spells/fireBall.png</file>
-		<celX>36</celX>
-		<celY>36</celY>
-		<celNumber>7</celNumber>
+		<file>Synthese/res/images/tiles/Spells/root.png</file>
+		<celX>191</celX>
+		<celY>192</celY>
+		<celNumber>5</celNumber>
 		<direction>90</direction>
 		<damage>5</damage>
 		<heal>0</heal>
-		<mana>0</mana>
+		<mana>50</mana>
 		<name>Root</name>
 		<range>3</range>
 		<type>magic</type>
-		<sound>Synthese/res/sounds/fireball.wav</sound>
+		<sound>Synthese/res/sounds/root.wav</sound>
 	</spell>
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
