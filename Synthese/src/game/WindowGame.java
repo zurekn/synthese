@@ -48,6 +48,7 @@ public class WindowGame extends BasicGame {
 	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
+	private MessageHandler messageHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
 	private ArrayList<Trap> traps = new ArrayList<Trap>();
 	private Character previousCharacter = null;
@@ -119,6 +120,8 @@ public class WindowGame extends BasicGame {
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
+		messageHandler = new MessageHandler();
+		
 		// Create the player list
 		initPlayers();
 
@@ -201,8 +204,10 @@ public class WindowGame extends BasicGame {
 			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
 		}
 
-		if (Data.untraversableBlocks.containsKey(position))
+		if (Data.untraversableBlocks.containsKey(position)){
+			messageHandler.addMessage(new Message(10, 10, "Position ["+position+"] non disponible"));//TODO
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
+		}
 		//TODO ajout du message erreur dans renderText
 
 		if (Data.MAX_PLAYER <= players.size())
@@ -433,6 +438,8 @@ public class WindowGame extends BasicGame {
 				start();
 		}
 
+		messageHandler.update();
+		
 		// Update event
 		/*
 		 * if(time - eventTime > Data.REFRESH_TIME_EVENT){ int x, y, xMin, yMin,
@@ -523,24 +530,32 @@ public class WindowGame extends BasicGame {
 			e.setRange(r);
 
 			try {
+				int damage = 0;
 				currentCharacter.useSpell(spellID, direction);
 				if (focus.character != null) {
 					if (currentCharacter.isMonster() == focus.character.isMonster())
-						if (e.getHeal() > 0)
+						if (e.getHeal() > 0){
 							focus.character.heal(e.getHeal());
-						else
-							focus.character.takeDamage(e.getDamage(), e.getType());
-					else
-						focus.character.takeDamage(e.getDamage(), e.getType());
+							messageHandler.addMessage(new Message("Heal "+e.getHeal()+" to the "+focus.character.getName()+""));
+						}else{
+							damage = focus.character.takeDamage(e.getDamage(), e.getType());
+							messageHandler.addMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage));	
+						}
+					else{
+						damage = focus.character.takeDamage(e.getDamage(), e.getType());
+						messageHandler.addMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage));	
+
+					}
 					if (focus.character.checkDeath()) {
 						// TODO ADD a textual event
 						System.out.println("-----------------------------------------");
 						System.out.println("DEATH FOR" + focus.character.toString());
 						System.out.println("-----------------------------------------");
 						players.remove(focus.character);
-						;
 						mobs.remove(focus.character);
 						playerNumber--;
+						messageHandler.addMessage(new Message(focus.character.getName()+"Died "));	
+
 					}
 				}
 				events.add(e);

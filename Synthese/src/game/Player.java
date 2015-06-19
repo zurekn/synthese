@@ -57,7 +57,7 @@ public class Player extends Character {
 			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
 		}
 			
-		this.setStats(h.getStat());
+		this.setStats(h.getStat().clone());
 		this.setSpells(h.getSpells());
 		
 		if (Data.debug) {
