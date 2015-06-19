@@ -130,6 +130,7 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
+	public static final long MESSAGE_DURATION = 2000;
 	
 	
 

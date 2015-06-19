@@ -146,7 +146,7 @@ public abstract class Character {
 	 * @param type
 	 *            , type of damage (fire, ice, shock...)
 	 */
-	public void takeDamage(int damage, String type) {
+	public int takeDamage(int damage, String type) {
 		
 		System.out.println("Icoming : "+damage+", "+type+", counterP " +getStats().getArmor()+", counterM " +getStats().getMagicResist());
 		
@@ -161,7 +161,7 @@ public abstract class Character {
 			damage = 0;
 		stats.setLife(stats.getLife() - damage);
 		System.out.println(id + " take : [" + damage + "] damage, remaining ["+stats.getLife()+"] HP");
-		
+		return damage;
 	}
 
 	public void heal(int heal) {
