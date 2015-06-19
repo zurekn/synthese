@@ -15,6 +15,7 @@ public class Message {
 	private Color color;
 	private long startTime;
 	private long duration;
+	private int rotation = 0;
 	
 	public Message(int x, int y, String message) {
 		super();
@@ -59,6 +60,14 @@ public class Message {
 		this.y = y;
 	}
 
+	public void setRotation(int rotat){
+		rotation = rotat;
+	}
+	
+	public int getRotation(){
+		return rotation;
+	}
+	
 	public String getMessage() {
 		return message;
 	}
@@ -70,6 +79,7 @@ public class Message {
 	public void render(GameContainer container, Graphics g, int x, int y) {
 		g.setColor(color);
 		g.drawString(message, x, y);
+
 	}
 
 	public boolean update() {
