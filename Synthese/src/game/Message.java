@@ -14,24 +14,35 @@ public class Message {
 	private int type;
 	private Color color;
 	private long startTime;
-
+	private long duration;
+	
 	public Message(int x, int y, String message) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.message = message;
 		type = 0;
-		color = Data.getColorMessage(type);
-		startTime = System.currentTimeMillis();
+		init();
 	}
 
 	public Message(String string) {
 		message = string;
 		type = 0;
+		init();
+	}
+	
+	public Message(String s, int type){
+		message = s;
+		this.type = type;
+		init();
+	}
+
+	private void init(){
+		duration = Data.getDurationMessage(type);
 		color = Data.getColorMessage(type);
 		startTime = System.currentTimeMillis();
 	}
-
+	
 	public int getX() {
 		return x;
 	}
@@ -62,7 +73,7 @@ public class Message {
 	}
 
 	public boolean update() {
-		return System.currentTimeMillis() - startTime > Data.MESSAGE_DURATION;
+		return System.currentTimeMillis() - startTime > duration;
 	}
 
 }

@@ -10,16 +10,22 @@ public class MessageHandler {
 	private int initialX = 10;
 	private int inittialY = 50;
 	public ArrayList<Message> messages = new ArrayList<Message>();
-	
+	private ArrayList<Message> deletedMessage = new ArrayList<Message>();
 	public void render(GameContainer container, Graphics g){
 		int i = 10;
 		for(Message m : messages){
 			
 			m.render(container, g, initialX, inittialY + i);
 			if(m.update())
-				messages.remove(m);
+				deletedMessage.add(m);
 			i += 10;
 		}
+		
+		for(Message m : deletedMessage){
+			messages.remove(m);
+		}
+		
+		deletedMessage.clear();
 	}
 
 	public void update(){
