@@ -70,19 +70,14 @@ public class AlphaBeta {
 	private void detectFocus(WindowGameData gameData, CharacterData c) {
 		String aiType = c.getAiType().split(":")[0];
 		int type = 3;
-		switch (aiType) {
-		case "coward":
+		if(aiType.equals("coward"))
 			type = 0;
-			break;
-		case "lonewolf":
+		else if(aiType.equals("lonewolf"))
 			type = 1;
-			break;
-		case "normal":
+		else if(aiType.equals("normal"))
 			type = 2;
-			break;
-		case "player":
+		else if(aiType.equals("player"))
 			type = 3;
-		}
 
 		if (c.getStats().getLifePercentage() < AI_FACTORS[type][MIN_LIFE]) {
 			c.setFocusedOn(null);
