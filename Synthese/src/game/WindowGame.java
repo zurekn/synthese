@@ -269,7 +269,7 @@ public class WindowGame extends BasicGame {
 				System.out.println("Une nouvelle position  vient d'être récupèrée par WindowGame [" + e.toString() + "], position sur le plateau ["
 						+ e.getX() / apix.getBlockSizeX() + ":" + e.getY() / apix.getBlockSizeY() + "]");
 				try {
-					if(gameOn)
+					if (gameOn)
 						decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
 					else
 						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY());
@@ -402,6 +402,7 @@ public class WindowGame extends BasicGame {
 	}
 
 	long eventTime = 0;
+
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		long time = System.currentTimeMillis();
@@ -418,31 +419,24 @@ public class WindowGame extends BasicGame {
 		}
 
 		// Turn timer
-		if(gameOn){
+		if (gameOn) {
 			if (turnTimer < 0) {
 				switchTurn();
 			}
-		}else{
-			if(timerInitPlayer < 0)
+		} else {
+			if (timerInitPlayer < 0)
 				start();
 		}
-		
-		//Update event
-	/*	if(time - eventTime > Data.REFRESH_TIME_EVENT){
-			int x, y, xMin, yMin, xMax, yMax;
-			xMin = Data.MAP_X;
-			xMax = Data.MAP_X + Data.MAP_WIDTH;
-			yMin = Data.MAP_Y;
-			yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
-			for (Event e : events) {
-				x = e.getX();
-				y = e.getY();
-				e.setRange(e.getRange() - 1);
-				if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() < 1) {
-					events.remove(i);
-				}
-			}
-		}*/
+
+		// Update event
+		/*
+		 * if(time - eventTime > Data.REFRESH_TIME_EVENT){ int x, y, xMin, yMin,
+		 * xMax, yMax; xMin = Data.MAP_X; xMax = Data.MAP_X + Data.MAP_WIDTH;
+		 * yMin = Data.MAP_Y; yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y *
+		 * Data.BLOCK_SIZE_Y; for (Event e : events) { x = e.getX(); y =
+		 * e.getY(); e.setRange(e.getRange() - 1); if (x < xMin || x > xMax || y
+		 * < yMin || y > yMax || e.getRange() < 1) { events.remove(i); } } }
+		 */
 	}
 
 	/**
@@ -450,7 +444,7 @@ public class WindowGame extends BasicGame {
 	 */
 	public void switchTurn() {
 		// Reset the timer
-		System.out.println("turn = "+turn+", playerNumber = "+playerNumber+", turnTimer = "+turnTimer);
+		System.out.println("turn = " + turn + ", playerNumber = " + playerNumber + ", turnTimer = " + turnTimer);
 		turnTimer = Data.TURN_MAX_TIME;
 		turn = (turn + 1) % playerNumber;
 
@@ -519,30 +513,33 @@ public class WindowGame extends BasicGame {
 			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
 			Focus focus = getFirstCharacterRange(getCharacterPositionOnLine(currentCharacter.getX(), currentCharacter.getY(), e.getDirection()), e);
-			System.out.println("get focus : "+focus.toString());
+			System.out.println("get focus : " + focus.toString());
 			int r = focus.range > e.getRange() ? e.getRange() : focus.range;
 			e.setRange(r);
 
 			try {
 				currentCharacter.useSpell(spellID, direction);
-				if(currentCharacter.isMonster() == focus.character.isMonster())
-					if(e.getHeal() > 0)
-						focus.character.heal(e.getHeal());
+				if (focus.character != null) {
+					if (currentCharacter.isMonster() == focus.character.isMonster())
+						if (e.getHeal() > 0)
+							focus.character.heal(e.getHeal());
+						else
+							focus.character.takeDamage(e.getDamage(), e.getType());
 					else
 						focus.character.takeDamage(e.getDamage(), e.getType());
-				else
-					focus.character.takeDamage(e.getDamage(), e.getType());
-				if(focus.character.checkDeath()){
-					//TODO ADD a textual event
-					System.out.println("-----------------------------------------");
-					System.out.println("DEATH FOR"+focus.character.toString());
-					System.out.println("-----------------------------------------");
-					players.remove(focus.character);;
-					mobs.remove(focus.character);
-					playerNumber--;
+					if (focus.character.checkDeath()) {
+						// TODO ADD a textual event
+						System.out.println("-----------------------------------------");
+						System.out.println("DEATH FOR" + focus.character.toString());
+						System.out.println("-----------------------------------------");
+						players.remove(focus.character);
+						;
+						mobs.remove(focus.character);
+						playerNumber--;
+					}
 				}
 				events.add(e);
-				System.out.println("Created "+e.toString());
+				System.out.println("Created " + e.toString());
 			} catch (IllegalActionException iae) {
 				iae.printStackTrace();
 			}
@@ -581,14 +578,14 @@ public class WindowGame extends BasicGame {
 	 */
 	private Focus getFirstCharacterRange(ArrayList<Character> chars, Event e) {
 		int range = Data.MAX_RANGE;
-		System.out.println("Search the first character range : " + e.toString()+", "+chars.toString());
+		System.out.println("Search the first character range : " + e.toString() + ", " + chars.toString());
 		Character focus = null;
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH || e.getDirection() == Data.SOUTH) {
 				int i = (Math.abs(c.getY() - (e.getYOnBoard() - 1))) + 1;
 				System.out.println("c.getY() = [" + c.getY() + "], e.getXOnBoard = [" + (e.getYOnBoard() - 1) + "], i = [" + i + "]");
 
-				if (i < range){
+				if (i < range) {
 					range = i;
 					focus = c;
 				}
@@ -598,14 +595,14 @@ public class WindowGame extends BasicGame {
 						+ (c.getX() - e.getXOnBoard() - 1) + "]");
 				int i = (Math.abs(c.getX() - (e.getXOnBoard() - 1))) + 1;
 
-				if (i < range){
+				if (i < range) {
 					range = i;
 					focus = c;
 				}
 			}
 		}
 		if (Data.debug)
-			System.out.println("The Range is : " + range+", focus is "+focus.toString());
+			System.out.println("The Range is : " + range + ", focus is " + focus.toString());
 		return new Focus(range, focus);
 	}
 
@@ -634,11 +631,11 @@ public class WindowGame extends BasicGame {
 							decodeAction("s2:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
-						System.err.println(e.getLocalizedMessage());
+						System.err.println("Yolo" +e.getMessage());
 					}
 				}
 		}
-		if(Input.KEY_SUBTRACT == key){
+		if (Input.KEY_SUBTRACT == key) {
 			start();
 		}
 		if (Input.KEY_ADD == key) {
@@ -791,17 +788,17 @@ public class WindowGame extends BasicGame {
 		return handler;
 	}
 
-	private class Focus{
+	private class Focus {
 		protected int range;
 		protected Character character;
-		
-		public Focus(int range, Character character){
+
+		public Focus(int range, Character character) {
 			this.range = range;
 			this.character = character;
 		}
-		
-		public String toString(){
-			return "Focus [ range, "+range+", "+character.toString()+"]";
+
+		public String toString() {
+			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
 	}
 }
