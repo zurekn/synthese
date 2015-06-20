@@ -48,7 +48,7 @@ public class Player extends Character {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
-		this.setAiType("hero");
+		this.setAiType("player");
 		this.setTrueID(id);
 		this.setNpc(false);
 		Hero h = HeroData.getHeroByClass(caracterClass);

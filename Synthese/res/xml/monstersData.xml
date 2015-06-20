@@ -9,7 +9,7 @@
 		<mana>40</mana>
 		<armor>10</armor>
 		<magicPower>10</magicPower>
-		<luck>5</luck>
+		<luck>20</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>10</magicResist>
 		<spells>
@@ -30,7 +30,7 @@
 		<mana>40</mana>
 		<armor>20</armor>
 		<magicPower>1</magicPower>
-		<luck>10</luck>
+		<luck>20</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>10</magicResist>
 		<spells>
@@ -50,7 +50,7 @@
 		<mana>50</mana>
 		<armor>70</armor>
 		<magicPower>3</magicPower>
-		<luck>10</luck>
+		<luck>30</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>2</magicResist>
 		<spells>
@@ -71,7 +71,7 @@
 		<mana>50</mana>
 		<armor>10</armor>
 		<magicPower>3</magicPower>
-		<luck>20</luck>
+		<luck>30</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>20</magicResist>
 		<spells>
@@ -92,7 +92,7 @@
 		<mana>50</mana>
 		<armor>35</armor>
 		<magicPower>16</magicPower>
-		<luck>2</luck>
+		<luck>10</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>20</magicResist>
 		<spells>
@@ -113,7 +113,7 @@
 		<mana>50</mana>
 		<armor>25</armor>
 		<magicPower>16</magicPower>
-		<luck>10</luck>
+		<luck>40</luck>
 		<movementPoints>4</movementPoints>
 		<magicResist>20</magicResist>
 		<spells>
@@ -134,7 +134,7 @@
 		<mana>50</mana>
 		<armor>25</armor>
 		<magicPower>16</magicPower>
-		<luck>10</luck>
+		<luck>30</luck>
 		<movementPoints>4</movementPoints>
 		<magicResist>20</magicResist>
 		<spells>
@@ -155,7 +155,7 @@
 		<mana>50</mana>
 		<armor>25</armor>
 		<magicPower>16</magicPower>
-		<luck>10</luck>
+		<luck>40</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>20</magicResist>
 		<spells>
@@ -176,7 +176,7 @@
 		<mana>90</mana>
 		<armor>35</armor>
 		<magicPower>26</magicPower>
-		<luck>10</luck>
+		<luck>25</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>30</magicResist>
 		<spells>
@@ -198,7 +198,7 @@
 		<mana>40</mana>
 		<armor>15</armor>
 		<magicPower>16</magicPower>
-		<luck>10</luck>
+		<luck>20</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>15</magicResist>
 		<spells>
@@ -219,7 +219,7 @@
 		<mana>90</mana>
 		<armor>35</armor>
 		<magicPower>26</magicPower>
-		<luck>10</luck>
+		<luck>20</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>30</magicResist>
 		<spells>

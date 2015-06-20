@@ -13,7 +13,7 @@ public class WindowGameData {
 	public WindowGameData(ArrayList<Player> players, ArrayList<Mob> mobs,
 			int turn) {
 		int n = players.size() + mobs.size();
-		index = (turn - players.size() + 1)%n;
+		index = (turn - players.size() + 1) % n;
 		int initTurn = turn;
 
 		do {
@@ -106,15 +106,15 @@ public class WindowGameData {
 	}
 
 	public void doCommand(String cmd) {
-		//index value is on next character
-		int i = (index-1)%characters.size();
-		
+		// index value is on next character
+		int i = (index - 1) % characters.size();
+
 		if (cmd.startsWith("m")) {// Movement action
 			String[] tokens = cmd.split(":");
 			characters.get(i).moveAiTo(Integer.parseInt(tokens[1]),
 					Integer.parseInt(tokens[2]));
-			//nextCharacter();
-		}else if(cmd.startsWith("s")) {
+			// nextCharacter();
+		} else if (cmd.startsWith("s")) {
 			String[] tokens = cmd.split(":");
 		}
 	}
@@ -126,35 +126,64 @@ public class WindowGameData {
 		if (range == 0) {
 			targets.add(character);
 		} else {
-			for (CharacterData c : characters) {
-				if (damageSpell && (character.isMonster() != c.isMonster()))
-					if (c.getX() == character.getX()
-							|| c.getY() == character.getY())
-						if (c.getX() == character.getX()) {
-							if (Math.abs((c.getX() - character.getX())) <= range) {
-								targets.add(c);
-							}
-						} else if (Math.abs((c.getY() - character.getY())) <= range)
-							targets.add(c);
-
-				if (!damageSpell && (character.isMonster() == c.isMonster())) {
-					if (c.getX() == character.getX()
-							|| c.getY() == character.getY())
-						if (c.getX() == character.getX()) {
-							if (Math.abs((c.getX() - character.getX())) <= range) {
-								targets.add(c);
-							}
-						} else if (Math.abs((c.getY() - character.getY())) <= range)
-							targets.add(c);
+			int max = 2*range+1;
+			CharacterData[][] surroundings = new CharacterData[max][max];
+			for(CharacterData c : characters)
+				try{
+					surroundings[c.getX()-character.getX()+range][c.getY()-character.getY()+range]=c;
+				}catch(ArrayIndexOutOfBoundsException e){}
+			
+			for(int x = range; x < max ; x++){
+				if(isTarget(character, surroundings[x][range], damageSpell)){
+					targets.add(surroundings[x][range]);
+					break;
 				}
 			}
+			
+			for(int x = range; x >= 0 ; x--){
+				if(isTarget(character, surroundings[x][range], damageSpell)){
+					targets.add(surroundings[x][range]);
+					break;
+				}
+			}
+			
+			for(int y = range; y < max ; y++){
+				if(isTarget(character, surroundings[range][y], damageSpell)){
+					targets.add(surroundings[range][y]);
+					break;
+				}
+			}
+			
+			for(int y = range; y < max ; y++){
+				if(isTarget(character, surroundings[range][y], damageSpell)){
+					targets.add(surroundings[range][y]);
+					break;
+				}
+			}
+				
+			
+			
 		}
 		return targets;
+	}
+
+	private boolean isTarget(CharacterData current, CharacterData target,
+			boolean damageSpell) {
+		try {
+			if (damageSpell && (current.isMonster() != target.isMonster()))
+				return true;
+
+			if (!damageSpell && (current.isMonster() == target.isMonster()))
+				return true;
+			return false;
+		} catch (NullPointerException npe) {
+			return false;
+		}
 	}
 
 	public void useSpell(CharacterData character, Spell spell,
 			CharacterData target) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
