@@ -211,8 +211,14 @@ public class WindowGame extends BasicGame {
 			messageHandler.addGlobalMessage(new Message("Position ["+position+"] non disponible", 1));
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
-		//TODO ajout du message erreur dans renderText
 
+		if(!Data.departureBlocks.containsKey(position)){
+			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
+			throw new IllegalMovementException("Caracter must be at a departure position");
+		}else{
+			Data.departureBlocks.replace(position, true);
+		}
+		
 		if (Data.MAX_PLAYER <= players.size())
 			return;
 		String id = "P" + players.size();

@@ -1,6 +1,8 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -104,8 +106,24 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 	}
 
 	public void renderInitBlock(GameContainer container, Graphics g) {
-		// TODO Auto-generated method stub
+		String []split;
+		String var;
+		boolean used;
+		int x, y;
+		Set<String> set = Data.departureBlocks.keySet();
+		Iterator<String> it = set.iterator();
 		
+		g.setColor(Data.BLOCK_REACHABLE_COLOR);
+		while(it.hasNext()){
+			var = ((String) it.next());
+			if(!Data.departureBlocks.get(var)){
+				split = var.split(":");
+				x = Integer.parseInt(split[0]);
+				y = Integer.parseInt(split[1]);
+				g.fillRect(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y * Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+			}
+		}
+		g.setColor(Data.DEFAULT_COLOR);
 	}
 	
 	

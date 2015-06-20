@@ -39,8 +39,8 @@ public class Data {
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
-	public static final boolean runQRCam = true;
-	public static final boolean RUN_APIX = true;
+	public static final boolean runQRCam = false;
+	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
@@ -136,6 +136,11 @@ public class Data {
 	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	private static final Color MESSAGE_COLOR_TYPE_2 = new Color(Color.green);
+	public static final int MESSAGE_TYPE_INFO = 0;
+	public static final int MESSAGE_TYPE_ERROR = 1;
+	private static final int MESSAGE_TYPE_SUCCES = 2;
+	public static final Color DEFAULT_COLOR = Color.black;
 	public static final int ACTION_PER_TURN = 1;
 	
 	//ERROR MESSAGES
@@ -144,6 +149,7 @@ public class Data {
 	//MESSAGES
 	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
 	public static final String TURN_TEXT = "End of turn in : ";
+	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
 	private static float MUSIC_VOLUM = .1f;
 	private static float MUSIC_PITCH = 1;
 	public static  String MAIN_TEXT = "";
@@ -322,11 +328,14 @@ public class Data {
 	public static Color getColorMessage(int type) {
 		Color color;
 		switch(type){
-		case 0:
+		case Data.MESSAGE_TYPE_INFO:
 			color = MESSAGE_COLOR_TYPE_0;
 			break;
-		case 1:
+		case Data.MESSAGE_TYPE_ERROR:
 			color = MESSAGE_COLOR_TYPE_1;
+			break;
+		case Data.MESSAGE_TYPE_SUCCES:
+			color = MESSAGE_COLOR_TYPE_2;
 			break;
 		default:
 			color = MESSAGE_COLOR_TYPE_0;
