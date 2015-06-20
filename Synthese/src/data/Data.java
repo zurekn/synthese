@@ -103,7 +103,7 @@ public class Data {
 
 	public static final int INF = 500;
 
-	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
+	public static String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
@@ -128,18 +128,25 @@ public class Data {
 	public static WindowGame game;
 	public static long beginTime;
 	
-	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
-	public static final String TURN_TEXT = "End of turn in : ";
-	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
 	public static final long MESSAGE_DURATION = 2000;
 	
+	public static Music BACKGROUND_MUSIC; 
+	
+	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
 	public static final int ACTION_PER_TURN = 1;
 	
 	//ERROR MESSAGES
 	public static final String ERROR_TOO_MUCH_ACTION = "Une seul action par tour !";
+	
+	//MESSAGES
+	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
+	public static final String TURN_TEXT = "End of turn in : ";
+	private static float MUSIC_VOLUM = .1f;
+	private static float MUSIC_PITCH = 1;
+	public static  String MAIN_TEXT = "";
 
 	
 	/**
@@ -212,12 +219,26 @@ public class Data {
 					System.out.println("New departure blok at : ["+x+":"+y+"]");
 			}
 			
+			BACKGROUND_MUSIC = new Music(root.getChildText("music"));
 		} catch (DataConversionException e) {
+			e.printStackTrace();
+		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 
+		
+		playBackgroundMusic();
 	}
 	
+	public static void playBackgroundMusic(){
+		BACKGROUND_MUSIC.loop(MUSIC_PITCH, MUSIC_VOLUM);
+	}
+	
+	public static void musicVolumeUp(int volume){
+		MUSIC_VOLUM = volume;
+		BACKGROUND_MUSIC.setVolume(MUSIC_VOLUM);
+		
+	}
 	
 	public static String getImageDir(){
 		if(!initImageDir){
