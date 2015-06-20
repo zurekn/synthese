@@ -21,6 +21,7 @@
 			<spell id="s9"></spell>
 		</spells>
 		<eyeSight>5</eyeSight>
+		<value>0</value>
 	</hero>
 	<hero id="rogue">
 		<icon>Synthese/res/images/tiles/class/rogue_icon.png</icon>
@@ -37,6 +38,7 @@
 			<spell id="s2"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
+		<value>5</value>
 	</hero>
 	<hero id="barbarian">
 		<icon>Synthese/res/images/tiles/class/war_icon.png</icon>
@@ -52,6 +54,7 @@
 			<spell id="s5"></spell>
 		</spells>
 		<eyeSight>4</eyeSight>
+		<value>10</value>
 	</hero>
 	<hero id="cleric">
 		<icon>Synthese/res/images/tiles/class/priest_icon.png</icon>
@@ -69,5 +72,6 @@
 			<spell id="s1"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
+		<value>0</value>
 	</hero>
 </heros>
