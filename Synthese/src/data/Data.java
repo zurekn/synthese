@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -23,6 +25,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.Sys;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -35,7 +38,8 @@ import org.newdawn.slick.tiled.TiledMap;
  *
  */
 public class Data {
-
+	
+	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
@@ -133,6 +137,8 @@ public class Data {
 	
 	public static Music BACKGROUND_MUSIC; 
 	
+	
+	
 	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
@@ -150,6 +156,7 @@ public class Data {
 	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
+	public static Image IMAGE_HALO = null;
 	private static float MUSIC_VOLUM = .1f;
 	private static float MUSIC_PITCH = 1;
 	public static  String MAIN_TEXT = "";
@@ -188,7 +195,6 @@ public class Data {
 				+ ", BLOCK_NUMBER = " + Data.BLOCK_NUMBER_X
 				+ ", BLOCK_SIZE_X = " + Data.BLOCK_SIZE_X + ", BLOCK_SIZE_Y = "
 				+ Data.BLOCK_SIZE_Y + ", SCALE = " + Data.SCALE);
-
 	}
 
 	public static void initSpell() {
@@ -226,6 +232,7 @@ public class Data {
 			}
 			
 			BACKGROUND_MUSIC = new Music(root.getChildText("music"));
+			IMAGE_HALO = new Image(root.getChildText("halo_image"));
 		} catch (DataConversionException e) {
 			e.printStackTrace();
 		} catch (SlickException e) {

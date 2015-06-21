@@ -153,5 +153,6 @@
 	</departure>
 	
 	<music>Synthese/res/musics/dungeon.wav</music>
+	<halo_image>Synthese/res/images/tiles/Other/halo.png</halo_image>
 
 </map>

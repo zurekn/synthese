@@ -212,7 +212,7 @@ public class WindowGame extends BasicGame {
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
 
-		if(!Data.departureBlocks.containsKey(position)){
+		if(!Data.departureBlocks.containsKey(position) && !Data.DEBUG_DEPARTURE){
 			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
 			throw new IllegalMovementException("Caracter must be at a departure position");
 		}else{
