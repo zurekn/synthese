@@ -88,7 +88,7 @@
 		<celX>191</celX>
 		<celY>192</celY>
 		<celNumber>5</celNumber>
-		<direction>90</direction>
+		<direction>0</direction>
 		<damage>5</damage>
 		<heal>0</heal>
 		<mana>50</mana>
@@ -99,9 +99,9 @@
 	</spell>
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
-		<celX>86</celX>
-		<celY>96</celY>
-		<celNumber>4</celNumber>
+		<celX>38</celX>
+		<celY>38</celY>
+		<celNumber>2</celNumber>
 		<direction>90</direction>
 		<damage>7</damage>
 		<heal>0</heal>

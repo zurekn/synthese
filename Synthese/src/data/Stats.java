@@ -14,6 +14,7 @@ public class Stats {
 	private int eyeSight;
 	private String characterClass = "";
 	private float lifePercentage = 1.f;
+	private float manaPercentage = 1.f;
 
 	public Stats(int life, int mana) {
 		this.life = life;
@@ -78,7 +79,9 @@ public class Stats {
 		this.life = life;
 		if (this.life > this.maxLife)
 			this.life = maxLife;
-		this.lifePercentage = this.life / this.maxLife ;
+		
+		float l = (float) life, m = (float) maxLife;
+		this.lifePercentage = l / m;
 	}
 
 	public int getArmor() {
@@ -117,6 +120,13 @@ public class Stats {
 		this.mana = mana;
 		if (this.mana > this.maxMana)
 			this.mana = maxMana;
+		
+		float n = (float) mana, m = (float) maxMana;
+		this.manaPercentage = n / m;
+	}
+	
+	public float getManaPercentage(){
+		return manaPercentage;
 	}
 
 	public int getStrength() {
@@ -173,5 +183,4 @@ public class Stats {
 				+ ", magicResist=" + magicResist + ", characterClass="
 				+ characterClass + "]";
 	}
-
 }

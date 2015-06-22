@@ -166,7 +166,7 @@ public class WindowGame extends BasicGame {
 			// TODO test add chalenger
 			try {
 				if(Data.DEBUG_PLAYER > 0)
-					addChalenger(10, 12);
+					addChalenger(10, 8);
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
 					addChalenger(15, 15);
