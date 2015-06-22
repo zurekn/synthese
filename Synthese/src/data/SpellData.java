@@ -15,6 +15,7 @@ import org.jdom2.input.SAXBuilder;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 public class SpellData {
@@ -61,7 +62,7 @@ public class SpellData {
 			type = el.getChildText("type");
 			direction = Integer.parseInt(el.getChildText("direction"));
 			celNumber = Integer.parseInt(el.getChildText("celNumber"));
-			Music sound = new Music(el.getChildText("sound"));
+			Sound sound = new Sound(el.getChildText("sound"));
 			SpriteSheet ss;
 			
 				ss = new SpriteSheet("" + el.getChildText("file"),

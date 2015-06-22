@@ -13,6 +13,7 @@ import org.jdom2.input.SAXBuilder;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 public class TrapData {
@@ -70,7 +71,7 @@ public class TrapData {
 				ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
-			traps.add(new TrapD(id, damage, damageType, name, celNumber, ss, new Music(sound)));
+			traps.add(new TrapD(id, damage, damageType, name, celNumber, ss, new Sound(sound)));
 			System.out.println("   Trap : ["+name+"] load end");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block

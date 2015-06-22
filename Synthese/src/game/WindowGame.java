@@ -132,6 +132,8 @@ public class WindowGame extends BasicGame {
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
 
+		if(!Data.BACKGROUND_MUSIC.playing())
+			Data.BACKGROUND_MUSIC.loop(Data.MUSIC_PITCH, Data.MUSIC_VOLUM);
 		// start();
 	}
 
@@ -166,14 +168,14 @@ public class WindowGame extends BasicGame {
 			// TODO test add chalenger
 			try {
 				if(Data.DEBUG_PLAYER > 0)
-					addChalenger(10, 8);
+					addChalenger(10, 8, -1);
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
-					addChalenger(15, 15);
+					addChalenger(15, 15, -1);
 				if (Data.DEBUG_PLAYER > 2)
-					addChalenger(16, 15);
+					addChalenger(16, 15, -1);
 				if (Data.DEBUG_PLAYER > 3)
-					addChalenger(7, 12);
+					addChalenger(7, 12, -1);
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			} catch (IllegalMovementException e) {
@@ -195,7 +197,7 @@ public class WindowGame extends BasicGame {
 	 * @throws IllegalMovementException
 	 * @throws IllegalActionException
 	 */
-	public void addChalenger(int x, int y) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
+	public void addChalenger(int x, int y, int size) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
 		if (gameOn)
 			throw new IllegalActionException("Can not add player when game is on!");
 
@@ -223,7 +225,11 @@ public class WindowGame extends BasicGame {
 			return;
 		String id = "P" + players.size();
 		String type = HeroData.getRandomHero();
-		players.add(new Player(x, y, id, type));
+		
+		Player p = new Player(x, y, id, type);
+		p.setSizeCharacter(size);
+		players.add(p);
+		
 		timerInitPlayer = Data.INIT_MAX_TIME;
 		if (players.size() >= Data.MAX_PLAYER) {
 			System.out.println(" ----Max player reached ----");
@@ -291,7 +297,7 @@ public class WindowGame extends BasicGame {
 						else
 							System.err.println("Récupération d'une valeur de l'apix durant le tour de l'ia");
 					else
-						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY());
+						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY(), e.getSize());
 				} catch (IllegalActionException e1) {
 					System.err.println(e1.getLocalizedMessage());
 				} catch (IllegalCaracterClassException e1) {
@@ -414,7 +420,8 @@ public class WindowGame extends BasicGame {
 			e.render(container, g);
 			x = e.getX();
 			y = e.getY();
-			e.setRange(e.getRange() - 1);
+			e.move();
+			//e.setRange(e.getRange() - 1);
 			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
 				events.remove(i);
 			}
@@ -574,6 +581,7 @@ public class WindowGame extends BasicGame {
 				System.out.println("Created " + e.toString());
 			} catch (IllegalActionException iae) {
 				iae.printStackTrace();
+				messageHandler.addPlayerMessage(new Message(iae.getLocalizedMessage()), turn);
 			}
 
 		}
@@ -654,13 +662,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s8:" + Data.NORTH);
+							decodeAction("s2:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s5:" + Data.EAST);
+							decodeAction("s3:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s6:" + Data.SOUTH);
+							decodeAction("s4:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s7:" + Data.WEST);
+							decodeAction("s9:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
@@ -678,7 +686,7 @@ public class WindowGame extends BasicGame {
 				Random rand = new Random();
 				int x = rand.nextInt(Data.BLOCK_NUMBER_X - 0) + 0;
 				int y = rand.nextInt(Data.BLOCK_NUMBER_Y - 0) + 0;
-				addChalenger(x, y);
+				addChalenger(x, y, -1);
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			} catch (IllegalMovementException e) {
@@ -768,18 +776,19 @@ public class WindowGame extends BasicGame {
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
+			System.out.println("--------------------------------------------------"+ players.get(i).getName()+"---------------------------------------------");
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
-				c.add(mobs.get(i));
+				c.add(players.get(i));
 			// bottom
 			if (direction == Data.SOUTH && players.get(i).getY() > y && players.get(i).getX() == x)
-				c.add(mobs.get(i));
+				c.add(players.get(i));
 			// on left
 			if (direction == Data.EAST && players.get(i).getY() == y && players.get(i).getX() > x)
-				c.add(mobs.get(i));
+				c.add(players.get(i));
 			// on right
 			if (direction == Data.WEST && players.get(i).getY() == y && players.get(i).getX() < x)
-				c.add(mobs.get(i));
+				c.add(players.get(i));
 		}
 
 		for (int i = 0; i < mobs.size(); i++) {

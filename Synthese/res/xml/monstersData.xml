@@ -36,7 +36,7 @@
 		<spells>
 			<spell>s2</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>4</eyeSight>
 	</monster>
 	
@@ -57,7 +57,7 @@
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:2</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -69,16 +69,16 @@
 		<life>200</life>
 		<strength>15</strength>
 		<mana>50</mana>
-		<armor>10</armor>
+		<armor>5</armor>
 		<magicPower>3</magicPower>
 		<luck>30</luck>
 		<movementPoints>2</movementPoints>
-		<magicResist>20</magicResist>
+		<magicResist>15</magicResist>
 		<spells>
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>42</eyeSight>
 	</monster>
 	
@@ -99,7 +99,7 @@
 			<spell>s2</spell>
 			<spell>s9</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -107,7 +107,7 @@
 		<name>Bold-smile</name>
 		<file>Synthese/res/images/tiles/Monsters/bat.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>310</life>
 		<strength>25</strength>
 		<mana>50</mana>
@@ -120,7 +120,7 @@
 			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>2</eyeSight>
 	</monster>
 	
@@ -128,7 +128,7 @@
 		<name>Zig Bee</name>
 		<file>Synthese/res/images/tiles/Monsters/bee.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>210</life>
 		<strength>25</strength>
 		<mana>50</mana>
@@ -141,7 +141,7 @@
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -162,7 +162,7 @@
 			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -184,7 +184,7 @@
 			<spell>s4</spell>
 			<spell>s7</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -192,7 +192,7 @@
 		<name>Whorm</name>
 		<file>Synthese/res/images/tiles/Monsters/small_worm.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>250</life>
 		<strength>15</strength>
 		<mana>40</mana>
@@ -205,7 +205,7 @@
 			<spell>s2</spell>
 			<spell>s7</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -227,7 +227,7 @@
 			<spell>s4</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	

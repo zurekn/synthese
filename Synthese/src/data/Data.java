@@ -3,6 +3,9 @@ package data;
 import game.Mob;
 import game.WindowGame;
 
+import java.awt.GraphicsConfigTemplate;
+import java.awt.GraphicsConfiguration;
+import java.awt.font.GraphicAttribute;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -25,6 +28,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.Sys;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
@@ -186,10 +190,12 @@ public class Data {
 	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
+	public static final int FONT_SIZE = 10;
 	public static Image IMAGE_HALO = null;
-	private static float MUSIC_VOLUM = .1f;
-	private static float MUSIC_PITCH = 1;
-	public static  String MAIN_TEXT = "";
+	public static float MUSIC_VOLUM = .1f;
+	public static float MUSIC_PITCH = 1;
+	public static String MAIN_TEXT = "";
+	public static int MESSAGE_MAX_LENGTH;
 
 	
 	/**
@@ -219,6 +225,7 @@ public class Data {
 		Data.TOTAL_HEIGHT = Data.MAP_HEIGHT + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.TOTAL_WIDTH = Data.MAP_WIDTH + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.SCALE = (float) Data.SCREEN_HEIGHT / Data.TOTAL_HEIGHT;
+		Data.MESSAGE_MAX_LENGTH = (Data.MAP_WIDTH - Data.DECK_AREA_SIZE_X - Data.PLAYER_LIFE_RECT_X_SIZE) / Data.FONT_SIZE;
 
 		System.out.println("MAP_FILE = " + Data.MAP_FILE + ", MAP_WIDTH = "
 				+ Data.MAP_WIDTH + ", MAP_HEIGHT = " + Data.MAP_HEIGHT
@@ -270,7 +277,6 @@ public class Data {
 		}
 
 		
-		playBackgroundMusic();
 	}
 	
 	public static void playBackgroundMusic(){

@@ -2,6 +2,7 @@ package data;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 public class SpellD {
@@ -17,7 +18,7 @@ public class SpellD {
 	private int spriteDirection;
 
 	public SpellD(String id, int damage, int heal, int mana, int range, String name,
-			int celNumber, String type, SpriteSheet ss, Music sound, int spriteDirection) {
+			int celNumber, String type, SpriteSheet ss, Sound sound, int spriteDirection) {
 		this.id = id;
 		this.damage = damage;
 		this.heal = heal;
