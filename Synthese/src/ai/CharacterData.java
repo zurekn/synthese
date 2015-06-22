@@ -137,7 +137,7 @@ public class CharacterData {
 		if (damage < 0)
 			damage = 0;
 		stats.setLife(stats.getLife() - damage);
-		System.out.println(id + " take : [" + damage + "] damage");
+		//System.out.println(id + " take : [" + damage + "] damage");
 	}
 
 	public void heal(int heal) {
@@ -331,7 +331,7 @@ public class CharacterData {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

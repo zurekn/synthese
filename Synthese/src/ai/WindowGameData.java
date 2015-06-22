@@ -1,5 +1,9 @@
 package ai;
 
+import data.Data;
+import data.Stats;
+import exception.IllegalActionException;
+import game.Character;
 import game.Mob;
 import game.Player;
 import game.Spell;
@@ -108,61 +112,101 @@ public class WindowGameData {
 	public void doCommand(String cmd) {
 		// index value is on next character
 		int i = (index - 1) % characters.size();
+		CharacterData character = characters.get(i);
 
 		if (cmd.startsWith("m")) {// Movement action
 			String[] tokens = cmd.split(":");
-			characters.get(i).moveAiTo(Integer.parseInt(tokens[1]),
+			character.moveAiTo(Integer.parseInt(tokens[1]),
 					Integer.parseInt(tokens[2]));
-			// nextCharacter();
-		} else if (cmd.startsWith("s")) {
+		} else if (cmd.startsWith("s")) {// spell
 			String[] tokens = cmd.split(":");
+			Spell spell = character.getSpell(tokens[0]);
+			CharacterData target = null;
+			float d = Float.MAX_VALUE;
+			int direction = Integer.parseInt(tokens[1]);
+			if (direction == Data.SELF) {
+				useSpell(character, spell, target);
+			} else {
+				for (CharacterData c : characters) {
+					if (c.getX() == character.getX()) {
+						float diffY = c.getY() - character.getY();
+						if (Math.abs(diffY) < d) {
+							if (direction == Data.NORTH && diffY > 0) {
+								target = c;
+								d = Math.abs(diffY);
+							}
+							if (direction == Data.SOUTH && diffY < 0) {
+								target = c;
+								d = Math.abs(diffY);
+							}
+						}
+					}
+
+					if (c.getY() == character.getY()) {
+						float diffX = c.getX() - character.getX();
+						if (Math.abs(diffX) < d) {
+							if (direction == Data.EAST && diffX < 0) {
+								target = c;
+								d = Math.abs(diffX);
+							}
+							if (direction == Data.WEST && diffX > 0) {
+								target = c;
+								d = Math.abs(diffX);
+							}
+						}
+					}
+				}
+				if(target !=  null){
+					useSpell(character, spell, target);
+				}
+			}
 		}
 	}
 
 	public ArrayList<CharacterData> getTargetsInRange(CharacterData character,
 			int range, boolean damageSpell) {
-		//TODO take obstacles in count
+		// TODO take obstacles in count
 		ArrayList<CharacterData> targets = new ArrayList<CharacterData>();
 		if (range == 0) {
 			targets.add(character);
 		} else {
-			int max = 2*range+1;
+			int max = 2 * range + 1;
 			CharacterData[][] surroundings = new CharacterData[max][max];
-			for(CharacterData c : characters)
-				try{
-					surroundings[c.getX()-character.getX()+range][c.getY()-character.getY()+range]=c;
-				}catch(ArrayIndexOutOfBoundsException e){}
-			
-			for(int x = range; x < max ; x++){
-				if(isTarget(character, surroundings[x][range], damageSpell)){
+			for (CharacterData c : characters)
+				try {
+					surroundings[c.getX() - character.getX() + range][c.getY()
+							- character.getY() + range] = c;
+				} catch (ArrayIndexOutOfBoundsException e) {
+				}
+
+			for (int x = range; x < max; x++) {
+				if (isTarget(character, surroundings[x][range], damageSpell)) {
 					targets.add(surroundings[x][range]);
 					break;
 				}
 			}
-			
-			for(int x = range; x >= 0 ; x--){
-				if(isTarget(character, surroundings[x][range], damageSpell)){
+
+			for (int x = range; x >= 0; x--) {
+				if (isTarget(character, surroundings[x][range], damageSpell)) {
 					targets.add(surroundings[x][range]);
 					break;
 				}
 			}
-			
-			for(int y = range; y < max ; y++){
-				if(isTarget(character, surroundings[range][y], damageSpell)){
+
+			for (int y = range; y < max; y++) {
+				if (isTarget(character, surroundings[range][y], damageSpell)) {
 					targets.add(surroundings[range][y]);
 					break;
 				}
 			}
-			
-			for(int y = range; y < max ; y++){
-				if(isTarget(character, surroundings[range][y], damageSpell)){
+
+			for (int y = range; y < max; y++) {
+				if (isTarget(character, surroundings[range][y], damageSpell)) {
 					targets.add(surroundings[range][y]);
 					break;
 				}
 			}
-				
-			
-			
+
 		}
 		return targets;
 	}
@@ -183,7 +227,13 @@ public class WindowGameData {
 
 	public void useSpell(CharacterData character, Spell spell,
 			CharacterData target) {
-		// TODO Auto-generated method stub
+		Stats stats = character.getStats();
+		if (spell.getMana() < stats.getMana()) {
+			int newMana = stats.getMana() - spell.getMana();
+			stats.setMana(newMana);
+		}
+		target.takeDamage(spell.getDamage(), spell.getType());
+		target.heal(spell.getHeal());
 
 	}
 }

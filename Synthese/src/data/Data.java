@@ -46,13 +46,13 @@ public class Data {
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
-	public static final boolean DISPLAY_PLAYER = false;
+	public static final boolean DISPLAY_PLAYER = true;
 	public static final boolean runQRCam = false;
 	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 0;
+	public static final int DEBUG_PLAYER = 4;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
@@ -83,7 +83,7 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 50; // in sec
+	public static int TURN_MAX_TIME = 5000; // in sec
 
 	//For the stat display
 	public static int PLAYER_LIFE_RECT_X_POS = 10;
@@ -141,7 +141,37 @@ public class Data {
 	
 	public static Music BACKGROUND_MUSIC; 
 	
+	//AI
+	public static final int AI_DEPTH_MAX = 1;
+	public static final float[][] AI_FACTORS = {
+			{ 2.f, 1.5f, 0.75f, 0.2f, 0.50f, 0.3f }, // coward
+			{ 1.f, 0.5f, 0.40f, 0.3f, 0.70f, 0.9f }, // lonewolf
+			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f }, // normal
+			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f } // player
+	};
 	
+	public static final float[][] AI_HEURISITCS = {
+		{2.25f, 8.f, 2.0f, 2.0f},	//coward
+		{1.00f, 7.f, 0.5f, 2.0f},	//lonewolf
+		{1.00f, 7.f, 1.0f, 2.0f},	//normal
+		{1.00f, 7.f, 1.0f, 2.0f}	//player
+	};
+
+	public static final int COWARD = 0;
+	public static final int LONEWOLF = 1;
+	public static final int NORMAL = 2;
+	public static final int PLAYER = 3;
+	
+	public static final int LIFE = 1 ;
+	public static final int ALLIES_LIFE = 2;
+	public static final int MANA = 3;
+
+	public static final int ENEMIES_DETECTION = 0; 
+	public static final int ALLIES_DETECTION = 1;
+	public static final int MIN_LIFE = 2; //min percentage life before unfocus
+	public static final int BACKUP_ALLIES = 3; //min percentage of allies' life to heal them
+	public static final int RUNAWAY = 4; // min danger level to run away
+	public static final int STICK_TO_ALLIES = 5; //min danger level to go near allies 
 	
 	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
