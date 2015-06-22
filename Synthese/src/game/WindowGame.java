@@ -211,8 +211,14 @@ public class WindowGame extends BasicGame {
 			messageHandler.addGlobalMessage(new Message("Position ["+position+"] non disponible", 1));
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
-		//TODO ajout du message erreur dans renderText
 
+		if(!Data.departureBlocks.containsKey(position) && !Data.DEBUG_DEPARTURE){
+			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
+			throw new IllegalMovementException("Caracter must be at a departure position");
+		}else{
+			Data.departureBlocks.replace(position, true);
+		}
+		
 		if (Data.MAX_PLAYER <= players.size())
 			return;
 		String id = "P" + players.size();
@@ -648,13 +654,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s2:" + Data.NORTH);
+							decodeAction("s8:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s2:" + Data.EAST);
+							decodeAction("s5:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s2:" + Data.SOUTH);
+							decodeAction("s6:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s2:" + Data.WEST);
+							decodeAction("s7:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
@@ -829,5 +835,10 @@ public class WindowGame extends BasicGame {
 		public String toString() {
 			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
+	}
+	
+	public Character getCurrentPlayer()
+	{
+		return currentCharacter;
 	}
 }

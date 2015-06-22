@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -23,6 +25,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.Sys;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -35,7 +38,8 @@ import org.newdawn.slick.tiled.TiledMap;
  *
  */
 public class Data {
-
+	
+	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
@@ -103,7 +107,7 @@ public class Data {
 
 	public static final int INF = 500;
 
-	public static final String MAP_FILE = "Synthese/res/images/map3.tmx";
+	public static String MAP_FILE = "Synthese/res/images/map3.tmx";
 	public static final String MONSTER_DATA_XML = "Synthese/res/xml/monstersData.xml";
 	public static final String SPELLS_DATA_XML = "Synthese/res/xml/spells.xml";
 	public static final String TRAPS_DATA_XML = "Synthese/res/xml/traps.xml";
@@ -128,18 +132,34 @@ public class Data {
 	public static WindowGame game;
 	public static long beginTime;
 	
-	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
-	public static final String TURN_TEXT = "End of turn in : ";
-	public static  String MAIN_TEXT = "";
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
 	public static final long MESSAGE_DURATION = 2000;
 	
+	public static Music BACKGROUND_MUSIC; 
+	
+	
+	
+	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	private static final Color MESSAGE_COLOR_TYPE_2 = new Color(Color.green);
+	public static final int MESSAGE_TYPE_INFO = 0;
+	public static final int MESSAGE_TYPE_ERROR = 1;
+	private static final int MESSAGE_TYPE_SUCCES = 2;
+	public static final Color DEFAULT_COLOR = Color.black;
 	public static final int ACTION_PER_TURN = 1;
 	
 	//ERROR MESSAGES
 	public static final String ERROR_TOO_MUCH_ACTION = "Une seul action par tour !";
+	
+	//MESSAGES
+	public static final String INIT_PLAYER_TEXT = "Time until the game begin :";
+	public static final String TURN_TEXT = "End of turn in : ";
+	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
+	public static Image IMAGE_HALO = null;
+	private static float MUSIC_VOLUM = .1f;
+	private static float MUSIC_PITCH = 1;
+	public static  String MAIN_TEXT = "";
 
 	
 	/**
@@ -175,7 +195,6 @@ public class Data {
 				+ ", BLOCK_NUMBER = " + Data.BLOCK_NUMBER_X
 				+ ", BLOCK_SIZE_X = " + Data.BLOCK_SIZE_X + ", BLOCK_SIZE_Y = "
 				+ Data.BLOCK_SIZE_Y + ", SCALE = " + Data.SCALE);
-
 	}
 
 	public static void initSpell() {
@@ -212,12 +231,27 @@ public class Data {
 					System.out.println("New departure blok at : ["+x+":"+y+"]");
 			}
 			
+			BACKGROUND_MUSIC = new Music(root.getChildText("music"));
+			IMAGE_HALO = new Image(root.getChildText("halo_image"));
 		} catch (DataConversionException e) {
+			e.printStackTrace();
+		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 
+		
+		playBackgroundMusic();
 	}
 	
+	public static void playBackgroundMusic(){
+		BACKGROUND_MUSIC.loop(MUSIC_PITCH, MUSIC_VOLUM);
+	}
+	
+	public static void musicVolumeUp(int volume){
+		MUSIC_VOLUM = volume;
+		BACKGROUND_MUSIC.setVolume(MUSIC_VOLUM);
+		
+	}
 	
 	public static String getImageDir(){
 		if(!initImageDir){
@@ -301,11 +335,14 @@ public class Data {
 	public static Color getColorMessage(int type) {
 		Color color;
 		switch(type){
-		case 0:
+		case Data.MESSAGE_TYPE_INFO:
 			color = MESSAGE_COLOR_TYPE_0;
 			break;
-		case 1:
+		case Data.MESSAGE_TYPE_ERROR:
 			color = MESSAGE_COLOR_TYPE_1;
+			break;
+		case Data.MESSAGE_TYPE_SUCCES:
+			color = MESSAGE_COLOR_TYPE_2;
 			break;
 		default:
 			color = MESSAGE_COLOR_TYPE_0;

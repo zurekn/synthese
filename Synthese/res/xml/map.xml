@@ -151,5 +151,8 @@
 		<block x="24" y="16" />
 		<block x="24" y="12" />
 	</departure>
+	
+	<music>Synthese/res/musics/dungeon.wav</music>
+	<halo_image>Synthese/res/images/tiles/Other/halo.png</halo_image>
 
 </map>

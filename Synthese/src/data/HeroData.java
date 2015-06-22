@@ -81,6 +81,7 @@ public class HeroData {
 				e.printStackTrace();
 			}
 			Hero h = new Hero(id, icon, new Stats(life, armor, mana, strength, magicPower, luck, movementPoints, magicResist, eyeSight ,id));
+			CLASSES_VALUES.put(id, Integer.parseInt(el.getChildText("value")));
 			Iterator<Element> ii =  el.getChild("spells").getChildren("spell").iterator();
 			
 			while(ii.hasNext()){
@@ -94,10 +95,10 @@ public class HeroData {
 			System.out.println("	Hero : "+h.getCaracterClass());
 		}
 		//TODO 
-		CLASSES_VALUES.put("mage", 0);
-		CLASSES_VALUES.put("barbarian", 10);
-		CLASSES_VALUES.put("rogue", 5);
-		CLASSES_VALUES.put("cleric", 0);
+//		CLASSES_VALUES.put("mage", 0);
+//		CLASSES_VALUES.put("barbarian", 10);
+//		CLASSES_VALUES.put("rogue", 5);
+//		CLASSES_VALUES.put("cleric", 0);
 	}
 
 }

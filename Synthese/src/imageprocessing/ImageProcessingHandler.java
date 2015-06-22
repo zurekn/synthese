@@ -1,15 +1,19 @@
 package imageprocessing;
 
+import game.WindowGame;
+
 import java.awt.im.InputMethodHighlight;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 
 import com.github.sarxos.webcam.Webcam;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 import data.Data;
 import data.Handler;
@@ -111,6 +115,7 @@ public class ImageProcessingHandler extends Handler {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
+			image = null;
 			System.out.println("Image prise à "+System.currentTimeMillis());
 			image = webcam.getImage();
 			try {
@@ -122,9 +127,43 @@ public class ImageProcessingHandler extends Handler {
 			}
 			//Test de version opti
 //			List<FormObject> lf = ip.etiquetageIntuitifImageGiveList2(imageRef, image, seuil);
-			List<FormObject> lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 
+			List<FormObject> lf = new ArrayList<FormObject>();
+			if(WindowGame.getInstance().getCurrentPlayer() != null)
+			{
+				game.Character currentPlayer = WindowGame.getInstance().getCurrentPlayer();
+				int tempLimitMinX = ((currentPlayer.getX()*APIX.blockSizeX + APIX.relativeX) - (APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMinX = tempLimitMinX < APIX.relativeX ? 
+														APIX.relativeX : 
+														tempLimitMinX;
+				
+				int tempLimitMinY = ((currentPlayer.getY()*APIX.blockSizeY + APIX.relativeY) - (APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMinY = tempLimitMinY < APIX.relativeY ? 
+														APIX.relativeY : 
+														tempLimitMinY;
+				
+				int tempLimitMaxX = ((currentPlayer.getX()*APIX.blockSizeX + APIX.relativeX) + (APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMaxX = tempLimitMaxX > Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX ? 
+								Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX : 
+								tempLimitMaxX;
+
+				int tempLimitMaxY = ((currentPlayer.getY()*APIX.blockSizeY + APIX.relativeY) + (APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMaxY = tempLimitMaxY > Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY ? 
+								Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY : 
+									tempLimitMaxY;
+
+
+				lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 
+															tempLimitMinX,
+															tempLimitMaxX,
+															tempLimitMinY,
+															tempLimitMaxY);
+			}
+			else
+			{
+				lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 
 																		APIX.relativeX, Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX, 
 																		APIX.relativeY, Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY);
+			}
 
 			/***********************************	debug	************************************************/
 			/*List<FormObject> lf = null;
@@ -161,6 +200,8 @@ public class ImageProcessingHandler extends Handler {
 			try {
 				System.out.println("Attente de "+Data.WAIT_TI/1000+" sec pour le prochain traitement");
 				Thread.sleep(Data.WAIT_TI);
+				//if(lf != null)
+				//	imageRef = image; // permet de faire un traitement de l'image t-1 à t et non imageInit à image t
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

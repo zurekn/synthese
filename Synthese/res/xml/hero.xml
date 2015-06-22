@@ -6,7 +6,7 @@
 		<mana>100</mana>
 		<strength>2</strength>
 		<magicPower>10</magicPower>
-		<luck>7</luck>
+		<luck>25</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>6</magicResist>
 		<spells>
@@ -21,6 +21,7 @@
 			<spell id="s9"></spell>
 		</spells>
 		<eyeSight>5</eyeSight>
+		<value>0</value>
 	</hero>
 	<hero id="rogue">
 		<icon>Synthese/res/images/tiles/class/rogue_icon.png</icon>
@@ -29,7 +30,7 @@
 		<mana>100</mana>
 		<strength>7</strength>
 		<magicPower>2</magicPower>
-		<luck>8</luck>
+		<luck>50</luck>
 		<movementPoints>4</movementPoints>
 		<magicResist>4</magicResist>
 		<spells>
@@ -37,6 +38,7 @@
 			<spell id="s2"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
+		<value>5</value>
 	</hero>
 	<hero id="barbarian">
 		<icon>Synthese/res/images/tiles/class/war_icon.png</icon>
@@ -45,13 +47,14 @@
 		<mana>100</mana>
 		<strength>10</strength>
 		<magicPower>0</magicPower>
-		<luck>5</luck>
+		<luck>30</luck>
 		<movementPoints>2</movementPoints>
 		<magicResist>2</magicResist>
 		<spells>
 			<spell id="s5"></spell>
 		</spells>
 		<eyeSight>4</eyeSight>
+		<value>10</value>
 	</hero>
 	<hero id="cleric">
 		<icon>Synthese/res/images/tiles/class/priest_icon.png</icon>
@@ -60,7 +63,7 @@
 		<mana>125</mana>
 		<strength>2</strength>
 		<magicPower>8</magicPower>
-		<luck>6</luck>
+		<luck>35</luck>
 		<movementPoints>3</movementPoints>
 		<magicResist>8</magicResist>
 		<spells>
@@ -69,5 +72,6 @@
 			<spell id="s1"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
+		<value>0</value>
 	</hero>
 </heros>

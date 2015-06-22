@@ -122,6 +122,21 @@
 		<mana>25</mana>
 		<name>Meteor</name>
 		<range>5</range>
+		<type>magic</type>
 		<sound>Synthese/res/sounds/Meteor.wav</sound>
+	</spell>
+	<spell id="s10">
+		<file>Synthese/res/images/tiles/Spells/holy_strike.png</file>
+		<celX>190</celX>
+		<celY>213</celY>
+		<celNumber>7</celNumber>
+		<direction>90</direction>
+		<damage>20</damage>
+		<heal>0</heal>
+		<mana>15</mana>
+		<name>Holy Strike</name>
+		<range>1</range>
+		<type>physic</type>
+		<sound>Synthese/res/sounds/holy_strike.wav</sound>
 	</spell>
 </spells>
