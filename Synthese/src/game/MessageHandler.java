@@ -16,19 +16,41 @@ public class MessageHandler {
 	public ArrayList<ArrayList<Message>> playerMessages = new ArrayList<ArrayList<Message>>();
 
 	private ArrayList<Message> deletedMessage = new ArrayList<Message>();
+	private ArrayList<Message> waitingMessage = new ArrayList<Message>();
+
 	private ArrayList<ArrayList<Message>> deletedPlayerMessage = new ArrayList<ArrayList<Message>>();
+	private ArrayList<ArrayList<Message>> waitingPlayerMessage = new ArrayList<ArrayList<Message>>();
 
 	public void render(GameContainer container, Graphics g) {
 		int i = 10;
+		for(Message m : waitingMessage)
+			globalMessages.add(m);
+		waitingMessage.clear();
+		
 		for (Message m : globalMessages) {
-
 			m.render(container, g, initialX, inittialY + i);
 			if (m.update())
 				deletedMessage.add(m);
 			i += 10;
 		}
 
+
+		// For the delete
+		for (Message m : deletedMessage) {
+			globalMessages.remove(m);
+		}
+		
 		int n = 0;
+		i = 0;
+		for(ArrayList<Message> list : waitingPlayerMessage){
+			for(Message m : list)
+				playerMessages.get(i).add(m);
+			waitingPlayerMessage.get(i).clear();
+			i++;
+		}
+		
+		
+		n = 0;
 		i = 0;
 		for (ArrayList<Message> list : playerMessages) {
 			g.rotate(Data.MAP_X + Data.MAP_WIDTH / 2, Data.MAP_Y + Data.MAP_HEIGHT / 2, n * 90);
@@ -43,10 +65,6 @@ public class MessageHandler {
 			n++;
 		}
 
-		// For the delete
-		for (Message m : deletedMessage) {
-			globalMessages.remove(m);
-		}
 
 		n = 0;
 		for (ArrayList<Message> list : deletedPlayerMessage) {
@@ -71,7 +89,7 @@ public class MessageHandler {
 	public void addGlobalMessage(Message message) {
 		ArrayList<Message> splitMessage = split(message);
 		for (Message m : splitMessage)
-			globalMessages.add(m);
+			waitingMessage.add(m);
 	}
 
 	public void addPlayerMessage(Message message, int player) {
@@ -80,6 +98,7 @@ public class MessageHandler {
 			for (int i = 0; i < WindowGame.getInstance().getPlayers().size(); i++) {
 				playerMessages.add(new ArrayList<Message>());
 				deletedPlayerMessage.add(new ArrayList<Message>());
+				waitingPlayerMessage.add(new ArrayList<Message>());
 			}
 
 		ArrayList<Message> splitMessage = split(message);
@@ -109,7 +128,7 @@ public class MessageHandler {
 				break;
 			}
 			for (Message m : splitMessage)
-				playerMessages.get(player).add(m);
+				waitingPlayerMessage.get(player).add(m);
 
 		}
 	}
@@ -123,12 +142,15 @@ public class MessageHandler {
 		else {
 
 			while (message.getMessage().length() > Data.MESSAGE_MAX_LENGTH) {
-				cut = Math.min(message.getMessage().length(), Data.MESSAGE_MAX_LENGTH);
+				cut = Math.min(message.getMessage().length(),
+						Data.MESSAGE_MAX_LENGTH);
 				if (cut < message.getMessage().length()) {
-					cut = message.getMessage().substring(0, cut).lastIndexOf(" ");
+					cut = message.getMessage().substring(0, cut)
+							.lastIndexOf(" ");
 					var = message.getMessage().substring(0, cut);
 					split.add(new Message(var, message.getType()));
-					message = new Message(message.getMessage().substring(cut), message.getType());
+					message = new Message(message.getMessage().substring(cut),
+							message.getType());
 				}
 			}
 			split.add(message);
