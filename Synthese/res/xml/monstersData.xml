@@ -69,11 +69,11 @@
 		<life>200</life>
 		<strength>15</strength>
 		<mana>50</mana>
-		<armor>10</armor>
+		<armor>5</armor>
 		<magicPower>3</magicPower>
 		<luck>30</luck>
 		<movementPoints>2</movementPoints>
-		<magicResist>20</magicResist>
+		<magicResist>15</magicResist>
 		<spells>
 			<spell>s2</spell>
 			<spell>s4</spell>

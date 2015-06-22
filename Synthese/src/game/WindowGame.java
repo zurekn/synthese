@@ -654,13 +654,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s8:" + Data.NORTH);
+							decodeAction("s1:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s5:" + Data.EAST);
+							decodeAction("s3:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
 							decodeAction("s6:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s7:" + Data.WEST);
+							decodeAction("s9:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
