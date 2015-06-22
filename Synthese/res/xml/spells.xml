@@ -23,7 +23,7 @@
 		<heal>15</heal>
 		<mana>10</mana>
 		<name>Holly Ray</name>
-		<range>5</range>
+		<range>7</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/holy_ray.wav</sound>
 	</spell>
@@ -37,7 +37,7 @@
 		<heal>0</heal>
 		<mana>5</mana>
 		<name>Dark Mater</name>
-		<range>5</range>
+		<range>10</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Dark_matter.wav</sound>
 	</spell>
@@ -51,7 +51,7 @@
 		<heal>0</heal>
 		<mana>25</mana>
 		<name>Water Wave</name>
-		<range>5</range>
+		<range>9</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Water_wave.wav</sound>
 	</spell>
@@ -79,7 +79,7 @@
 		<heal>10</heal>
 		<mana>5</mana>
 		<name>Lunar light</name>
-		<range>5</range>
+		<range>10</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Lunar_light.wav</sound>
 	</spell>
@@ -93,7 +93,7 @@
 		<heal>0</heal>
 		<mana>50</mana>
 		<name>Root</name>
-		<range>3</range>
+		<range>8</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/root.wav</sound>
 	</spell>
@@ -107,7 +107,7 @@
 		<heal>0</heal>
 		<mana>0</mana>
 		<name>Shoot</name>
-		<range>6</range>
+		<range>15</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/Shoot.wav</sound>
 	</spell>
@@ -121,7 +121,7 @@
 		<heal>0</heal>
 		<mana>25</mana>
 		<name>Meteor</name>
-		<range>7</range>
+		<range>11</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Meteor.wav</sound>
 	</spell>

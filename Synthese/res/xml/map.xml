@@ -126,19 +126,19 @@
 	</block>
 
 	<!-- Monsters -->
-	<monster id="m1">
+	<monster id="m9">
 		<x>5</x>
 		<y>5</y>
 	</monster>
-	<monster id="m2">
+	<monster id="m6">
 		<x>6</x>
 		<y>5</y>
 	</monster>
-	<monster id="m3">
+	<monster id="m10">
 		<x>10</x>
 		<y>10</y>
 	</monster>
-	<monster id="m4">
+	<monster id="m11">
 		<x>11</x>
 		<y>11</y>
 	</monster>
