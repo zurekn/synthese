@@ -36,7 +36,7 @@
 		<spells>
 			<spell>s2</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>4</eyeSight>
 	</monster>
 	
@@ -57,7 +57,7 @@
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:2</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -78,7 +78,7 @@
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>42</eyeSight>
 	</monster>
 	
@@ -99,7 +99,7 @@
 			<spell>s2</spell>
 			<spell>s9</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -120,7 +120,7 @@
 			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>2</eyeSight>
 	</monster>
 	
@@ -141,7 +141,7 @@
 			<spell>s2</spell>
 			<spell>s4</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -162,7 +162,7 @@
 			<spell>s2</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -184,7 +184,7 @@
 			<spell>s4</spell>
 			<spell>s7</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -205,7 +205,7 @@
 			<spell>s2</spell>
 			<spell>s7</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	
@@ -227,7 +227,7 @@
 			<spell>s4</spell>
 			<spell>s3</spell>
 		</spells>
-		<aiType>normal:4</aiType>
+		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
 	</monster>
 	

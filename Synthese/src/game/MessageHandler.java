@@ -115,8 +115,6 @@ public class MessageHandler {
 	}
 
 	private ArrayList<Message> split(Message message) {
-		System.out.println("Font syze = " + Data.FONT_SIZE + ", Data.MEssageMA " + Data.MESSAGE_MAX_LENGTH);
-		System.out.println("Get " + message.toString());
 		ArrayList<Message> split = new ArrayList<Message>();
 		int cut = 0;
 		String var = "";
@@ -131,7 +129,6 @@ public class MessageHandler {
 					var = message.getMessage().substring(0, cut);
 					split.add(new Message(var, message.getType()));
 					message = new Message(message.getMessage().substring(cut), message.getType());
-					System.out.println("Add new message [" + var + "], cut = " + cut);
 				}
 			}
 			split.add(message);
