@@ -16,6 +16,7 @@ public class PlayerHandler {
 	
 	public PlayerHandler(ArrayList<Player> player2){
 		this.player = player2;
+		
 	}
 
 public void renderPlayerStat(GameContainer container, Graphics g){
@@ -23,7 +24,7 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 		
 		for(int i = 0; i < player.size(); i++){
 			Stats s = player.get(i).getStats();
-			switch(i){
+			switch(player.get(i).getNumber()){
 			case 0: //bottom
 				//LIFE BAR*
 				g.setColor(Color.green);

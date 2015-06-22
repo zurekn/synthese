@@ -83,7 +83,7 @@ public class MessageHandler {
 			}
 
 		ArrayList<Message> splitMessage = split(message);
-		if (player > WindowGame.getInstance().getPlayers().size())
+		if (player >= WindowGame.getInstance().getPlayers().size())
 			for (Message m : splitMessage)
 				addGlobalMessage(m);
 		else {

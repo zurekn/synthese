@@ -227,6 +227,7 @@ public class WindowGame extends BasicGame {
 		String type = HeroData.getRandomHero();
 		
 		Player p = new Player(x, y, id, type);
+		p.setNumber(players.size());
 		p.setSizeCharacter(size);
 		players.add(p);
 		

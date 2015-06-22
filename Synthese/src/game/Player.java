@@ -20,6 +20,7 @@ import exception.IllegalMovementException;
 public class Player extends Character {
 	
 	private Image icon;
+	private int number;
 	
 	/**
 	 * This constructor is not available
@@ -86,5 +87,13 @@ public class Player extends Character {
 //			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 //			g.drawOval(posX, posY, sizeX, sizeY);
 		}
+	}
+
+	public int getNumber(){
+		return number;
+	}
+	
+	public void setNumber(int n) {
+		this.number = n;
 	}
 }
