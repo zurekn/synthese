@@ -135,7 +135,7 @@
 		<heal>0</heal>
 		<mana>15</mana>
 		<name>Holy Strike</name>
-		<range>1</range>
+		<range>10</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/holy_strike.wav</sound>
 	</spell>
