@@ -79,7 +79,7 @@ public class ImageProcessingHandler extends Handler {
 			return;
 		for (FormObject o : lf) 
 		{
-			MovementEvent e = new MovementEvent(o.getBaryCenter().getX(), o.getBaryCenter().getY());
+			MovementEvent e = new MovementEvent(o.getBaryCenter().getX(), o.getBaryCenter().getY(), o.getSurface());
 			for (MovementListener listener : getMouvementListener())
 				listener.newMovement(e);
 		}
@@ -195,7 +195,7 @@ public class ImageProcessingHandler extends Handler {
 			/**********************************	 fin debug	*************************************************/
 			
 			
-			addMovement(lf);
+			addMovement(compareObjects(lf));
 			System.out.println("fin du traitement -----------------------------------------------");
 			try {
 				System.out.println("Attente de "+Data.WAIT_TI/1000+" sec pour le prochain traitement");
@@ -254,4 +254,21 @@ public class ImageProcessingHandler extends Handler {
 		return elementsRes;
 	}
 
+	public List<FormObject> compareObjects(List<FormObject> fo)
+	{
+		int currentSize = WindowGame.getInstance().getCurrentPlayer().getSizeCharacter();
+		FormObject final_fo = null;
+		List<FormObject> lf = new ArrayList<FormObject>();
+		int zeroSize = Integer.MAX_VALUE;
+		for (FormObject formObject : fo) {
+			if(zeroSize < Math.abs(currentSize-formObject.getSurface()))
+			{
+				zeroSize = Math.abs(currentSize-formObject.getSurface());
+				final_fo = formObject;
+			}
+				
+		}
+		lf.add(final_fo);
+		return lf;
+	}
 }

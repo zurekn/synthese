@@ -27,6 +27,8 @@ public abstract class Character {
 	private int lastY;
 	private String id;
 	private String trueID;
+	
+	private int sizeCharacter;
 
 	private Animation[] animation;
 	private Stats stats;
@@ -124,7 +126,7 @@ public abstract class Character {
 			throw new IllegalActionException("Spell unkown");
 		// TODO handle the heal
 		if(spell.getMana() > stats.getMana())
-			throw new IllegalActionException("No Enough Mana");
+			throw new IllegalActionException("No Enough Mana" + spell.getMana() +" / "+ stats.getMana());
 		else{
 			int newMana = stats.getMana() - spell.getMana();
 			stats.setMana(newMana);
@@ -253,6 +255,13 @@ public abstract class Character {
 		this.trueID = trueID;
 	}
 
+	public int getSizeCharacter() {
+		return sizeCharacter;
+	}
+
+	public void setSizeCharacter(int sizeCharacter) {
+		this.sizeCharacter = sizeCharacter;
+	}
 
 	/**
 	 * Add the spell s to this character.
