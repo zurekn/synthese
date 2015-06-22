@@ -110,8 +110,8 @@ public class APIX extends Handler {
 		imageHandler.addMovementListener(new MovementAdapter() {
 
 			public void newMovement(MovementEvent e) {
-
-				addMovementEvent(new MovementEvent(e.getX(), e.getY()));
+				addMovementEvent(e);
+				//addMovementEvent(new MovementEvent(e.getX(), e.getY(), e.getSize()));
 			}
 		});
 		//imageHandler.begin();
@@ -240,7 +240,7 @@ public class APIX extends Handler {
 	 * @param e - event of the movement to add, MovementEvent
 	 */
 	protected void addMovementEvent(MovementEvent e) {
-		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY); // pour relative, inversion du X Y
+		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY, e.getSize()); // pour relative, inversion du X Y
 		for (APIXListener listener : getAPIXListener())
 			listener.newMouvement(event);
 	}

@@ -16,7 +16,7 @@
 	<spell id="s1">
 		<file>Synthese/res/images/tiles/Spells/HolyRay.png</file>
 		<celX>60</celX>
-		<celY>61</celY>
+		<celY>60</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
 		<damage>0</damage>

@@ -442,7 +442,7 @@ public class ImageProcessing {
 		//#debug
 		if(countPixelsNotNull(subImgElements) == 0)
 		{	
-			if(!APIX.isInit)
+			if(APIX.isInit)
 				return null;
 			System.out.println("images identiques mais phase d'initialisation");
 			subImgElements = getOneGrayAndBinaryImageOpti(imgCompare, seuil);
