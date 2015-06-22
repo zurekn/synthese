@@ -4,11 +4,12 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.Sound;
 
 public class Event {
 	private String id;
 	private Animation[] animation;
-	private Music sound;
+	private Sound sound;
 	private int x;
 	private int y;
 	private int direction = Data.NORTH;
@@ -34,16 +35,15 @@ public class Event {
 		}
 	}
 
-	public Event(String id, Music sound) {
+	public Event(String id, Sound sound) {
 		this.id = id;
 		this.sound = sound;
 		if (this.sound != null)
 			this.playSound = true;
 	}
 
-	public Event(String id, Animation[] animation, Music sound, int x, int y,
-			int direction, int duration, int range, int xRelative,
-			int yRelative, int spriteDirection) {
+	public Event(String id, Animation[] animation, Sound sound, int x, int y, int direction, int duration, int range, int xRelative, int yRelative,
+			int spriteDirection) {
 		super();
 		this.id = id;
 		this.animation = animation;
@@ -112,11 +112,11 @@ public class Event {
 		this.animation = animation;
 	}
 
-	public Music getSound() {
+	public Sound getSound() {
 		return sound;
 	}
 
-	public void setSound(Music sound) {
+	public void setSound(Sound sound) {
 		this.sound = sound;
 	}
 
@@ -185,8 +185,7 @@ public class Event {
 	}
 
 	public Event getCopiedEvent() {
-		Event e = new Event(id, animation, sound, x, y, direction, duration,
-				range, xRelative, yRelative, spriteDirection);
+		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative, spriteDirection);
 		e.setDamage(damage);
 		e.setHeal(heal);
 		e.setType(type);
@@ -199,19 +198,19 @@ public class Event {
 
 		if (spriteDirection == 90) {
 			if (finalDirection == Data.NORTH - spriteDirection) {
-				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 
 			} else if (finalDirection == Data.SOUTH - spriteDirection) {
-				dx = (4*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
-				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+				dx = (4 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 
 			} else if (finalDirection == Data.EAST - spriteDirection) {
-				dx = (4*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
-				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+				dx = (4 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 
 			} else if (finalDirection == Data.WEST - spriteDirection) {
-				dx = (2*Data.BLOCK_SIZE_Y - animation[0].getWidth())/2; 
-				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight())/2;
+				dx = (2 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 			}
 		}
 
@@ -225,18 +224,39 @@ public class Event {
 			playSound = false;
 			sound.play();
 		}
+
+
+	}
+
+	public void move() {
 		this.x += this.xRelative;
 		this.y += this.yRelative;
-
+		
+		switch (direction) {
+		case Data.NORTH:
+			range += yRelative / Data.BLOCK_SIZE_Y;
+			break;
+		case Data.SOUTH:
+			range -= yRelative / Data.BLOCK_SIZE_Y;
+			break;
+		case Data.EAST:
+			range -= xRelative / Data.BLOCK_SIZE_X;
+			break;
+		case Data.WEST:
+			range += xRelative / Data.BLOCK_SIZE_X;
+			break;
+		case Data.SELF:
+			range -= 1;
+		default:
+			range -= 1;
+			break;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Event [id=" + id + ", x=" + x + ", y=" + y + ", direction="
-				+ direction + ", duration=" + duration + ", range=" + range
-				+ ", xRelative=" + xRelative + ", yRelative=" + yRelative
-				+ ", damage=" + damage + ", heal=" + heal + ", type=" + type
-				+ "]";
+		return "Event [id=" + id + ", x=" + x + ", y=" + y + ", direction=" + direction + ", duration=" + duration + ", range=" + range
+				+ ", xRelative=" + xRelative + ", yRelative=" + yRelative + ", damage=" + damage + ", heal=" + heal + ", type=" + type + "]";
 	}
 
 }

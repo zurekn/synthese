@@ -132,6 +132,8 @@ public class WindowGame extends BasicGame {
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
 
+		if(!Data.BACKGROUND_MUSIC.playing())
+			Data.BACKGROUND_MUSIC.loop(Data.MUSIC_PITCH, Data.MUSIC_VOLUM);
 		// start();
 	}
 
@@ -414,7 +416,8 @@ public class WindowGame extends BasicGame {
 			e.render(container, g);
 			x = e.getX();
 			y = e.getY();
-			e.setRange(e.getRange() - 1);
+			e.move();
+			//e.setRange(e.getRange() - 1);
 			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
 				events.remove(i);
 			}
@@ -654,13 +657,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s8:" + Data.NORTH);
+							decodeAction("s2:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s5:" + Data.EAST);
+							decodeAction("s2:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s6:" + Data.SOUTH);
+							decodeAction("s2:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s7:" + Data.WEST);
+							decodeAction("s2:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());

@@ -86,4 +86,14 @@ public class Message {
 		return System.currentTimeMillis() - startTime > duration;
 	}
 
+	public int getType() { 
+		return type;
+	}
+
+	@Override
+	public String toString() {
+		return "Message [message=" + message + ", type=" + type + "]";
+	}
+
+	
 }

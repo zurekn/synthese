@@ -2,6 +2,7 @@ package data;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 public class TrapD {
@@ -15,7 +16,7 @@ public class TrapD {
 	
 
 	public TrapD(String id, int damage, String damageType, String name, int celNumber,
-			SpriteSheet ss, Music sound) {
+			SpriteSheet ss, Sound sound) {
 		this.id = id;
 		this.damage = damage;
 		this.name = name;
