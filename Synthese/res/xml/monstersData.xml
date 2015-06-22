@@ -69,11 +69,11 @@
 		<life>200</life>
 		<strength>15</strength>
 		<mana>50</mana>
-		<armor>10</armor>
+		<armor>5</armor>
 		<magicPower>3</magicPower>
 		<luck>30</luck>
 		<movementPoints>2</movementPoints>
-		<magicResist>20</magicResist>
+		<magicResist>15</magicResist>
 		<spells>
 			<spell>s2</spell>
 			<spell>s4</spell>
@@ -107,7 +107,7 @@
 		<name>Bold-smile</name>
 		<file>Synthese/res/images/tiles/Monsters/bat.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>310</life>
 		<strength>25</strength>
 		<mana>50</mana>
@@ -128,7 +128,7 @@
 		<name>Zig Bee</name>
 		<file>Synthese/res/images/tiles/Monsters/bee.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>210</life>
 		<strength>25</strength>
 		<mana>50</mana>
@@ -192,7 +192,7 @@
 		<name>Whorm</name>
 		<file>Synthese/res/images/tiles/Monsters/small_worm.png</file>
 		<celDimensionX>32</celDimensionX>
-		<celDimensionY>34</celDimensionY>
+		<celDimensionY>32</celDimensionY>
 		<life>250</life>
 		<strength>15</strength>
 		<mana>40</mana>
