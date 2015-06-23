@@ -171,9 +171,9 @@ public abstract class Character {
 		System.out.println("Icoming : "+damage+", "+type+", counterP " +getStats().getArmor()+", counterM " +getStats().getMagicResist());
 		
 		if (type.equals("magic")) {
-			damage = damage - getStats().getMagicResist()/2;
+			damage = damage - getStats().getMagicResist();
 		} else if (type.equals("physic")) {
-			damage = damage - getStats().getArmor()/2;
+			damage = damage - getStats().getArmor();
 		} else {
 			System.out.println("Wrong damage type : " + type);
 		}

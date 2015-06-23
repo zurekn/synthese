@@ -198,7 +198,8 @@ public class Data {
 	public static String MAIN_TEXT = "";
 	public static int MESSAGE_MAX_LENGTH;
 
-	
+	public static Image WIN_IMAGE;
+	public static Image LOSE_IMAGE;
 	/**
 	 * Load all game variables
 	 * 
@@ -271,6 +272,8 @@ public class Data {
 			
 			BACKGROUND_MUSIC = new Music(root.getChildText("music"));
 			IMAGE_HALO = new Image(root.getChildText("halo_image"));
+			WIN_IMAGE = new Image(root.getChildText("win_image"));
+			LOSE_IMAGE = new Image(root.getChildText("lose_image"));
 		} catch (DataConversionException e) {
 			e.printStackTrace();
 		} catch (SlickException e) {
