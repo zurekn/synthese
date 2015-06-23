@@ -20,9 +20,10 @@ public class Spell {
 	private int x = 20;
 	private int y = 20;
 	private String type;
+	float speed;
 
 	public Spell(String id, String name, int damage, int heal, int mana,
-			int range, String type, Event event) {
+			int range, String type, float speed, Event event) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -36,6 +37,15 @@ public class Spell {
 		this.event.setDamage(damage);
 		this.event.setHeal(heal);
 		this.event.setType(type);
+		this.speed = speed;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 
 	public String getId() {

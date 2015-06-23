@@ -43,6 +43,7 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 	
+	public static final boolean FULLSCREEN = true;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
@@ -193,13 +194,15 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
 	public static final int FONT_SIZE = 10;
+	public static final int FONT_HEIGHT = 12;
 	public static Image IMAGE_HALO = null;
 	public static float MUSIC_VOLUM = .1f;
 	public static float MUSIC_PITCH = 1;
 	public static String MAIN_TEXT = "";
 	public static int MESSAGE_MAX_LENGTH;
 
-	
+	public static Image WIN_IMAGE;
+	public static Image LOSE_IMAGE;
 	/**
 	 * Load all game variables
 	 * 
@@ -245,6 +248,10 @@ public class Data {
 
 		try {
 			Element root = doc.getRootElement();
+			// ----------------- récupération du chemin de la carte dans le fichier map.xml------//
+			Element mapInfo = root.getChild("mapInfo");
+			Data.MAP_FILE = mapInfo.getChildText("background");
+			
 			List<Element> blocks = root.getChildren("block");
 			int x, y;
 			Element block;
@@ -272,6 +279,8 @@ public class Data {
 			
 			BACKGROUND_MUSIC = new Music(root.getChildText("music"));
 			IMAGE_HALO = new Image(root.getChildText("halo_image"));
+			WIN_IMAGE = new Image(root.getChildText("win_image"));
+			LOSE_IMAGE = new Image(root.getChildText("lose_image"));
 		} catch (DataConversionException e) {
 			e.printStackTrace();
 		} catch (SlickException e) {

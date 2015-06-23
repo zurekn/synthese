@@ -23,8 +23,7 @@ public class Main {
 //		Data.SCREEN_WIDTH = 1920;
 //		Data.SCREEN_HEIGHT = 1080;
 		Data.checkValuesIni("paramTI.ini"); // Vérification des variables dans le fichier .ini
-		boolean fullScreen = false;
-        AppGameContainer gameContaineur =  new AppGameContainer(WindowGame.getInstance(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, fullScreen);
+        AppGameContainer gameContaineur =  new AppGameContainer(WindowGame.getInstance(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, Data.FULLSCREEN);
     	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
     	
