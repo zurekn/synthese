@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Random;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -131,8 +132,25 @@ public abstract class Character {
 			int newMana = stats.getMana() - spell.getMana();
 			stats.setMana(newMana);
 		}
-		//TODO Ajouter la magic power et le message non mana
-		return spell.getDamage() + ":" + spell.getHeal();
+
+		int damage = spell.getDamage();
+		int heal = spell.getHeal();
+		int res = 0;
+		Random rand = new Random();
+		int i = rand.nextInt(101);
+		if(i < stats.getLuck()){
+			//coup critique
+			res = 1;
+			damage += damage/2;
+			heal += heal / 2;
+		}
+		if(i > 90){
+			//echec critique
+			heal = (heal/2) * -1;
+			damage = damage / 2;
+			res = -1;
+		}
+		return damage + ":" + heal+":"+res;
 	}
 	
 	public double distanceFrom(Character c){

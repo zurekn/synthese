@@ -58,7 +58,7 @@ public class WindowGame extends BasicGame {
 	private int playerNumber;
 	private int turn;
 	private int actionLeft = Data.ACTION_PER_TURN;
-	
+
 	private boolean gameOn = false;
 	private int timerInitPlayer;
 
@@ -122,7 +122,7 @@ public class WindowGame extends BasicGame {
 		mobHandler = new MobHandler(mobs);
 
 		messageHandler = new MessageHandler();
-		
+
 		// Create the player list
 		initPlayers();
 
@@ -132,7 +132,7 @@ public class WindowGame extends BasicGame {
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
 
-		if(!Data.BACKGROUND_MUSIC.playing())
+		if (!Data.BACKGROUND_MUSIC.playing())
 			Data.BACKGROUND_MUSIC.loop(Data.MUSIC_PITCH, Data.MUSIC_VOLUM);
 		// start();
 	}
@@ -167,7 +167,7 @@ public class WindowGame extends BasicGame {
 			 */
 			// TODO test add chalenger
 			try {
-				if(Data.DEBUG_PLAYER > 0)
+				if (Data.DEBUG_PLAYER > 0)
 					addChalenger(10, 8, -1);
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
@@ -204,33 +204,34 @@ public class WindowGame extends BasicGame {
 		String position = x + ":" + y;
 
 		if (WindowGame.getInstance().getAllPositions().contains(position)) {
-			//messageHandler.addMessage(new Message("Position ["+position+"] non disponible", 1));
+			// messageHandler.addMessage(new
+			// Message("Position ["+position+"] non disponible", 1));
 
 			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
 		}
 
-		if (Data.untraversableBlocks.containsKey(position)){
-			messageHandler.addGlobalMessage(new Message("Position ["+position+"] non disponible", 1));
+		if (Data.untraversableBlocks.containsKey(position)) {
+			messageHandler.addGlobalMessage(new Message("Position [" + position + "] non disponible", 1));
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
 
-		if(!Data.departureBlocks.containsKey(position) && !Data.DEBUG_DEPARTURE){
+		if (!Data.departureBlocks.containsKey(position) && !Data.DEBUG_DEPARTURE) {
 			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
 			throw new IllegalMovementException("Caracter must be at a departure position");
-		}else{
+		} else {
 			Data.departureBlocks.put(position, true);
 		}
-		
+
 		if (Data.MAX_PLAYER <= players.size())
 			return;
 		String id = "P" + players.size();
 		String type = HeroData.getRandomHero();
-		
+
 		Player p = new Player(x, y, id, type);
 		p.setNumber(players.size());
 		p.setSizeCharacter(size);
 		players.add(p);
-		
+
 		timerInitPlayer = Data.INIT_MAX_TIME;
 		if (players.size() >= Data.MAX_PLAYER) {
 			System.out.println(" ----Max player reached ----");
@@ -293,7 +294,7 @@ public class WindowGame extends BasicGame {
 						+ e.getX() / apix.getBlockSizeX() + ":" + e.getY() / apix.getBlockSizeY() + "]");
 				try {
 					if (gameOn)
-						if(!currentCharacter.isMonster())
+						if (!currentCharacter.isMonster())
 							decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
 						else
 							System.err.println("Récupération d'une valeur de l'apix durant le tour de l'ia");
@@ -401,7 +402,7 @@ public class WindowGame extends BasicGame {
 		g.setColor(Data.TEXT_COLOR);
 		g.drawString(Data.MAIN_TEXT, 10, 20);
 		messageHandler.render(container, g);
-		
+
 	}
 
 	/**
@@ -422,12 +423,15 @@ public class WindowGame extends BasicGame {
 			x = e.getX();
 			y = e.getY();
 			e.move();
-			//e.setRange(e.getRange() - 1);
+			// e.setRange(e.getRange() - 1);
 			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
+				//Copie dans list eventToRemove
 				events.remove(i);
 			}
-
 		}
+		//deuxieme boule sur enventToRemove
+		//afficher seulement la phase de destruction du sprite
+		
 	}
 
 	long eventTime = 0;
@@ -489,9 +493,9 @@ public class WindowGame extends BasicGame {
 		else
 			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
 
-		messageHandler.addGlobalMessage(new Message("Turn of "+currentCharacter.getName()));
+		messageHandler.addGlobalMessage(new Message("Turn of " + currentCharacter.getName()));
 		actionLeft = Data.ACTION_PER_TURN;
-		
+
 		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
 			commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
 
@@ -548,35 +552,48 @@ public class WindowGame extends BasicGame {
 			e.setRange(focus.range);
 
 			try {
-				int damage = 0;
-				currentCharacter.useSpell(spellID, direction);
-				if (focus.character != null) {
-					if (currentCharacter.isMonster() == focus.character.isMonster())
-						if (e.getHeal() > 0){
-							focus.character.heal(e.getHeal());
-							messageHandler.addPlayerMessage(new Message("Heal "+e.getHeal()+" to the "+focus.character.getName()+""), turn);
-						}else{
-							damage = focus.character.takeDamage(e.getDamage(), e.getType());
-							messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
-						}
-					else{
-						damage = focus.character.takeDamage(e.getDamage(), e.getType());
-						messageHandler.addPlayerMessage(new Message("Use "+spellID+" on "+focus.character.getName()+" and deal "+damage), turn);	
-
-					}
-					if (focus.character.checkDeath()) {
-						// TODO ADD a textual event
-						System.out.println("-----------------------------------------");
-						System.out.println("DEATH FOR" + focus.character.toString());
-						System.out.println("-----------------------------------------");
-						players.remove(focus.character);
-						mobs.remove(focus.character);
-						playerNumber--;
-						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
-
+				String res = currentCharacter.useSpell(spellID, direction);
+				String []split = res.split(":");
+				int damage = Integer.parseInt(split[0]);
+				int heal = Integer.parseInt(split[1]);
+				int state = Integer.parseInt(split[2]);
+				
+				if(state == -1){
+					if(heal > 0){
+						currentCharacter.heal(heal);
+						messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
+					}else{
+						currentCharacter.takeDamage(damage, e.getType());
 					}
 				}else{
-					messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
+					if (focus.character != null) {
+						if (currentCharacter.isMonster() == focus.character.isMonster())
+							if (e.getHeal() > 0){
+								focus.character.heal(heal);
+								messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
+							}else{
+								damage = focus.character.takeDamage(damage, e.getType());
+								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+							}
+						else{
+							damage = focus.character.takeDamage(damage, e.getType());
+							messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+	
+						}
+						if (focus.character.checkDeath()) {
+							// TODO ADD a textual event
+							System.out.println("-----------------------------------------");
+							System.out.println("DEATH FOR" + focus.character.toString());
+							System.out.println("-----------------------------------------");
+							players.remove(focus.character);
+							mobs.remove(focus.character);
+							playerNumber--;
+							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+	
+						}
+					}else{
+						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
+					}
 				}
 				events.add(e);
 				System.out.println("Created " + e.toString());
@@ -632,9 +649,9 @@ public class WindowGame extends BasicGame {
 				}
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
-				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard()) + "], i = ["
-						+ (c.getX() - e.getXOnBoard()) + "]");
-				int i = (Math.abs(c.getX() - (e.getXOnBoard()))) ;
+				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard()) + "], i = [" + (c.getX() - e.getXOnBoard())
+						+ "]");
+				int i = (Math.abs(c.getX() - (e.getXOnBoard())));
 
 				if (i < range) {
 					range = i;
@@ -643,7 +660,7 @@ public class WindowGame extends BasicGame {
 			}
 		}
 		if (Data.debug && focus != null)
-			System.out.println("The Range is : " + range+", focus is "+focus.toString());
+			System.out.println("The Range is : " + range + ", focus is " + focus.toString());
 		return new Focus(range, focus);
 	}
 
@@ -676,7 +693,7 @@ public class WindowGame extends BasicGame {
 					}
 				}
 		}
-		if(Input.KEY_DIVIDE == key){
+		if (Input.KEY_DIVIDE == key) {
 			currentCharacter.takeDamage(20, "magic");
 		}
 		if (Input.KEY_SUBTRACT == key) {
@@ -777,7 +794,8 @@ public class WindowGame extends BasicGame {
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
-			System.out.println("--------------------------------------------------"+ players.get(i).getName()+"---------------------------------------------");
+			System.out.println("--------------------------------------------------" + players.get(i).getName()
+					+ "---------------------------------------------");
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
 				c.add(players.get(i));
@@ -846,9 +864,8 @@ public class WindowGame extends BasicGame {
 			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
 	}
-	
-	public Character getCurrentPlayer()
-	{
+
+	public Character getCurrentPlayer() {
 		return currentCharacter;
 	}
 }
