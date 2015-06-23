@@ -245,6 +245,10 @@ public class Data {
 
 		try {
 			Element root = doc.getRootElement();
+			// ----------------- récupération du chemin de la carte dans le fichier map.xml------//
+			Element mapInfo = root.getChild("mapInfo");
+			Data.MAP_FILE = mapInfo.getChildText("background");
+			
 			List<Element> blocks = root.getChildren("block");
 			int x, y;
 			Element block;

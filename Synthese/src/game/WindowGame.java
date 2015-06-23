@@ -106,13 +106,12 @@ public class WindowGame extends BasicGame {
 		thread = Thread.currentThread();
 		handler = new GameHandler(thread);
 
-		Data.loadGame();
 		Data.loadMap();
+		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
 		// TrapData.loadTrap();
-		Data.loadMap();
 
 		initAPIX();
 		initCommandHandler();
