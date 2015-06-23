@@ -271,7 +271,7 @@ public abstract class Character {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getSpeed(), s
 						.getEvent()));
 	}
 

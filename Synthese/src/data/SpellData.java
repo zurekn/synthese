@@ -63,12 +63,13 @@ public class SpellData {
 			direction = Integer.parseInt(el.getChildText("direction"));
 			celNumber = Integer.parseInt(el.getChildText("celNumber"));
 			Sound sound = new Sound(el.getChildText("sound"));
+			float speed = Float.parseFloat(el.getChildText("speed"));
 			SpriteSheet ss;
 			
 				ss = new SpriteSheet("" + el.getChildText("file"),
 						Integer.parseInt(el.getChildText("celX")),
 						Integer.parseInt(el.getChildText("celY")));
-				SpellD spell = new SpellD(id, damage, heal, mana, range, name, celNumber, type, ss, sound, direction);
+				SpellD spell = new SpellD(id, damage, heal, mana, range, name, celNumber, type, ss, sound, direction, speed);
 			spells.add(spell);
 			System.out.println("	Spell : "+spell.toString());
 			} catch (NumberFormatException e) {

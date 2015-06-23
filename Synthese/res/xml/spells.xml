@@ -12,6 +12,7 @@
 		<range>5</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/fireball.wav</sound>
+		<speed>0.5</speed>
 	</spell>
 	<spell id="s1">
 		<file>Synthese/res/images/tiles/Spells/HolyRay.png</file>
@@ -26,6 +27,7 @@
 		<range>7</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/holy_ray.wav</sound>
+		<speed>0.5</speed>
 	</spell>
 	<spell id="s3">
 		<file>Synthese/res/images/tiles/Spells/Dark Matter.png</file>
@@ -40,6 +42,7 @@
 		<range>10</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Dark_matter.wav</sound>
+		<speed>0.5</speed>
 	</spell>
 	<spell id="s4">
 		<file>Synthese/res/images/tiles/Spells/water wave.png</file>
@@ -54,6 +57,7 @@
 		<range>9</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Water_wave.wav</sound>
+		<speed>0.5</speed>
 	</spell>
 	<spell id="s5">
 		<file>Synthese/res/images/tiles/Spells/sword slash.png</file>
@@ -68,6 +72,7 @@
 		<range>5</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/sword_slash.wav</sound>
+		<speed>0.5</speed>
 	</spell>
 	<spell id="s6">
 		<file>Synthese/res/images/tiles/Spells/Lunar Light.png</file>
@@ -79,9 +84,10 @@
 		<heal>10</heal>
 		<mana>5</mana>
 		<name>Lunar light</name>
-		<range>10</range>
+		<range>7</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Lunar_light.wav</sound>
+		<speed>0.1</speed>
 	</spell>
 	<spell id="s7">
 		<file>Synthese/res/images/tiles/Spells/root.png</file>
@@ -91,25 +97,27 @@
 		<direction>0</direction>
 		<damage>15</damage>
 		<heal>0</heal>
-		<mana>50</mana>
+		<mana>5</mana>
 		<name>Root</name>
-		<range>8</range>
+		<range>1</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/root.wav</sound>
+		<speed>0.3</speed>
 	</spell>
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
 		<celX>38</celX>
 		<celY>38</celY>
-		<celNumber>2</celNumber>
+		<celNumber>3</celNumber>
 		<direction>90</direction>
-		<damage>40</damage>
+		<damage>50</damage>
 		<heal>0</heal>
 		<mana>0</mana>
 		<name>Shoot</name>
 		<range>15</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/Shoot.wav</sound>
+		<speed>1</speed>
 	</spell>
 	<spell id="s9">
 		<file>Synthese/res/images/tiles/Spells/Meteor.png</file>
@@ -119,11 +127,12 @@
 		<direction>90</direction>
 		<damage>80</damage>
 		<heal>0</heal>
-		<mana>25</mana>
+		<mana>5</mana>
 		<name>Meteor</name>
 		<range>11</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Meteor.wav</sound>
+		<speed>0.7</speed>
 	</spell>
 	<spell id="s10">
 		<file>Synthese/res/images/tiles/Spells/holy_strike.png</file>
@@ -138,6 +147,7 @@
 		<range>10</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/holy_strike.wav</sound>
+		<speed>1</speed>
 	</spell>
 
 </spells>
