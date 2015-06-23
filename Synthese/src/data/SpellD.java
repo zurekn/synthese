@@ -16,9 +16,10 @@ public class SpellD {
 	private String type;
 	private Event event;
 	private int spriteDirection;
+	private float speed;
 
 	public SpellD(String id, int damage, int heal, int mana, int range, String name,
-			int celNumber, String type, SpriteSheet ss, Sound sound, int spriteDirection) {
+			int celNumber, String type, SpriteSheet ss, Sound sound, int spriteDirection, float speed) {
 		this.id = id;
 		this.damage = damage;
 		this.heal = heal;
@@ -28,6 +29,7 @@ public class SpellD {
 		this.type = type;
 		this.event = new Event(id,sound);
 		this.spriteDirection = spriteDirection;
+		this.speed = speed;
 		initEventAnimation(celNumber, ss);
 	}
 
@@ -118,13 +120,22 @@ public class SpellD {
 	public String getType() {
 		return type;
 	}
+	public float getSpeed() {
+		return speed;
+	}
 
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
+	
 	@Override
 	public String toString() {
 		return "SpellD [id=" + id + ", name=" + name + ", damage=" + damage
 				+ ", heal=" + heal + ", mana=" + mana + ", range=" + range
 				+ ", type=" + type + ", event=" + event + "]";
 	}
+
+	
 	
 	
 

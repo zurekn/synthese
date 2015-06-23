@@ -31,7 +31,7 @@ public class MessageHandler {
 			m.render(container, g, initialX, inittialY + i);
 			if (m.update())
 				deletedMessage.add(m);
-			i += 10;
+			i += Data.FONT_HEIGHT;
 		}
 
 
@@ -58,7 +58,7 @@ public class MessageHandler {
 				m.render(container, g, Data.PLAYER_MESSAGE_X_POS + Data.MAP_X, Data.PLAYER_MESSAGE_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT + i);
 				if (m.update())
 					deletedPlayerMessage.get(n).add(m);
-				i += 10;
+				i += Data.FONT_HEIGHT;
 			}
 			g.rotate(Data.MAP_X + Data.MAP_WIDTH / 2, Data.MAP_Y + Data.MAP_HEIGHT / 2, n * 90);
 			i = 0;

@@ -14,14 +14,17 @@ public class Event {
 	private int y;
 	private int direction = Data.NORTH;
 	private int duration = Data.INF;
-	private int range;
-	private int xRelative;
-	private int yRelative;
+	private float range;
+	private float xRelative;
+	private float yRelative;
 	private boolean playSound = false;
+	private boolean showFirstFrame = false;
+	private boolean isFinalFrame = false;
 	private int damage;
 	private int heal;
 	private String type;
 	private int spriteDirection;
+	private float speed;
 
 	public Event(String id) {
 		this.id = id;
@@ -40,10 +43,14 @@ public class Event {
 		this.sound = sound;
 		if (this.sound != null)
 			this.playSound = true;
+		showFirstFrame = false;
+		isFinalFrame = false;
 	}
 
-	public Event(String id, Animation[] animation, Sound sound, int x, int y, int direction, int duration, int range, int xRelative, int yRelative,
-			int spriteDirection) {
+	
+
+	public Event(String id, Animation[] animation, Sound sound, int x, int y, int direction, int duration, float range, float xRelative, float yRelative,
+			int spriteDirection, float speed) {
 		super();
 		this.id = id;
 		this.animation = animation;
@@ -56,8 +63,11 @@ public class Event {
 		this.xRelative = xRelative;
 		this.yRelative = yRelative;
 		this.spriteDirection = spriteDirection;
+		this.speed = speed;
 		if (sound != null)
 			playSound = true;
+		showFirstFrame = true;
+		isFinalFrame = false;
 	}
 
 	public int getSpriteDirection() {
@@ -124,8 +134,9 @@ public class Event {
 		return direction;
 	}
 
-	public void setDirection(int direction) {
+	public void setDirection(int direction, float speed) {
 		this.direction = direction;
+		this.speed = speed;
 		switch (direction) {
 		case Data.SELF:
 			this.xRelative = 0;
@@ -133,19 +144,19 @@ public class Event {
 			break;
 		case Data.NORTH:
 			this.xRelative = 0;
-			this.yRelative = -1 * Data.BLOCK_SIZE_Y;
+			this.yRelative = (0-this.speed) * Data.BLOCK_SIZE_Y;
 			break;
 		case Data.SOUTH:
 			this.xRelative = 0;
-			this.yRelative = 1 * Data.BLOCK_SIZE_Y;
+			this.yRelative = this.speed * Data.BLOCK_SIZE_Y;
 			break;
 
 		case Data.EAST:
-			this.xRelative = 1 * Data.BLOCK_SIZE_X;
+			this.xRelative = this.speed * Data.BLOCK_SIZE_X;
 			this.yRelative = 0;
 			break;
 		case Data.WEST:
-			this.xRelative = -1 * Data.BLOCK_SIZE_X;
+			this.xRelative = (0-this.speed) * Data.BLOCK_SIZE_X;
 			this.yRelative = 0;
 			break;
 		}
@@ -176,16 +187,24 @@ public class Event {
 
 	}
 
-	public int getRange() {
+	public float getRange() {
 		return range;
 	}
 
-	public void setRange(int range) {
+	public void setRange(float range) {
 		this.range = range;
 	}
+	
+	public boolean isFinalFrame() {
+		return isFinalFrame;
+	}
 
+	public void setFinalFrame(boolean isFinalFrame) {
+		this.isFinalFrame = isFinalFrame;
+	}
+	
 	public Event getCopiedEvent() {
-		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative, spriteDirection);
+		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative, spriteDirection, speed);
 		e.setDamage(damage);
 		e.setHeal(heal);
 		e.setType(type);
@@ -195,9 +214,11 @@ public class Event {
 	public void render(GameContainer container, Graphics g) {
 		int dx = 0, dy = 0;
 		int finalDirection = direction - spriteDirection;
-
+		int finalFrame = (animation[0].getFrameCount() - 1);
+		
 		if (spriteDirection == 90) {
 			if (finalDirection == Data.NORTH - spriteDirection) {
+				dx = (2 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
 				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 
 			} else if (finalDirection == Data.SOUTH - spriteDirection) {
@@ -215,23 +236,73 @@ public class Event {
 		}
 
 		g.rotate(x, y, direction - spriteDirection);
-
-		g.drawAnimation(animation[0], x + dx, y + dy);
-
+		
+		if(showFirstFrame){
+			animation[0].restart();
+			for(int i=0; i<4 && animation[0].getFrame()==0;i++){
+				g.drawAnimation(animation[0], x + dx, y + dy);
+			}
+			showFirstFrame = false;
+			animation[0].setCurrentFrame(1);
+		}else if(animation[0].getFrame()== finalFrame-1){
+			animation[0].stop();
+			g.drawAnimation(animation[0], x + dx, y + dy);
+			animation[0].setCurrentFrame(1);
+		}else if(animation[0].getFrame()!= 0 ){
+			g.drawAnimation(animation[0], x + dx, y + dy);
+		}else{
+			animation[0].setCurrentFrame(1);
+			g.drawAnimation(animation[0], x + dx, y + dy);
+		}
+		
 		g.rotate(x, y, -direction + spriteDirection);
 
 		if (playSound) {
 			playSound = false;
 			sound.play();
 		}
+	}
+	
+	public void renderPostRemove(GameContainer container, Graphics g) {
+		int dx = 0, dy = 0;
+		int finalDirection = direction - spriteDirection;
+		int finalFrame = (animation[0].getFrameCount() - 1);
 
+		if (spriteDirection == 90) {
+			if (finalDirection == Data.NORTH - spriteDirection) {
+				dx = (2 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
+
+			} else if (finalDirection == Data.SOUTH - spriteDirection) {
+				dx = (4 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
+
+			} else if (finalDirection == Data.EAST - spriteDirection) {
+				dx = (4 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
+
+			} else if (finalDirection == Data.WEST - spriteDirection) {
+				dx = (2 * Data.BLOCK_SIZE_Y - animation[0].getWidth()) / 2;
+				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
+			}
+		}
+
+		g.rotate(x, y, direction - spriteDirection);
+		animation[0].setCurrentFrame(finalFrame);
+		animation[0].stop();
+		
+		for(int i=0; i<4;i++){
+			g.drawAnimation(animation[0], x + dx, y + dy);
+		}
+		animation[0].restart();
+		g.rotate(x, y, -direction + spriteDirection);
 
 	}
-
+	
 	public void move() {
 		this.x += this.xRelative;
 		this.y += this.yRelative;
-		
+		float test = range;
 		switch (direction) {
 		case Data.NORTH:
 			range += yRelative / Data.BLOCK_SIZE_Y;
@@ -251,6 +322,11 @@ public class Event {
 			range -= 1;
 			break;
 		}
+		/*
+		if(test == range)
+			System.out.println(" === WHAAT === ...  "+" xRelative = "+ xRelative+" yRelative = "+yRelative+
+					" Block X = "+ Data.BLOCK_SIZE_X+" Block Y = "+ Data.BLOCK_SIZE_Y );
+					*/
 	}
 
 	@Override

@@ -127,7 +127,7 @@ public abstract class Character {
 			throw new IllegalActionException("Spell unkown");
 		// TODO handle the heal
 		if(spell.getMana() > stats.getMana())
-			throw new IllegalActionException("No Enough Mana" + spell.getMana() +" / "+ stats.getMana());
+			throw new IllegalActionException("No Enough Mana " + spell.getMana() +" / "+ stats.getMana());
 		else{
 			int newMana = stats.getMana() - spell.getMana();
 			stats.setMana(newMana);
@@ -289,7 +289,7 @@ public abstract class Character {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getSpeed(), s
 						.getEvent()));
 	}
 

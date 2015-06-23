@@ -107,13 +107,12 @@ public class WindowGame extends BasicGame {
 		thread = Thread.currentThread();
 		handler = new GameHandler(thread);
 
-		Data.loadGame();
 		Data.loadMap();
+		Data.loadGame();
 		SpellData.loadSpell();
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
 		// TrapData.loadTrap();
-		Data.loadMap();
 
 		initAPIX();
 		initCommandHandler();
@@ -412,28 +411,32 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
+		Event lastEvent = null;
 		xMin = Data.MAP_X;
 		xMax = Data.MAP_X + Data.MAP_WIDTH;
 		yMin = Data.MAP_Y;
 		yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
+		
 		for (int i = 0; i < events.size(); i++) {
 			Event e = events.get(i);
-			e.render(container, g);
-			x = e.getX();
-			y = e.getY();
-			e.move();
-			// e.setRange(e.getRange() - 1);
-			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
-				//Copie dans list eventToRemove
+			if(!e.isFinalFrame()){
+				e.render(container, g);
+				x = e.getX();
+				y = e.getY();
+				e.move();
+				//e.setRange(e.getRange() - 1);
+				if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {				
+					e.setFinalFrame(true);
+				}
+			}else{
+				e.renderPostRemove(container, g);
 				events.remove(i);
 			}
 		}
-		//deuxieme boule sur enventToRemove
-		//afficher seulement la phase de destruction du sprite
-		
+		long eventTime = 0;
 	}
 
-	long eventTime = 0;
+	
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
@@ -521,24 +524,29 @@ public class WindowGame extends BasicGame {
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
 		if (action.startsWith("s")) { // Spell action
-			if(actionLeft <= 0){
-				messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
-				return;
+			if(actionLeft <= 0 ){
+				if(!Data.debug){
+					messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
+					return;
+				}else{
+					messageHandler.addPlayerMessage(new Message("Action interdite, mais on est en mode debug... ", 1), turn);
+
+				}
 			}
-			actionLeft --;
+			
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
 				throw new IllegalActionException("Wrong number of arguments in action string");
 
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
-
+			
 			if (currentCharacter.getSpell(spellID) == null)
 				throw new IllegalActionException("Spell [" + spellID + "] not found");
-
+			float speed = currentCharacter.getSpell(spellID).getSpeed();
 			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
 
-			e.setDirection(direction);
+			e.setDirection(direction, speed);
 			e.setX(Data.MAP_X + currentCharacter.getX() * Data.BLOCK_SIZE_X);
 			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
@@ -619,9 +627,11 @@ public class WindowGame extends BasicGame {
 				}
 				events.add(e);
 				System.out.println("Created " + e.toString());
+				actionLeft --;
 			} catch (IllegalActionException iae) {
-				iae.printStackTrace();
-				messageHandler.addPlayerMessage(new Message(iae.getLocalizedMessage()), turn);
+				//iae.printStackTrace();
+				System.out.println(iae.getLocalizedMessage() +"----------------------------"+iae.getMessage());
+				messageHandler.addPlayerMessage(new Message(iae.getLocalizedMessage(),Data.MESSAGE_TYPE_ERROR), turn);
 			}
 
 		}
@@ -657,7 +667,7 @@ public class WindowGame extends BasicGame {
 	 * @return
 	 */
 	private Focus getFirstCharacterRange(ArrayList<Character> chars, Event e) {
-		int range = Data.MAX_RANGE;
+		float range = Data.MAX_RANGE;
 		System.out.println("Search the first character range : " + e.toString() + ", " + chars.toString());
 		Character focus = null;
 		for (Character c : chars) {
@@ -702,13 +712,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s2:" + Data.NORTH);
+							decodeAction("s6:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s3:" + Data.EAST);
+							decodeAction("s9:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s4:" + Data.SOUTH);
+							decodeAction("s8:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s9:" + Data.WEST);
+							decodeAction("s7:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
@@ -843,8 +853,6 @@ public class WindowGame extends BasicGame {
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
-			System.out.println("--------------------------------------------------" + players.get(i).getName()
-					+ "---------------------------------------------");
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
 				c.add(players.get(i));
@@ -897,10 +905,10 @@ public class WindowGame extends BasicGame {
 	}
 
 	private class Focus {
-		protected int range;
+		protected float range;
 		protected Character character;
 
-		public Focus(int range, Character character) {
+		public Focus(float range, Character character) {
 			this.range = range;
 			this.character = character;
 		}
