@@ -37,7 +37,7 @@
 		<direction>90</direction>
 		<damage>125</damage>
 		<heal>0</heal>
-		<mana>5</mana>
+		<mana>555</mana>
 		<name>Dark Mater</name>
 		<range>10</range>
 		<type>magic</type>
