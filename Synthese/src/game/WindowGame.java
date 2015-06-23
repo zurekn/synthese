@@ -173,7 +173,7 @@ public class WindowGame extends BasicGame {
 				if (Data.DEBUG_PLAYER > 1)
 					addChalenger(15, 15, -1);
 				if (Data.DEBUG_PLAYER > 2)
-					addChalenger(16, 15, -1);
+					addChalenger(19, 15, -1);
 				if (Data.DEBUG_PLAYER > 3)
 					addChalenger(7, 12, -1);
 			} catch (IllegalCaracterClassException e) {
@@ -623,8 +623,8 @@ public class WindowGame extends BasicGame {
 		Character focus = null;
 		for (Character c : chars) {
 			if (e.getDirection() == Data.NORTH || e.getDirection() == Data.SOUTH) {
-				int i = (Math.abs(c.getY() - (e.getYOnBoard() - 1))) + 1;
-				System.out.println("c.getY() = [" + c.getY() + "], e.getXOnBoard = [" + (e.getYOnBoard() - 1) + "], i = [" + i + "]");
+				int i = (Math.abs(c.getY() - (e.getYOnBoard())));
+				System.out.println("c.getY() = [" + c.getY() + "], e.getYOnBoard = [" + (e.getYOnBoard()) + "], i = [" + i + "]");
 
 				if (i < range) {
 					range = i;
@@ -632,9 +632,9 @@ public class WindowGame extends BasicGame {
 				}
 			}
 			if (e.getDirection() == Data.EAST || e.getDirection() == Data.WEST) {
-				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard() - 1) + "], i = ["
-						+ (c.getX() - e.getXOnBoard() - 1) + "]");
-				int i = (Math.abs(c.getX() - (e.getXOnBoard() - 1))) + 1;
+				System.out.println("c.getX() = [" + c.getX() + "], e.getXOnBoard = [" + (e.getXOnBoard()) + "], i = ["
+						+ (c.getX() - e.getXOnBoard()) + "]");
+				int i = (Math.abs(c.getX() - (e.getXOnBoard()))) ;
 
 				if (i < range) {
 					range = i;
