@@ -2,8 +2,6 @@ package ai;
 
 import data.Data;
 import data.Stats;
-import exception.IllegalActionException;
-import game.Character;
 import game.Mob;
 import game.Player;
 import game.Spell;
@@ -165,7 +163,6 @@ public class WindowGameData {
 
 	public ArrayList<CharacterData> getTargetsInRange(CharacterData character,
 			int range, boolean damageSpell) {
-		// TODO take obstacles in count
 		ArrayList<CharacterData> targets = new ArrayList<CharacterData>();
 		if (range == 0) {
 			targets.add(character);
@@ -210,8 +207,51 @@ public class WindowGameData {
 		}
 		return targets;
 	}
+	
+	public int targetable(ArrayList<CharacterData> enemies, CharacterData character){
+		int n=0;
+		int eyesight = character.getStats().getEyeSight();
+		int max = 2 * eyesight + 1;
+		CharacterData[][] surroundings = new CharacterData[max][max];
+		for (CharacterData e : enemies){
+			try {
+				surroundings[e.getX() - character.getX() + eyesight][e.getY()
+						- character.getY() + eyesight] = e;
+			} catch (ArrayIndexOutOfBoundsException aioobe) {
+			}
+			
+			for (int x = eyesight; x < max; x++) {
+				if (surroundings[x][eyesight]!=null) {
+					n++;
+					break;
+				}
+			}
 
-	private boolean isTarget(CharacterData current, CharacterData target,
+			for (int x = eyesight; x >= 0; x--) {
+				if (surroundings[x][eyesight]!=null) {
+					n++;
+					break;
+				}
+			}
+
+			for (int y = eyesight; y < max; y++) {
+				if (surroundings[eyesight][y]!=null) {
+					n++;
+					break;
+				}
+			}
+
+			for (int y = eyesight; y < max; y++) {
+				if(surroundings[eyesight][y]!=null) {
+					n++;
+					break;
+				}
+			}
+		}
+		return n;
+	}
+
+	public boolean isTarget(CharacterData current, CharacterData target,
 			boolean damageSpell) {
 		try {
 			if (damageSpell && (current.isMonster() != target.isMonster()))
@@ -234,6 +274,10 @@ public class WindowGameData {
 		}
 		target.takeDamage(spell.getDamage(), spell.getType());
 		target.heal(spell.getHeal());
+		if(target.getStats().getLife()<0){
+			characters.remove(target);
+			index = index % characters.size();
+		}
 
 	}
 }
