@@ -43,7 +43,7 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 	
-	public static final boolean FULLSCREEN = false;
+	public static final boolean FULLSCREEN = true;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
@@ -192,6 +192,7 @@ public class Data {
 	public static final String TURN_TEXT = "End of turn in : ";
 	public static final String DEPARTURE_BLOCK_ERROR = "Le pion doit être sur une case de départ !";
 	public static final int FONT_SIZE = 10;
+	public static final int FONT_HEIGHT = 12;
 	public static Image IMAGE_HALO = null;
 	public static float MUSIC_VOLUM = .1f;
 	public static float MUSIC_PITCH = 1;

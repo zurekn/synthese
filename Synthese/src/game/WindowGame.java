@@ -526,7 +526,7 @@ public class WindowGame extends BasicGame {
 				messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
 				return;
 			}
-			actionLeft --;
+			
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
 				throw new IllegalActionException("Wrong number of arguments in action string");
@@ -597,9 +597,11 @@ public class WindowGame extends BasicGame {
 				}
 				events.add(e);
 				System.out.println("Created " + e.toString());
+				actionLeft --;
 			} catch (IllegalActionException iae) {
-				iae.printStackTrace();
-				messageHandler.addPlayerMessage(new Message(iae.getLocalizedMessage()), turn);
+				//iae.printStackTrace();
+				System.out.println(iae.getLocalizedMessage() +"----------------------------"+iae.getMessage());
+				messageHandler.addPlayerMessage(new Message(iae.getLocalizedMessage(),Data.MESSAGE_TYPE_ERROR), turn);
 			}
 
 		}
@@ -794,8 +796,6 @@ public class WindowGame extends BasicGame {
 		ArrayList<Character> c = new ArrayList<Character>();
 
 		for (int i = 0; i < players.size(); i++) {
-			System.out.println("--------------------------------------------------" + players.get(i).getName()
-					+ "---------------------------------------------");
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
 				c.add(players.get(i));

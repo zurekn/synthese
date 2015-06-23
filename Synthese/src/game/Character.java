@@ -127,7 +127,7 @@ public abstract class Character {
 			throw new IllegalActionException("Spell unkown");
 		// TODO handle the heal
 		if(spell.getMana() > stats.getMana())
-			throw new IllegalActionException("No Enough Mana" + spell.getMana() +" / "+ stats.getMana());
+			throw new IllegalActionException("No Enough Mana " + spell.getMana() +" / "+ stats.getMana());
 		else{
 			int newMana = stats.getMana() - spell.getMana();
 			stats.setMana(newMana);
