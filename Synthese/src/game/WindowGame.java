@@ -423,14 +423,18 @@ public class WindowGame extends BasicGame {
 				e.render(container, g);
 				x = e.getX();
 				y = e.getY();
-				e.move();
-				//e.setRange(e.getRange() - 1);
-				if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {				
+				if(e.isMobile())
+					e.move();
+				
+				if( e.getRange() <= 1)
+					e.setMobile(false);
+			
+				if (x < xMin || x > xMax || y < yMin || y > yMax)			
 					e.setFinalFrame(true);
-				}
 			}else{
 				e.renderPostRemove(container, g);
-				events.remove(i);
+				if(e.isNeeDelete())
+					events.remove(i);
 			}
 		}
 		long eventTime = 0;
@@ -586,6 +590,7 @@ public class WindowGame extends BasicGame {
 						playerNumber--;
 						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 						checkEndGame();
+						switchTurn();
 					}
 					
 				}else{
@@ -615,10 +620,10 @@ public class WindowGame extends BasicGame {
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());
 							System.out.println("-----------------------------------------");
+							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							players.remove(focus.character);
 							mobs.remove(focus.character);
 							playerNumber--;
-							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							checkEndGame();
 						}
 					}else{

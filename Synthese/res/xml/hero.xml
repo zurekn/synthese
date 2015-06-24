@@ -16,7 +16,6 @@
 			<spell id="s4"></spell>
 			<spell id="s5"></spell>
 			<spell id="s6"></spell>
-			<spell id="s7"></spell>
 			<spell id="s8"></spell>
 			<spell id="s9"></spell>
 		</spells>
@@ -34,6 +33,7 @@
 		<movementPoints>4</movementPoints>
 		<magicResist>4</magicResist>
 		<spells>
+			<spell id="s8"></spell>
 			<spell id="s5"></spell>
 			<spell id="s2"></spell>
 		</spells>
@@ -48,7 +48,7 @@
 		<strength>10</strength>
 		<magicPower>0</magicPower>
 		<luck>30</luck>
-		<movementPoints>2</movementPoints>
+		<movementPoints>3</movementPoints>
 		<magicResist>2</magicResist>
 		<spells>
 			<spell id="s5"></spell>
@@ -69,6 +69,7 @@
 		<spells>
 			<spell id="s2"></spell>
 			<spell id="s3"></spell>
+			<spell id="s10"></spell>
 			<spell id="s1"></spell>
 		</spells>
 		<eyeSight>6</eyeSight>
