@@ -60,12 +60,13 @@ public class WindowGame extends BasicGame {
 	private int actionLeft = Data.ACTION_PER_TURN;
 
 	private boolean gameOn = false;
+	private boolean gameEnded = false;
+	private boolean gameWin = false;
+	private boolean gameLose = false;
 	private int timerInitPlayer;
 
 	private int turnTimer;
 	private long timeStamp = -1;
-	private long eventTimer = -1;
-
 	private static WindowGame windowGame = null;
 
 	public static WindowGame getInstance() {
@@ -127,7 +128,7 @@ public class WindowGame extends BasicGame {
 
 		playerHandler = new PlayerHandler(players);
 
-		new Thread(movementHandler).start();
+		//new Thread(movementHandler).start();
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
 
@@ -148,23 +149,13 @@ public class WindowGame extends BasicGame {
 		gameOn = true;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void initPlayers() {
 
 		players = new ArrayList<Player>();
 
 		Collection<String> pos = Data.departureBlocks.keySet();
-		Iterator it = pos.iterator();
-		String var;
-		String[] s;
-
+		pos.iterator();
 		if (Data.debug) {
-			int i = 0;
-			/*
-			 * while (it.hasNext() && i < Data.DEBUG_PLAYER) { var = (String)
-			 * it.next(); addPlayer(var); i++; }
-			 */
-			// TODO test add chalenger
 			try {
 				if (Data.DEBUG_PLAYER > 0)
 					addChalenger(10, 8, -1);
@@ -196,6 +187,7 @@ public class WindowGame extends BasicGame {
 	 * @throws IllegalMovementException
 	 * @throws IllegalActionException
 	 */
+	@SuppressWarnings("unused")
 	public void addChalenger(int x, int y, int size) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
 		if (gameOn)
 			throw new IllegalActionException("Can not add player when game is on!");
@@ -325,6 +317,13 @@ public class WindowGame extends BasicGame {
 	 */
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
+		if(gameEnded){
+			if(gameWin)
+				Data.WIN_IMAGE.draw(Data.MAP_X, Data.MAP_Y, Data.MAP_WIDTH, Data.MAP_HEIGHT);
+			if(gameLose)
+				Data.LOSE_IMAGE.draw(Data.MAP_X, Data.MAP_Y, Data.MAP_WIDTH, Data.MAP_HEIGHT);
+			return;
+		}
 		if (!apix.isInit()) {
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
@@ -412,28 +411,32 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
+		Event lastEvent = null;
 		xMin = Data.MAP_X;
 		xMax = Data.MAP_X + Data.MAP_WIDTH;
 		yMin = Data.MAP_Y;
 		yMax = Data.MAP_Y + Data.BLOCK_NUMBER_Y * Data.BLOCK_SIZE_Y;
+		
 		for (int i = 0; i < events.size(); i++) {
 			Event e = events.get(i);
-			e.render(container, g);
-			x = e.getX();
-			y = e.getY();
-			e.move();
-			// e.setRange(e.getRange() - 1);
-			if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {
-				//Copie dans list eventToRemove
+			if(!e.isFinalFrame()){
+				e.render(container, g);
+				x = e.getX();
+				y = e.getY();
+				e.move();
+				//e.setRange(e.getRange() - 1);
+				if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {				
+					e.setFinalFrame(true);
+				}
+			}else{
+				e.renderPostRemove(container, g);
 				events.remove(i);
 			}
 		}
-		//deuxieme boule sur enventToRemove
-		//afficher seulement la phase de destruction du sprite
-		
+		long eventTime = 0;
 	}
 
-	long eventTime = 0;
+	
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
@@ -521,9 +524,14 @@ public class WindowGame extends BasicGame {
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
 		if (action.startsWith("s")) { // Spell action
-			if(actionLeft <= 0){
-				messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
-				return;
+			if(actionLeft <= 0 ){
+				if(!Data.debug){
+					messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
+					return;
+				}else{
+					messageHandler.addPlayerMessage(new Message("Action interdite, mais on est en mode debug... ", 1), turn);
+
+				}
 			}
 			
 			String[] tokens = action.split(":");
@@ -532,13 +540,13 @@ public class WindowGame extends BasicGame {
 
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
-
+			
 			if (currentCharacter.getSpell(spellID) == null)
 				throw new IllegalActionException("Spell [" + spellID + "] not found");
-
+			float speed = currentCharacter.getSpell(spellID).getSpeed();
 			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
 
-			e.setDirection(direction);
+			e.setDirection(direction, speed);
 			e.setX(Data.MAP_X + currentCharacter.getX() * Data.BLOCK_SIZE_X);
 			e.setY(Data.MAP_Y + currentCharacter.getY() * Data.BLOCK_SIZE_Y);
 			// Get the range to the next character to hit
@@ -558,26 +566,49 @@ public class WindowGame extends BasicGame {
 				int state = Integer.parseInt(split[2]);
 				
 				if(state == -1){
+					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
-						messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
+						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
+
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
+						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
+
 					}
+					if (currentCharacter.checkDeath()) {
+						// TODO ADD a textual event
+						System.out.println("-----------------------------------------");
+						System.out.println("DEATH FOR" + currentCharacter.toString());
+						System.out.println("-----------------------------------------");
+						players.remove(currentCharacter);
+						mobs.remove(currentCharacter);
+						playerNumber--;
+						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+						checkEndGame();
+					}
+					
 				}else{
 					if (focus.character != null) {
 						if (currentCharacter.isMonster() == focus.character.isMonster())
 							if (e.getHeal() > 0){
 								focus.character.heal(heal);
-								messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
+								if(state > 0 )
+									messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
+								else
+									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
+
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 							}
 						else{
 							damage = focus.character.takeDamage(damage, e.getType());
-							messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
-	
+							if(state > 0)
+								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
+							else
+								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+
 						}
 						if (focus.character.checkDeath()) {
 							// TODO ADD a textual event
@@ -588,7 +619,7 @@ public class WindowGame extends BasicGame {
 							mobs.remove(focus.character);
 							playerNumber--;
 							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
-	
+							checkEndGame();
 						}
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
@@ -636,7 +667,7 @@ public class WindowGame extends BasicGame {
 	 * @return
 	 */
 	private Focus getFirstCharacterRange(ArrayList<Character> chars, Event e) {
-		int range = Data.MAX_RANGE;
+		float range = Data.MAX_RANGE;
 		System.out.println("Search the first character range : " + e.toString() + ", " + chars.toString());
 		Character focus = null;
 		for (Character c : chars) {
@@ -681,13 +712,13 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s2:" + Data.NORTH);
+							decodeAction("s6:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s3:" + Data.EAST);
+							decodeAction("s9:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s4:" + Data.SOUTH);
+							decodeAction("s8:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s9:" + Data.WEST);
+							decodeAction("s7:" + Data.WEST);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
@@ -782,6 +813,33 @@ public class WindowGame extends BasicGame {
 		return players;
 	}
 
+	public GameHandler getHandler() {
+		return handler;
+	}
+	
+
+	public Character getCurrentPlayer() {
+		return currentCharacter;
+	}
+	
+	public void checkEndGame(){
+		if(mobs.size() <= 0 || players.size() <= 0){
+			//GAME WIN
+			stopAllThread();
+			gameEnded = true;
+			if(mobs.size() <= 0)
+				gameWin = true;
+			if(players.size() <= 0)
+				gameLose = true;
+		}
+	}
+	
+	public void stopAllThread(){
+		apix.stop();
+		commands.getInstance().getThread().stop();
+		turnTimer = Integer.MAX_VALUE;
+	}
+	
 	/**
 	 * Get all character on a line line = Horizontal or Vertical
 	 * 
@@ -846,15 +904,11 @@ public class WindowGame extends BasicGame {
 		return null;
 	}
 
-	public GameHandler getHandler() {
-		return handler;
-	}
-
 	private class Focus {
-		protected int range;
+		protected float range;
 		protected Character character;
 
-		public Focus(int range, Character character) {
+		public Focus(float range, Character character) {
 			this.range = range;
 			this.character = character;
 		}
@@ -862,9 +916,5 @@ public class WindowGame extends BasicGame {
 		public String toString() {
 			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
-	}
-
-	public Character getCurrentPlayer() {
-		return currentCharacter;
 	}
 }

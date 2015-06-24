@@ -271,4 +271,8 @@ public class ImageProcessingHandler extends Handler {
 		lf.add(final_fo);
 		return lf;
 	}
+
+	public void stop() {
+		getThread().stop();
+	}
 }

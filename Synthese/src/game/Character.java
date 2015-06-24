@@ -171,9 +171,9 @@ public abstract class Character {
 		System.out.println("Icoming : "+damage+", "+type+", counterP " +getStats().getArmor()+", counterM " +getStats().getMagicResist());
 		
 		if (type.equals("magic")) {
-			damage = damage - getStats().getMagicResist()/2;
+			damage = damage - getStats().getMagicResist();
 		} else if (type.equals("physic")) {
-			damage = damage - getStats().getArmor()/2;
+			damage = damage - getStats().getArmor();
 		} else {
 			System.out.println("Wrong damage type : " + type);
 		}
@@ -289,7 +289,7 @@ public abstract class Character {
 	 */
 	public void addSpell(SpellD s) {
 		spells.add(new Spell(s.getId(), s.getName(), s.getDamage(),
-				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s
+				s.getHeal(), s.getMana(), s.getRange(), s.getType(), s.getSpeed(), s
 						.getEvent()));
 	}
 

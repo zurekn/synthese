@@ -146,17 +146,17 @@ public class Data {
 	public static final float[] AI_BORDERS = {-10.f,-5.f,-2.f};
 	public static final int AI_DEPTH_MAX = 1;
 	public static final float[][] AI_FACTORS = {
-			{ 2.f, 1.5f, 0.75f, 0.2f, 0.50f, 0.3f }, // coward
-			{ 1.f, 0.5f, 0.40f, 0.3f, 0.70f, 0.9f }, // lonewolf
-			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f }, // normal
-			{ 1.f, 1.0f, 0.50f, 0.5f, 0.80f, 0.6f } // player
+			{ 2.f, 1.5f, 0.75f, 0.2f, 1.0f, 0.8f }, // coward
+			{ 1.f, 0.5f, 0.40f, 0.3f, 1.8f, 5.0f }, // lonewolf
+			{ 1.f, 1.0f, 0.50f, 0.5f, 2.0f, 1.5f }, // normal
+			{ 1.f, 1.0f, 0.50f, 0.5f, 2.0f, 1.5f } // player
 	};
 	
 	public static final float[][] AI_HEURISITCS = {
-		{2.25f, 8.f, 2.0f, 2.0f},	//coward
-		{1.00f, 7.f, 0.5f, 2.0f},	//lonewolf
-		{1.00f, 7.f, 1.0f, 2.0f},	//normal
-		{1.00f, 7.f, 1.0f, 2.0f}	//player
+		{2.25f, 8.f, 2.0f, 2.0f, 4.0f},	//coward
+		{1.00f, 7.f, 0.5f, 2.0f, 2.0f},	//lonewolf
+		{1.00f, 7.f, 1.0f, 2.0f, 2.0f},	//normal
+		{1.00f, 7.f, 1.0f, 2.0f, 2.0f}	//player
 	};
 
 	public static final int COWARD = 0;
@@ -203,7 +203,8 @@ public class Data {
 
 	public static Image WIN_IMAGE;
 	public static Image LOSE_IMAGE;
-	
+
+	//github.com/zurekn/synthese
 	/**
 	 * Load all game variables
 	 * 

@@ -36,11 +36,19 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	private WebcamPanel panel = null;
 	private JTextArea textarea = null;
 	private final EventListenerList listeners = new EventListenerList();
+	private boolean stop = false;
 	// QR datas
 	private String QRDatas;
+	private static QRCam qrcam;
 	
-	public QRCam() {
-		super();
+	public static QRCam getInstance(){
+		if(qrcam == null)
+			qrcam = new QRCam();
+		return qrcam;
+	}
+	
+	private QRCam() {
+		/*super();
 		setLayout(new FlowLayout());
 		setTitle("Read QR / Bar Code With Webcam");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,6 +69,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 		setVisible(true);
 		
 		executor.execute(this);
+		*/
 	}
 	
 	public QRCam(Webcam webcam){
@@ -139,7 +148,7 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 			}else{
 				//textarea.setText("");
 			}
-		} while (true);
+		} while (true && !stop);
 	}
 	
 	public Thread newThread(Runnable r) {
@@ -176,5 +185,9 @@ public class QRCam extends JFrame implements Runnable, ThreadFactory {
 	
 	public QRCodeListener[] getQRCodeListener(){
 		return listeners.getListeners(QRCodeListener.class);
+	}
+
+	public void stop() {
+		stop = true;
 	}
 }
