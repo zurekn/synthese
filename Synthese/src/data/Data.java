@@ -43,7 +43,7 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 	
-	public static final boolean FULLSCREEN = true;
+	public static final boolean FULLSCREEN = false;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
@@ -153,10 +153,10 @@ public class Data {
 	};
 	
 	public static final float[][] AI_HEURISITCS = {
-		{2.25f, 8.f, 2.0f, 2.0f, 4.0f},	//coward
-		{1.00f, 7.f, 0.5f, 2.0f, 2.0f},	//lonewolf
-		{1.00f, 7.f, 1.0f, 2.0f, 2.0f},	//normal
-		{1.00f, 7.f, 1.0f, 2.0f, 2.0f}	//player
+		{20.f, 20.f, 30.f, 2.0f, 4.0f},	//coward
+		{10.f, 5.0f, 20.f, 2.0f, 2.0f},	//lonewolf
+		{10.f, 10.f, 20.f, 2.0f, 2.0f},	//normal
+		{10.f, 10.f, 20.f, 2.0f, 2.0f}	//player
 	};
 
 	public static final int COWARD = 0;
@@ -164,8 +164,8 @@ public class Data {
 	public static final int NORMAL = 2;
 	public static final int PLAYER = 3;
 	
-	public static final int LIFE = 1 ;
-	public static final int ALLIES_LIFE = 2;
+	public static final int LIFE = 2 ;
+	public static final int ALLIES_LIFE = 1;
 	public static final int MANA = 3;
 	public static final int TARGET_DETECTION = 4;
 
