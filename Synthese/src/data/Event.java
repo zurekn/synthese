@@ -19,7 +19,11 @@ public class Event {
 	private float yRelative;
 	private boolean playSound = false;
 	private boolean showFirstFrame = false;
-	private boolean isFinalFrame = false;
+	private boolean finalFrame = false;
+	private boolean mobile = false;
+	private boolean neeDelete = false;
+	private int countShowFirst = 0;
+	private int countShowFinal = 0;
 	private int damage;
 	private int heal;
 	private String type;
@@ -44,7 +48,10 @@ public class Event {
 		if (this.sound != null)
 			this.playSound = true;
 		showFirstFrame = false;
-		isFinalFrame = false;
+		finalFrame = false;
+		mobile=true;
+		countShowFirst = 0;
+		countShowFinal = 0;
 	}
 
 	
@@ -67,7 +74,10 @@ public class Event {
 		if (sound != null)
 			playSound = true;
 		showFirstFrame = true;
-		isFinalFrame = false;
+		finalFrame = false;
+		mobile = true;
+		countShowFirst = 0;
+		countShowFinal = 0;
 	}
 
 	public int getSpriteDirection() {
@@ -128,6 +138,14 @@ public class Event {
 
 	public void setSound(Sound sound) {
 		this.sound = sound;
+	}
+
+	public boolean isNeeDelete() {
+		return neeDelete;
+	}
+
+	public void setNeeDelete(boolean neeDelete) {
+		this.neeDelete = neeDelete;
 	}
 
 	public int getDirection() {
@@ -196,13 +214,22 @@ public class Event {
 	}
 	
 	public boolean isFinalFrame() {
-		return isFinalFrame;
+		return finalFrame;
 	}
 
 	public void setFinalFrame(boolean isFinalFrame) {
-		this.isFinalFrame = isFinalFrame;
+		this.finalFrame = isFinalFrame;
 	}
 	
+	
+	public boolean isMobile() {
+		return mobile;
+	}
+
+	public void setMobile(boolean canMove) {
+		this.mobile = canMove;
+	}
+
 	public Event getCopiedEvent() {
 		Event e = new Event(id, animation, sound, x, y, direction, duration, range, xRelative, yRelative, spriteDirection, speed);
 		e.setDamage(damage);
@@ -234,23 +261,31 @@ public class Event {
 				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 			}
 		}
-
 		g.rotate(x, y, direction - spriteDirection);
 		
-		if(showFirstFrame){
+		if(!mobile && animation[0].getFrame()<finalFrame-1){
+			animation[0].setCurrentFrame(animation[0].getFrame()+1);
+		}
+		if(showFirstFrame){ // On n'affiche la première frame qu'une fois
 			animation[0].restart();
-			for(int i=0; i<4 && animation[0].getFrame()==0;i++){
-				g.drawAnimation(animation[0], x + dx, y + dy);
-			}
+			g.drawAnimation(animation[0], x + dx, y + dy);
 			showFirstFrame = false;
-			animation[0].setCurrentFrame(1);
-		}else if(animation[0].getFrame()== finalFrame-1){
+		}else if(countShowFirst<4)	{
+			g.drawAnimation(animation[0], x + dx, y + dy);
+				countShowFirst += 1;
+				if(countShowFirst == 4)
+					animation[0].setCurrentFrame(1);
+		}else if(animation[0].getFrame()== finalFrame-1){ // On n'affiche pas la dernière frame
+			
 			animation[0].stop();
 			g.drawAnimation(animation[0], x + dx, y + dy);
 			animation[0].setCurrentFrame(1);
-		}else if(animation[0].getFrame()!= 0 ){
+			if(!mobile)
+				this.finalFrame = true;
+			
+		}else if(animation[0].getFrame()!= 0 ){ // On affiche chaque frame intermédiaire
 			g.drawAnimation(animation[0], x + dx, y + dy);
-		}else{
+		}else{ 									// On réaffiche pas la première frame
 			animation[0].setCurrentFrame(1);
 			g.drawAnimation(animation[0], x + dx, y + dy);
 		}
@@ -286,17 +321,19 @@ public class Event {
 				dy = (-Data.BLOCK_SIZE_X - animation[0].getHeight()) / 2;
 			}
 		}
-
 		g.rotate(x, y, direction - spriteDirection);
+		
 		animation[0].setCurrentFrame(finalFrame);
 		animation[0].stop();
-		
-		for(int i=0; i<4;i++){
+		if(countShowFinal<3){
 			g.drawAnimation(animation[0], x + dx, y + dy);
+				countShowFinal += 1;
+				if(countShowFinal == 3)
+					neeDelete = true;
 		}
+		
 		animation[0].restart();
 		g.rotate(x, y, -direction + spriteDirection);
-
 	}
 	
 	public void move() {
