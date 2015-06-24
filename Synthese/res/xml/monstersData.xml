@@ -6,7 +6,7 @@
 		<celDimensionY>46</celDimensionY>
 		<life>100</life>
 		<strength>10</strength>
-		<mana>40</mana>
+		<mana>100</mana>
 		<armor>10</armor>
 		<magicPower>10</magicPower>
 		<luck>20</luck>
@@ -27,7 +27,7 @@
 		<celDimensionY>46</celDimensionY>
 		<life>300</life>
 		<strength>20</strength>
-		<mana>40</mana>
+		<mana>100</mana>
 		<armor>20</armor>
 		<magicPower>1</magicPower>
 		<luck>20</luck>
@@ -56,6 +56,7 @@
 		<spells>
 			<spell>s2</spell>
 			<spell>s4</spell>
+			<spell>s8</spell>
 		</spells>
 		<aiType>normal:2</aiType>
 		<eyeSight>3</eyeSight>
@@ -77,6 +78,7 @@
 		<spells>
 			<spell>s2</spell>
 			<spell>s4</spell>
+			<spell>s9</spell>
 		</spells>
 		<aiType>normal:3</aiType>
 		<eyeSight>42</eyeSight>
@@ -181,8 +183,9 @@
 		<magicResist>30</magicResist>
 		<spells>
 			<spell>s2</spell>
+			<spell>s5</spell>
 			<spell>s4</spell>
-			<spell>s7</spell>
+			<spell>s9</spell>
 		</spells>
 		<aiType>normal:3</aiType>
 		<eyeSight>3</eyeSight>
