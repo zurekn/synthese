@@ -409,12 +409,20 @@ public class APIX extends Handler {
 	}
 
 	public static APIX getInstance() {
-		if(apix ==null)
+		if(apix == null)
 			apix = new APIX();
 		return apix;
 		
 	}
 
+	public void stop(){
+		if(!Data.RUN_APIX)
+			return;
+		this.getThread().stop();
+		ImageProcessingHandler.getInstance().stop();
+		qrcam.getInstance().stop();
+	}
+	
 	@Override
 	public void begin() {
 		getThread().start();

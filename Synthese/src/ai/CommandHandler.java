@@ -38,13 +38,13 @@ public class CommandHandler extends Handler {
 		AIHandler.getInstance().begin();
 		while (true) {
 			unlockTemporay(1);
-			try {
+			/*try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-			}
-			/*currentTime = System.currentTimeMillis();
+			}*/
+			currentTime = System.currentTimeMillis();
 
-			if ((currentTime - startTime) == MIN_TIME)*/
+			if ((currentTime - startTime) > MIN_TIME)
 				if (hasCommand()) {
 					startTime = System.currentTimeMillis();
 					// ID useless for this case

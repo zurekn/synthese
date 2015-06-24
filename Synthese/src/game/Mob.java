@@ -45,9 +45,13 @@ public class Mob extends Character {
 		// g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
 		// Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
+		if (isMyTurn()) 
+			Data.IMAGE_HALO.draw(getX() * Data.BLOCK_SIZE_X + Data.MAP_X - 10, getY() * Data.BLOCK_SIZE_Y + Data.MAP_Y - 10, Data.BLOCK_SIZE_X + 20 , Data.BLOCK_SIZE_Y + 20);
+		
+		
 		animation[6].draw(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y
 				* Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
-		if (isMyTurn()) {
+		/*if (isMyTurn()) {
 			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X
 					+ Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints()
 					* Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
@@ -58,8 +62,8 @@ public class Mob extends Character {
 					+ Data.BLOCK_SIZE_X;
 			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y
 					+ Data.BLOCK_SIZE_Y;
-//			g.drawOval(posX, posY, sizeX, sizeY);
-		}
+			g.drawOval(posX, posY, sizeX, sizeY);
+		}*/
 		if(Data.debug){
 			if(getFocusedOn()!=null)
 				g.drawLine(Data.MAP_X + x * Data.BLOCK_SIZE_X+ Data.BLOCK_SIZE_X / 2, Data.MAP_Y + y
