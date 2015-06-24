@@ -423,14 +423,18 @@ public class WindowGame extends BasicGame {
 				e.render(container, g);
 				x = e.getX();
 				y = e.getY();
-				e.move();
-				//e.setRange(e.getRange() - 1);
-				if (x < xMin || x > xMax || y < yMin || y > yMax || e.getRange() <= 1) {				
+				if(e.isMobile())
+					e.move();
+				
+				if( e.getRange() <= 1)
+					e.setMobile(false);
+			
+				if (x < xMin || x > xMax || y < yMin || y > yMax)			
 					e.setFinalFrame(true);
-				}
 			}else{
 				e.renderPostRemove(container, g);
-				events.remove(i);
+				if(e.isNeeDelete())
+					events.remove(i);
 			}
 		}
 		long eventTime = 0;

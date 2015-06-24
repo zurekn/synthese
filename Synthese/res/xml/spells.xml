@@ -76,8 +76,8 @@
 	</spell>
 	<spell id="s6">
 		<file>Synthese/res/images/tiles/Spells/Lunar Light.png</file>
-		<celX>184</celX>
-		<celY>183</celY>
+		<celX>101</celX>
+		<celY>100</celY>
 		<celNumber>3</celNumber>
 		<direction>90</direction>
 		<damage>0</damage>
@@ -89,6 +89,23 @@
 		<sound>Synthese/res/sounds/Lunar_light.wav</sound>
 		<speed>0.1</speed>
 	</spell>
+
+	<spell id="s7">
+		<file>Synthese/res/images/tiles/Spells/Aero.png</file>
+		<celX>72</celX>
+		<celY>41</celY>
+		<celNumber>4</celNumber>
+		<direction>90</direction>
+		<damage>75</damage>
+		<heal>0</heal>
+		<mana>15</mana>
+		<name>Aero</name>
+		<range>6</range>
+		<type>magic</type>
+		<sound>Synthese/res/sounds/Aero.wav</sound>
+		<speed>0.7</speed>
+	</spell>
+	
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
 		<celX>38</celX>
