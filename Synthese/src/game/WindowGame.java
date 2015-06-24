@@ -585,10 +585,11 @@ public class WindowGame extends BasicGame {
 						System.out.println("-----------------------------------------");
 						System.out.println("DEATH FOR" + currentCharacter.toString());
 						System.out.println("-----------------------------------------");
+						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
 						players.remove(currentCharacter);
 						mobs.remove(currentCharacter);
 						playerNumber--;
-						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+						
 						checkEndGame();
 						switchTurn();
 					}
@@ -696,6 +697,12 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		}
+		
+		if(e.getDirection() == Data.SELF)
+		{
+			return new Focus(0, currentCharacter);
+		}
+		
 		if (Data.debug && focus != null)
 			System.out.println("The Range is : " + range + ", focus is " + focus.toString());
 		return new Focus(range, focus);
@@ -723,7 +730,9 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_NUMPAD2 == key)
 							decodeAction("s8:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s7:" + Data.WEST);
+							decodeAction("s4:" + Data.WEST);
+						if (Input.KEY_NUMPAD5 == key)
+							decodeAction("s1:" + Data.SELF);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
@@ -856,7 +865,13 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Character> getCharacterPositionOnLine(int x, int y, int direction) {
 
 		ArrayList<Character> c = new ArrayList<Character>();
-
+		
+		if(direction == Data.SELF)
+		{
+			c.add(currentCharacter);
+			return c;
+		}
+		
 		for (int i = 0; i < players.size(); i++) {
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
