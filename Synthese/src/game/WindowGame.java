@@ -586,6 +586,7 @@ public class WindowGame extends BasicGame {
 						playerNumber--;
 						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 						checkEndGame();
+						switchTurn();
 					}
 					
 				}else{
@@ -615,10 +616,10 @@ public class WindowGame extends BasicGame {
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());
 							System.out.println("-----------------------------------------");
+							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							players.remove(focus.character);
 							mobs.remove(focus.character);
 							playerNumber--;
-							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							checkEndGame();
 						}
 					}else{

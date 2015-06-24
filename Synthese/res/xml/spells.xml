@@ -1,4 +1,19 @@
 <spells>
+	<spell id="s1">
+		<file>Synthese/res/images/tiles/Spells/HolyRay.png</file>
+		<celX>60</celX>
+		<celY>60</celY>
+		<celNumber>4</celNumber>
+		<direction>90</direction>
+		<damage>0</damage>
+		<heal>45</heal>
+		<mana>10</mana>
+		<name>Holly Ray</name>
+		<range>6</range>
+		<type>magic</type>
+		<sound>Synthese/res/sounds/holy_ray.wav</sound>
+		<speed>0.5</speed>
+	</spell>
 	<spell id="s2">
 		<file>Synthese/res/images/tiles/Spells/fireball.png</file>
 		<celX>64</celX>
@@ -7,26 +22,11 @@
 		<direction>90</direction>
 		<damage>100</damage>
 		<heal>0</heal>
-		<mana>10</mana>
+		<mana>15</mana>
 		<name>Fire Ball</name>
 		<range>5</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/fireball.wav</sound>
-		<speed>0.5</speed>
-	</spell>
-	<spell id="s1">
-		<file>Synthese/res/images/tiles/Spells/HolyRay.png</file>
-		<celX>60</celX>
-		<celY>60</celY>
-		<celNumber>4</celNumber>
-		<direction>90</direction>
-		<damage>0</damage>
-		<heal>15</heal>
-		<mana>10</mana>
-		<name>Holly Ray</name>
-		<range>7</range>
-		<type>magic</type>
-		<sound>Synthese/res/sounds/holy_ray.wav</sound>
 		<speed>0.5</speed>
 	</spell>
 	<spell id="s3">
@@ -35,11 +35,11 @@
 		<celY>125</celY>
 		<celNumber>5</celNumber>
 		<direction>90</direction>
-		<damage>125</damage>
+		<damage>80</damage>
 		<heal>0</heal>
 		<mana>25</mana>
 		<name>Dark Mater</name>
-		<range>10</range>
+		<range>6</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Dark_matter.wav</sound>
 		<speed>0.5</speed>
@@ -54,7 +54,7 @@
 		<heal>0</heal>
 		<mana>25</mana>
 		<name>Water Wave</name>
-		<range>9</range>
+		<range>8</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Water_wave.wav</sound>
 		<speed>0.5</speed>
@@ -69,7 +69,7 @@
 		<heal>0</heal>
 		<mana>0</mana>
 		<name>Sword Slash</name>
-		<range>5</range>
+		<range>2</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/sword_slash.wav</sound>
 		<speed>0.5</speed>
@@ -89,32 +89,17 @@
 		<sound>Synthese/res/sounds/Lunar_light.wav</sound>
 		<speed>0.1</speed>
 	</spell>
-	<spell id="s7">
-		<file>Synthese/res/images/tiles/Spells/root.png</file>
-		<celX>191</celX>
-		<celY>192</celY>
-		<celNumber>5</celNumber>
-		<direction>0</direction>
-		<damage>15</damage>
-		<heal>0</heal>
-		<mana>5</mana>
-		<name>Root</name>
-		<range>1</range>
-		<type>magic</type>
-		<sound>Synthese/res/sounds/root.wav</sound>
-		<speed>0.3</speed>
-	</spell>
 	<spell id="s8">
 		<file>Synthese/res/images/tiles/Spells/Shoot.png</file>
 		<celX>38</celX>
 		<celY>38</celY>
 		<celNumber>3</celNumber>
 		<direction>90</direction>
-		<damage>50</damage>
+		<damage>30</damage>
 		<heal>0</heal>
 		<mana>0</mana>
 		<name>Shoot</name>
-		<range>15</range>
+		<range>10</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/Shoot.wav</sound>
 		<speed>1</speed>
@@ -125,11 +110,11 @@
 		<celY>196</celY>
 		<celNumber>5</celNumber>
 		<direction>90</direction>
-		<damage>80</damage>
+		<damage>100</damage>
 		<heal>0</heal>
-		<mana>5</mana>
+		<mana>30</mana>
 		<name>Meteor</name>
-		<range>11</range>
+		<range>6</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Meteor.wav</sound>
 		<speed>0.7</speed>
@@ -140,14 +125,13 @@
 		<celY>213</celY>
 		<celNumber>7</celNumber>
 		<direction>90</direction>
-		<damage>20</damage>
+		<damage>75</damage>
 		<heal>0</heal>
-		<mana>15</mana>
+		<mana>20</mana>
 		<name>Holy Strike</name>
-		<range>10</range>
+		<range>7</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/holy_strike.wav</sound>
 		<speed>1</speed>
 	</spell>
-
 </spells>
