@@ -138,7 +138,6 @@ public class Data {
 	public static long beginTime;
 	
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
-	public static final long MESSAGE_DURATION = 2000;
 	
 	public static Music BACKGROUND_MUSIC; 
 	
@@ -178,11 +177,13 @@ public class Data {
 	public static final int STICK_TO_ALLIES = 5; //min danger level to go near allies 
 	
 	//MESSAGES PARAM
+	public static final long MESSAGE_DURATION = 3000;
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
 	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
 	private static final Color MESSAGE_COLOR_TYPE_2 = new Color(Color.green);
 	public static final int MESSAGE_TYPE_INFO = 0;
 	public static final int MESSAGE_TYPE_ERROR = 1;
+	public static final int MESSAGE_TYPE_CONSTANT = -1;
 	private static final int MESSAGE_TYPE_SUCCES = 2;
 	public static final Color DEFAULT_COLOR = Color.black;
 	public static final int ACTION_PER_TURN = 1;

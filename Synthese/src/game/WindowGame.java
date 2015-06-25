@@ -601,6 +601,7 @@ public class WindowGame extends BasicGame {
 						System.out.println("DEATH FOR" + currentCharacter.toString());
 						System.out.println("-----------------------------------------");
 						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
+						turn--;
 						players.remove(currentCharacter);
 						mobs.remove(currentCharacter);
 						playerNumber--;
@@ -632,14 +633,17 @@ public class WindowGame extends BasicGame {
 
 						}
 						if (focus.character.checkDeath()) {
-							// TODO ADD a textual event
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());
 							System.out.println("-----------------------------------------");
 							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+							int index = Math.max(players.indexOf(focus.character), mobs.indexOf(focus.character));
+							int indexCurrent = Math.max(players.indexOf(currentCharacter), mobs.indexOf(currentCharacter));
 							players.remove(focus.character);
 							mobs.remove(focus.character);
 							playerNumber--;
+							if(index <= indexCurrent)
+								turn = (turn - 1) % playerNumber;
 							checkEndGame();
 						}
 					}else{
