@@ -131,24 +131,24 @@ public class ImageProcessingHandler extends Handler {
 			if(WindowGame.getInstance().getCurrentPlayer() != null)
 			{
 				game.Character currentPlayer = WindowGame.getInstance().getCurrentPlayer();
-				int tempLimitMinX = ((currentPlayer.getX()*APIX.blockSizeX + APIX.relativeX) - (APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
-				tempLimitMinX = tempLimitMinX < APIX.relativeX ? 
-														APIX.relativeX : 
+				int tempLimitMinX = ((currentPlayer.getX()*(int)APIX.blockSizeX + (int)APIX.relativeX) - ((int)APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMinX = tempLimitMinX < (int)APIX.relativeX ? 
+												(int)APIX.relativeX : 
 														tempLimitMinX;
 				
-				int tempLimitMinY = ((currentPlayer.getY()*APIX.blockSizeY + APIX.relativeY) - (APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
-				tempLimitMinY = tempLimitMinY < APIX.relativeY ? 
-														APIX.relativeY : 
+				int tempLimitMinY = ((currentPlayer.getY()*(int)APIX.blockSizeY + (int)APIX.relativeY) - ((int)APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMinY = tempLimitMinY < (int)APIX.relativeY ? 
+												(int)APIX.relativeY : 
 														tempLimitMinY;
 				
-				int tempLimitMaxX = ((currentPlayer.getX()*APIX.blockSizeX + APIX.relativeX) + (APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
-				tempLimitMaxX = tempLimitMaxX > Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX ? 
-								Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX : 
+				int tempLimitMaxX = ((currentPlayer.getX()*(int)APIX.blockSizeX + (int)APIX.relativeX) + ((int)APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMaxX = tempLimitMaxX > Data.BLOCK_NUMBER_X*(int)APIX.blockSizeX+(int)APIX.relativeX ? 
+								Data.BLOCK_NUMBER_X*(int)APIX.blockSizeX+(int)APIX.relativeX : 
 								tempLimitMaxX;
 
-				int tempLimitMaxY = ((currentPlayer.getY()*APIX.blockSizeY + APIX.relativeY) + (APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
-				tempLimitMaxY = tempLimitMaxY > Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY ? 
-								Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY : 
+				int tempLimitMaxY = ((currentPlayer.getY()*(int)APIX.blockSizeY + (int)APIX.relativeY) + ((int)APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
+				tempLimitMaxY = tempLimitMaxY > Data.BLOCK_NUMBER_Y*(int)APIX.blockSizeY+(int)APIX.relativeY ? 
+								Data.BLOCK_NUMBER_Y*(int)APIX.blockSizeY+(int)APIX.relativeY : 
 									tempLimitMaxY;
 
 
@@ -161,8 +161,8 @@ public class ImageProcessingHandler extends Handler {
 			else
 			{
 				lf = ip.etiquetageIntuitifImageGiveListOpti(imageRef, image, seuil, 
-																		APIX.relativeX, Data.BLOCK_NUMBER_X*APIX.blockSizeX+APIX.relativeX, 
-																		APIX.relativeY, Data.BLOCK_NUMBER_Y*APIX.blockSizeY+APIX.relativeY);
+						(int)APIX.relativeX, Data.BLOCK_NUMBER_X*(int)APIX.blockSizeX+(int)APIX.relativeX, 
+						(int)APIX.relativeY, Data.BLOCK_NUMBER_Y*(int)APIX.blockSizeY+(int)APIX.relativeY);
 			}
 
 			/***********************************	debug	************************************************/
@@ -194,8 +194,10 @@ public class ImageProcessingHandler extends Handler {
 			
 			/**********************************	 fin debug	*************************************************/
 			
-			
-			addMovement(compareObjects(lf));
+//			if(WindowGame.getInstance().gameOn)
+//				addMovement(compareObjects(lf));
+//			else
+				addMovement(lf);
 			System.out.println("fin du traitement -----------------------------------------------");
 			try {
 				System.out.println("Attente de "+Data.WAIT_TI/1000+" sec pour le prochain traitement");

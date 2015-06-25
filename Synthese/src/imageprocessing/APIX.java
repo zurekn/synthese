@@ -42,10 +42,10 @@ public class APIX extends Handler {
 	private Webcam webcam;
 	private final EventListenerList listeners = new EventListenerList();
 	public static boolean isInit = false;
-	public static int relativeX = -1;
-	public static int relativeY = -1;
-	public static int blockSizeX = -1;
-	public static int blockSizeY = -1;
+	public static float relativeX = -1;
+	public static float relativeY = -1;
+	public static float blockSizeX = -1;
+	public static float blockSizeY = -1;
 	private boolean isRunning = false;
 	
 	private static APIX apix ;
@@ -66,7 +66,7 @@ public class APIX extends Handler {
 
 	}
 	
-	public int getBlockSizeX() {
+	public float getBlockSizeX() {
 		return blockSizeX;
 	}
 
@@ -74,7 +74,7 @@ public class APIX extends Handler {
 		this.blockSizeX = blockSizeX;
 	}
 
-	public int getBlockSizeY() {
+	public float getBlockSizeY() {
 		return blockSizeY;
 	}
 
@@ -82,11 +82,11 @@ public class APIX extends Handler {
 		this.blockSizeY = blockSizeY;
 	}
 
-	public int getRelativeX() {
+	public float getRelativeX() {
 		return relativeX;
 	}
 
-	public int getRelativeY() {
+	public float getRelativeY() {
 		return relativeY;
 	}
 
@@ -220,6 +220,8 @@ public class APIX extends Handler {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("nombre de points trouvés : "+imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI).size()+"##############################");
+		System.out.println("nombre de points trouvés : "+imageHandler.ip.etiquetageIntuitifImageGiveListOpti(image1, image1, Data.SEUILINITTI, 0, 0, 0, 0).size()+"##############################");
 		setRelativeValues(
 				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI),
 				image1.getHeight(), image1.getWidth());
@@ -240,7 +242,7 @@ public class APIX extends Handler {
 	 * @param e - event of the movement to add, MovementEvent
 	 */
 	protected void addMovementEvent(MovementEvent e) {
-		MovementEvent event = new MovementEvent(e.getX() - relativeX, e.getY() - relativeY, e.getSize()); // pour relative, inversion du X Y
+		MovementEvent event = new MovementEvent((int)(e.getX() - relativeX), (int)(e.getY() - relativeY), e.getSize()); // pour relative, inversion du X Y
 		for (APIXListener listener : getAPIXListener())
 			listener.newMouvement(event);
 	}
@@ -382,7 +384,7 @@ public class APIX extends Handler {
 		System.out.println("trouvé en bas gauche : " + pix.getX()+ "  "+pix.getY());
 		}
 
-		if (pix == null)
+		if (pix == null || HautDroite.size() == 0 || HautGauche.size() == 0 || BasGauche.size() == 0)
 			return;
 
 		setRelativeX(pix.getX());

@@ -43,17 +43,17 @@ import org.newdawn.slick.tiled.TiledMap;
  */
 public class Data {
 	
-	public static final boolean FULLSCREEN = false;
+	public static final boolean FULLSCREEN = true;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
-	public static final boolean debug = true;
-	public static final boolean DISPLAY_PLAYER = true;
-	public static final boolean runQRCam = false;
-	public static final boolean RUN_APIX = false;
+	public static final boolean debug = false;
+	public static final boolean DISPLAY_PLAYER = false;
+	public static final boolean runQRCam = true;
+	public static final boolean RUN_APIX = true;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 1;
+	public static final int DEBUG_PLAYER = 0;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
@@ -84,7 +84,7 @@ public class Data {
 	public static int TOTAL_WIDTH;
 	public static int TOTAL_HEIGHT;
 
-	public static int TURN_MAX_TIME = 5000; // in sec
+	public static int TURN_MAX_TIME = 30; // in sec
 
 	//For the stat display
 	public static int PLAYER_LIFE_RECT_X_POS = 10;

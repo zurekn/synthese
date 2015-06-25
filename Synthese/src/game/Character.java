@@ -66,7 +66,7 @@ public abstract class Character {
 			if (tokens.length != 2) {
 				throw new IllegalMovementException("Invalid movement syntax ");
 			} else {
-
+				
 				int x = Integer.parseInt(tokens[0]);
 				int y = Integer.parseInt(tokens[1]);
 
