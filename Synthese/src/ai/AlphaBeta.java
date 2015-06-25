@@ -682,6 +682,8 @@ public class AlphaBeta {
 			n.setMaxDepthReached(true);
 
 			n.setHeuristic(h(data, character));
+			if(node.getHeuristic() < n.getHeuristic())
+				node.setHeuristic(n.getHeuristic());
 		}
 	}
 
