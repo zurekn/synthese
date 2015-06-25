@@ -13,11 +13,13 @@ public class AlphaBeta {
 	// TODO debug
 
 	private static AlphaBeta alphaBeta;
+	
 	private TreeNode root;
 	private int nodeCount = 0;
 	private int max = 0;
 	@SuppressWarnings("unused")
 	private long startTime;
+	private boolean halted = false;
 	private float[][] coefMatrix;
 
 	// private static HashMap<String, LinkedList<int[]>>[] reachableBlocksMaps;
@@ -560,6 +562,11 @@ public class AlphaBeta {
 			int depthMax, TreeNode node, float alpha, float beta,
 			CharacterData character, boolean spellDone) {
 		CharacterData c = gameData.nextCharacter();
+		long time = System.currentTimeMillis() - startTime;
+		if(time > Data.TIME_LIMIT){
+			halted = true;
+			return 0.f;
+		}
 		try {
 			/*
 			 * System.out .println(character.getId() + "\t" +
@@ -593,9 +600,89 @@ public class AlphaBeta {
 
 	public void calculateNpcCommands(WindowGameData gameData,
 			Character character) {
-		startTime = System.currentTimeMillis();
 		calculateNpcCommands(gameData, new CharacterData(character), false);
 
+	}
+	
+	private void max(WindowGameData gameData, CharacterData character){
+		System.err.println("Calculation halted for "+character.getId());
+		root = new TreeNode(null, "root", 0, 0.0f);
+		detectFocus(gameData, character);
+		WindowGameData data = null;
+		// Spell Part
+		ArrayList<Spell> spells = character.getSpells();
+
+		CharacterData focus = character.getFocusedOn();
+		for (Spell spell : spells) {
+			if (spell.getMana() <= character.getStats().getMana()) {
+				int range = spell.getRange();
+				boolean damageSpell = spell.getDamage() > 0;
+				ArrayList<CharacterData> targets = new ArrayList<CharacterData>();
+				boolean focused = false;
+				int direction = 0;
+				try {
+					direction = character.getSpellDirection(focus.getX(), focus.getY());
+					if (focus.getId().equals("point") || direction == -1) {
+						throw new NullPointerException();
+					} else {
+						targets.add(focus);
+						focused = true;
+					}
+				} catch (NullPointerException npe) {
+					targets = gameData.getTargetsInRange(character, range,
+							damageSpell);
+				}
+
+				for (CharacterData target : targets) {
+					boolean bool = false;
+					if (focused) {
+						if (gameData.isTarget(character, target,
+								damageSpell))
+							bool = true;
+					} else {
+						bool = true;
+					}
+					if (bool) {
+						direction = character.getSpellDirection(
+								target.getX(), target.getY());
+						if (direction != -1) {
+							data = gameData.clone();
+							data.useSpell(character, spell, target);
+
+							// Create node and add it to tree
+							nodeCount++;
+							TreeNode n = new TreeNode(root, spell.getId()
+									+ ":" + direction, 1);
+							root.addSon(n);
+
+							n.setHeuristic(h(data, character));
+							movements(n, data, character);
+						}
+					}
+				}
+			}
+		}
+		movements(root,data, character);
+	}
+	
+	private void movements(TreeNode node, WindowGameData gameData, CharacterData character){
+		ArrayList<int[]> positions = AStar.getInstance()
+				.getReachableNodes(gameData, character);
+		WindowGameData data = null;
+		for (int[] position : positions) {
+			int x = position[0], y = position[1];
+			data = gameData.clone();
+			data.move(character, x, y);
+
+			// Create node and add it to tree
+			nodeCount++;
+			TreeNode n = new TreeNode(node, "m:" + x + ":" + y,node.getDepth()+1);
+			node.addSon(n);
+
+			n.setMaxDepthReached(true);
+
+			n.setHeuristic(h(data, character));
+		}
 	}
 
 	/**
@@ -607,13 +694,17 @@ public class AlphaBeta {
 	 */
 	private void calculateNpcCommands(WindowGameData gameData,
 			CharacterData character, boolean spellDone) {
-
+		startTime = System.currentTimeMillis();
 		root = new TreeNode(null, "root", 0, 0.0f);
 		// int depthMax = Integer.parseInt(character.getAiType().split(":")[1]);
 		int depthMax = 3;
 		maxValue(gameData, 0, depthMax, root, Float.MIN_VALUE, Float.MAX_VALUE,
 				character, spellDone);
 		String cmd = "";
+		
+		if(halted)
+			max(gameData, character);
+			
 		float value = Float.MIN_VALUE;
 		ArrayList<String> commands = new ArrayList<String>();
 		for (TreeNode n : root.getSons()) {
@@ -624,8 +715,9 @@ public class AlphaBeta {
 			if (n.getHeuristic() == value) {
 				commands.add(n.getCommand());
 			}
-
 		}
+
+		
 		Random rand = new Random(System.nanoTime());
 		cmd = commands.get(rand.nextInt(commands.size()));
 

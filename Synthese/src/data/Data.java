@@ -143,6 +143,7 @@ public class Data {
 	public static Music BACKGROUND_MUSIC; 
 	
 	//AI
+	public static final long TIME_LIMIT = 10000;
 	public static final float[] AI_BORDERS = {-10.f,-5.f,-2.f};
 	public static final int AI_DEPTH_MAX = 1;
 	public static final float[][] AI_FACTORS = {
