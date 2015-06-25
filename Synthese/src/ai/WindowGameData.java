@@ -275,8 +275,10 @@ public class WindowGameData {
 		target.takeDamage(spell.getDamage(), spell.getType());
 		target.heal(spell.getHeal());
 		if(target.getStats().getLife()<0){
-			characters.remove(target);
-			index = (index-1) % characters.size();
+			if(characters.indexOf(target) <= characters.indexOf(character))
+				index = (index-1) % characters.size();
+				
+			characters.remove(target);		
 		}
 
 	}

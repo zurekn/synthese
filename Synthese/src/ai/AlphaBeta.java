@@ -13,7 +13,7 @@ public class AlphaBeta {
 	// TODO debug
 
 	private static AlphaBeta alphaBeta;
-	
+
 	private TreeNode root;
 	private int nodeCount = 0;
 	private int max = 0;
@@ -226,7 +226,8 @@ public class AlphaBeta {
 					boolean focused = false;
 					int direction = 0;
 					try {
-						direction = character.getSpellDirection(focus.getX(), focus.getY());
+						direction = character.getSpellDirection(focus.getX(),
+								focus.getY());
 						if (focus.getId().equals("point") || direction == -1) {
 							throw new NullPointerException();
 						} else {
@@ -405,7 +406,8 @@ public class AlphaBeta {
 					boolean focused = false;
 					int direction = 0;
 					try {
-						direction = character.getSpellDirection(focus.getX(), focus.getY());
+						direction = character.getSpellDirection(focus.getX(),
+								focus.getY());
 						if (focus.getId().equals("point") || direction == -1) {
 							throw new NullPointerException();
 						} else {
@@ -563,7 +565,7 @@ public class AlphaBeta {
 			CharacterData character, boolean spellDone) {
 		CharacterData c = gameData.nextCharacter();
 		long time = System.currentTimeMillis() - startTime;
-		if(time > Data.TIME_LIMIT){
+		if (time > Data.TIME_LIMIT) {
 			halted = true;
 			return 0.f;
 		}
@@ -603,9 +605,76 @@ public class AlphaBeta {
 		calculateNpcCommands(gameData, new CharacterData(character), false);
 
 	}
-	
-	private void max(WindowGameData gameData, CharacterData character){
-		System.err.println("Calculation halted for "+character.getId());
+
+	/**
+	 * if spellDone is set to true, the algorithm will not search for a movement
+	 * 
+	 * @param gameData
+	 * @param character
+	 * @param spellDone
+	 */
+	private void calculateNpcCommands(WindowGameData gameData,
+			CharacterData character, boolean spellDone) {
+		try {
+			startTime = System.currentTimeMillis();
+			root = new TreeNode(null, "root", 0, 0.0f);
+			// int depthMax =
+			// Integer.parseInt(character.getAiType().split(":")[1]);
+			int depthMax = 3;
+			maxValue(gameData, 0, depthMax, root, Float.MIN_VALUE,
+					Float.MAX_VALUE, character, spellDone);
+			String cmd = "";
+
+			if (halted)
+				max(gameData, character);
+
+			float value = Float.MIN_VALUE;
+			ArrayList<String> commands = new ArrayList<String>();
+			for (TreeNode n : root.getSons()) {
+				if (n.getHeuristic() > value) {
+					commands = new ArrayList<String>();
+					value = n.getHeuristic();
+				}
+				if (n.getHeuristic() == value) {
+					commands.add(n.getCommand());
+				}
+			}
+
+			Random rand = new Random(System.nanoTime());
+			cmd = commands.get(rand.nextInt(commands.size()));
+
+			CommandHandler.getInstance().addCommand(cmd);
+			/*
+			 * if(Data.debug) System.out.println("Noeuds : " + nodeCount);
+			 */
+			max = Math.max(max, nodeCount);
+			nodeCount = 0;
+
+			gameData.doCommand(cmd);
+			if (cmd.startsWith("m")) { // If command is a movement go to next
+										// character
+				CharacterData c = gameData.nextCharacter();
+				if (c.isNpc()) {// if next character is npc, continue
+					calculateNpcCommands(gameData, c, false);
+				} else
+					CommandHandler.getInstance().setCalculationDone(true);
+
+			} else {// else search another command for the current character
+				calculateNpcCommands(gameData, character, true);
+			}
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println("Character unknown : " + e.getStackTrace());
+			CharacterData c = gameData.nextCharacter();
+			if (c.isNpc()) {// if next character is npc, continue
+				calculateNpcCommands(gameData, c, false);
+			} else
+				CommandHandler.getInstance().setCalculationDone(true);
+		}
+	}
+
+	private void max(WindowGameData gameData, CharacterData characterData) {
+		System.err.println("Calculation halted for " + characterData.getId());
+		CharacterData character = gameData.getCharacter(characterData);
 		root = new TreeNode(null, "root", 0, 0.0f);
 		detectFocus(gameData, character);
 		WindowGameData data = null;
@@ -621,7 +690,8 @@ public class AlphaBeta {
 				boolean focused = false;
 				int direction = 0;
 				try {
-					direction = character.getSpellDirection(focus.getX(), focus.getY());
+					direction = character.getSpellDirection(focus.getX(),
+							focus.getY());
 					if (focus.getId().equals("point") || direction == -1) {
 						throw new NullPointerException();
 					} else {
@@ -636,23 +706,22 @@ public class AlphaBeta {
 				for (CharacterData target : targets) {
 					boolean bool = false;
 					if (focused) {
-						if (gameData.isTarget(character, target,
-								damageSpell))
+						if (gameData.isTarget(character, target, damageSpell))
 							bool = true;
 					} else {
 						bool = true;
 					}
 					if (bool) {
-						direction = character.getSpellDirection(
-								target.getX(), target.getY());
+						direction = character.getSpellDirection(target.getX(),
+								target.getY());
 						if (direction != -1) {
 							data = gameData.clone();
 							data.useSpell(character, spell, target);
 
 							// Create node and add it to tree
 							nodeCount++;
-							TreeNode n = new TreeNode(root, spell.getId()
-									+ ":" + direction, 1);
+							TreeNode n = new TreeNode(root, spell.getId() + ":"
+									+ direction, 1);
 							root.addSon(n);
 
 							n.setHeuristic(h(data, character));
@@ -662,12 +731,13 @@ public class AlphaBeta {
 				}
 			}
 		}
-		movements(root,data, character);
+		movements(root, gameData, character);
 	}
-	
-	private void movements(TreeNode node, WindowGameData gameData, CharacterData character){
-		ArrayList<int[]> positions = AStar.getInstance()
-				.getReachableNodes(gameData, character);
+
+	private void movements(TreeNode node, WindowGameData gameData,
+			CharacterData character) {
+		ArrayList<int[]> positions = AStar.getInstance().getReachableNodes(
+				gameData, character);
 		WindowGameData data = null;
 		for (int[] position : positions) {
 			int x = position[0], y = position[1];
@@ -676,69 +746,15 @@ public class AlphaBeta {
 
 			// Create node and add it to tree
 			nodeCount++;
-			TreeNode n = new TreeNode(node, "m:" + x + ":" + y,node.getDepth()+1);
+			TreeNode n = new TreeNode(node, "m:" + x + ":" + y,
+					node.getDepth() + 1);
 			node.addSon(n);
 
 			n.setMaxDepthReached(true);
 
 			n.setHeuristic(h(data, character));
-		}
-	}
-
-	/**
-	 * if spellDone is set to true, the algorithm will not search for a movement
-	 * 
-	 * @param gameData
-	 * @param character
-	 * @param spellDone
-	 */
-	private void calculateNpcCommands(WindowGameData gameData,
-			CharacterData character, boolean spellDone) {
-		startTime = System.currentTimeMillis();
-		root = new TreeNode(null, "root", 0, 0.0f);
-		// int depthMax = Integer.parseInt(character.getAiType().split(":")[1]);
-		int depthMax = 3;
-		maxValue(gameData, 0, depthMax, root, Float.MIN_VALUE, Float.MAX_VALUE,
-				character, spellDone);
-		String cmd = "";
-		
-		if(halted)
-			max(gameData, character);
-			
-		float value = Float.MIN_VALUE;
-		ArrayList<String> commands = new ArrayList<String>();
-		for (TreeNode n : root.getSons()) {
-			if (n.getHeuristic() > value) {
-				commands = new ArrayList<String>();
-				value = n.getHeuristic();
-			}
-			if (n.getHeuristic() == value) {
-				commands.add(n.getCommand());
-			}
-		}
-
-		
-		Random rand = new Random(System.nanoTime());
-		cmd = commands.get(rand.nextInt(commands.size()));
-
-		CommandHandler.getInstance().addCommand(cmd);
-		/*
-		 * if(Data.debug) System.out.println("Noeuds : " + nodeCount);
-		 */
-		max = Math.max(max, nodeCount);
-		nodeCount = 0;
-
-		gameData.doCommand(cmd);
-		if (cmd.startsWith("m")) { // If command is a movement go to next
-									// character
-			CharacterData c = gameData.nextCharacter();
-			if (c.isNpc()) {// if next character is npc, continue
-				calculateNpcCommands(gameData, c, false);
-			} else
-				CommandHandler.getInstance().setCalculationDone(true);
-
-		} else {// else search another command for the current character
-			calculateNpcCommands(gameData, character, true);
+			if (node.getHeuristic() < n.getHeuristic())
+				node.setHeuristic(n.getHeuristic());
 		}
 	}
 }
