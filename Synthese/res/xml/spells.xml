@@ -6,7 +6,7 @@
 		<celNumber>4</celNumber>
 		<direction>90</direction>
 		<damage>0</damage>
-		<heal>45</heal>
+		<heal>180</heal>
 		<mana>10</mana>
 		<name>Holly Ray</name>
 		<range>6</range>
@@ -96,11 +96,11 @@
 		<celY>41</celY>
 		<celNumber>4</celNumber>
 		<direction>90</direction>
-		<damage>75</damage>
+		<damage>65</damage>
 		<heal>0</heal>
 		<mana>15</mana>
 		<name>Aero</name>
-		<range>6</range>
+		<range>5</range>
 		<type>magic</type>
 		<sound>Synthese/res/sounds/Aero.wav</sound>
 		<speed>0.7</speed>
@@ -142,13 +142,28 @@
 		<celY>213</celY>
 		<celNumber>7</celNumber>
 		<direction>90</direction>
-		<damage>75</damage>
+		<damage>65</damage>
 		<heal>0</heal>
-		<mana>20</mana>
+		<mana>5</mana>
 		<name>Holy Strike</name>
-		<range>7</range>
+		<range>1</range>
 		<type>physic</type>
 		<sound>Synthese/res/sounds/holy_strike.wav</sound>
 		<speed>1</speed>
+	</spell>
+	<spell id="s11">
+		<file>Synthese/res/images/tiles/Spells/Ice Crush.png</file>
+		<celX>76</celX>
+		<celY>94</celY>
+		<celNumber>5</celNumber>
+		<direction>90</direction>
+		<damage>65</damage>
+		<heal>0</heal>
+		<mana>20</mana>
+		<name>Ice Crush</name>
+		<range>6</range>
+		<type>magic</type>
+		<sound>Synthese/res/sounds/Ice_Crush.wav</sound>
+		<speed>0.7</speed>
 	</spell>
 </spells>

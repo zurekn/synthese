@@ -411,7 +411,6 @@ public class WindowGame extends BasicGame {
 	 */
 	private void renderEvents(GameContainer container, Graphics g) {
 		int x, y, xMin, yMin, xMax, yMax;
-		Event lastEvent = null;
 		xMin = Data.MAP_X;
 		xMax = Data.MAP_X + Data.MAP_WIDTH;
 		yMin = Data.MAP_Y;
@@ -423,11 +422,14 @@ public class WindowGame extends BasicGame {
 				e.render(container, g);
 				x = e.getX();
 				y = e.getY();
+				
 				if(e.isMobile())
 					e.move();
 				
-				if( e.getRange() <= 1)
+				if( e.getRange() <= 1){
+					System.out.println("range <= 1");
 					e.setMobile(false);
+				}
 			
 				if (x < xMin || x > xMax || y < yMin || y > yMax)			
 					e.setFinalFrame(true);
@@ -719,9 +721,9 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_NUMPAD8 == key)
 							decodeAction("s6:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s9:" + Data.EAST);
+							decodeAction("s11:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
-							decodeAction("s8:" + Data.SOUTH);
+							decodeAction("s10:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
 							decodeAction("s7:" + Data.WEST);
 					} catch (IllegalActionException e) {
