@@ -133,8 +133,8 @@ public abstract class Character {
 			stats.setMana(newMana);
 		}
 
-		int damage = spell.getDamage();
-		int heal = spell.getHeal();
+		int damage = spell.getDamage() + stats.getMagicPower()*2 + stats.getStrength()*2;
+		int heal = spell.getHeal() + stats.getMagicPower()*2;
 		int res = 0;
 		Random rand = new Random();
 		int i = rand.nextInt(101);
@@ -150,6 +150,7 @@ public abstract class Character {
 			damage = damage / 2;
 			res = -1;
 		}
+		System.out.println(" Dommages effectués : "+ damage +" *****************************************************************************");
 		return damage + ":" + heal+":"+res;
 	}
 	

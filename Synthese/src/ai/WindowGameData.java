@@ -276,7 +276,7 @@ public class WindowGameData {
 		target.heal(spell.getHeal());
 		if(target.getStats().getLife()<0){
 			characters.remove(target);
-			index = index % characters.size();
+			index = (index-1) % characters.size();
 		}
 
 	}

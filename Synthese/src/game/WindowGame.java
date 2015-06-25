@@ -318,10 +318,19 @@ public class WindowGame extends BasicGame {
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
 		if(gameEnded){
-			if(gameWin)
-				Data.WIN_IMAGE.draw(Data.MAP_X, Data.MAP_Y, Data.MAP_WIDTH, Data.MAP_HEIGHT);
-			if(gameLose)
-				Data.LOSE_IMAGE.draw(Data.MAP_X, Data.MAP_Y, Data.MAP_WIDTH, Data.MAP_HEIGHT);
+			Data.map.render(Data.MAP_X,  Data.MAP_Y);
+			mobHandler.render(container, g);
+			renderDeckArea(container, g);
+			playerHandler.render(container, g);
+			if(gameWin){
+				Data.WIN_IMAGE.draw(Data.ENDING_ANIMATION_X, Data.ENDING_ANIMATION_Y, (float) Data.WIN_IMAGE.getWidth() * Data.ENDING_ANIMATION_SCALE, (float) Data.WIN_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE);
+			}
+			if(gameLose){
+				Data.LOSE_IMAGE.draw(Data.ENDING_ANIMATION_X, Data.ENDING_ANIMATION_Y, (float) Data.LOSE_IMAGE.getWidth() * Data.ENDING_ANIMATION_SCALE, (float) Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE);
+			}
+			
+			if(Data.ENDING_ANIMATION_Y < (Data.MAP_HEIGHT - Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE) / 2)
+				Data.ENDING_ANIMATION_Y ++;
 			return;
 		}
 		if (!apix.isInit()) {
@@ -446,6 +455,8 @@ public class WindowGame extends BasicGame {
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
+		if(gameEnded)
+			return;
 		long time = System.currentTimeMillis();
 		if (time - timeStamp > 1000) {
 			if (gameOn) {
@@ -529,6 +540,8 @@ public class WindowGame extends BasicGame {
 	 * @throws IllegalMovementException
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
+		if(gameEnded)
+			return;
 		if (action.startsWith("s")) { // Spell action
 			if(actionLeft <= 0 ){
 				if(!Data.debug){
@@ -587,10 +600,11 @@ public class WindowGame extends BasicGame {
 						System.out.println("-----------------------------------------");
 						System.out.println("DEATH FOR" + currentCharacter.toString());
 						System.out.println("-----------------------------------------");
+						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
 						players.remove(currentCharacter);
 						mobs.remove(currentCharacter);
 						playerNumber--;
-						messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
+						
 						checkEndGame();
 						switchTurn();
 					}
@@ -698,6 +712,12 @@ public class WindowGame extends BasicGame {
 				}
 			}
 		}
+		
+		if(e.getDirection() == Data.SELF)
+		{
+			return new Focus(0, currentCharacter);
+		}
+		
 		if (Data.debug && focus != null)
 			System.out.println("The Range is : " + range + ", focus is " + focus.toString());
 		return new Focus(range, focus);
@@ -725,33 +745,51 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_NUMPAD2 == key)
 							decodeAction("s10:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)
-							decodeAction("s7:" + Data.WEST);
+							decodeAction("s4:" + Data.WEST);
+						if (Input.KEY_NUMPAD5 == key)
+							decodeAction("s1:" + Data.SELF);
 					} catch (IllegalActionException e) {
 						// TODO Auto-generated catch block
 						System.err.println(e.getMessage());
 					}
 				}
-		}
-		if (Input.KEY_DIVIDE == key) {
-			currentCharacter.takeDamage(20, "magic");
-		}
-		if (Input.KEY_SUBTRACT == key) {
-			start();
-		}
-		if (Input.KEY_ADD == key) {
-			try {
-				Random rand = new Random();
-				int x = rand.nextInt(Data.BLOCK_NUMBER_X - 0) + 0;
-				int y = rand.nextInt(Data.BLOCK_NUMBER_Y - 0) + 0;
-				addChalenger(x, y, -1);
-			} catch (IllegalCaracterClassException e) {
-				e.printStackTrace();
-			} catch (IllegalMovementException e) {
-				e.printStackTrace();
-			} catch (IllegalActionException e) {
-				e.printStackTrace();
+			
+			if (Input.KEY_DIVIDE == key) {
+				currentCharacter.takeDamage(20, "magic");
 			}
+			if (Input.KEY_SUBTRACT == key) {
+				start();
+			}
+			if (Input.KEY_ADD == key) {
+				try {
+					Random rand = new Random();
+					int x = rand.nextInt(Data.BLOCK_NUMBER_X - 0) + 0;
+					int y = rand.nextInt(Data.BLOCK_NUMBER_Y - 0) + 0;
+					addChalenger(x, y, -1);
+				} catch (IllegalCaracterClassException e) {
+					e.printStackTrace();
+				} catch (IllegalMovementException e) {
+					e.printStackTrace();
+				} catch (IllegalActionException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(Input.KEY_L == key){
+				gameEnded = true;
+				gameLose = true;
+				stopAllThread();
+			}
+			
+			if(Input.KEY_W == key){
+				gameEnded = true;
+				gameWin = true;
+				stopAllThread();
+			}
+			
+			
 		}
+
 		if (Input.KEY_ESCAPE == key) {
 			container.exit();
 		}
@@ -858,7 +896,13 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Character> getCharacterPositionOnLine(int x, int y, int direction) {
 
 		ArrayList<Character> c = new ArrayList<Character>();
-
+		
+		if(direction == Data.SELF)
+		{
+			c.add(currentCharacter);
+			return c;
+		}
+		
 		for (int i = 0; i < players.size(); i++) {
 			// above
 			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)

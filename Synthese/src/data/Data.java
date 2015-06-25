@@ -153,10 +153,10 @@ public class Data {
 	};
 	
 	public static final float[][] AI_HEURISITCS = {
-		{2.25f, 8.f, 2.0f, 2.0f, 4.0f},	//coward
-		{1.00f, 7.f, 0.5f, 2.0f, 2.0f},	//lonewolf
-		{1.00f, 7.f, 1.0f, 2.0f, 2.0f},	//normal
-		{1.00f, 7.f, 1.0f, 2.0f, 2.0f}	//player
+		{20.f, 20.f, 30.f, 2.0f, 4.0f},	//coward
+		{10.f, 5.0f, 20.f, 2.0f, 2.0f},	//lonewolf
+		{10.f, 10.f, 20.f, 2.0f, 2.0f},	//normal
+		{10.f, 10.f, 20.f, 2.0f, 2.0f}	//player
 	};
 
 	public static final int COWARD = 0;
@@ -164,8 +164,8 @@ public class Data {
 	public static final int NORMAL = 2;
 	public static final int PLAYER = 3;
 	
-	public static final int LIFE = 1 ;
-	public static final int ALLIES_LIFE = 2;
+	public static final int LIFE = 2 ;
+	public static final int ALLIES_LIFE = 1;
 	public static final int MANA = 3;
 	public static final int TARGET_DETECTION = 4;
 
@@ -203,8 +203,10 @@ public class Data {
 
 	public static Image WIN_IMAGE;
 	public static Image LOSE_IMAGE;
+	public static float ENDING_ANIMATION_Y = 0;
+	public static float ENDING_ANIMATION_X = 0;
+	public static float ENDING_ANIMATION_SCALE = 0;
 
-	//github.com/zurekn/synthese
 	/**
 	 * Load all game variables
 	 * 
@@ -233,7 +235,10 @@ public class Data {
 		Data.TOTAL_WIDTH = Data.MAP_WIDTH + 2 * Data.DECK_AREA_SIZE_Y;
 		Data.SCALE = (float) Data.SCREEN_HEIGHT / Data.TOTAL_HEIGHT;
 		Data.MESSAGE_MAX_LENGTH = (Data.MAP_WIDTH - Data.DECK_AREA_SIZE_X - Data.PLAYER_LIFE_RECT_X_SIZE) / Data.FONT_SIZE;
-
+		Data.ENDING_ANIMATION_SCALE = (float)Data.MAP_WIDTH / (float)Data.WIN_IMAGE.getWidth();
+		Data.ENDING_ANIMATION_X = Data.MAP_X;
+		Data.ENDING_ANIMATION_Y = Data.MAP_Y - Data.WIN_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE;
+		
 		System.out.println("MAP_FILE = " + Data.MAP_FILE + ", MAP_WIDTH = "
 				+ Data.MAP_WIDTH + ", MAP_HEIGHT = " + Data.MAP_HEIGHT
 				+ ", BLOCK_NUMBER = " + Data.BLOCK_NUMBER_X
