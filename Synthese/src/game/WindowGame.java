@@ -14,6 +14,7 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -59,7 +60,7 @@ public class WindowGame extends BasicGame {
 	private int turn;
 	private int actionLeft = Data.ACTION_PER_TURN;
 
-	private boolean gameOn = false;
+	public boolean gameOn = false;
 	private boolean gameEnded = false;
 	private boolean gameWin = false;
 	private boolean gameLose = false;
@@ -107,6 +108,7 @@ public class WindowGame extends BasicGame {
 		thread = Thread.currentThread();
 		handler = new GameHandler(thread);
 
+		container.setMouseGrabbed(true);;
 		Data.loadMap();
 		Data.loadGame();
 		SpellData.loadSpell();
@@ -286,11 +288,11 @@ public class WindowGame extends BasicGame {
 				try {
 					if (gameOn)
 						if (!currentCharacter.isMonster())
-							decodeAction("m:" + (e.getX() / apix.getBlockSizeX()) + ":" + (e.getY() / apix.getBlockSizeY()));
+							decodeAction("m:" + (int)(e.getX() / apix.getBlockSizeX()) + ":" + (int)(e.getY() / apix.getBlockSizeY()));
 						else
 							System.err.println("Récupération d'une valeur de l'apix durant le tour de l'ia");
 					else
-						addChalenger(e.getX() / apix.getBlockSizeX(), e.getY() / apix.getBlockSizeY(), e.getSize());
+						addChalenger((int)(e.getX() / apix.getBlockSizeX()), (int)(e.getY() / apix.getBlockSizeY()), e.getSize());
 				} catch (IllegalActionException e1) {
 					System.err.println(e1.getLocalizedMessage());
 				} catch (IllegalCaracterClassException e1) {
@@ -540,7 +542,7 @@ public class WindowGame extends BasicGame {
 	 * @throws IllegalMovementException
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
-		if(gameEnded)
+		if(gameEnded || !gameOn)
 			return;
 		if (action.startsWith("s")) { // Spell action
 			if(actionLeft <= 0 ){
@@ -560,8 +562,10 @@ public class WindowGame extends BasicGame {
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
 			
-			if (currentCharacter.getSpell(spellID) == null)
+			if (currentCharacter.getSpell(spellID) == null){
+				messageHandler.addPlayerMessage(new Message("Vous n'avez pas le sort : "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 				throw new IllegalActionException("Spell [" + spellID + "] not found");
+			}
 			float speed = currentCharacter.getSpell(spellID).getSpeed();
 			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
 

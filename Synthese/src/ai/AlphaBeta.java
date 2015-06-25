@@ -604,8 +604,9 @@ public class AlphaBeta {
 
 	}
 	
-	private void max(WindowGameData gameData, CharacterData character){
-		System.err.println("Calculation halted for "+character.getId());
+	private void max(WindowGameData gameData, CharacterData characterData){
+		System.err.println("Calculation halted for "+characterData.getId());
+		CharacterData character = gameData.getCharacter(characterData);
 		root = new TreeNode(null, "root", 0, 0.0f);
 		detectFocus(gameData, character);
 		WindowGameData data = null;
@@ -662,7 +663,7 @@ public class AlphaBeta {
 				}
 			}
 		}
-		movements(root,data, character);
+		movements(root,gameData, character);
 	}
 	
 	private void movements(TreeNode node, WindowGameData gameData, CharacterData character){
