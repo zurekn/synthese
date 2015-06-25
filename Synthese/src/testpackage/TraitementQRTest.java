@@ -15,7 +15,7 @@ public class TraitementQRTest {
 		 QRCodeProcessing tqr = new  QRCodeProcessing();
 		 String QRes="";
 		 String QRImage = "Aero.png";
-		 String QRList[] = {"DarkMatter.png","Shoot.png","LunarLight.png","Attaque.png","Heal.png","Potion.png","Ice crush.png","Fire Ball.png","Water Wave.png","Meteor.png"}; 
+		 String QRList[] = {"DarkMatter.png","Shoot.png","LunarLight.png","Attaque.png","Heal.png","SwordSlash.png","Ice crush.png","Fire Ball.png","Water Wave.png","Meteor.png","Aero.png"}; 
 		// error with 
 		 
 		 // ti.makeBinaryImage("webcamCapture.jpg", "vintageWebcamCapture.jpg", "jpg", 110);
