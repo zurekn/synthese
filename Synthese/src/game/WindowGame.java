@@ -436,7 +436,7 @@ public class WindowGame extends BasicGame {
 					e.move();
 				
 				if( e.getRange() <= 1){
-					System.out.println("range <= 1");
+				//	System.out.println("range <= 1");
 					e.setMobile(false);
 				}
 			
@@ -739,9 +739,9 @@ public class WindowGame extends BasicGame {
 						if (Input.KEY_DOWN == key)
 							decodeAction("m:" + currentCharacter.getX() + ":" + (currentCharacter.getY() + 1));
 						if (Input.KEY_NUMPAD8 == key)
-							decodeAction("s6:" + Data.NORTH);
+							decodeAction("s3:" + Data.NORTH);
 						if (Input.KEY_NUMPAD6 == key)
-							decodeAction("s11:" + Data.EAST);
+							decodeAction("s9:" + Data.EAST);
 						if (Input.KEY_NUMPAD2 == key)
 							decodeAction("s10:" + Data.SOUTH);
 						if (Input.KEY_NUMPAD4 == key)

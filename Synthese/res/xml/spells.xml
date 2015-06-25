@@ -31,8 +31,8 @@
 	</spell>
 	<spell id="s3">
 		<file>Synthese/res/images/tiles/Spells/Dark Matter.png</file>
-		<celX>131</celX>
-		<celY>125</celY>
+		<celX>84</celX>
+		<celY>80</celY>
 		<celNumber>5</celNumber>
 		<direction>90</direction>
 		<damage>80</damage>
@@ -123,8 +123,8 @@
 	</spell>
 	<spell id="s9">
 		<file>Synthese/res/images/tiles/Spells/Meteor.png</file>
-		<celX>191</celX>
-		<celY>196</celY>
+		<celX>107</celX>
+		<celY>110</celY>
 		<celNumber>5</celNumber>
 		<direction>90</direction>
 		<damage>100</damage>
@@ -138,8 +138,8 @@
 	</spell>
 	<spell id="s10">
 		<file>Synthese/res/images/tiles/Spells/holy_strike.png</file>
-		<celX>190</celX>
-		<celY>213</celY>
+		<celX>80</celX>
+		<celY>90</celY>
 		<celNumber>7</celNumber>
 		<direction>90</direction>
 		<damage>65</damage>
