@@ -1,0 +1,26 @@
+cond{    
+	["if", "1", "else"] 
+	["if", "1", "null"]
+	["for", "3",  "null"] 
+}
+var{
+    ["life", "int", "0", "120"]
+    ["ennemyInSigth", "boolean"]
+}
+
+comp{
+    ["int", "==", ">=", "<=", "!="]
+    ["boolean", "=="]
+}
+
+code{
+    windogame.decodeAction("m:" + (windogame.getCurrentPlayer().getX() - 1) + ":" + windogame.getCurrentPlayer().getY());
+    windogame.decodeAction("m:" + (windogame.getCurrentPlayer().getX() + 1) + ":" + windogame.getCurrentPlayer().getY());
+    windogame.decodeAction("m:" + windogame.getCurrentPlayer().getX() + ":" + (windogame.getCurrentPlayer().getY() - 1));
+    windogame.decodeAction("m:" + windogame.getCurrentPlayer().getX() + ":" + (windogame.getCurrentPlayer().getY() + 1));
+    windogame.decodeAction("s3:" + Data.NORTH);
+    windogame.decodeAction("s9:" + Data.EAST);
+    windogame.decodeAction("s10:" + Data.SOUTH);
+    windogame.decodeAction("s4:" + Data.WEST);
+    windogame.decodeAction("s1:" + Data.SELF);
+}

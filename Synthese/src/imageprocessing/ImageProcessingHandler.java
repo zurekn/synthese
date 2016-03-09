@@ -2,7 +2,6 @@ package imageprocessing;
 
 import game.WindowGame;
 
-import java.awt.im.InputMethodHighlight;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +12,6 @@ import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 
 import com.github.sarxos.webcam.Webcam;
-import com.sun.java.swing.plaf.windows.resources.windows;
-
 import data.Data;
 import data.Handler;
 

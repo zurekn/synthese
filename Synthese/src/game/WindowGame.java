@@ -163,6 +163,7 @@ public class WindowGame extends BasicGame {
 				{
 					addChalenger(10, 8, -1);
 					CompileString.compile("p0");
+					//CompileString.CompileAndExecuteClass("p0", "run");
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
@@ -537,6 +538,11 @@ public class WindowGame extends BasicGame {
 
 		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
 			commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
+		
+		if(!currentCharacter.isNpc())
+		{
+			//currentCharacter.
+		}
 
 		// print the current turn in the console
 		if (Data.debug) {
