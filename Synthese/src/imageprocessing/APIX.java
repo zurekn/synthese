@@ -5,34 +5,18 @@ import game.WindowGame;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-import javax.swing.DebugGraphics;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamCompositeDriver;
 import com.github.sarxos.webcam.WebcamResolution;
-import com.github.sarxos.webcam.ds.buildin.WebcamDefaultDriver;
-
 import data.Data;
 import data.Handler;
 
 import javax.swing.event.EventListenerList;
-
-import org.omg.CORBA.OMGVMCID;
-
-import sun.java2d.opengl.WGLGraphicsConfig;
 
 public class APIX extends Handler {
 

@@ -22,40 +22,28 @@ import javax.tools.ToolProvider;
 
 public class CompileString {
 	static Boolean debug = true;
-	static String className = "j1";
-	static String pathClass = "src/javacompiler/";
-	static String destPathClass = "bin/javacompiler/";
+	static String className = "";
+	static String pathClass = "Synthese/src/javacompiler/";
+	static String destPathClass = "target/classes/javacompiler/";
 	static boolean aRisque = false;
 
-	public static void main(String[] args) throws Exception {
-		// System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
+	public static void compile(String geneticName)
+	{
+		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
-		Node root = DecodeScript("src/testScriptTree.txt");
+		Node root = DecodeScript("testScriptTree.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
-		for (String st : contentCode)
-			System.out.println(st);
+		//for (String st : contentCode)
+			//System.out.println(st);
 
-		className += (aRisque ? "_Arisque" : "");
+		className = geneticName + (aRisque ? "_Arisque" : "");
 		ReadWriteCode(contentCode, className);
-		// CompileAndExecuteClass(className);
-
-		// Serialization d'un objet
-		serializeObject(className, root);
-
-		/*
-		 * // Dé-Serialization d'un objet 
-		 * deserializeObject(className);
-		 */
-
+		// CompileAndExecuteClass(className, "run");
 	}
 
-	/**
-	 * 
-	 * @param name
-	 *            of the object, object (node) to store
-	 * @return object to be output
-	 * @throws IOException
+	/*
+	 * Sérialization d'un objet
 	 */
 	public static void serializeObject(String name, Node root)
 			throws IOException {
@@ -65,7 +53,10 @@ public class CompileString {
 		objectOutputStream.flush();
 		objectOutputStream.close();
 	}
-
+	
+	/*
+	 * Dé-sérialize un objet
+	 */
 	public static void deserializeObject(String name) throws IOException,
 			ClassNotFoundException {
 		ObjectInputStream objectInputStream = new ObjectInputStream(
@@ -266,8 +257,6 @@ public class CompileString {
 		return partsRandom;
 	}
 	
-	
-
 	/**
 	 * Construit un bout de code pour comparer 2 chiffres
 	 * 
@@ -316,10 +305,7 @@ public class CompileString {
 		}
 		return resNode;
 	}
-	
-	
-	
-	
+		
 	/**
 	 * 
 	 * @param className
@@ -329,16 +315,16 @@ public class CompileString {
 		if(debug)
 			System.out.println(message);
 	}
+	
 	/*
 	 * Compilation, déplacement, et instanciation d'une classe à partir d'un
 	 * String
 	 */
-	public static void CompileAndExecuteClass(String className) {
+	public static void CompileAndExecuteClass(String className, String methodName) {
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		int result = compiler.run(null, null, null, pathClass + className
-				+ ".java");
-		System.out.println("Compile result code = " + result);
+		int result = compiler.run(null, null, null, pathClass + className + ".java");
+		//System.out.println("Compile result code = " + result);
 
 		// Déplacement du fichier .CLASS du répertoire /src au /bin
 		File afile = new File(pathClass + className + ".CLASS");
@@ -359,13 +345,13 @@ public class CompileString {
 		try {
 			c = Class.forName("javacompiler." + className);
 			Object obj = c.newInstance();
-			Method method = c.getDeclaredMethod("run", noparams);
+			Method method = c.getDeclaredMethod(methodName, noparams);
 			// Ajouter une insertion dans log du temps d'exécution
 			method.invoke(obj, null);
 
 			method = c.getDeclaredMethod("setLife", paramInt);
 			method.invoke(obj, 1);
-			method = c.getDeclaredMethod("run", noparams);
+			method = c.getDeclaredMethod(methodName, noparams);
 			method.invoke(obj, null);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -402,7 +388,7 @@ public class CompileString {
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
 			while ((ligne = br.readLine()) != null) {
-				if (ligne.contains("public class maClasseTest"))
+				if (ligne.contains("maClasseTest"))
 					ligne = ligne.replace("maClasseTest", className);
 				content.add(ligne);
 				if (inRun && !isAdded && ligne.contains("{")) {
