@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 
+import javacompiler.CompileString;
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -158,14 +160,26 @@ public class WindowGame extends BasicGame {
 		if (Data.debug) {
 			try {
 				if (Data.DEBUG_PLAYER > 0)
+				{
 					addChalenger(10, 8, -1);
+					CompileString.compile("p0");
+				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
+				{
 					addChalenger(15, 15, -1);
+					CompileString.compile("p1");
+				}
 				if (Data.DEBUG_PLAYER > 2)
+				{
 					addChalenger(19, 15, -1);
+					CompileString.compile("p2");
+				}
 				if (Data.DEBUG_PLAYER > 3)
+				{
 					addChalenger(7, 12, -1);
+					CompileString.compile("p3");
+				}
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();
 			} catch (IllegalMovementException e) {

@@ -22,13 +22,14 @@ import javax.tools.ToolProvider;
 
 public class CompileString {
 	static Boolean debug = true;
-	static String className = "j1";
+	static String className = "";
 	static String pathClass = "src/javacompiler/";
 	static String destPathClass = "bin/javacompiler/";
 	static boolean aRisque = false;
 
-	public static void main(String[] args) throws Exception {
-		// System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
+	public static void compile(String geneticName)
+	{
+		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
 		Node root = DecodeScript("src/testScriptTree.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
@@ -36,26 +37,13 @@ public class CompileString {
 		for (String st : contentCode)
 			System.out.println(st);
 
-		className += (aRisque ? "_Arisque" : "");
+		className = geneticName + (aRisque ? "_Arisque" : "");
 		ReadWriteCode(contentCode, className);
 		// CompileAndExecuteClass(className);
-
-		// Serialization d'un objet
-		serializeObject(className, root);
-
-		/*
-		 * // Dé-Serialization d'un objet 
-		 * deserializeObject(className);
-		 */
-
 	}
 
-	/**
-	 * 
-	 * @param name
-	 *            of the object, object (node) to store
-	 * @return object to be output
-	 * @throws IOException
+	/*
+	 * Sérialization d'un objet
 	 */
 	public static void serializeObject(String name, Node root)
 			throws IOException {
@@ -65,7 +53,10 @@ public class CompileString {
 		objectOutputStream.flush();
 		objectOutputStream.close();
 	}
-
+	
+	/*
+	 * Dé-sérialize un objet
+	 */
 	public static void deserializeObject(String name) throws IOException,
 			ClassNotFoundException {
 		ObjectInputStream objectInputStream = new ObjectInputStream(
