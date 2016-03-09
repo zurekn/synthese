@@ -46,14 +46,14 @@ public class Data {
 	public static final boolean FULLSCREEN = true;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
-	public static final boolean debug = false;
+	public static final boolean debug = true;
 	public static final boolean DISPLAY_PLAYER = false;
-	public static final boolean runQRCam = true;
-	public static final boolean RUN_APIX = true;
+	public static final boolean runQRCam = false;
+	public static final boolean RUN_APIX = false;
 	public static boolean debugPicture = false; 
 	public static final boolean inTest = true;
 	public static final boolean debugQR = false;
-	public static final int DEBUG_PLAYER = 0;
+	public static final int DEBUG_PLAYER = 4;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
@@ -138,7 +138,7 @@ public class Data {
 	public static long beginTime;
 	
 	public static final long REFRESH_TIME_EVENT = 500;//in milli
-	public static final long MESSAGE_DURATION = 2000;
+	public static final long MESSAGE_DURATION = 3000;
 	
 	public static Music BACKGROUND_MUSIC; 
 	
@@ -179,7 +179,7 @@ public class Data {
 	
 	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
-	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.black);
 	private static final Color MESSAGE_COLOR_TYPE_2 = new Color(Color.green);
 	public static final int MESSAGE_TYPE_INFO = 0;
 	public static final int MESSAGE_TYPE_ERROR = 1;

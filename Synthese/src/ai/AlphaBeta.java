@@ -618,9 +618,8 @@ public class AlphaBeta {
 		try {
 			startTime = System.currentTimeMillis();
 			root = new TreeNode(null, "root", 0, 0.0f);
-			// int depthMax =
-			// Integer.parseInt(character.getAiType().split(":")[1]);
-			int depthMax = 3;
+			int depthMax =Integer.parseInt(character.getAiType().split(":")[1]);
+			//int depthMax = 3;
 			maxValue(gameData, 0, depthMax, root, Float.MIN_VALUE,
 					Float.MAX_VALUE, character, spellDone);
 			String cmd = "";

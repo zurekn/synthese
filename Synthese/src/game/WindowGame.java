@@ -120,7 +120,7 @@ public class WindowGame extends BasicGame {
 		initCommandHandler();
 
 		// Create the monster list
-		mobs = MonsterData.initMobs();
+		mobs = new ArrayList<Mob>();//MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
 		messageHandler = new MessageHandler();
@@ -134,8 +134,6 @@ public class WindowGame extends BasicGame {
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
 
-		if (!Data.BACKGROUND_MUSIC.playing())
-			Data.BACKGROUND_MUSIC.loop(Data.MUSIC_PITCH, Data.MUSIC_VOLUM);
 		// start();
 	}
 
@@ -208,11 +206,11 @@ public class WindowGame extends BasicGame {
 			throw new IllegalMovementException("Untraversable block at [" + position + "]");
 		}
 
-		if (!Data.departureBlocks.containsKey(position) && !Data.DEBUG_DEPARTURE) {
+		if (Data.departureBlocks.containsKey(position) || (Data.DEBUG_DEPARTURE && Data.debug)) {
+			Data.departureBlocks.put(position, true);
+		} else {
 			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
 			throw new IllegalMovementException("Caracter must be at a departure position");
-		} else {
-			Data.departureBlocks.put(position, true);
 		}
 
 		if (Data.MAX_PLAYER <= players.size())
@@ -274,6 +272,10 @@ public class WindowGame extends BasicGame {
 		apix.addAPIXListener(new APIXAdapter() {
 			@Override
 			public void newQRCode(QRCodeEvent e) {
+				if(currentCharacter.isMonster()){
+					messageHandler.addGlobalMessage(new Message("QR Code laissé durant tour IA !", Data.MESSAGE_TYPE_ERROR));
+					return;
+				}
 				System.out.println("Un nouveau QRCode vien d'être recupèrer par WindowGame [" + e.toString() + "]");
 				try {
 					decodeAction(e.getId() + ":" + e.getDirection());
@@ -322,7 +324,7 @@ public class WindowGame extends BasicGame {
 		if(gameEnded){
 			Data.map.render(Data.MAP_X,  Data.MAP_Y);
 			mobHandler.render(container, g);
-			renderDeckArea(container, g);
+			//renderDeckArea(container, g);
 			playerHandler.render(container, g);
 			if(gameWin){
 				Data.WIN_IMAGE.draw(Data.ENDING_ANIMATION_X, Data.ENDING_ANIMATION_Y, (float) Data.WIN_IMAGE.getWidth() * Data.ENDING_ANIMATION_SCALE, (float) Data.WIN_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE);
@@ -338,6 +340,7 @@ public class WindowGame extends BasicGame {
 		if (!apix.isInit()) {
 			g.setColor(Color.black);
 			g.setBackground(Color.white);
+			//Data.map.render(Data.MAP_X, Data.MAP_Y);
 			// TOP LEFT
 			g.fillRect(Data.MAP_X - 20, Data.MAP_Y - 20, 40, 40);
 			// TOP RIGHT
@@ -351,11 +354,14 @@ public class WindowGame extends BasicGame {
 			timerInitPlayer = Data.INIT_MAX_TIME;
 
 		} else {
+			if (!Data.BACKGROUND_MUSIC.playing())
+				Data.BACKGROUND_MUSIC.loop(Data.MUSIC_PITCH, Data.MUSIC_VOLUM);
+			
 			Data.map.render(Data.MAP_X, Data.MAP_Y);
 
 			if (gameOn) {
 				mobHandler.render(container, g);
-				renderDeckArea(container, g);
+				//renderDeckArea(container, g);
 				playerHandler.render(container, g);
 				renderReachableBlocks(container, g);
 				renderEvents(container, g);
@@ -452,8 +458,6 @@ public class WindowGame extends BasicGame {
 		}
 		long eventTime = 0;
 	}
-
-	
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
@@ -872,15 +876,26 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void checkEndGame(){
-		if(mobs.size() <= 0 || players.size() <= 0){
+		if(Data.debug && !Data.RUN_APIX && players.size() <= 1)
+		{	
 			//GAME WIN
 			stopAllThread();
 			gameEnded = true;
-			if(mobs.size() <= 0)
-				gameWin = true;
-			if(players.size() <= 0)
-				gameLose = true;
+			gameWin = true;
 		}
+		// Partie à décommenter pour avoir une partie classique mobs vs players
+		/*else
+		{
+			if(mobs.size() <= 0 || players.size() <= 0){
+				//GAME WIN
+				stopAllThread();
+				gameEnded = true;
+				if(mobs.size() <= 0)
+					gameWin = true;
+				if(players.size() <= 0)
+					gameLose = true;
+			}	
+		}*/
 	}
 	
 	public void stopAllThread(){

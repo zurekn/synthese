@@ -220,8 +220,6 @@ public class APIX extends Handler {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("nombre de points trouvés : "+imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI).size()+"##############################");
-		System.out.println("nombre de points trouvés : "+imageHandler.ip.etiquetageIntuitifImageGiveListOpti(image1, image1, Data.SEUILINITTI, 0, 0, 0, 0).size()+"##############################");
 		setRelativeValues(
 				imageHandler.ip.etiquetageIntuitifImageGiveList2(image1, image1, Data.SEUILETI),
 				image1.getHeight(), image1.getWidth());
@@ -389,8 +387,9 @@ public class APIX extends Handler {
 
 		setRelativeX(pix.getX());
 		setRelativeY(pix.getY());
-		blockSizeX =HautDroite.get(0).getBaryCenter().getX() - HautGauche.get(0).getBaryCenter().getX();
+		blockSizeX = HautDroite.get(0).getBaryCenter().getX() - HautGauche.get(0).getBaryCenter().getX();
 		blockSizeX = blockSizeX / Data.BLOCK_NUMBER_X;
+		setRelativeX(pix.getX()+(int)(blockSizeX/2));
 		
 		blockSizeY = BasGauche.get(0).getBaryCenter().getY() - HautGauche.get(0).getBaryCenter().getY();
 		blockSizeY = blockSizeY / Data.BLOCK_NUMBER_Y;

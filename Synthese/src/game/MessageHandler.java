@@ -94,6 +94,7 @@ public class MessageHandler {
 
 	public void addPlayerMessage(Message message, int player) {
 		// first call we create the playerList
+		System.out.println(message+", "+player);
 		if (playerMessages.size() < 1)
 			for (int i = 0; i < WindowGame.getInstance().getPlayers().size(); i++) {
 				playerMessages.add(new ArrayList<Message>());

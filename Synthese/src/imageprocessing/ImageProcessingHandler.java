@@ -141,12 +141,12 @@ public class ImageProcessingHandler extends Handler {
 												(int)APIX.relativeY : 
 														tempLimitMinY;
 				
-				int tempLimitMaxX = ((currentPlayer.getX()*(int)APIX.blockSizeX + (int)APIX.relativeX) + ((int)APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+2)));
+				int tempLimitMaxX = ((currentPlayer.getX()*(int)APIX.blockSizeX + (int)APIX.relativeX) + ((int)APIX.blockSizeX*(currentPlayer.getStats().getMovementPoints()+3)));
 				tempLimitMaxX = tempLimitMaxX > Data.BLOCK_NUMBER_X*(int)APIX.blockSizeX+(int)APIX.relativeX ? 
 								Data.BLOCK_NUMBER_X*(int)APIX.blockSizeX+(int)APIX.relativeX : 
 								tempLimitMaxX;
 
-				int tempLimitMaxY = ((currentPlayer.getY()*(int)APIX.blockSizeY + (int)APIX.relativeY) + ((int)APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+2)));
+				int tempLimitMaxY = ((currentPlayer.getY()*(int)APIX.blockSizeY + (int)APIX.relativeY) + ((int)APIX.blockSizeY*(currentPlayer.getStats().getMovementPoints()+3)));
 				tempLimitMaxY = tempLimitMaxY > Data.BLOCK_NUMBER_Y*(int)APIX.blockSizeY+(int)APIX.relativeY ? 
 								Data.BLOCK_NUMBER_Y*(int)APIX.blockSizeY+(int)APIX.relativeY : 
 									tempLimitMaxY;
