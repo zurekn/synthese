@@ -1,0 +1,19 @@
+cond{    
+	["if", "1", "else"] 
+	["if", "1", "null"]
+	["for", "3",  "null"] 
+	["while", "1", "null"]
+}
+var{
+    ["life", "int", "0", "120"]
+    ["ennemyInSigth", "boolean"]
+}
+
+comp{
+    ["int", "==", ">=", "<=", "!="]
+    ["boolean", "=="]
+}
+
+code{
+    WindowGameData.decodeAction("m:" + (WindowGameData.getCurrentCharacter().getX() - 1) + ":" + WindowGameData.getCurrentCharacter().getY());
+}
