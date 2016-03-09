@@ -23,6 +23,7 @@ public class maClasseTest extends Player implements Serializable {
 	{
 		
 	}
+	
 	public int getLife() {
 		return life;
 	}
@@ -34,5 +35,9 @@ public class maClasseTest extends Player implements Serializable {
 	}
 	public void setEnnemyInSigth(boolean ennemyInSigth) {
 		this.ennemyInSigth = ennemyInSigth;
+	}
+	
+	public void display(){
+		System.out.println(this.getLife());
 	}
 }

@@ -5,12 +5,15 @@ import imageprocessing.APIXAdapter;
 import imageprocessing.MovementEvent;
 import imageprocessing.QRCodeEvent;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 
-import javacompiler.CompileString;
+import javacompiler.*;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -163,7 +166,48 @@ public class WindowGame extends BasicGame {
 				{
 					addChalenger(10, 8, -1);
 					CompileString.compile("p0");
-					//CompileString.CompileAndExecuteClass("p0", "run");
+					
+					/*try {
+						String typeHero = HeroData.getRandomHero();
+						Class[] type = { Integer.TYPE,Integer.TYPE,String.class,String.class };
+						Class classDefinition = Class.forName("javacompiler.p0"); 
+						Constructor cons;
+						cons = classDefinition .getConstructor(type);
+						Object[] obj = {10, 8,"p0",typeHero};
+						Class<?> myObject = (Class<?>) cons.newInstance(obj);
+						
+						Class<?> noparams[] = {};
+						Class<?> paramInt[] = new Class[1];// paramètre int
+						paramInt[0] = Integer.TYPE;
+						
+						Method method = myObject.getDeclaredMethod("setLife", paramInt);
+						method.invoke(obj, 1);
+						method = myObject.getDeclaredMethod("display", noparams);
+						method.invoke(obj, null);
+						
+					} catch (NoSuchMethodException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}*/
+					
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)

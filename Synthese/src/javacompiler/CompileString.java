@@ -21,7 +21,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 public class CompileString {
-	static Boolean debug = true;
+	static Boolean debug = false;
 	static String className = "";
 	static String pathClass = "Synthese/src/javacompiler/";
 	static String destPathClass = "target/classes/javacompiler/";
