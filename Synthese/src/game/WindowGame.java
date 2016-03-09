@@ -120,7 +120,7 @@ public class WindowGame extends BasicGame {
 		initCommandHandler();
 
 		// Create the monster list
-		mobs = new ArrayList<Mob>();//MonsterData.initMobs();
+		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
 
 		messageHandler = new MessageHandler();
@@ -876,7 +876,7 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void checkEndGame(){
-		if(Data.debug && !Data.RUN_APIX && players.size() <= 1)
+		if(Data.debug && !Data.RUN_APIX && players.size() <= 1 && mobs.size() <= 0)
 		{	
 			//GAME WIN
 			stopAllThread();
