@@ -5,7 +5,6 @@ cond{
 }
 var{
     ["ch.getStats().getLife()", "int", "0", "120"]
-    ["ch.monster", "boolean"]
 }
 
 comp{
@@ -14,13 +13,9 @@ comp{
 }
 
 code{
-    windowgame.decodeAction("m:" + (windowgame.getCurrentPlayer().getX() - 1) + ":" + windowgame.getCurrentPlayer().getY());
-    windowgame.decodeAction("m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY());
-    windowgame.decodeAction("m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1));
-    windowgame.decodeAction("m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1));
-    windowgame.decodeAction("s3:" + Data.NORTH);
-    windowgame.decodeAction("s9:" + Data.EAST);
-    windowgame.decodeAction("s10:" + Data.SOUTH);
-    windowgame.decodeAction("s4:" + Data.WEST);
-    windowgame.decodeAction("s1:" + Data.SELF);
+    actionString ="m:" + (windowgame.getCurrentPlayer().getX() - 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
+    actionString ="m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
+    actionString ="m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1)+"!!";
+    actionString ="m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1)+"!!";
+    
 }

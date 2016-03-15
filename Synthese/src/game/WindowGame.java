@@ -539,9 +539,8 @@ public class WindowGame extends BasicGame {
 		messageHandler.addGlobalMessage(new Message("Turn of " + currentCharacter.getName()));
 		actionLeft = Data.ACTION_PER_TURN;
 
-		if (currentCharacter.isNpc() && !previousCharacter.isNpc())// mettre le run du bot IAGénétique
-			//commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
-			currentCharacter.findScriptAction();
+		if (currentCharacter.isNpc())// && !previousCharacter.isNpc())// mettre le run du bot IAGénétique
+			currentCharacter.findScriptAction(0); //commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
 
 		if(!currentCharacter.isNpc())
 		{
@@ -691,7 +690,9 @@ public class WindowGame extends BasicGame {
 		else if (action.startsWith("t")) { // Trap action
 			System.out.println("Find a trap action");
 		}
-
+		else if (action.startsWith("p")) { // Pass turn
+			switchTurn();
+		}
 		else if (action.startsWith("m")) {// Movement action
 			try {
 				String[] tokens = action.split(":");

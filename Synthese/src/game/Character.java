@@ -11,6 +11,7 @@ import javacompiler.CompileString;
 import javacompiler.IAGenetic;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -45,6 +46,8 @@ public abstract class Character {
 	private Character focusedOn;
 	private boolean npc = true;
 	protected boolean monster = true;
+	private int score = 0;
+	
 	
 	private Class<?> cl = null;
 	private Object obj = null;
@@ -60,22 +63,49 @@ public abstract class Character {
 		obj = ch.getObj();
 	}
 	
-	public void findScriptAction(){// Ici mettre l'instanciation de la nouvelle classe propre à CE charactère
-		try {
-			Class<?>[] paramTypes = {Character.class};
-			Method method = cl.getDeclaredMethod("run", paramTypes);
-			// Ajouter une insertion dans log du temps d'exécution
-			method.invoke(obj, this);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+	public void findScriptAction(int compteur){// Ici mettre l'instanciation de la nouvelle classe propre à CE charactère
+		System.out.println(this.id +"-compteur = "+compteur);
+		WindowGame windowgame = WindowGame.getInstance();
+		if(compteur>=10)
+		{	
+			try {
+				windowgame.decodeAction("p");
+			} catch (IllegalActionException e) {
+				e.printStackTrace();
+			}
+		}
+		else
+		{	try {
+				Method method = cl.getDeclaredMethod("run", Character.class);
+				String result = (String) method.invoke(obj, this);
+				
+				if(result !="")
+				{
+					String[] decode  = result.split("!!");
+					for(String st : decode)
+					{
+						 windowgame.decodeAction(st);
+					}
+					method = cl.getDeclaredMethod("setActionString", String.class);
+					method.invoke(obj, "");
+				}
+				else
+					findScriptAction(++compteur);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				findScriptAction(++compteur);
+			} catch (SecurityException e) {
+				e.printStackTrace();findScriptAction(++compteur);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (IllegalActionException e) {
+				e.printStackTrace();
+				findScriptAction(++compteur);
+			}
 		}
 	}
 

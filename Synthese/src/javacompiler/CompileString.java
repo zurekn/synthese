@@ -29,7 +29,9 @@ public class CompileString {
 	static String packageName = "game";
 	static boolean aRisque = false;
 	static Class<?> c = null;
-
+	static int nbLignesCode = 2;
+	
+	
 	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
@@ -206,17 +208,17 @@ public class CompileString {
 				System.out.println("conditionfull : " + conditionFull);
 
 			// *** ========== Ajout des lignes de code dans les boucles =========
-			nodeCond = addCodeLineAlea(code,10,nodeCond);
+			nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond);
 
 			if (partsRandomCond[0].contains("if")
 					&& partsRandomCond[2].contains("else")) {
 				Node nodeElse = new Node("else");
 				root.addChild(nodeElse);
 				// *** Ajout des lignes de code
-				nodeElse = addCodeLineAlea(code,10,nodeElse);
+				nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse);
 			}
 			// *** Ajout des lignes de code à la racinde du run()
-			root = addCodeLineAlea(code,10,root);
+			root = addCodeLineAlea(code,nbLignesCode,root);
 			
 			// fermeture du fichier
 			br.close();
@@ -325,6 +327,8 @@ public class CompileString {
 	 */
 	public static IAGenetic CompileAndInstanciateClass(String className) {
 
+		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
+		
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		System.out.println(pathClass + className + ".java");
