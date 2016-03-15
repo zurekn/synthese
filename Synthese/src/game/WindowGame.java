@@ -312,6 +312,70 @@ public class WindowGame extends BasicGame {
 		}
 	}
 
+
+	/**
+	 * Add a new player with color
+	 * 
+	 * @param x
+	 * @param y
+	 * @param color
+	 * @throws IllegalCaracterClassException
+	 * @throws IllegalMovementException
+	 * @throws IllegalActionException
+	 */
+	@SuppressWarnings("unused")
+	public void addChalenger(int x, int y, int size, Color pColor) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
+		if (gameOn)
+			throw new IllegalActionException("Can not add player when game is on!");
+
+		String position = x + ":" + y;
+
+		if (WindowGame.getInstance().getAllPositions().contains(position)) {
+			// messageHandler.addMessage(new
+			// Message("Position ["+position+"] non disponible", 1));
+
+			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
+		}
+
+		if (Data.untraversableBlocks.containsKey(position)) {
+			messageHandler.addGlobalMessage(new Message("Position [" + position + "] non disponible", 1));
+			throw new IllegalMovementException("Untraversable block at [" + position + "]");
+		}
+
+		if (Data.departureBlocks.containsKey(position) || (Data.DEBUG_DEPARTURE && Data.debug)) {
+			Data.departureBlocks.put(position, true);
+		} else {
+			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
+			throw new IllegalMovementException("Caracter must be at a departure position");
+		}
+
+		if (Data.MAX_PLAYER <= players.size())
+			return;
+		String id = "P" + players.size();
+		String type = HeroData.getRandomHero();
+
+		Player p = new Player(x, y, id, type);
+		/*		
+		//---------------------	Ajout d'un IA génétique	--------------------------
+		CompileString.compile(id);
+		CompilerHandler ch = CompileString.CompileAndInstanciateClass(id);
+		CompileString.InvokeInitPlayer(ch, x, y, id, type);
+		
+		CompileString.InvokeSetNumber(ch, players.size());
+		CompileString.InvokeSetSizeCharacter(ch, size);
+		*/
+		p.setNumber(players.size());
+		p.setSizeCharacter(size);
+		p.setPlayerColor(pColor);
+		players.add(p);
+		
+		timerInitPlayer = Data.INIT_MAX_TIME;
+		if (players.size() >= Data.MAX_PLAYER) {
+			System.out.println(" ----Max player reached ----");
+			start();
+		}
+	}
+
 	public void addPlayer(String position) {
 		if (!Data.departureBlocks.get(position)) {
 			String[] s = position.split(":");
