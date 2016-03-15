@@ -29,7 +29,8 @@ public class CompileString {
 	static String packageName = "game";
 	static boolean aRisque = false;
 	static Class<?> c = null;
-
+	
+	
 	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
@@ -325,6 +326,8 @@ public class CompileString {
 	 */
 	public static IAGenetic CompileAndInstanciateClass(String className) {
 
+		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
+		
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		System.out.println(pathClass + className + ".java");

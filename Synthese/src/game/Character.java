@@ -11,6 +11,7 @@ import javacompiler.CompileString;
 import javacompiler.IAGenetic;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -46,6 +47,7 @@ public abstract class Character {
 	private boolean npc = true;
 	protected boolean monster = true;
 	
+	
 	private Class<?> cl = null;
 	private Object obj = null;
 
@@ -54,7 +56,7 @@ public abstract class Character {
 	public abstract void init();
 	
 	public void generateScriptGenetic() {// génération d'un script génétique
-		CompileString.generate(id);
+		//CompileString.generate(id);
 		IAGenetic ch = CompileString.CompileAndInstanciateClass(id);
 		cl = ch.getC();
 		obj = ch.getObj();

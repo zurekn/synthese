@@ -31,10 +31,11 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.fillRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X, Data.PLAYER_LIFE_RECT_Y_POS  +Data.MAP_Y + Data.MAP_HEIGHT , ((float)s.getLife() / (float)s.getMaxLife())  * Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE );
 				//MANA BAR
 				g.setColor(Color.blue);
-
 				g.fillRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT , ((float)s.getMana() / (float)s.getMaxMana()) * Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE );
-
-				g.setColor(Color.black);
+				
+				//g.setColor(Color.black);
+				g.setColor(player.get(i).getPlayerColor());
+				
 				//LIFE BAR
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
@@ -50,7 +51,8 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.setColor(Color.blue);
 				g.fillRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT , ((float)s.getMana() / (float)s.getMaxMana()) * Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE );
 
-				g.setColor(Color.black);
+				//g.setColor(Color.black);
+				g.setColor(player.get(i).getPlayerColor());
 				//LIFE BAR
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
@@ -69,7 +71,8 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.setColor(Color.blue);
 				g.fillRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT , ((float)s.getMana() / (float)s.getMaxMana()) * Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE );
 
-				g.setColor(Color.black);
+				//g.setColor(Color.black);
+				g.setColor(player.get(i).getPlayerColor());
 				//LIFE BAR
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
@@ -87,7 +90,8 @@ public void renderPlayerStat(GameContainer container, Graphics g){
 				g.setColor(Color.blue);
 				g.fillRect(Data.PLAYER_MANA_RECT_X_POS + Data.MAP_X, Data.PLAYER_MANA_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT , ((float)s.getMana() / (float)s.getMaxMana()) * Data.PLAYER_MANA_RECT_X_SIZE, Data.PLAYER_MANA_RECT_Y_SIZE );
 
-				g.setColor(Color.black);
+				//g.setColor(Color.black);
+				g.setColor(player.get(i).getPlayerColor());
 				//LIFE BAR
 				g.drawRect(Data.PLAYER_LIFE_RECT_X_POS + Data.MAP_X , Data.PLAYER_LIFE_RECT_Y_POS + Data.MAP_Y + Data.MAP_HEIGHT, Data.PLAYER_LIFE_RECT_X_SIZE, Data.PLAYER_LIFE_RECT_Y_SIZE);
 				//MANA BAR
