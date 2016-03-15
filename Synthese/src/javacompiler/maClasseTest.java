@@ -14,10 +14,7 @@ public class maClasseTest extends Player implements Serializable {
 	public int life = -10;
 	public boolean ennemyInSigth = true;
 	WindowGame windogame = WindowGame.getInstance();
-	
-	public maClasseTest(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException {
-		super(x, y, id, caracterClass);
-	}
+	Player p = null;
 	
 	public void run() throws IllegalActionException
 	{
@@ -35,6 +32,14 @@ public class maClasseTest extends Player implements Serializable {
 	}
 	public void setEnnemyInSigth(boolean ennemyInSigth) {
 		this.ennemyInSigth = ennemyInSigth;
+	}
+	
+	public Player getP() {
+		return p;
+	}
+
+	public void setP(Player p) {
+		this.p = p;
 	}
 	
 	public void display(){

@@ -167,14 +167,16 @@ public class WindowGame extends BasicGame {
 					addChalenger(10, 8, -1);
 					CompileString.compile("p0");
 					
-					/*try {
+					try {
 						String typeHero = HeroData.getRandomHero();
 						Class[] type = { Integer.TYPE,Integer.TYPE,String.class,String.class };
 						Class classDefinition = Class.forName("javacompiler.p0"); 
-						Constructor cons;
-						cons = classDefinition .getConstructor(type);
-						Object[] obj = {10, 8,"p0",typeHero};
-						Class<?> myObject = (Class<?>) cons.newInstance(obj);
+						//Constructor cons;
+						//cons = classDefinition .getConstructor(type);
+						//Object[] obj = {10, 8,"p0",typeHero};
+						//Class<?> myObject = (Class<?>) cons.newInstance(obj);
+						Class<?> myObject = Class.forName("javacompiler.p0");
+						Object obj = myObject.newInstance();
 						
 						Class<?> noparams[] = {};
 						Class<?> paramInt[] = new Class[1];// paramètre int
@@ -206,7 +208,7 @@ public class WindowGame extends BasicGame {
 					} catch (InvocationTargetException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}*/
+					}
 					
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
