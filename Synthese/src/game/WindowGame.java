@@ -5,21 +5,17 @@ import imageprocessing.APIXAdapter;
 import imageprocessing.MovementEvent;
 import imageprocessing.QRCodeEvent;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
 
-import javacompiler.*;
+import javacompiler.CompileString;
+import javacompiler.CompilerHandler;
 
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -165,23 +161,27 @@ public class WindowGame extends BasicGame {
 				if (Data.DEBUG_PLAYER > 0)
 				{
 					addChalenger(10, 8, -1);
-					//CompileString.compile("p0");					
+					CompileString.compile("p0");
+					CompilerHandler ch = CompileString.CompileAndInstanciateClass("p0");
+					CompileString.InvokeInitPlayer(ch, 3, 2, "13", "mage");
+					//CompileString.InvokeRun(ch);
+					
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
 				{
 					addChalenger(15, 15, -1);
-					CompileString.compile("p1");
+				//	CompileString.compile("p1");
 				}
 				if (Data.DEBUG_PLAYER > 2)
 				{
 					addChalenger(19, 15, -1);
-					CompileString.compile("p2");
+				//	CompileString.compile("p2");
 				}
 				if (Data.DEBUG_PLAYER > 3)
 				{
 					addChalenger(7, 12, -1);
-					CompileString.compile("p3");
+				//	CompileString.compile("p3");
 				}
 			} catch (IllegalCaracterClassException e) {
 				e.printStackTrace();

@@ -23,9 +23,12 @@ import javax.tools.ToolProvider;
 public class CompileString {
 	static Boolean debug = false;
 	static String className = "";
-	static String pathClass = "Synthese/src/javacompiler/";
-	static String destPathClass = "target/classes/javacompiler/";
+	static String pathClass = "Synthese/src/game/";
+	static String destPathClass = "target/classes/game/";
+	static String classTestName = "PlayerGenetic";
+	static String packageName = "game";
 	static boolean aRisque = false;
+	static Class<?> c = null;
 
 	public static void compile(String geneticName)
 	{
@@ -320,7 +323,8 @@ public class CompileString {
 	 * Compilation, déplacement, et instanciation d'une classe à partir d'un
 	 * String
 	 */
-	public static void CompileAndExecuteClass(String className, String methodName) {
+	public static CompilerHandler CompileAndInstanciateClass(String className) {
+
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		int result = compiler.run(null, null, null, pathClass + className + ".java");
@@ -331,32 +335,48 @@ public class CompileString {
 		File destFile = new File(destPathClass + afile.getName());
 		if (destFile.exists())
 			destFile.delete();
-		if (afile.renameTo(new File(destPathClass + afile.getName()))) {
+		afile.renameTo(new File(destPathClass + afile.getName()));
+		/*if (afile.renameTo(new File(destPathClass + afile.getName()))) {
 			System.out.println("File is moved successful!");
 		} else {
 			System.out.println("File is failed to move!");
-		}
+		}*/
 
 		// Instanciation de la classe du joueur IA
-		Class<?> noparams[] = {};// pas de paramètre
-		Class<?> paramInt[] = new Class[1];// paramètre int
-		paramInt[0] = Integer.TYPE;
-		Class<?> c;
+		//Class<?> noparams[] = {};// pas de paramètre
+		Class<?> c = null;
+		Object obj = null;
 		try {
-			c = Class.forName("javacompiler." + className);
-			Object obj = c.newInstance();
-			Method method = c.getDeclaredMethod(methodName, noparams);
+			c = Class.forName(packageName + "." + className);
+			obj = c.newInstance();
+			//Method method = c.getDeclaredMethod(methodName, noparams);
 			// Ajouter une insertion dans log du temps d'exécution
-			method.invoke(obj, null);
+			//method.invoke(obj, (Object[])null);
 
-			method = c.getDeclaredMethod("setLife", paramInt);
+			/*method = c.getDeclaredMethod("setLife", paramInt);
 			method.invoke(obj, 1);
 			method = c.getDeclaredMethod(methodName, noparams);
-			method.invoke(obj, null);
+			method.invoke(obj, null);*/
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return new CompilerHandler(c,obj);
+	}
+	
+	public static void InvokeInitPlayer(CompilerHandler ch, int x, int y, String id, String caracterClass) {
+		try {
+			Class<?>[] paramTypes = {int.class, int.class, String.class, String.class};
+			Method method = ch.getC().getDeclaredMethod("init"+className, paramTypes);
+			// Ajouter une insertion dans log du temps d'exécution
+			method.invoke(ch.getObj(), x, y, id,  caracterClass);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -368,17 +388,33 @@ public class CompileString {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public static void InvokeRun(CompilerHandler ch) {
+		try {
+			Method method = ch.getC().getDeclaredMethod("run");
+			// Ajouter une insertion dans log du temps d'exécution
+			method.invoke(ch.getObj());
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
 	 * Lecture dans un fichier .java
 	 */
-	public static void ReadWriteCode(ArrayList<String> codeContent,
-			String className) {
+	public static void ReadWriteCode(ArrayList<String> codeContent,String className) {
 		Boolean inRun = false;
 		Boolean isAdded = false;
-		File fichier = new File(pathClass + "maClasseTest.java");
+		File fichier = new File(pathClass + classTestName +".java");
 		ArrayList<String> content = new ArrayList<String>();
 
 		// lecture du fichier java
@@ -388,8 +424,8 @@ public class CompileString {
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
 			while ((ligne = br.readLine()) != null) {
-				if (ligne.contains("maClasseTest"))
-					ligne = ligne.replace("maClasseTest", className);
+				if (ligne.contains(classTestName))
+					ligne = ligne.replace(classTestName, className);
 				content.add(ligne);
 				if (inRun && !isAdded && ligne.contains("{")) {
 					// Ajout des lignes de code désirées dans la ArrayList

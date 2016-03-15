@@ -3,6 +3,9 @@ package main;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
+import javacompiler.CompileString;
+import javacompiler.CompilerHandler;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -27,6 +30,12 @@ public class Main {
     	gameContaineur.setTargetFrameRate(30);
     	gameContaineur.start();
     	
+    	/*
+		CompileString.compile("p0");
+		CompilerHandler ch = CompileString.CompileAndInstanciateClass("p0");
+		CompileString.InvokeInitPlayer(ch, 3, 2, "13", "mage");
+		CompileString.InvokeRun(ch);
+    	 */
 	}
 
 }

@@ -5,29 +5,31 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import game.Character;
+import game.WindowGame;
 import data.Data;
 import data.Hero;
 import data.HeroData;
-import data.SpellData;
-import data.Stats;
+import exception.IllegalActionException;
 import exception.IllegalCaracterClassException;
 
 public class PlayerGenetic extends Character {
 	
 	private Image icon;
 	private int number;
+	WindowGame windowgame = WindowGame.getInstance();
 	
 	public PlayerGenetic(){
 		
 	}
 	
-	public void run()
+	public void run() throws IllegalActionException
 	{
 		
 	}
 	
 	@SuppressWarnings("unused")
-	public PlayerGenetic(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
+	public void initPlayerGenetic(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
 		monster=false;
 		this.setX(x);
 		this.setY(y);

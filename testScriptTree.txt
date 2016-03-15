@@ -4,8 +4,8 @@ cond{
 	["for", "3",  "null"] 
 }
 var{
-    ["life", "int", "0", "120"]
-    ["ennemyInSigth", "boolean"]
+    ["this.getStats().getLife()", "int", "0", "120"]
+    ["monster", "boolean"]
 }
 
 comp{
@@ -14,13 +14,13 @@ comp{
 }
 
 code{
-    windogame.decodeAction("m:" + (windogame.getCurrentPlayer().getX() - 1) + ":" + windogame.getCurrentPlayer().getY());
-    windogame.decodeAction("m:" + (windogame.getCurrentPlayer().getX() + 1) + ":" + windogame.getCurrentPlayer().getY());
-    windogame.decodeAction("m:" + windogame.getCurrentPlayer().getX() + ":" + (windogame.getCurrentPlayer().getY() - 1));
-    windogame.decodeAction("m:" + windogame.getCurrentPlayer().getX() + ":" + (windogame.getCurrentPlayer().getY() + 1));
-    windogame.decodeAction("s3:" + Data.NORTH);
-    windogame.decodeAction("s9:" + Data.EAST);
-    windogame.decodeAction("s10:" + Data.SOUTH);
-    windogame.decodeAction("s4:" + Data.WEST);
-    windogame.decodeAction("s1:" + Data.SELF);
+    windowgame.decodeAction("m:" + (windowgame.getCurrentPlayer().getX() - 1) + ":" + windowgame.getCurrentPlayer().getY());
+    windowgame.decodeAction("m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY());
+    windowgame.decodeAction("m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1));
+    windowgame.decodeAction("m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1));
+    windowgame.decodeAction("s3:" + Data.NORTH);
+    windowgame.decodeAction("s9:" + Data.EAST);
+    windowgame.decodeAction("s10:" + Data.SOUTH);
+    windowgame.decodeAction("s4:" + Data.WEST);
+    windowgame.decodeAction("s1:" + Data.SELF);
 }

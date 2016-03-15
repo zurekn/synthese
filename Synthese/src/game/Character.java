@@ -194,6 +194,10 @@ public abstract class Character {
 		return stats.getLife() <= 0;
 	}
 
+	public void setMonster(boolean monster) {
+		this.monster = monster;
+	}
+	
 	public String getId() {
 		return id;
 	}
