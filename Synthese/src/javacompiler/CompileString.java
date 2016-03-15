@@ -1,5 +1,7 @@
 package javacompiler;
 
+import game.Character;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,8 +14,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,20 +25,20 @@ public class CompileString {
 	static String className = "";
 	static String pathClass = "Synthese/src/game/";
 	static String destPathClass = "target/classes/game/";
-	static String classTestName = "PlayerGenetic";
+	static String classTestName = "IAScript";
 	static String packageName = "game";
 	static boolean aRisque = false;
 	static Class<?> c = null;
 
-	public static void compile(String geneticName)
+	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
 		Node root = DecodeScript("testScriptTree.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
-		//for (String st : contentCode)
-			//System.out.println(st);
+		for (String st : contentCode)
+			System.out.println(st);
 
 		className = geneticName + (aRisque ? "_Arisque" : "");
 		ReadWriteCode(contentCode, className);
@@ -75,7 +75,7 @@ public class CompileString {
 	 */
 	public static Node DecodeScript(String scriptPath) {
 		File fichier = new File(scriptPath);
-		Node root = new Node("run()");
+		Node root = new Node("run(Character ch)");
 		ArrayList<String> cond = new ArrayList<String>();
 		ArrayList<String> var = new ArrayList<String>();
 		ArrayList<String> comp = new ArrayList<String>();
@@ -318,15 +318,17 @@ public class CompileString {
 		if(debug)
 			System.out.println(message);
 	}
-	
+
 	/*
 	 * Compilation, déplacement, et instanciation d'une classe à partir d'un
 	 * String
 	 */
-	public static CompilerHandler CompileAndInstanciateClass(String className) {
+	public static IAGenetic CompileAndInstanciateClass(String className) {
 
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		System.out.println(pathClass + className + ".java");
+		@SuppressWarnings("unused")
 		int result = compiler.run(null, null, null, pathClass + className + ".java");
 		//System.out.println("Compile result code = " + result);
 
@@ -336,27 +338,13 @@ public class CompileString {
 		if (destFile.exists())
 			destFile.delete();
 		afile.renameTo(new File(destPathClass + afile.getName()));
-		/*if (afile.renameTo(new File(destPathClass + afile.getName()))) {
-			System.out.println("File is moved successful!");
-		} else {
-			System.out.println("File is failed to move!");
-		}*/
 
 		// Instanciation de la classe du joueur IA
-		//Class<?> noparams[] = {};// pas de paramètre
 		Class<?> c = null;
 		Object obj = null;
 		try {
 			c = Class.forName(packageName + "." + className);
 			obj = c.newInstance();
-			//Method method = c.getDeclaredMethod(methodName, noparams);
-			// Ajouter une insertion dans log du temps d'exécution
-			//method.invoke(obj, (Object[])null);
-
-			/*method = c.getDeclaredMethod("setLife", paramInt);
-			method.invoke(obj, 1);
-			method = c.getDeclaredMethod(methodName, noparams);
-			method.invoke(obj, null);*/
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -368,44 +356,7 @@ public class CompileString {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		return new CompilerHandler(c,obj);
-	}
-	
-	public static void InvokeInitPlayer(CompilerHandler ch, int x, int y, String id, String caracterClass) {
-		try {
-			Class<?>[] paramTypes = {int.class, int.class, String.class, String.class};
-			Method method = ch.getC().getDeclaredMethod("init"+className, paramTypes);
-			// Ajouter une insertion dans log du temps d'exécution
-			method.invoke(ch.getObj(), x, y, id,  caracterClass);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void InvokeRun(CompilerHandler ch) {
-		try {
-			Method method = ch.getC().getDeclaredMethod("run");
-			// Ajouter une insertion dans log du temps d'exécution
-			method.invoke(ch.getObj());
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		return new IAGenetic(c,obj, className);
 	}
 
 	/*
@@ -433,7 +384,7 @@ public class CompileString {
 						content.add("\t\t" + ln);
 					isAdded = true;
 				} else {
-					if (ligne.contains("run()"))
+					if (ligne.contains("run("))
 						inRun = true;
 				}
 			}

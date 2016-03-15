@@ -19,14 +19,12 @@ public class Mob extends Character {
 		this.setY(y);
 		this.setId(id);
 		this.setTrueID(trueID);
-
 		init();
 
 		if (Data.debug) {
 			System.out.println("Debug : Mob created : " + toStringAll());
 		}
 	}
-
 
 	public void init() {
 		Monster m = MonsterData.getMonsterById(this.getId());
@@ -35,7 +33,7 @@ public class Mob extends Character {
 		this.setName(m.getName());
 		this.setSpells(m.getSpells());
 		this.setAiType(m.getAiType());
-
+		this.generateScriptGenetic();
 	}
 
 	public void render(GameContainer container, Graphics g) {

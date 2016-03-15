@@ -4,7 +4,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import javacompiler.CompileString;
-import javacompiler.CompilerHandler;
+import javacompiler.IAGenetic;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;

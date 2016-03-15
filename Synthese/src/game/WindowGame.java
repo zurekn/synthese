@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-import javacompiler.CompileString;
-import javacompiler.CompilerHandler;
-
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -161,11 +158,6 @@ public class WindowGame extends BasicGame {
 				if (Data.DEBUG_PLAYER > 0)
 				{
 					addChalenger(10, 8, -1);
-					CompileString.compile("p0");
-					CompilerHandler ch = CompileString.CompileAndInstanciateClass("p0");
-					CompileString.InvokeInitPlayer(ch, 3, 2, "13", "mage");
-					//CompileString.InvokeRun(ch);
-					
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
@@ -236,6 +228,15 @@ public class WindowGame extends BasicGame {
 		String type = HeroData.getRandomHero();
 
 		Player p = new Player(x, y, id, type);
+		/*		
+		//---------------------	Ajout d'un IA génétique	--------------------------
+		CompileString.compile(id);
+		CompilerHandler ch = CompileString.CompileAndInstanciateClass(id);
+		CompileString.InvokeInitPlayer(ch, x, y, id, type);
+		
+		CompileString.InvokeSetNumber(ch, players.size());
+		CompileString.InvokeSetSizeCharacter(ch, size);
+		*/
 		p.setNumber(players.size());
 		p.setSizeCharacter(size);
 		players.add(p);
@@ -538,9 +539,10 @@ public class WindowGame extends BasicGame {
 		messageHandler.addGlobalMessage(new Message("Turn of " + currentCharacter.getName()));
 		actionLeft = Data.ACTION_PER_TURN;
 
-		if (currentCharacter.isNpc() && !previousCharacter.isNpc())
-			commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
-		
+		if (currentCharacter.isNpc() && !previousCharacter.isNpc())// mettre le run du bot IAGénétique
+			//commands.startCommandsCalculation(currentCharacter, players, mobs, turn);
+			currentCharacter.findScriptAction();
+
 		if(!currentCharacter.isNpc())
 		{
 			//currentCharacter.
@@ -568,7 +570,7 @@ public class WindowGame extends BasicGame {
 	 * @throws IllegalMovementException
 	 */
 	public void decodeAction(String action) throws IllegalActionException {
-		if(gameEnded || !gameOn)
+		if(gameEnded || !gameOn) // si jeu fini ou non lancé
 			return;
 		if (action.startsWith("s")) { // Spell action
 			if(actionLeft <= 0 ){
@@ -577,7 +579,6 @@ public class WindowGame extends BasicGame {
 					return;
 				}else{
 					messageHandler.addPlayerMessage(new Message("Action interdite, mais on est en mode debug... ", 1), turn);
-
 				}
 			}
 			
@@ -588,12 +589,12 @@ public class WindowGame extends BasicGame {
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
 			
-			if (currentCharacter.getSpell(spellID) == null){
+			if (currentCharacter.getSpell(spellID) == null){ //si peut lancer spell
 				messageHandler.addPlayerMessage(new Message("Vous n'avez pas le sort : "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 				throw new IllegalActionException("Spell [" + spellID + "] not found");
 			}
-			float speed = currentCharacter.getSpell(spellID).getSpeed();
-			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent();
+			float speed = currentCharacter.getSpell(spellID).getSpeed();//vitesse déplacement d'un spell
+			Event e = currentCharacter.getSpell(spellID).getEvent().getCopiedEvent(); //event d'un spell
 
 			e.setDirection(direction, speed);
 			e.setX(Data.MAP_X + currentCharacter.getX() * Data.BLOCK_SIZE_X);
@@ -607,14 +608,14 @@ public class WindowGame extends BasicGame {
 			}
 			e.setRange(focus.range);
 
-			try {
+			try {//lancement du spell
 				String res = currentCharacter.useSpell(spellID, direction);
 				String []split = res.split(":");
 				int damage = Integer.parseInt(split[0]);
 				int heal = Integer.parseInt(split[1]);
 				int state = Integer.parseInt(split[2]);
 				
-				if(state == -1){
+				if(state == -1){// echec critique
 					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
@@ -639,10 +640,10 @@ public class WindowGame extends BasicGame {
 						switchTurn();
 					}
 					
-				}else{
-					if (focus.character != null) {
+				}else{//si pas echec critique 
+					if (focus.character != null) {// si spell a une cible
 						if (currentCharacter.isMonster() == focus.character.isMonster())
-							if (e.getHeal() > 0){
+							if (e.getHeal() > 0){ // Si cible est dans la même équipe que toi
 								focus.character.heal(heal);
 								if(state > 0 )
 									messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
@@ -653,7 +654,7 @@ public class WindowGame extends BasicGame {
 								damage = focus.character.takeDamage(damage, e.getType());
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 							}
-						else{
+						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
 							if(state > 0)
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
@@ -661,7 +662,7 @@ public class WindowGame extends BasicGame {
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 
 						}
-						if (focus.character.checkDeath()) {
+						if (focus.character.checkDeath()) {// si mort
 							// TODO ADD a textual event
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());

@@ -4,8 +4,8 @@ cond{
 	["for", "3",  "null"] 
 }
 var{
-    ["this.getStats().getLife()", "int", "0", "120"]
-    ["monster", "boolean"]
+    ["ch.getStats().getLife()", "int", "0", "120"]
+    ["ch.monster", "boolean"]
 }
 
 comp{

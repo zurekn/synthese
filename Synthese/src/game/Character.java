@@ -1,9 +1,14 @@
 package game;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
+
+import javacompiler.CompileString;
+import javacompiler.IAGenetic;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -40,10 +45,39 @@ public abstract class Character {
 	private Character focusedOn;
 	private boolean npc = true;
 	protected boolean monster = true;
+	
+	private Class<?> cl = null;
+	private Object obj = null;
 
 	public abstract void render(GameContainer container, Graphics g);
 
 	public abstract void init();
+	
+	public void generateScriptGenetic() {// génération d'un script génétique
+		CompileString.generate(id);
+		IAGenetic ch = CompileString.CompileAndInstanciateClass(id);
+		cl = ch.getC();
+		obj = ch.getObj();
+	}
+	
+	public void findScriptAction(){// Ici mettre l'instanciation de la nouvelle classe propre à CE charactère
+		try {
+			Class<?>[] paramTypes = {Character.class};
+			Method method = cl.getDeclaredMethod("run", paramTypes);
+			// Ajouter une insertion dans log du temps d'exécution
+			method.invoke(obj, this);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Move the character to the position x:y if it's possible
