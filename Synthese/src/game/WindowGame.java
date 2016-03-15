@@ -165,51 +165,7 @@ public class WindowGame extends BasicGame {
 				if (Data.DEBUG_PLAYER > 0)
 				{
 					addChalenger(10, 8, -1);
-					CompileString.compile("p0");
-					
-					try {
-						String typeHero = HeroData.getRandomHero();
-						Class[] type = { Integer.TYPE,Integer.TYPE,String.class,String.class };
-						Class classDefinition = Class.forName("javacompiler.p0"); 
-						//Constructor cons;
-						//cons = classDefinition .getConstructor(type);
-						//Object[] obj = {10, 8,"p0",typeHero};
-						//Class<?> myObject = (Class<?>) cons.newInstance(obj);
-						Class<?> myObject = Class.forName("javacompiler.p0");
-						Object obj = myObject.newInstance();
-						
-						Class<?> noparams[] = {};
-						Class<?> paramInt[] = new Class[1];// paramètre int
-						paramInt[0] = Integer.TYPE;
-						
-						Method method = myObject.getDeclaredMethod("setLife", paramInt);
-						method.invoke(obj, 1);
-						method = myObject.getDeclaredMethod("display", noparams);
-						method.invoke(obj, null);
-						
-					} catch (NoSuchMethodException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SecurityException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+					//CompileString.compile("p0");					
 				}
 				// players.add(new Player(10, 12, "P0", "mage"));
 				if (Data.DEBUG_PLAYER > 1)
