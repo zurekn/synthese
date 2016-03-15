@@ -31,7 +31,6 @@ public class CompileString {
 	static Class<?> c = null;
 	static int nbLignesCode = 2;
 	
-	
 	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");

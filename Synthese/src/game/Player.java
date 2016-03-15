@@ -21,6 +21,7 @@ public class Player extends Character {
 	
 	private Image icon;
 	private int number;
+	Color playerColor;
 	
 	/**
 	 * This constructor is not available
@@ -65,7 +66,7 @@ public class Player extends Character {
 			
 		this.setStats(h.getStat().clone());
 		this.setSpells(h.getSpells());
-		
+		this.setPlayerColor(Color.black);
 		if (Data.debug) {
 			System.out.println("Debug : Player " + this.toString() + " created");
 		}
@@ -92,6 +93,8 @@ public class Player extends Character {
 			//int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			//int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 			//g.drawOval(posX, posY, sizeX, sizeY);
+			if(this.isMyTurn())
+				g.setColor(this.getPlayerColor());
 			g.fillRect(	Data.MAP_X + getX() * Data.BLOCK_SIZE_X,Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
 						Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 	}
@@ -103,4 +106,14 @@ public class Player extends Character {
 	public void setNumber(int n) {
 		this.number = n;
 	}
+
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	public void setPlayerColor(Color playerColor) {
+		this.playerColor = playerColor;
+	}
+	
+	
 }
