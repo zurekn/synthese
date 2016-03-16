@@ -44,7 +44,7 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Data {
 	
 	public static final boolean FULLSCREEN = false;
-	public static final boolean SMALLSCREEN = true;
+	public static final boolean SMALLSCREEN = false;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
