@@ -55,9 +55,20 @@ public abstract class Character {
 
 	public abstract void init();
 	
+	
+	/**
+	 * Genere le script pour l'IA
+	 */
 	public void generateScriptGenetic() {// génération d'un script génétique
-		CompileString.generate(id);
-		IAGenetic ch = CompileString.CompileAndInstanciateClass(id);
+		CompileString.generate(this.id);
+	}
+	
+	/**
+	 *  Compile le script d'IA
+	 */
+	void compileScriptGenetic()
+	{
+		IAGenetic ch = CompileString.CompileAndInstanciateClass(this.id);
 		cl = ch.getC();
 		obj = ch.getObj();
 	}

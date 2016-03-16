@@ -34,6 +34,7 @@ public class Mob extends Character {
 		this.setSpells(m.getSpells());
 		this.setAiType(m.getAiType());
 		this.generateScriptGenetic();
+		this.compileScriptGenetic();
 	}
 
 	public void render(GameContainer container, Graphics g) {
