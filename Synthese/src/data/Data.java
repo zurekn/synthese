@@ -44,7 +44,7 @@ import org.newdawn.slick.tiled.TiledMap;
 public class Data {
 	
 	public static final boolean FULLSCREEN = false;
-	public static final boolean SMALLSCREEN = false;
+	public static final boolean SMALLSCREEN = true;
 	public static final boolean DEBUG_DEPARTURE = true;
 	public static final boolean tiDebug = true;
 	public static final boolean debug = true;
@@ -57,6 +57,9 @@ public class Data {
 	public static final int DEBUG_PLAYER = 4;
 	//public static String IMAGE_DIR ="C:/Users/boby/Google Drive/Master1/Synthèse/ImageDeTest/";
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
+	
+	//For Genetic IA
+	public static boolean generateIA = true;
 	
 	// Const TI Part
 	public static long WAIT_TI = 5000;
