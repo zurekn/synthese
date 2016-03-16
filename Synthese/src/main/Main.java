@@ -28,7 +28,7 @@ public class Main {
 		}
 		else
 		{
-			Data.SCREEN_WIDTH = 720;
+			Data.SCREEN_WIDTH = 880;
 			Data.SCREEN_HEIGHT = 660;
 		}
 		Data.checkValuesIni("paramTI.ini"); // Vérification des variables dans le fichier .ini

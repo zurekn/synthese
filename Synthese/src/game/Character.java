@@ -460,5 +460,25 @@ public abstract class Character {
 
 		stats.setMana(stats.getMana() + stats.getMagicPower() + stats.getMaxMana() / 10);
 	}
-
+	
+	/*public String getDeplacement(String direction, int longueur)
+	{
+		if(longueur != 1 && longueur < this.stats.getMovementPoints())
+			longueur = random.nextInt(max - min + 1) + min
+		switch(direction)
+		{
+		case "haut" : 
+			break;
+		case "bas" : 
+			break;
+		case "gauche" : 
+			break;
+		case "droite" : 
+			break;
+		default : 
+			break;
+		}
+		
+		return null;
+	}*/
 }
