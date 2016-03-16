@@ -33,7 +33,8 @@ public class Mob extends Character {
 		this.setName(m.getName());
 		this.setSpells(m.getSpells());
 		this.setAiType(m.getAiType());
-		this.generateScriptGenetic();
+		if(Data.generateIA)
+			this.generateScriptGenetic();
 		this.compileScriptGenetic();
 	}
 
