@@ -13,9 +13,15 @@ comp{
 }
 
 code{
-    actionString ="m:" + (windowgame.getCurrentPlayer().getX() - 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
-    actionString ="m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
-    actionString ="m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1)+"!!";
-    actionString ="m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1)+"!!";
+    deplacementString  = "m:" + (windowgame.getCurrentPlayer().getX() - 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
+    deplacementString  = "m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
+    deplacementString  = "m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1)+"!!";
+    deplacementString  = "m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1)+"!!";
+    actionString= "s2:" + Data.NORTH;
+    actionString = "s3:" + Data.EAST;
+    actionString = "s4:" + Data.SOUTH;
+    actionString = "s5:" + Data.WEST;
+    actionString = "s7:" + Data.SELF;
+    actionString = "s9:" + Data.WEST;
     
 }

@@ -56,7 +56,7 @@ public abstract class Character {
 	public abstract void init();
 	
 	public void generateScriptGenetic() {// génération d'un script génétique
-		//CompileString.generate(id);
+		CompileString.generate(id);
 		IAGenetic ch = CompileString.CompileAndInstanciateClass(id);
 		cl = ch.getC();
 		obj = ch.getObj();
