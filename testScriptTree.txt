@@ -4,11 +4,19 @@ cond{
 	["for", "3",  "null"] 
 }
 var{
-    ["ch.getStats().getLife()", "int", "0", "120"]
+    ["ch.getStats().getLife()", "int"]
+    ["ch.getStats().getMaxLife()/2", "int"]
+    ["ch.getStats().getMaxLife()/3", "int"]
+    ["ch.getStats().getMagicResist()", "int"]
+    ["ch.getStats().getMaxLife()", "int"]
+    
+    
+    
+    
 }
 
 comp{
-    ["int", "==", ">=", "<=", "!="]
+    ["int", "==", ">=", "<=", "!=", "<", ">"]
     ["boolean", "=="]
 }
 

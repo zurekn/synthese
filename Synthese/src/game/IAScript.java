@@ -1,6 +1,7 @@
 package game;
 
 import data.Data;
+import java.util.Random;
 
 public class IAScript {
 	WindowGame windowgame = WindowGame.getInstance();

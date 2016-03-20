@@ -160,16 +160,28 @@ public class CompileString {
 				// *** traitement de variable
 				conditionFull += partsRandomVar[0]; // concaténation du nom de
 													// la variable
+				switch(partsRandomVar[1]){
+					case "int" :
+						String[] partsRandomComp = getParam(comp, 0);
+						conditionFull += getCompInt(partsRandomComp, partsRandomVar); // Rajout de la partie droite de la comparaison
+					break;
+					case "boolean" :
+						String[] partsRandomCompBool = getParam(comp, 1);
+						debugSys("Fin if/while");
+						conditionFull += getCodeBool(partsRandomCompBool);
+					break;
+				}
+				/*
 				if (partsRandomVar[1].contains("int")) {
 					String[] partsRandomComp = getParam(comp, 0);
-					conditionFull += getCompInt(partsRandomComp, partsRandomVar);
+					conditionFull += getCompInt(partsRandomComp, partsRandomVar); // Rajout de la partie droite de la comparaison
 				}
 
 				if (partsRandomVar[1].contains("boolean")) {
 					String[] partsRandomComp = getParam(comp, 1);
 					debugSys("Fin if/while");
 					conditionFull += getCodeBool(partsRandomComp);
-				}
+				}*/
 			}
 			// Cas de la condition for
 			if (partsRandomCond[0].contains("for")) 
@@ -262,7 +274,8 @@ public class CompileString {
 	}
 	
 	/**
-	 * Construit un bout de code pour comparer 2 chiffres
+	 * Construit un bout de code pour comparer 2 chiffres.
+	 * Ne construit pas la partie gauche de la comparaison
 	 * 
 	 * @param pos
 	 * @param param
@@ -271,15 +284,21 @@ public class CompileString {
 	
 	public static String getCompInt(String[] partsRandomComp,
 			String[] partsRandomVar) {
+		// Choix du comparateur (==, <=, >=, >, <, != )
 		int rand = 0;
 		rand = new Random().nextInt(partsRandomComp.length);
 		rand = (rand == 0) ? 1 : rand;
+		
 		if (debug)
 			System.out.println("getComptInt random : " + rand);
-		// concaténation du comparateur
-		return (partsRandomComp[rand] + " " + (new Random().nextInt(Integer
+		
+		// calcul de la variable comparante (à droite du comparateur)
+		/* int randVar =(new Random().nextInt(Integer
 				.parseInt(partsRandomVar[3])) + Integer
-				.parseInt(partsRandomVar[2])));
+				.parseInt(partsRandomVar[2]));*/
+		String test = "("+Integer.parseInt(partsRandomVar[2])+"+new Random().nextInt("+partsRandomVar[3]+"))";
+		// concaténation du comparateur et de la valeur comparante
+		return (partsRandomComp[rand] + " " + test);
 	}
 
 	/**
@@ -299,6 +318,15 @@ public class CompileString {
 
 	}
 
+	/**  Ajoute un certain nombre de lignes de code . 
+	 * Lignes contenues dans la section "code" de la base
+	 * Lignes ajoutées au paramètre Node resNode
+	 * 	
+	 * @param code
+	 * @param nbMaxLine
+	 * @param resNode
+	 * @return Node resNode
+	 */
 	public static Node addCodeLineAlea(ArrayList<String> code,int nbMaxLine,Node resNode){
 		int nbLnCode = new Random().nextInt(nbMaxLine) + 1;
 		int rand=0;
