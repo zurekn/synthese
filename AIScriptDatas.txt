@@ -8,12 +8,7 @@ var{
     ["ch.getStats().getMaxLife()", "int"]
     ["(ch.getStats().getMaxLife()/2)", "int"]
     ["(ch.getStats().getMaxLife()/3)", "int"]
-    ["(ch.getStats().getMagicResist())", "int"]
-    
-    
-    
-    
-    
+    ["(ch.getStats().getMagicResist())", "int"] 
 }
 
 comp{
@@ -26,11 +21,10 @@ code{
     deplacementString  = "m:" + (windowgame.getCurrentPlayer().getX() + 1) + ":" + windowgame.getCurrentPlayer().getY()+"!!";
     deplacementString  = "m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() - 1)+"!!";
     deplacementString  = "m:" + windowgame.getCurrentPlayer().getX() + ":" + (windowgame.getCurrentPlayer().getY() + 1)+"!!";
-    actionString= "s2:" + Data.NORTH;
-    actionString = "s3:" + Data.EAST;
-    actionString = "s4:" + Data.SOUTH;
-    actionString = "s5:" + Data.WEST;
-    actionString = "s7:" + Data.SELF;
-    actionString = "s9:" + Data.WEST;
-    
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.NORTH;
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.EAST;
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.SOUTH;
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.WEST;
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.SELF;
+    actionString = ch.getSpells().get(0).getId()+":"+ Data.WEST;
 }

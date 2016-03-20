@@ -26,7 +26,7 @@ public class Mob extends Character {
 		}
 	}
 
-	public void init() {
+	public void init(){
 		Monster m = MonsterData.getMonsterById(this.getId());
 		this.setAnimation(m.getAnimation());
 		this.setStats(m.getStats());
@@ -36,19 +36,15 @@ public class Mob extends Character {
 		if(Data.generateIA)
 			this.generateScriptGenetic();
 		this.compileScriptGenetic();
+		this.setFitness(new IAFitness(true));
 	}
 
 	public void render(GameContainer container, Graphics g) {
 		Animation[] animation = this.getAnimation();
 		int x = this.getX();
 		int y = this.getY();
-		// g.drawRect(getX() * Data.BLOCK_SIZE_X, getY() * Data.BLOCK_SIZE_Y,
-		// Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
-
 		if (isMyTurn()) 
 			Data.IMAGE_HALO.draw(getX() * Data.BLOCK_SIZE_X + Data.MAP_X - 10, getY() * Data.BLOCK_SIZE_Y + Data.MAP_Y - 10, Data.BLOCK_SIZE_X + 20 , Data.BLOCK_SIZE_Y + 20);
-		
-		
 		animation[6].draw(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y
 				* Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 		/*if (isMyTurn()) {

@@ -34,7 +34,7 @@
 		<movementPoints>3</movementPoints>
 		<magicResist>10</magicResist>
 		<spells>
-			<spell>s2</spell>
+			<spell>s4</spell>
 		</spells>
 		<aiType>normal:3</aiType>
 		<eyeSight>4</eyeSight>

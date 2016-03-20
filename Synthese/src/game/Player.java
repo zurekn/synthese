@@ -82,9 +82,9 @@ public class Player extends Character {
 	
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.black);
-		//if (isMyTurn()) 
-			//Data.IMAGE_HALO.draw(getX() * Data.BLOCK_SIZE_X + Data.MAP_X - 10, getY() * Data.BLOCK_SIZE_Y + Data.MAP_Y - 10, Data.BLOCK_SIZE_X + 20 , Data.BLOCK_SIZE_Y + 20);
-		if(Data.DISPLAY_PLAYER)
+		//if(this.isMyTurn())
+			g.setColor(this.getPlayerColor());
+		//if(Data.DISPLAY_PLAYER)
 			g.fillRect(Data.MAP_X + getX() * Data.BLOCK_SIZE_X, Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
@@ -93,10 +93,6 @@ public class Player extends Character {
 			//int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			//int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 			//g.drawOval(posX, posY, sizeX, sizeY);
-			if(this.isMyTurn())
-				g.setColor(this.getPlayerColor());
-			g.fillRect(	Data.MAP_X + getX() * Data.BLOCK_SIZE_X,Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
-						Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 	}
 
 	public int getNumber(){
