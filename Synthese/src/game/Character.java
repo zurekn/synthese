@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javacompiler.CompileString;
 import javacompiler.IAGenetic;
@@ -40,6 +41,9 @@ public abstract class Character {
 
 	private Animation[] animation;
 	private Stats stats;
+	private IAFitness fitness;
+	
+
 	private boolean myTurn = false;
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private String name;
@@ -92,10 +96,12 @@ public abstract class Character {
 				
 				if(result !="")
 				{
+					System.out.println("### Character.findScriptAction : result = "+result);
 					String[] decode  = result.split("!!");
 					for(String st : decode)
 					{
 						 windowgame.decodeAction(st);
+						 
 					}
 					method = cl.getDeclaredMethod("setActionString", String.class);
 					method.invoke(obj, "");
@@ -225,7 +231,7 @@ public abstract class Character {
 			damage = damage / 2;
 			res = -1;
 		}
-		System.out.println(" Dommages effectués : "+ damage +" *****************************************************************************");
+		System.out.println(" Dommages effectués : "+ damage +" **");
 		return damage + ":" + heal+":"+res;
 	}
 	
@@ -543,5 +549,13 @@ public abstract class Character {
 	public int Portee(String spellID)
 	{
 		return this.getSpell(spellID).getRange();
+	}
+	
+	public IAFitness getFitness() {
+		return fitness;
+	}
+
+	public void setFitness(IAFitness fitness) {
+		this.fitness = fitness;
 	}
 }

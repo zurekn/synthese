@@ -113,10 +113,8 @@ public class WindowGame extends BasicGame {
 		MonsterData.loadMonster();
 		HeroData.loadHeros();
 		// TrapData.loadTrap();
-
 		initAPIX();
 		initCommandHandler();
-
 		// Create the monster list
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
@@ -167,7 +165,7 @@ public class WindowGame extends BasicGame {
 				}
 				if (Data.DEBUG_PLAYER > 2)
 				{
-					addChalenger(19, 15, -1, Color.yellow);
+					addChalenger(19, 15, -1, Color.blue);
 				//	CompileString.compile("p2");
 				}
 				if (Data.DEBUG_PLAYER > 3)
@@ -450,6 +448,7 @@ public class WindowGame extends BasicGame {
 				playerHandler.renderInitBlock(container, g);
 			}
 			playerHandler.renderPlayerStat(container, g);
+			mobHandler.renderMobStat(container, g);
 			renderText(container, g);
 		}
 	}
@@ -634,6 +633,8 @@ public class WindowGame extends BasicGame {
 	public void decodeAction(String action) throws IllegalActionException {
 		if(gameEnded || !gameOn) // si jeu fini ou non lancé
 			return;
+		System.out.println("### decodeAction debug : action="+action);
+		
 		if (action.startsWith("s")) { // Spell action
 			if(actionLeft <= 0 ){
 				if(!Data.debug){
@@ -643,7 +644,6 @@ public class WindowGame extends BasicGame {
 					messageHandler.addPlayerMessage(new Message("Action interdite, mais on est en mode debug... ", 1), turn);
 				}
 			}
-			
 			String[] tokens = action.split(":");
 			if (tokens.length != 2)
 				throw new IllegalActionException("Wrong number of arguments in action string");
@@ -651,7 +651,7 @@ public class WindowGame extends BasicGame {
 			String spellID = tokens[0].split("\n")[0];
 			int direction = Integer.parseInt(tokens[1]);
 			
-			if (currentCharacter.getSpell(spellID) == null){ //si peut lancer spell
+			if (currentCharacter.getSpell(spellID) == null){ //si peut pas lancer spell
 				messageHandler.addPlayerMessage(new Message("Vous n'avez pas le sort : "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 				throw new IllegalActionException("Spell [" + spellID + "] not found");
 			}
