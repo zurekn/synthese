@@ -999,7 +999,7 @@ public class WindowGame extends BasicGame {
 	 * @param direction
 	 * @return ArrayList<Character>
 	 */
-	private ArrayList<Character> getCharacterPositionOnLine(int x, int y, int direction) {
+	public ArrayList<Character> getCharacterPositionOnLine(int x, int y, int direction) {
 
 		ArrayList<Character> c = new ArrayList<Character>();
 		

@@ -14,6 +14,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
 import ai.AStar;
@@ -461,24 +462,86 @@ public abstract class Character {
 		stats.setMana(stats.getMana() + stats.getMagicPower() + stats.getMaxMana() / 10);
 	}
 	
-	/*public String getDeplacement(String direction, int longueur)
+	/*
+	 * Génération d'un déplacement
+	 * dx et dy sont des entiers qui correspondent à :
+	 * 0 => petit déplacement
+	 * 1 => moyen déplacement
+	 * 2 => grand déplacement
+	 * Le signe de dx et dy déterminent la direction
+	 */
+	public String getDeplacement(int dx, int dy)
 	{
-		if(longueur != 1 && longueur < this.stats.getMovementPoints())
-			longueur = random.nextInt(max - min + 1) + min
+		WindowGame windowgame = WindowGame.getInstance();
+		switch(dx)
+		{
+			case -2 : 
+				dx = -this.stats.getMovementPoints();
+			case -1 : 
+				dx = -(int)(this.stats.getMovementPoints())/2;
+			case 0 : 
+				dx = 1;
+			case 1 : 
+				dx = (int)(this.stats.getMovementPoints())/2;
+			case 2 : 
+				dx = this.stats.getMovementPoints();
+			default : 
+				dx = 1;
+		}
+		switch(dy)
+		{
+			case -2 : 
+				dy = -this.stats.getMovementPoints();
+			case -1 : 
+				dy = -(int)(this.stats.getMovementPoints())/2;
+			case 0 : 
+				dy = 1;
+			case 1 : 
+				dy = (int)(this.stats.getMovementPoints())/2;
+			case 2 : 
+				dy = this.stats.getMovementPoints();
+			default : 
+				dy = 1;
+		}
+
+		
+		return "m:" + (windowgame.getCurrentPlayer().getX()+dx) + ":" + (windowgame.getCurrentPlayer().getY()+dy);
+	}
+	
+	/*
+	 * Passer son tour
+	 */
+	public String PasserTour()
+	{
+		return "p";
+	}
+	
+	/*
+	 * Retourne si le mob trouvé est ami ou ennemi	
+	 */
+	public Character Rechercher(String direction)
+	{
+		WindowGame windowgame = WindowGame.getInstance();		
 		switch(direction)
 		{
-		case "haut" : 
-			break;
-		case "bas" : 
-			break;
-		case "gauche" : 
-			break;
-		case "droite" : 
-			break;
-		default : 
-			break;
+			case "haut" : 
+				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.NORTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.NORTH).get(0));
+			case "bas" : 
+				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).get(0));
+			case "gauche" : 
+				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.WEST).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.WEST).get(0));
+			case "droite" : 
+				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.EAST).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.EAST).get(0));
+			default : 
+				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).get(0));
 		}
-		
-		return null;
-	}*/
+	}
+	
+	/*
+	 * Retourne la range d'un spell
+	 */
+	public int Portee(String spellID)
+	{
+		return this.getSpell(spellID).getRange();
+	}
 }
