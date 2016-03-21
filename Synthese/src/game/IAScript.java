@@ -1,18 +1,16 @@
 package game;
 
-import data.Data;
 
 public class IAScript {
 	WindowGame windowgame = WindowGame.getInstance();
 	String actionString = "";
-	String deplacementString = "";
+	String deplacementString = "p";
 	
 	public IAScript() {
 	}
 	
 	public String run(Character ch)
 	{
-		
 		return actionString+"!!"+deplacementString;
 	}
 

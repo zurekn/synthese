@@ -59,7 +59,7 @@ public class Data {
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	//For Genetic IA
-	public static boolean generateIA = true;
+	public static boolean generateIA = false;
 	
 	// Const TI Part
 	public static long WAIT_TI = 5000;
@@ -91,6 +91,7 @@ public class Data {
 	public static int TURN_MAX_TIME = 30; // in sec
 
 	//For the stat display
+	//Player
 	public static int PLAYER_LIFE_RECT_X_POS = 10;
 	public static int PLAYER_LIFE_RECT_Y_POS = 10;
 	public static int PLAYER_LIFE_RECT_X_SIZE = 100;
@@ -103,6 +104,10 @@ public class Data {
 	public static int PLAYER_ICON_Y_POS = 50;
 	public static int PLAYER_MESSAGE_X_POS = 120;
 	public static int PLAYER_MESSAGE_Y_POS = 10;
+	//Mob
+	public static boolean MOB_LIFE_SHOW = true;
+	public static int MOB_LIFE_RECT_X_SIZE = 30;
+	public static int MOB_LIFE_RECT_Y_SIZE = 3;
 	
 	public static final int SELF = 360;
 	public static final int NORTH = 0;

@@ -550,7 +550,7 @@ public abstract class Character {
 	{
 		return this.getSpell(spellID).getRange();
 	}
-	
+
 	public IAFitness getFitness() {
 		return fitness;
 	}

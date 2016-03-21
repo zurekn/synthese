@@ -30,12 +30,16 @@ public class CompileString {
 	static boolean aRisque = false;
 	static Class<?> c = null;
 	static int nbLignesCode = 2;
+	private static ArrayList<String> code;
+	private static ArrayList<String> comp;
+	private static ArrayList<String> var;
+	private static ArrayList<String> cond;
 	
 	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
-		Node root = DecodeScript("testScriptTree.txt");
+		Node root = DecodeScript("AIScriptDatas.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
 		for (String st : contentCode)
@@ -70,37 +74,40 @@ public class CompileString {
 
 		readJSON.displayTree();
 	}
-
-	/*
-	 * Décodage du script du joueur IA
-	 */
+	
+/** Creation of genetic AI tree from a text file.
+ * 	Creation stages : 
+ * - Decode text file and store datas in variables
+ * - Choose randomly one condition branch and build its condition
+ * - Choose randomly NbCodeLine code lines in the condition branch
+ * - Choose randomly NbCodeLine code lines outside the condition branch 
+ * @param scriptPath : the text file containing all needed datas
+ * @return Node : the resulting script tree
+ */
 	public static Node DecodeScript(String scriptPath) {
 		File fichier = new File(scriptPath);
 		Node root = new Node("run(Character ch)");
-		ArrayList<String> cond = new ArrayList<String>();
-		ArrayList<String> var = new ArrayList<String>();
-		ArrayList<String> comp = new ArrayList<String>();
-		ArrayList<String> code = new ArrayList<String>();
+		cond = new ArrayList<String>();
+		var = new ArrayList<String>();
+		comp = new ArrayList<String>();
+		code = new ArrayList<String>();
 		boolean condBool = false;
 		boolean compBool = false;
 		boolean varBool = false;
 		boolean codeBool = false;
-
-		// ====== Lecture du script ==========
+		// ====== Lecture du fichier texte ==========
 		try {
 			InputStream ips = new FileInputStream(fichier);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
 			String ligne;
 			while ((ligne = br.readLine()) != null) {
-
 				if (condBool) {
 					if (ligne.contains("}"))
 						condBool = false;
 					else
 						cond.add(ligne);
 				}
-
 				if (varBool) {
 					if (ligne.contains("}"))
 						varBool = false;
@@ -135,102 +142,88 @@ public class CompileString {
 					codeBool = true;
 				// script.add(ligne);
 			}
+			debugSys("DecodeScript : var="+var);
+			debugSys("DecodeScript : code="+code);
+			debugSys("DecodeScript : comp="+comp);
+			debugSys("DecodeScript : cond="+cond);
 			// ======= Construction de l'arbre ==========
-			int rand = 0;
-			// *** récupérer condition
-			String[] partsRandomCond = getParam(cond, -1);
-			
-			// initialisation du noeud + code final
-			Node nodeCond = new Node("");
-			String conditionFull = "";
-			
-			// test du cas if / while
-			if (partsRandomCond[0].contains("if")
-					|| partsRandomCond[0].contains("while")) {
-				// Risqué si while
-				if (partsRandomCond[0].contains("while")) {
-					nodeCond.setValue("while");
-					aRisque = true;
-				} else
-					nodeCond.setValue("if");
-				
-				// *** récupérer variable aléatoire
-				String[] partsRandomVar = getParam(var, -1);
-				
-				// *** traitement de variable
-				conditionFull += partsRandomVar[0]; // concaténation du nom de
-													// la variable
-				if (partsRandomVar[1].contains("int")) {
-					String[] partsRandomComp = getParam(comp, 0);
-					conditionFull += getCompInt(partsRandomComp, partsRandomVar);
-				}
-
-				if (partsRandomVar[1].contains("boolean")) {
-					String[] partsRandomComp = getParam(comp, 1);
-					debugSys("Fin if/while");
-					conditionFull += getCodeBool(partsRandomComp);
-				}
-			}
-			// Cas de la condition for
-			if (partsRandomCond[0].contains("for")) 
-			{
-				// *** ajout de la condition for
-				nodeCond.setValue("for");
-				conditionFull += "int i = 0 ; i"; // concaténation de l'initialisation
-				String[] partsRandomComp = getParam(comp, 0);
-				rand = new Random().nextInt(partsRandomComp.length);
-				rand = (rand <= 2) ? 2 : 3; // voir 1 , 3
-				int condRandom = rand;
-				conditionFull += partsRandomComp[rand]; // concaténation du
-														// comparateur
-				String[] partsRandomVar = null;
-				do {
-					//  recuperation d'une ligne "variable" aleatoire
-					partsRandomVar = getParam(var, -1);
-					// tant qu'on a pas de int...
-				} while (!partsRandomVar[1].contains("int"));
-
-				// i-- si >= , i++ si <=
-				if (condRandom == 2)
-					conditionFull += partsRandomVar[0] + "; i--";
-				else
-					conditionFull += partsRandomVar[0] + "; i++";
-			}
-			
-			// *** ajout du noeud de condition
-			root.addChild(nodeCond);
-			// ajout du neud de comparaison de condition
-			Node condFullNode = new Node(conditionFull);
-			nodeCond.addChild(condFullNode); // Ajout du noeud de condition de
-												// la boucle
-			if (debug)
-				System.out.println("conditionfull : " + conditionFull);
-
-			// *** ========== Ajout des lignes de code dans les boucles =========
-			nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond);
-
-			if (partsRandomCond[0].contains("if")
-					&& partsRandomCond[2].contains("else")) {
-				Node nodeElse = new Node("else");
-				root.addChild(nodeElse);
-				// *** Ajout des lignes de code
-				nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse);
-			}
-			// *** Ajout des lignes de code à la racinde du run()
-			root = addCodeLineAlea(code,nbLignesCode,root);
-			
-			// fermeture du fichier
-			br.close();
+			root = addFullCondition(root); // Ajout de conditions et code à l'intérieur de ces conditions
+			root = addCodeLineAlea(code,nbLignesCode,root);// Ajout des lignes de code à la racinde du run()
+			br.close();// fermeture du fichier txt
 		} catch (Exception e) {
-			if (debug)
-				System.out.println(e.toString());
+				System.out.println("Decode : "+e.toString());
 		}
-
 		return root;
 	}
 	
+	/** Add a full condition branch node with code lines inside.
+	 * 
+	 *  Should be use like : node = addFullCondition(node)
+	 *  
+	 * @param resNode : node where we append condition
+	 * @return : resulting node with conditions appended
+	 */
+	public static Node addFullCondition(Node resNode)
+	{
+					int rand = 0;
+					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire
+					Node nodeCond = new Node(""); // init. supernoeud de condition
+					String conditionFull = ""; // init. valeur textuelle de la condition
+					if (partsRandomCond[0].contains("if") // test du cas if / while
+							|| partsRandomCond[0].contains("while")) {
+						if (partsRandomCond[0].contains("while")) { // Risqué si while
+							nodeCond.setValue("while");
+							aRisque = true;
+						} else
+							nodeCond.setValue("if");
+						String[] partsRandomVar = getParam(var, -1); // ligne variable aléatoire
+						conditionFull += partsRandomVar[0]; // concaténer nom de la variable
+						switch(partsRandomVar[1]){
+							case "int" :
+								String[] partsRandomComp = getParam(comp, 0);
+								conditionFull += getCompInt(partsRandomComp, partsRandomVar); // concaténer la partie droite de la comparaison
+							break;
+							case "boolean" :
+								String[] partsRandomCompBool = getParam(comp, 1);
+								conditionFull += getCodeBool(partsRandomCompBool);
+							break;
+						}
+					}
+					if (partsRandomCond[0].contains("for"))  // Cas d'un for
+					{
+						nodeCond.setValue("for"); // Ajoute "for" au niveau juste en dessous du noeud resNode
+						conditionFull += "int i = 0 ; i"; // concatène l'initialisation
+						String[] partsRandomComp = getParam(comp, 0); // récupère les comparateurs pour les int
+						rand = new Random().nextInt(partsRandomComp.length); // choisis un comparateur int aléatoire
+						rand = (rand <= 2) ? 2 : 3; // soit "<=" soit ">=" autorisés
+						int condRandom = rand;
+						conditionFull += partsRandomComp[rand]; // concaténation du comparateur
+						String[] partsRandomVar = null;
+						do {
+							partsRandomVar = getParam(var, -1); //  recuperation d'une ligne "variable" int aleatoire
+						} while (!partsRandomVar[1].contains("int"));
+						// ajout de l'itération. i-- si ">=" , i++ si "<="
+						if (condRandom == 2 || condRandom == 6 )
+							conditionFull += partsRandomVar[0] + "; i--";
+						else
+							conditionFull += partsRandomVar[0] + "; i++";
+					}
+					resNode.addChild(nodeCond); // lier les supernoeuds
+					Node condFullNode = new Node(conditionFull); // création du sous-noeud
+					nodeCond.addChild(condFullNode); // Ajout du sous-noeud au supernoeud de condition
+					debugSys("conditionfull : " + conditionFull);
+					nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond); // *** Ajout des lignes de code dans la branche
+					if (partsRandomCond[0].contains("if")  // Cas du if avec un else
+							&& partsRandomCond[2].contains("else")) {
+						Node nodeElse = new Node("else");
+						resNode.addChild(nodeElse);
+						nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse); // *** Ajout des lignes de code dans le ELSE
+					}
+		return resNode;
+	}
+	
 
-	/** Récupération d'un parametre
+	/** Récupération d'un paramètre
 	 * 
 	 * @param cond
 	 *            : toutes les possibilités pour chaque param
@@ -240,29 +233,30 @@ public class CompileString {
 	 * @return un param aléatoire
 	 */
 	public static String[] getParam(ArrayList<String> param, int pos) {
-		int rand = 0;
-		rand = new Random().nextInt(param.size()); // random sur les positions
-		String random;
+		int randPosition = 0;
+		String dataLine;
 		if (pos < 0) {
-			random = (param.get(rand)); // recuperation de la condition a la
+			randPosition = new Random().nextInt(param.size()); // random sur les positions
+			dataLine = (param.get(randPosition)); // recuperation de la condition a la
 										// position rand
 		} else {
-			random = (param.get(pos));
+			dataLine = (param.get(pos));
 		}
 		if (debug)
-			System.out.println("random : " + random);
+			System.out.println("random : pos= "+randPosition+" string= " + dataLine);
 		
-		random = random.replace("\"", "");
-		random = random.replace("[", "");
-		random = random.replace(" ", "");
-		random = random.replace("]", "");
-		String[] partsRandom = random.split(","); // implode des params de la
+		dataLine = dataLine.replace("\"", "");
+		dataLine = dataLine.replace("[", "");
+		dataLine = dataLine.replace(" ", "");
+		dataLine = dataLine.replace("]", "");
+		String[] partsRandom = dataLine.split(","); // implode des params de la
 													// condition dans parts
 		return partsRandom;
 	}
 	
 	/**
-	 * Construit un bout de code pour comparer 2 chiffres
+	 * Construit un bout de code pour comparer 2 chiffres.
+	 * Ne construit pas la partie gauche de la comparaison
 	 * 
 	 * @param pos
 	 * @param param
@@ -271,34 +265,46 @@ public class CompileString {
 	
 	public static String getCompInt(String[] partsRandomComp,
 			String[] partsRandomVar) {
+		// Choix du comparateur (==, <=, >=, >, <, != )
 		int rand = 0;
 		rand = new Random().nextInt(partsRandomComp.length);
 		rand = (rand == 0) ? 1 : rand;
+		
 		if (debug)
 			System.out.println("getComptInt random : " + rand);
-		// concaténation du comparateur
-		return (partsRandomComp[rand] + " " + (new Random().nextInt(Integer
-				.parseInt(partsRandomVar[3])) + Integer
-				.parseInt(partsRandomVar[2])));
+		
+		// calcul de la variable comparante (à droite du comparateur)
+		//String test = "("+Integer.parseInt(partsRandomVar[2])+"+new Random().nextInt("+partsRandomVar[3]+"))";
+		String[] testVar = getParam(var,-1);
+		String rightVar = testVar[0]; 
+		debugSys("getComptInt : rightVar = "+rightVar);
+		// concaténation du comparateur et de la valeur comparante
+		return (partsRandomComp[rand] + " " + rightVar);
 	}
 
 	/**
-	 * Construit un bout de code pour comparer 2 booléens
+	 * Construit un bout de code pour comparer 2 booléens.
+	 * Ne construit pas le booléen de gauche.
 	 * 
 	 * @param pos
 	 * @param param
 	 * @return bout de code (comparateur) à concaténer
 	 */
 	public static String getCodeBool(String[] partsRandomComp) {
-		// conditionFull += partsRandomComp[1] + " " + ((new Random().nextInt(1)
-		// == 1)? "true" : "false");
-		if (debug)
-			System.out.println("getCodeBool");
 		return partsRandomComp[1] + " "
 				+ ((new Random().nextInt(1) == 1) ? "true" : "false");
 
 	}
 
+	/**  Ajoute un certain nombre de lignes de code . 
+	 * Les lignes sont contenues dans la section "code" de la base
+	 * Les lignes sont ajoutées au paramètre Node resNode
+	 * 	
+	 * @param code
+	 * @param nbMaxLine
+	 * @param resNode
+	 * @return Node resNode
+	 */
 	public static Node addCodeLineAlea(ArrayList<String> code,int nbMaxLine,Node resNode){
 		int nbLnCode = new Random().nextInt(nbMaxLine) + 1;
 		int rand=0;
@@ -310,9 +316,9 @@ public class CompileString {
 		return resNode;
 	}
 		
-	/**
+	/** print message only when debugging
 	 * 
-	 * @param className
+	 * @param message : message to print
 	 */
 	public static void debugSys(String message)
 	{
@@ -330,7 +336,7 @@ public class CompileString {
 		
 		// Compilation de la classe du joueur IA
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		System.out.println(pathClass + className + ".java");
+		System.out.println("IAGenetic : "+pathClass + className + ".java");
 		@SuppressWarnings("unused")
 		int result = compiler.run(null, null, null, pathClass + className + ".java");
 		//System.out.println("Compile result code = " + result);
@@ -362,15 +368,16 @@ public class CompileString {
 		return new IAGenetic(c,obj, className);
 	}
 
-	/*
-	 * Lecture dans un fichier .java
+	/** Read skelet class (classTestName), construct then write text content in "className" class by calling WriteCode
+	 * 
+	 * @param codeContent : Generated code to push in "run" method
+	 * @param className : should correspond to the monster id which will run this script.
 	 */
 	public static void ReadWriteCode(ArrayList<String> codeContent,String className) {
 		Boolean inRun = false;
 		Boolean isAdded = false;
 		File fichier = new File(pathClass + classTestName +".java");
 		ArrayList<String> content = new ArrayList<String>();
-
 		// lecture du fichier java
 		try {
 			InputStream ips = new FileInputStream(fichier);
@@ -393,15 +400,17 @@ public class CompileString {
 			}
 			br.close();
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.out.println("ReadWriteCode"+e.toString());
 		}
 
 		WriteCode(content, className);
 	}
 
-	/*
-	 * Ecriture dans un fichier .java
-	 */
+	/**
+	 * Write code content in "className" class
+	  * @param content : all code to write in file.
+	  * @param className : should correspond to the monster id which will run this script.
+	  */
 	public static void WriteCode(ArrayList<String> content, String className) {
 		// création du fichier qui va écraser l'ancien fichier java
 		try {
@@ -414,7 +423,7 @@ public class CompileString {
 			}
 			fichierSortie.close();
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.out.println("WriteCode : "+e.toString());
 		}
 	}
 
