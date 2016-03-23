@@ -70,6 +70,7 @@ public class Player extends Character {
 		if (Data.debug) {
 			System.out.println("Debug : Player " + this.toString() + " created");
 		}
+		this.setFitness(new IAFitness(true));
 	}
 
 	public void init() {

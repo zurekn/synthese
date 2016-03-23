@@ -51,7 +51,6 @@ public abstract class Character {
 	private Character focusedOn;
 	private boolean npc = true;
 	protected boolean monster = true;
-	private int score = 0;
 
 	private Class<?> cl = null;
 	private Object obj = null;

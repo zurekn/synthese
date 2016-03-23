@@ -62,7 +62,15 @@ public class CommandHandler extends Handler {
 	@Override
 	public void begin() {
 		System.out.println("Launch the Command Handler Thread");
-		getThread().start();
+		if(getThread().isInterrupted())
+			getThread().resume();
+		else if(getThread().getState().name() == "TIMED_WAITING")
+		{
+			
+		}else
+		{
+			getThread().start();
+		}
 	}
 
 	public static CommandHandler getInstance() {

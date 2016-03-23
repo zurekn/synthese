@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import main.Main;
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -44,6 +46,7 @@ public class WindowGame extends BasicGame {
 	private GameContainer container;
 	private MobHandler mobHandler;
 	private ArrayList<Mob> mobs;
+	private ArrayList<Mob> originMobs;
 	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
 	private MovementHandler movementHandler;
@@ -56,6 +59,7 @@ public class WindowGame extends BasicGame {
 
 	private int playerNumber;
 	private int turn;
+	private int global_turn;
 	private int actionLeft = Data.ACTION_PER_TURN;
 
 	public boolean gameOn = false;
@@ -78,8 +82,9 @@ public class WindowGame extends BasicGame {
 		return windowGame;
 	}
 
-	private WindowGame() throws SlickException {
+	public WindowGame() throws SlickException {
 		super(Data.NAME);
+		windowGame = this;
 	}
 
 	private WindowGame(String title, GameContainer container, MobHandler mobHandler, ArrayList<Mob> mobs, game.PlayerHandler playerHandler,
@@ -102,6 +107,7 @@ public class WindowGame extends BasicGame {
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
+		gameOn = false;
 		this.container = container;
 		thread = Thread.currentThread();
 		handler = new GameHandler(thread);
@@ -118,7 +124,12 @@ public class WindowGame extends BasicGame {
 		// Create the monster list
 		mobs = MonsterData.initMobs();
 		mobHandler = new MobHandler(mobs);
-
+		// créer une liste statique des mobs
+		originMobs = new ArrayList<Mob>();
+		for(Mob mo : mobs)
+		{
+			originMobs.add(mo);
+		}
 		messageHandler = new MessageHandler();
 
 		// Create the player list
@@ -132,11 +143,13 @@ public class WindowGame extends BasicGame {
 
 		// start();
 	}
+	
 
 	private void start() {
 		playerNumber = players.size() + mobs.size();
 
 		turnTimer = Data.TURN_MAX_TIME;
+		global_turn = 1;
 		turn = 0;
 		players.get(turn).setMyTurn(true);
 		currentCharacter = players.get(turn);
@@ -394,13 +407,15 @@ public class WindowGame extends BasicGame {
 	}
 
 	int i = 0;
-
+	int renderj = 0;
 	/**
 	 * The render function Call all game's render
 	 */
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		g.scale(Data.SCALE, Data.SCALE);
+		
 		if(gameEnded){
+			renderj++;
 			Data.map.render(Data.MAP_X,  Data.MAP_Y);
 			mobHandler.render(container, g);
 			//renderDeckArea(container, g);
@@ -414,6 +429,16 @@ public class WindowGame extends BasicGame {
 			
 			if(Data.ENDING_ANIMATION_Y < (Data.MAP_HEIGHT - Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE) / 2)
 				Data.ENDING_ANIMATION_Y ++;
+			//this.container.sleep(1000);
+			if(renderj==500)
+			{
+				renderj = 0;
+				gameOn = false;
+				gameEnded = false;
+				gameWin = false;
+				gameLose = false;
+				Main.reloadGame();
+			}
 			return;
 		}
 		if (!apix.isInit()) {
@@ -577,8 +602,18 @@ public class WindowGame extends BasicGame {
 		System.out.println("turn = " + turn + ", playerNumber = " + playerNumber + ", turnTimer = " + turnTimer);
 		messageHandler.addGlobalMessage(new Message("Next turn"));
 		turnTimer = Data.TURN_MAX_TIME;
+		
+		
 		turn = (turn + 1) % playerNumber;
-
+		if(turn == 0)
+		{
+			checkEndGame();
+			global_turn++;
+			messageHandler.addPlayerMessage(new Message("Tour de jeu numéro  "+global_turn, Data.MESSAGE_TYPE_INFO), turn);	
+			for(Mob mo:mobs){
+				mo.getFitness().addTurn();
+			}
+		}
 		previousCharacter = currentCharacter;
 		previousCharacter.regenMana();
 		// Switch the turn
@@ -681,12 +716,19 @@ public class WindowGame extends BasicGame {
 					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
+						if(focus.character != null)
+							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+						else
+							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
+						if(focus.character != null)
+							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+						else
+							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
-
 					}
 					if (currentCharacter.checkDeath()) {
 						// TODO ADD a textual event
@@ -711,10 +753,13 @@ public class WindowGame extends BasicGame {
 									messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 								else
 									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
+								currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
 
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+
 							}
 						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
@@ -722,7 +767,9 @@ public class WindowGame extends BasicGame {
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 							else
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
-
+							if(focus.character != null)
+								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+						
 						}
 						if (focus.character.checkDeath()) {// si mort
 							// TODO ADD a textual event
@@ -737,6 +784,7 @@ public class WindowGame extends BasicGame {
 						}
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
+						currentCharacter.getFitness().scoreUnlessSpell();
 					}
 				}
 				events.add(e);
@@ -755,6 +803,7 @@ public class WindowGame extends BasicGame {
 		}
 		else if (action.startsWith("p")) { // Pass turn
 			switchTurn();
+			currentCharacter.getFitness().scorePassTurn();
 		}
 		else if (action.startsWith("m")) {// Movement action
 			try {
@@ -766,6 +815,7 @@ public class WindowGame extends BasicGame {
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				switchTurn();
+				currentCharacter.getFitness().scoreMove();
 
 			} catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
@@ -853,7 +903,8 @@ public class WindowGame extends BasicGame {
 				currentCharacter.takeDamage(20, "magic");
 			}
 			if (Input.KEY_SUBTRACT == key) {
-				start();
+				if(gameEnded)
+					start();
 			}
 			if (Input.KEY_ADD == key) {
 				try {
@@ -963,12 +1014,26 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void checkEndGame(){
-		if(Data.debug && !Data.RUN_APIX && players.size() <= 1 && mobs.size() <= 0)
+		if(Data.debug && !Data.RUN_APIX && players.size() > 0 && mobs.size() <= 0 )
 		{	
 			//GAME WIN
-			stopAllThread();
 			gameEnded = true;
 			gameWin = true;
+		}else if(Data.debug && !Data.RUN_APIX && (players.size() <= 0 || global_turn == Data.maxTurn))
+		{
+			
+			//GAME LOSE
+			gameEnded = true;
+			gameLose = true;
+		}
+		if(gameEnded)
+		{
+			//stopAllThread();
+			System.out.println("-- FIN DE JEU-- ");
+			for(Mob mo : originMobs){
+				System.out.println("Mob "+mo.getId()+" nom="+mo.getName()+" : Nb turn = "+mo.getFitness().getNbTurn());
+			}
+			
 		}
 		// Partie à décommenter pour avoir une partie classique mobs vs players
 		/*else
@@ -986,8 +1051,9 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void stopAllThread(){
-		apix.stop();
-		commands.getInstance().getThread().stop();
+		//apix.stop();
+		//commands.getInstance().getThread().stop();
+		commands.getInstance().getThread().interrupt();
 		turnTimer = Integer.MAX_VALUE;
 	}
 	

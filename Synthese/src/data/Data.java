@@ -60,6 +60,7 @@ public class Data {
 	
 	//For Genetic IA
 	public static boolean generateIA = false;
+	public static int maxTurn = 10;
 	
 	// Const TI Part
 	public static long WAIT_TI = 5000;
@@ -188,7 +189,7 @@ public class Data {
 	
 	//MESSAGES PARAM
 	public static final Color MESSAGE_COLOR_TYPE_1 = new Color(Color.red);
-	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.black);
+	public static final Color MESSAGE_COLOR_TYPE_0 = new Color(Color.white);
 	private static final Color MESSAGE_COLOR_TYPE_2 = new Color(Color.green);
 	public static final int MESSAGE_TYPE_INFO = 0;
 	public static final int MESSAGE_TYPE_ERROR = 1;
