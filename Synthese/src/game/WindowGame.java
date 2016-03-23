@@ -670,8 +670,10 @@ public class WindowGame extends BasicGame {
 			return;
 		System.out.println("### decodeAction debug : action="+action);
 		
-		if (action.startsWith("s")) { // Spell action
-			if(actionLeft <= 0 ){
+		if (action.startsWith("s")) // Spell action 
+		{ 
+			if(actionLeft <= 0)
+			{
 				if(!Data.debug){
 					messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
 					return;
@@ -754,10 +756,14 @@ public class WindowGame extends BasicGame {
 								else
 									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
 								currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
-
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
+
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+
+
+								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 
 							}
@@ -769,7 +775,7 @@ public class WindowGame extends BasicGame {
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 							if(focus.character != null)
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
-						
+
 						}
 						if (focus.character.checkDeath()) {// si mort
 							// TODO ADD a textual event
