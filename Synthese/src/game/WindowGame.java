@@ -683,13 +683,15 @@ public class WindowGame extends BasicGame {
 					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
-						currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+						if(focus.character != null)
+							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
+						if(focus.character != null)
+							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
-						currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 					}
 					if (currentCharacter.checkDeath()) {
 						// TODO ADD a textual event
@@ -726,7 +728,8 @@ public class WindowGame extends BasicGame {
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 							else
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
-							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+							if(focus.character != null)
+								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 						}
 						if (focus.character.checkDeath()) {// si mort
 							// TODO ADD a textual event
