@@ -685,12 +685,16 @@ public class WindowGame extends BasicGame {
 						currentCharacter.heal(heal);
 						if(focus.character != null)
 							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+						else
+							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
 						if(focus.character != null)
 							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+						else
+							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 					}
 					if (currentCharacter.checkDeath()) {
