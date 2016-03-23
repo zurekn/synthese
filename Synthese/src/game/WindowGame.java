@@ -737,6 +737,7 @@ public class WindowGame extends BasicGame {
 						System.out.println("-----------------------------------------");
 						System.out.println("DEATH FOR" + currentCharacter.toString());
 						System.out.println("-----------------------------------------");
+						System.out.println(currentCharacter.getFitness().stringFitness());
 						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
 						players.remove(currentCharacter);
 						mobs.remove(currentCharacter);
@@ -809,8 +810,8 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		}
 		else if (action.startsWith("p")) { // Pass turn
-			switchTurn();
 			currentCharacter.getFitness().scorePassTurn();
+			switchTurn();
 		}
 		else if (action.startsWith("m")) {// Movement action
 			try {
