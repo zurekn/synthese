@@ -59,7 +59,7 @@ public class Data {
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	//For Genetic IA
-	public static boolean generateIA = false;
+	public static boolean generateIA = true;
 	
 	// Const TI Part
 	public static long WAIT_TI = 5000;

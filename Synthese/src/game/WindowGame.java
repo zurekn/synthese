@@ -702,6 +702,7 @@ public class WindowGame extends BasicGame {
 						System.out.println("-----------------------------------------");
 						System.out.println("DEATH FOR" + currentCharacter.toString());
 						System.out.println("-----------------------------------------");
+						System.out.println(currentCharacter.getFitness().stringFitness());
 						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
 						players.remove(currentCharacter);
 						mobs.remove(currentCharacter);
@@ -740,6 +741,7 @@ public class WindowGame extends BasicGame {
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());
 							System.out.println("-----------------------------------------");
+							System.out.println(focus.character.getFitness().stringFitness());
 							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							players.remove(focus.character);
 							mobs.remove(focus.character);
@@ -766,8 +768,8 @@ public class WindowGame extends BasicGame {
 			System.out.println("Find a trap action");
 		}
 		else if (action.startsWith("p")) { // Pass turn
-			switchTurn();
 			currentCharacter.getFitness().scorePassTurn();
+			switchTurn();
 		}
 		else if (action.startsWith("m")) {// Movement action
 			try {
@@ -778,9 +780,8 @@ public class WindowGame extends BasicGame {
 				String position = tokens[1] + ":" + tokens[2];
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
-				switchTurn();
 				currentCharacter.getFitness().scoreMove();
-
+				switchTurn();
 			} catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
 			}
