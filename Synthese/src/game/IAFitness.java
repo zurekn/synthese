@@ -93,7 +93,7 @@ public class IAFitness {
 	 */
 	public void scoreUnlessSpell()
 	{
-		this.setUnlessSpell(this.getpActionmissed()+this.getUnlessSpell());
+		this.setpActionmissed(this.getpActionmissed()+this.getUnlessSpell());
 	}
 	
 	/*
@@ -101,7 +101,7 @@ public class IAFitness {
 	 */
 	public void scorePassTurn()
 	{
-		this.setPass(this.getpPass()+this.getPass());
+		this.setpPass(this.getpPass()+this.getPass());
 	}
 	
 	/*
@@ -109,7 +109,14 @@ public class IAFitness {
 	 */
 	public void scoreMove()
 	{
-		this.setMove(this.getpMove()+this.getMove());
+		this.setpMove(this.getpMove()+this.getMove());
+	}
+	
+	public String stringFitness()
+	{
+		return "Fitnesse : pAction = " + this.getpAction() + ";pHeal = " + this.getpHeal() + 
+										";pActionmissed = " + this.getpActionmissed() + ";pPass = " + this.getpPass() + 
+										";pMove = " + this.getpMove();
 	}
 	
 	//	Getters and Setters

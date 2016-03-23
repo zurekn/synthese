@@ -782,6 +782,7 @@ public class WindowGame extends BasicGame {
 							System.out.println("-----------------------------------------");
 							System.out.println("DEATH FOR" + focus.character.toString());
 							System.out.println("-----------------------------------------");
+							System.out.println(focus.character.getFitness().stringFitness());
 							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
 							players.remove(focus.character);
 							mobs.remove(focus.character);
@@ -820,10 +821,10 @@ public class WindowGame extends BasicGame {
 				String position = tokens[1] + ":" + tokens[2];
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
-				switchTurn();
 				currentCharacter.getFitness().scoreMove();
+				switchTurn();
 
-			} catch (IllegalMovementException ime) {
+			}catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
 			}
 		} else {
