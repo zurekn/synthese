@@ -1,5 +1,6 @@
 package game;
 
+import data.Data;
 
 public class IAScript {
 	WindowGame windowgame = WindowGame.getInstance();

@@ -635,8 +635,10 @@ public class WindowGame extends BasicGame {
 			return;
 		System.out.println("### decodeAction debug : action="+action);
 		
-		if (action.startsWith("s")) { // Spell action
-			if(actionLeft <= 0 ){
+		if (action.startsWith("s")) // Spell action 
+		{ 
+			if(actionLeft <= 0)
+			{
 				if(!Data.debug){
 					messageHandler.addPlayerMessage(new Message(Data.ERROR_TOO_MUCH_ACTION, 1), turn);
 					return;
@@ -681,12 +683,13 @@ public class WindowGame extends BasicGame {
 					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
+						currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
-
+						currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 					}
 					if (currentCharacter.checkDeath()) {
 						// TODO ADD a textual event
@@ -711,10 +714,11 @@ public class WindowGame extends BasicGame {
 									messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 								else
 									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
-
+								currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
-								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
+								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);
+								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 							}
 						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
@@ -722,7 +726,7 @@ public class WindowGame extends BasicGame {
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 							else
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
-
+							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
 						}
 						if (focus.character.checkDeath()) {// si mort
 							// TODO ADD a textual event
@@ -737,6 +741,7 @@ public class WindowGame extends BasicGame {
 						}
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
+						currentCharacter.getFitness().scoreUnlessSpell();
 					}
 				}
 				events.add(e);
@@ -755,6 +760,7 @@ public class WindowGame extends BasicGame {
 		}
 		else if (action.startsWith("p")) { // Pass turn
 			switchTurn();
+			currentCharacter.getFitness().scorePassTurn();
 		}
 		else if (action.startsWith("m")) {// Movement action
 			try {
@@ -766,6 +772,7 @@ public class WindowGame extends BasicGame {
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				switchTurn();
+				currentCharacter.getFitness().scoreMove();
 
 			} catch (IllegalMovementException ime) {
 				throw new IllegalActionException("Mob can't reach this block");
