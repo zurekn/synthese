@@ -11,7 +11,14 @@ public class IAFitness {
 	/** is a mob or character ? */
 	private boolean isNPC; 
 	/** total local score */
-	private int totalScore; 
+	private int totalScore;
+	
+	private int killEnemy;
+	private int killAlly;
+	private int attackAlly;
+	private int attackEnemy;
+	private int healAlly;
+	private int healEnemy;
 	
 	//used for overall fitness
 	/** number of turn AI stayed alive */
@@ -23,6 +30,12 @@ public class IAFitness {
 		this.totalScore = 0;
 	}
 	
+	/** Add points to score depending on action
+	 * 
+	 * @param target
+	 * @param damages
+	 * @param heal
+	 */
 	public void evaluateAction(Character target, int damages, int heal)
 	{
 		
@@ -35,4 +48,6 @@ public class IAFitness {
 	{
 		nbTurn++;
 	}
+	
+	
 }
