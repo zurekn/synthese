@@ -5,6 +5,10 @@ import imageprocessing.APIXAdapter;
 import imageprocessing.MovementEvent;
 import imageprocessing.QRCodeEvent;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -607,7 +611,9 @@ public class WindowGame extends BasicGame {
 		turn = (turn + 1) % playerNumber;
 		if(turn == 0)
 		{
+			
 			checkEndGame();
+			currentCharacter.getFitness().debugFile("=== TOUR "+global_turn+" ===", true);
 			global_turn++;
 			messageHandler.addPlayerMessage(new Message("Tour de jeu numéro  "+global_turn, Data.MESSAGE_TYPE_INFO), turn);	
 			for(Mob mo:mobs){
@@ -715,21 +721,16 @@ public class WindowGame extends BasicGame {
 				int state = Integer.parseInt(split[2]);
 				
 				if(state == -1){// echec critique
+					
 					messageHandler.addPlayerMessage(new Message("Echec critique du sort "+SpellData.getSpellById(spellID).getName(), Data.MESSAGE_TYPE_ERROR), turn);
 					if(heal > 0){
 						currentCharacter.heal(heal);
-						if(focus.character != null)
 							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
-						else
-							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
 					}else{
 						currentCharacter.takeDamage(damage, e.getType());
-						if(focus.character != null)
 							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
-						else
-							currentCharacter.getFitness().scoreUnlessSpell();
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 					}
 					if (currentCharacter.checkDeath()) {
@@ -762,11 +763,6 @@ public class WindowGame extends BasicGame {
 
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
-
-
-								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);
-								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
-
 							}
 						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
@@ -793,6 +789,7 @@ public class WindowGame extends BasicGame {
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 						currentCharacter.getFitness().scoreUnlessSpell();
+						currentCharacter.getFitness().debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+currentCharacter.getFitness().stringFitness(),true);
 					}
 				}
 				events.add(e);
@@ -1039,7 +1036,8 @@ public class WindowGame extends BasicGame {
 			//stopAllThread();
 			System.out.println("-- FIN DE JEU-- ");
 			for(Mob mo : originMobs){
-				System.out.println("Mob "+mo.getId()+" nom="+mo.getName()+" : Nb turn = "+mo.getFitness().getNbTurn());
+				//System.out.println("Mob "+mo.getId()+" nom="+mo.getName()+" : Nb turn = "+mo.getFitness().getNbTurn());
+				System.out.println("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().stringFitness());
 			}
 			
 		}
@@ -1136,6 +1134,7 @@ public class WindowGame extends BasicGame {
 	}
 
 	private class Focus {
+
 		protected float range;
 		protected Character character;
 
@@ -1148,4 +1147,6 @@ public class WindowGame extends BasicGame {
 			return "Focus [ range, " + range + ", " + character.toString() + "]";
 		}
 	}
+
+
 }

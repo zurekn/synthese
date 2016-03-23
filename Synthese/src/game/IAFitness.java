@@ -1,5 +1,10 @@
 package game;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 
 public class IAFitness {
 	// used for local fitness
@@ -33,6 +38,7 @@ public class IAFitness {
 		this.pActionmissed = 0;
 		this.pMove = 0;
 		this.pPass = 0;
+		debugFile("==init==",false);
 	}
 	/**
 	 *  Add a turn in number of turn passed alive
@@ -48,6 +54,8 @@ public class IAFitness {
 	 */
 	public void scoreHeal(Character focusCharacter, Character currentCharacter)
 	{	// score : soigne quelqu'un dont la vie est inférieure à maxlife
+		if(focusCharacter != null)
+		{
 		if(focusCharacter.getStats().getLife()<focusCharacter.getStats().getMaxLife()) 
 		{	
 			// score : soigne ennemi
@@ -64,6 +72,13 @@ public class IAFitness {
 			else// score : soigne allié
 				currentCharacter.getFitness().setpHeal(currentCharacter.getFitness().getpHeal()+currentCharacter.getFitness().getHealAllyMaxLife());
 		}
+		debugFile("mob "+currentCharacter.getName()+" a soigné le mob "+focusCharacter.getName()+". "+stringFitness(),true);
+		}
+		else{
+			this.scoreUnlessSpell();
+			debugFile("mob "+currentCharacter.getName()+" a soigné personne ."+stringFitness(),true);
+		}
+		
 	}
 	
 	/*
@@ -71,21 +86,31 @@ public class IAFitness {
 	 */
 	public void scoreSpell(Character focusCharacter, Character currentCharacter)
 	{	// score : tue quelqu'un
-		if(focusCharacter.checkDeath()) 
-		{	
-			// score : tue ennemi
-			if(focusCharacter.isMonster() != currentCharacter.isMonster()) 
-				currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getKillEnemy());
-			else // score : tue allié
-				currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getKillAlly());
+		if(focusCharacter != null)
+		{
+			if(focusCharacter.checkDeath()) 
+			{	
+				// score : tue ennemi
+				if(focusCharacter.isMonster() != currentCharacter.isMonster()) 
+					currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getKillEnemy());
+				else // score : tue allié
+					currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getKillAlly());
+			}
+			else // score : attaque quelqu'un dont la vie est supérieur ou égale à maxlife
+			{	// score : attaque ennemi
+				if(focusCharacter.isMonster() != currentCharacter.isMonster()) 
+					currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getAttackEnemy());
+				else // score : attaque allié
+					currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getAttackAlly());
+			
+			}
+			debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur mob "+focusCharacter.getName()+". "+stringFitness(),true);
+		}else{
+			this.scoreUnlessSpell();
+			debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+stringFitness(),true);
 		}
-		else // score : attaque quelqu'un dont la vie est supérieur ou égale à maxlife
-		{	// score : attaque ennemi
-			if(focusCharacter.isMonster() != currentCharacter.isMonster()) 
-				currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getAttackEnemy());
-			else // score : attaque allié
-				currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getAttackAlly());
-		}
+		
+		
 	}
 	
 	/*
@@ -112,11 +137,26 @@ public class IAFitness {
 		this.setpMove(this.getpMove()+this.getMove());
 	}
 	
+	public void debugFile(String message, boolean append)
+	{
+		try {
+			FileWriter fw = new FileWriter(new File("Synthese/src/game/IAdebug.txt"), append);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter fichierSortie = new PrintWriter(bw);
+			fichierSortie.println(message);
+			fichierSortie.close();
+		} catch (Exception e) {
+			System.out.println("WriteCode : "+e.toString());
+		}
+	}
+	
 	public String stringFitness()
 	{
-		return "Fitnesse : pAction = " + this.getpAction() + ";pHeal = " + this.getpHeal() + 
-										";pActionmissed = " + this.getpActionmissed() + ";pPass = " + this.getpPass() + 
-										";pMove = " + this.getpMove();
+		return "Fitness : pAction = " + this.getpAction() + ";pHeal = " + this.getpHeal() + 
+										";pActionmissed = " + this.getpActionmissed() + 
+										";pPass = " + this.getpPass() + 
+										";pMove = " + this.getpMove() +
+										";nbTurn alive = "+this.nbTurn;
 	}
 	
 	//	Getters and Setters
