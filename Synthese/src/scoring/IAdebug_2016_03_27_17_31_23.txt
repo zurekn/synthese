@@ -1,0 +1,90 @@
+==init==
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur mob P1. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 1;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+=== TOUR 1 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 0;nbTurn alive = 0
+mob P2 a soigné le mob P1. Fitness : pAction = -20;pHeal = 1;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 2;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 0;nbTurn alive = 1
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -40;pHeal = 0;pActionmissed = 0;pPass = 1;pMove = 0;nbTurn alive = 1
+=== TOUR 2 ===
+mob P0 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 2;pMove = 0;nbTurn alive = 0
+mob P2 a soigné le mob P1. Fitness : pAction = -20;pHeal = 2;pActionmissed = 0;pPass = 0;pMove = 2;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 3;pActionmissed = 0;pPass = 0;pMove = 2;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 2;pMove = 0;nbTurn alive = 2
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -70;pHeal = 0;pActionmissed = 0;pPass = 2;pMove = 0;nbTurn alive = 2
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 1;pPass = 0;pMove = 3;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 4;pActionmissed = 0;pPass = 0;pMove = 3;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 2
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 0;nbTurn alive = 2
+=== TOUR 3 ===
+mob P0 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 4;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 2;pPass = 0;pMove = 4;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 5;pActionmissed = 0;pPass = 0;pMove = 4;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 3
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 4;pMove = 0;nbTurn alive = 3
+=== TOUR 4 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 5;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 3;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 4;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 7;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 8;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 9;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 10;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 11;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 12;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 6;pActionmissed = 0;pPass = 0;pMove = 5;nbTurn alive = 0
+mob Ghost a lancé un sort sur mob P0. Fitness : pAction = 20;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 4
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 5;pMove = 0;nbTurn alive = 4
+=== TOUR 5 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 6;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 13;pPass = 1;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 14;pPass = 1;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 7;pActionmissed = 0;pPass = 0;pMove = 6;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 6;nbTurn alive = 5
+=== TOUR 6 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 6;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 7;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 15;pPass = 2;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 16;pPass = 2;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 8;pActionmissed = 0;pPass = 0;pMove = 7;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 6
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 7;pMove = 0;nbTurn alive = 6
+=== TOUR 7 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 8;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 17;pPass = 3;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 18;pPass = 3;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 9;pActionmissed = 0;pPass = 0;pMove = 8;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 8;nbTurn alive = 7
+=== TOUR 8 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 0;pMove = 8;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 9;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 19;pPass = 4;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 20;pPass = 4;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 10;pActionmissed = 0;pPass = 0;pMove = 9;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 9;pPass = 0;pMove = 9;nbTurn alive = 8
+=== TOUR 9 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 0;pMove = 9;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 10;pMove = 0;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 21;pPass = 5;pMove = 5;nbTurn alive = 0
+mob P2 a lancé un sort sur personne .Fitness : pAction = -20;pHeal = 2;pActionmissed = 22;pPass = 5;pMove = 5;nbTurn alive = 0
+mob P3 a soigné le mob P3. Fitness : pAction = 0;pHeal = 11;pActionmissed = 0;pPass = 0;pMove = 10;nbTurn alive = 0
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 10;pPass = 0;pMove = 10;nbTurn alive = 9
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 10;pMove = 0;nbTurn alive = 9
+=== TOUR 10 ===

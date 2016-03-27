@@ -2,8 +2,18 @@ package game;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class IAFitness {
@@ -26,6 +36,7 @@ public class IAFitness {
 	private int unlessSpell = 1;
 	private int move = 1;
 	private int pass = 1;
+	private String scoreFileName = "Synthese/src/scoring/IAdebug.txt";
 	
 	//used for overall fitness
 	private int nbTurn = 0; // number of turn AI stayed alive
@@ -40,6 +51,7 @@ public class IAFitness {
 		this.pPass = 0;
 		debugFile("==init==",false);
 	}
+	
 	/**
 	 *  Add a turn in number of turn passed alive
 	 *  Should be used once per turn if character is alive.
@@ -54,8 +66,8 @@ public class IAFitness {
 	 */
 	public void scoreHeal(Character focusCharacter, Character currentCharacter)
 	{	// score : soigne quelqu'un dont la vie est inférieure à maxlife
-		if(focusCharacter != null)
-		{
+		//if(focusCharacter != null)
+		//{
 		if(focusCharacter.getStats().getLife()<focusCharacter.getStats().getMaxLife()) 
 		{	
 			// score : soigne ennemi
@@ -72,12 +84,12 @@ public class IAFitness {
 			else// score : soigne allié
 				currentCharacter.getFitness().setpHeal(currentCharacter.getFitness().getpHeal()+currentCharacter.getFitness().getHealAllyMaxLife());
 		}
-		debugFile("mob "+currentCharacter.getName()+" a soigné le mob "+focusCharacter.getName()+". "+stringFitness(),true);
-		}
-		else{
-			this.scoreUnlessSpell();
-			debugFile("mob "+currentCharacter.getName()+" a soigné personne ."+stringFitness(),true);
-		}
+		debugFile("mob "+currentCharacter.getName()+" a soigné le mob "+focusCharacter.getName()+". "+toStringFitness(),true);
+		//}
+		//else{
+			//this.scoreUnlessSpell();
+			//debugFile("mob "+currentCharacter.getName()+" a soigné personne ."+stringFitness(),true);
+		//}
 		
 	}
 	
@@ -86,8 +98,8 @@ public class IAFitness {
 	 */
 	public void scoreSpell(Character focusCharacter, Character currentCharacter)
 	{	// score : tue quelqu'un
-		if(focusCharacter != null)
-		{
+		//if(focusCharacter != null)
+		//{
 			if(focusCharacter.checkDeath()) 
 			{	
 				// score : tue ennemi
@@ -104,11 +116,11 @@ public class IAFitness {
 					currentCharacter.getFitness().setpAction(currentCharacter.getFitness().getpAction()+currentCharacter.getFitness().getAttackAlly());
 			
 			}
-			debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur mob "+focusCharacter.getName()+". "+stringFitness(),true);
-		}else{
-			this.scoreUnlessSpell();
-			debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+stringFitness(),true);
-		}
+			debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur mob "+focusCharacter.getName()+". "+toStringFitness(),true);
+		//}else{
+			//this.scoreUnlessSpell();
+			//debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+stringFitness(),true);
+		//}
 		
 		
 	}
@@ -137,10 +149,26 @@ public class IAFitness {
 		this.setpMove(this.getpMove()+this.getMove());
 	}
 	
+	/*
+	 * Copiage du fichier IAdebug.txt dans un même fichier dont le nom comporte la date de fin de test.
+	 */
+	public void renameScoreFile()
+	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		Date date = new Date();
+		File oldfile =new File(this.scoreFileName);
+		File newfile =new File(this.scoreFileName.replace(".txt", "_"+dateFormat.format(date)+".txt"));
+		try {
+			Files.copy(oldfile.toPath(), newfile.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void debugFile(String message, boolean append)
 	{
 		try {
-			FileWriter fw = new FileWriter(new File("Synthese/src/game/IAdebug.txt"), append);
+			FileWriter fw = new FileWriter(new File(this.scoreFileName), append);
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter fichierSortie = new PrintWriter(bw);
 			fichierSortie.println(message);
@@ -150,7 +178,7 @@ public class IAFitness {
 		}
 	}
 	
-	public String stringFitness()
+	public String toStringFitness()
 	{
 		return "Fitness : pAction = " + this.getpAction() + ";pHeal = " + this.getpHeal() + 
 										";pActionmissed = " + this.getpActionmissed() + 

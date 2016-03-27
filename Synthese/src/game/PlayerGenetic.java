@@ -5,31 +5,54 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import game.Character;
-import game.WindowGame;
 import data.Data;
 import data.Hero;
 import data.HeroData;
-import exception.IllegalActionException;
+import data.SpellData;
+import data.Stats;
 import exception.IllegalCaracterClassException;
 
 public class PlayerGenetic extends Character {
 	
 	private Image icon;
 	private int number;
+	Color playerColor;
 	WindowGame windowgame = WindowGame.getInstance();
+	String actionString = "";
+	String deplacementString = "p";
+	
+	/**
+	 * This constructor is not available
+	 * @param x
+	 * @param y
+	 * @param id
+	 * @param stats
+	 * @deprecated
+	 */
+	public PlayerGenetic(int x, int y, String id, Stats stats) {
+		this.setX(x);
+		this.setY(y);
+		this.setId(id);
+		this.setStats(stats);
+		this.setSpells(SpellData.getSpellForClass(this.getStats().getCharacterClass()));
+		init();
+
+		if (Data.debug) {
+			System.out.println("Debug : Player " + getId() + " created");
+		}
+	}
 	
 	public PlayerGenetic(){
 		
 	}
 	
-	public void run() throws IllegalActionException
+	public String run(Character ch)
 	{
-		
+		return actionString+"!!"+deplacementString;
 	}
 	
 	@SuppressWarnings("unused")
-	public void initPlayerGenetic(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
+	public PlayerGenetic(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
 		monster=false;
 		this.setX(x);
 		this.setY(y);
@@ -46,10 +69,14 @@ public class PlayerGenetic extends Character {
 			
 		this.setStats(h.getStat().clone());
 		this.setSpells(h.getSpells());
-		
+		this.setPlayerColor(Color.black);
 		if (Data.debug) {
 			System.out.println("Debug : Player " + this.toString() + " created");
 		}
+		if(Data.generateIA)
+			this.generateScriptGenetic();
+		this.compileScriptGenetic();
+		this.setFitness(new IAFitness(true));
 	}
 
 	public void init() {
@@ -62,9 +89,9 @@ public class PlayerGenetic extends Character {
 	
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.black);
-		//if (isMyTurn()) 
-			//Data.IMAGE_HALO.draw(getX() * Data.BLOCK_SIZE_X + Data.MAP_X - 10, getY() * Data.BLOCK_SIZE_Y + Data.MAP_Y - 10, Data.BLOCK_SIZE_X + 20 , Data.BLOCK_SIZE_Y + 20);
-		if(Data.DISPLAY_PLAYER)
+		//if(this.isMyTurn())
+			g.setColor(this.getPlayerColor());
+		//if(Data.DISPLAY_PLAYER)
 			g.fillRect(Data.MAP_X + getX() * Data.BLOCK_SIZE_X, Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
 				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 
@@ -73,8 +100,6 @@ public class PlayerGenetic extends Character {
 			//int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
 			//int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
 			//g.drawOval(posX, posY, sizeX, sizeY);
-			g.fillRect(	Data.MAP_X + getX() * Data.BLOCK_SIZE_X,Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
-						Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
 	}
 
 	public int getNumber(){
@@ -84,4 +109,14 @@ public class PlayerGenetic extends Character {
 	public void setNumber(int n) {
 		this.number = n;
 	}
+
+	public Color getPlayerColor() {
+		return playerColor;
+	}
+
+	public void setPlayerColor(Color playerColor) {
+		this.playerColor = playerColor;
+	}
+	
+	
 }

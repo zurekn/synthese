@@ -22,6 +22,9 @@ public class Player extends Character {
 	private Image icon;
 	private int number;
 	Color playerColor;
+	WindowGame windowgame = WindowGame.getInstance();
+	String actionString = "";
+	String deplacementString = "p";
 	
 	/**
 	 * This constructor is not available
@@ -70,9 +73,17 @@ public class Player extends Character {
 		if (Data.debug) {
 			System.out.println("Debug : Player " + this.toString() + " created");
 		}
+		if(Data.generateIA)
+			this.generateScriptGenetic();
+		this.compileScriptGenetic();
 		this.setFitness(new IAFitness(true));
 	}
 
+	public String run(Character ch)
+	{
+		return actionString+"!!"+deplacementString;
+	}
+	
 	public void init() {
 
 	}

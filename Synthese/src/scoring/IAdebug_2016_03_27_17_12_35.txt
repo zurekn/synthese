@@ -1,0 +1,32 @@
+==init==
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Ghost a lancé un sort sur mob Ghost. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Pumpking a lancé un sort sur mob Pumpking. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+=== TOUR 1 ===
+mob P0 a lancé un sort sur mob Slime. Fitness : pAction = 20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 0;nbTurn alive = 0
+mob Ghost a lancé un sort sur mob Ghost. Fitness : pAction = -50;pHeal = 0;pActionmissed = 0;pPass = 1;pMove = 0;nbTurn alive = 1
+mob Slime a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -40;pHeal = 0;pActionmissed = 0;pPass = 1;pMove = 0;nbTurn alive = 1
+=== TOUR 2 ===
+mob P0 a lancé un sort sur mob Slime. Fitness : pAction = 40;pHeal = 0;pActionmissed = 0;pPass = 1;pMove = 1;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 2;pMove = 0;nbTurn alive = 0
+mob Pumpking a lancé un sort sur mob Pumpking. Fitness : pAction = -50;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 2
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -60;pHeal = 0;pActionmissed = 0;pPass = 2;pMove = 0;nbTurn alive = 2
+=== TOUR 3 ===
+mob P0 a lancé un sort sur mob Slime. Fitness : pAction = 60;pHeal = 0;pActionmissed = 0;pPass = 2;pMove = 1;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 0;nbTurn alive = 0
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 3
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 2;nbTurn alive = 3
+mob Eye seeyou a lancé un sort sur mob Eye seeyou. Fitness : pAction = -90;pHeal = 0;pActionmissed = 0;pPass = 3;pMove = 0;nbTurn alive = 3
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 4;pMove = 0;nbTurn alive = 0
+=== TOUR 4 ===
+mob P0 a lancé un sort sur mob Slime. Fitness : pAction = 80;pHeal = 0;pActionmissed = 0;pPass = 3;pMove = 1;nbTurn alive = 0
+mob P1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 5;pMove = 0;nbTurn alive = 0
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 2;pMove = 2;nbTurn alive = 4
+=== TOUR 5 ===
+mob P0 a lancé un sort sur mob Slime. Fitness : pAction = 100;pHeal = 0;pActionmissed = 0;pPass = 4;pMove = 1;nbTurn alive = 0
+mob P1 a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 6;pMove = 0;nbTurn alive = 0
+mob Slime a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 3;pMove = 2;nbTurn alive = 5

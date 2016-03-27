@@ -1,0 +1,45 @@
+==init==
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+=== TOUR 1 ===
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 0;nbTurn alive = 1
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+=== TOUR 2 ===
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 2;pMove = 0;nbTurn alive = 2
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+=== TOUR 3 ===
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+mob Slime a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 0;nbTurn alive = 3
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+=== TOUR 4 ===
+mob Ghost a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 4
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 4
+mob Slime a lancé un sort sur mob P1. Fitness : pAction = 20;pHeal = 0;pActionmissed = 4;pPass = 4;pMove = 0;nbTurn alive = 4
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 4
+=== TOUR 5 ===
+mob Ghost a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Ghost a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Ghost a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Slime a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 5;pPass = 5;pMove = 0;nbTurn alive = 5
+mob Eye seeyou a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 5
+=== TOUR 6 ===
+mob P0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 6;nbTurn alive = 0
+mob Pumpking a soigné personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 6
+=== TOUR 7 ===
+mob Slime a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 6;pPass = 7;pMove = 0;nbTurn alive = 7
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 7
+=== TOUR 8 ===
+mob Pumpking a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 1;pMove = 6;nbTurn alive = 8
+=== TOUR 9 ===
+mob Slime a lancé un sort sur personne .Fitness : pAction = 20;pHeal = 0;pActionmissed = 7;pPass = 9;pMove = 0;nbTurn alive = 9
+mob Eye seeyou a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 9;nbTurn alive = 9
+=== TOUR 10 ===
