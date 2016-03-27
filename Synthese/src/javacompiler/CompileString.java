@@ -21,7 +21,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 public class CompileString {
-	static Boolean debug = false;
+	static Boolean debug = true;
 	static String className = "";
 	static String pathClass = "Synthese/src/game/";
 	static String destPathClass = "target/classes/game/";
@@ -39,6 +39,7 @@ public class CompileString {
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
+		debugSys("\n===========   GENERATE MOB "+geneticName+"  ===========");
 		Node root = DecodeScript("AIScriptDatas.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
@@ -147,9 +148,10 @@ public class CompileString {
 			debugSys("DecodeScript : comp="+comp);
 			debugSys("DecodeScript : cond="+cond);
 			// ======= Construction de l'arbre ==========
-			root = addFullCondition(root); // Ajout de conditions et code à l'intérieur de ces conditions
 			root = addCodeLineAlea(code,nbLignesCode,root);// Ajout des lignes de code à la racinde du run()
+			root = addFullCondition(root,2); // Ajout de conditions et code à l'intérieur de ces conditions
 			br.close();// fermeture du fichier txt
+		
 		} catch (Exception e) {
 				System.out.println("Decode : "+e.toString());
 		}
@@ -158,15 +160,16 @@ public class CompileString {
 	
 	/** Add a full condition branch node with code lines inside.
 	 * 
-	 *  Should be use like : node = addFullCondition(node)
+	 *  Should be used like : node = addFullCondition(node)
 	 *  
 	 * @param resNode : node where we append condition
 	 * @return : resulting node with conditions appended
 	 */
-	public static Node addFullCondition(Node resNode)
+	public static Node addFullCondition(Node resNode, int maxDepth)
 	{
+		if(maxDepth > 0){
 					int rand = 0;
-					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire
+					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire (if, for, etc.)
 					Node nodeCond = new Node(""); // init. supernoeud de condition
 					String conditionFull = ""; // init. valeur textuelle de la condition
 					if (partsRandomCond[0].contains("if") // test du cas if / while
@@ -176,9 +179,9 @@ public class CompileString {
 							aRisque = true;
 						} else
 							nodeCond.setValue("if");
-						String[] partsRandomVar = getParam(var, -1); // ligne variable aléatoire
+						String[] partsRandomVar = getParam(var, -1); // LIGNE de variables aléatoire
 						conditionFull += partsRandomVar[0]; // concaténer nom de la variable
-						switch(partsRandomVar[1]){
+					/*	switch(partsRandomVar[1]){
 							case "int" :
 								String[] partsRandomComp = getParam(comp, 0);
 								conditionFull += getCompInt(partsRandomComp, partsRandomVar); // concaténer la partie droite de la comparaison
@@ -187,7 +190,8 @@ public class CompileString {
 								String[] partsRandomCompBool = getParam(comp, 1);
 								conditionFull += getCodeBool(partsRandomCompBool);
 							break;
-						}
+						}*/
+						conditionFull += getCompInCond(partsRandomVar[1]);
 					}
 					if (partsRandomCond[0].contains("for"))  // Cas d'un for
 					{
@@ -211,15 +215,20 @@ public class CompileString {
 					resNode.addChild(nodeCond); // lier les supernoeuds
 					Node condFullNode = new Node(conditionFull); // création du sous-noeud
 					nodeCond.addChild(condFullNode); // Ajout du sous-noeud au supernoeud de condition
-					debugSys("conditionfull : " + conditionFull);
 					nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond); // *** Ajout des lignes de code dans la branche
+					boolean moreDeep = (new Random().nextInt(2)==0?false:true);
+					if(moreDeep)nodeCond = addFullCondition(nodeCond,maxDepth-1);// Ajout d'une autre branche conditionnelle
 					if (partsRandomCond[0].contains("if")  // Cas du if avec un else
 							&& partsRandomCond[2].contains("else")) {
 						Node nodeElse = new Node("else");
 						resNode.addChild(nodeElse);
 						nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse); // *** Ajout des lignes de code dans le ELSE
+						moreDeep = (new Random().nextInt(2)==0?false:true);
+						if(moreDeep)nodeElse = addFullCondition(nodeElse,maxDepth-1);// Ajout d'une autre branche conditionnelle
 					}
+		}
 		return resNode;
+		
 	}
 	
 
@@ -244,7 +253,29 @@ public class CompileString {
 		}
 		if (debug)
 			System.out.println("random : pos= "+randPosition+" string= " + dataLine);
-		
+		dataLine = dataLine.replace("\"", "");
+		dataLine = dataLine.replace("[", "");
+		dataLine = dataLine.replace(" ", "");
+		dataLine = dataLine.replace("]", "");
+		String[] partsRandom = dataLine.split(","); // implode des params de la
+													// condition dans parts
+		return partsRandom;
+	}
+	
+	/** Get a parameter by its type (int, bool, etc.)
+	 * 
+	 * @param type
+	 *            : Param type
+	 * @return Table containing splitted line
+	 */
+	public static String[] getParamByType(ArrayList<String> param, String type) {
+		String dataLine = "";
+		int randPosition ;
+		do{
+			randPosition = new Random().nextInt(param.size()); // param random
+			dataLine = (param.get(randPosition).toString()); // recuperation de la valeur
+		}while(!dataLine.contains(type));
+		debugSys("\t\tgetParamByType : type = "+type+", line = "+dataLine);
 		dataLine = dataLine.replace("\"", "");
 		dataLine = dataLine.replace("[", "");
 		dataLine = dataLine.replace(" ", "");
@@ -255,6 +286,32 @@ public class CompileString {
 	}
 	
 	/**
+	 * Construit un bout de code pour comparer 2 variables.
+	 * Ne construit pas la partie gauche de la comparaison
+	 * 
+	 * @param pos
+	 * @param param
+	 * @return bout de code (comparateur) à concaténer
+	 */
+	public static String getCompInCond(String type) {
+		String[] partsRandomComp;
+		String[] partsRandomVar;
+		String returnString;
+		debugSys("\tgetCompInCond : récupération du comparateur ");
+		partsRandomComp = getParamByType(comp, type);
+		int rand = 0;
+		rand = new Random().nextInt(partsRandomComp.length); // Choix random du comparateur (==, <=, >=, >, <, != )
+		rand = (rand == 0) ? 1 : rand;
+		debugSys("\tgetCompInCond : récupération de variable comparante ");
+		partsRandomVar = getParamByType(var, type); // recupere la variable à droite du comparateur
+		String rightVar = partsRandomVar[0]; 
+		//debugSys("getComptInCond : rightVar = "+rightVar);
+		returnString = (partsRandomComp[rand] + " " + rightVar+(type.contains("(")?")":""));
+		// concaténation du comparateur et de la valeur comparante
+		return returnString;
+	}
+	
+	/**
 	 * Construit un bout de code pour comparer 2 chiffres.
 	 * Ne construit pas la partie gauche de la comparaison
 	 * 
@@ -262,7 +319,6 @@ public class CompileString {
 	 * @param param
 	 * @return bout de code (comparateur) à concaténer
 	 */
-	
 	public static String getCompInt(String[] partsRandomComp,
 			String[] partsRandomVar) {
 		// Choix du comparateur (==, <=, >=, >, <, != )
@@ -286,8 +342,7 @@ public class CompileString {
 	 * Construit un bout de code pour comparer 2 booléens.
 	 * Ne construit pas le booléen de gauche.
 	 * 
-	 * @param pos
-	 * @param param
+	 * @param partsRandomComp : la ligne "comparateur"
 	 * @return bout de code (comparateur) à concaténer
 	 */
 	public static String getCodeBool(String[] partsRandomComp) {

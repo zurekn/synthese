@@ -6,6 +6,10 @@ public class IAScript {
 	WindowGame windowgame = WindowGame.getInstance();
 	String actionString = "";
 	String deplacementString = "p";
+	int up=Data.NORTH;
+	int down=Data.SOUTH;
+	int left=Data.WEST;
+	int right=Data.EAST;
 	
 	public IAScript() {
 	}

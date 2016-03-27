@@ -124,7 +124,13 @@ public abstract class Character {
 			}
 		}
 	}
-
+	
+	public void waitTime(int time)
+	{
+		if(time == 0 )
+			return;
+		waitTime(time-1);
+	}
 	/**
 	 * Move the character to the position x:y if it's possible
 	 * 
@@ -467,7 +473,9 @@ public abstract class Character {
 		stats.setMana(stats.getMana() + stats.getMagicPower() + stats.getMaxMana() / 10);
 	}
 	
-	/*
+	// 					=========================   GAI METHODS  ====================================
+	
+	/**
 	 * Génération d'un déplacement
 	 * dx et dy sont des entiers qui correspondent à :
 	 * 0 => petit déplacement
@@ -513,43 +521,76 @@ public abstract class Character {
 		return "m:" + (windowgame.getCurrentPlayer().getX()+dx) + ":" + (windowgame.getCurrentPlayer().getY()+dy);
 	}
 	
-	/*
+	/**
 	 * Passer son tour
 	 */
-	public String PasserTour()
+	public String passerTour()
 	{
 		return "p";
 	}
 	
-	/*
-	 * Retourne si le mob trouvé est ami ou ennemi	
+	/**
+	 * Retourne le premier personnage trouvé dans la direction donnée
 	 */
-	public Character Rechercher(String direction)
+	public Character researchCharacter(int direction)
 	{
 		WindowGame windowgame = WindowGame.getInstance();		
-		switch(direction)
-		{
-			case "haut" : 
-				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.NORTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.NORTH).get(0));
-			case "bas" : 
-				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).get(0));
-			case "gauche" : 
-				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.WEST).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.WEST).get(0));
-			case "droite" : 
-				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.EAST).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.EAST).get(0));
-			default : 
-				return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), Data.SOUTH).get(0));
-		}
+		return (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), direction).isEmpty()? null : windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), direction).get(0));
+			
 	}
 	
-	/*
+	/**
+	 * Retourne le premier personnage trouvé dans la direction donnée
+	 */
+	public boolean isCharacterInLine(int direction)
+	{
+		boolean exist = false;
+		WindowGame windowgame = WindowGame.getInstance();	
+		exist = (windowgame.getCharacterPositionOnLine(windowgame.getCurrentPlayer().getX(), windowgame.getCurrentPlayer().getY(), direction).isEmpty()? exist : true);
+		return exist;
+	}
+	
+	/**
 	 * Retourne la range d'un spell
 	 */
 	public int Portee(String spellID)
 	{
 		return this.getSpell(spellID).getRange();
 	}
+	
+	/**
+	 * 
+	 * @return the id of the most powerful damaging spell of this character
+	 */
+	public String getMaxDamagingSpellId(){
+		String maxPowered = new String();
+		int maxPower = Integer.MIN_VALUE;
+		for(Spell s : this.getSpells()){
+			if(s.getDamage() > maxPower){
+				maxPower = s.getDamage();
+				maxPowered = s.getId();
+			}
+		}
+		return maxPowered;
+	}
+	
+	/**
+	 * 
+	 * @return the id of the most powerful healing spell of this character
+	 */
+	public String getMaxHealingSpellId(){
+		String maxPowered = new String();
+		int maxPower = Integer.MIN_VALUE;
+		for(Spell s : this.getSpells()){
+			if(s.getHeal() > maxPower){
+				maxPower = s.getHeal();
+				maxPowered = s.getId();
+			}
+		}
+		return maxPowered;
+	}
 
+	
 	public IAFitness getFitness() {
 		return fitness;
 	}
