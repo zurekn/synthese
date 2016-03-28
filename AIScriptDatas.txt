@@ -29,7 +29,7 @@ var{
     ["ch.Portee(ch.getSpells().get(0).getId())", "t_int"]
     ["ch.Portee(ch.getMaxHealingSpellId())", "t_int"]
     ["ch.Portee(ch.getMaxDamagingSpellId())", "t_int"]
-    ["((ch.researchCharacter(up)==null)?0:ch.researchCharacter(up).getStats.getLife())", "t_int"]
+    ["((ch.researchCharacter(up)==null)?0:ch.researchCharacter(up).getStats().getLife())", "t_int"]
     ["((ch.researchCharacter(up)==null)?0:ch.researchCharacter(down).getStats().getLife())", "t_int"]
     ["((ch.researchCharacter(up)==null)?0:ch.researchCharacter(left).getStats().getLife())", "t_int"]
     ["((ch.researchCharacter(up)==null)?0:ch.researchCharacter(right).getStats().getLife())", "t_int"]

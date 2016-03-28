@@ -49,10 +49,13 @@ public class WindowGame extends BasicGame {
 
 	private GameContainer container;
 	private MobHandler mobHandler;
+	private PlayerGeneticHandler genHandler;
 	private ArrayList<Mob> mobs;
 	private ArrayList<Mob> originMobs;
 	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
+	private ArrayList<PlayerGenetic> genPlayers;
+	private ArrayList<PlayerGenetic> originGenPlayers;
 	private MovementHandler movementHandler;
 	private MessageHandler messageHandler;
 	private ArrayList<Event> events = new ArrayList<Event>();
@@ -134,13 +137,22 @@ public class WindowGame extends BasicGame {
 		{
 			originMobs.add(mo);
 		}
+		
 		messageHandler = new MessageHandler();
 
 		// Create the player list
-		initPlayers();
-
-		playerHandler = new PlayerHandler(players);
-
+		players = new ArrayList<Player>();
+		genPlayers = new ArrayList<PlayerGenetic>();
+		originGenPlayers = new ArrayList<PlayerGenetic>();
+		if(Data.autoIA)
+		{
+			initGeneticPlayers();
+		}
+		else
+		{
+			initPlayers();
+			playerHandler = new PlayerHandler(players);
+		}
 		//new Thread(movementHandler).start();
 		// Set the timer
 		timerInitPlayer = Data.INIT_MAX_TIME;
@@ -150,22 +162,73 @@ public class WindowGame extends BasicGame {
 	
 
 	private void start() {
-		playerNumber = players.size() + mobs.size();
-
 		turnTimer = Data.TURN_MAX_TIME;
 		global_turn = 1;
 		turn = 0;
-		players.get(turn).setMyTurn(true);
-		currentCharacter = players.get(turn);
-
-		reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
+		if(!Data.autoIA)
+		{
+			players.get(turn).setMyTurn(true);
+			playerNumber = players.size() + mobs.size();
+			currentCharacter = players.get(turn);
+			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
+			
+		}
+		else
+		{
+			genPlayers.get(turn).setMyTurn(true);
+			playerNumber = genPlayers.size() + mobs.size();
+			currentCharacter = genPlayers.get(turn);
+		}
 		gameOn = true;
 		currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
+	}
+	
+	public void initGeneticPlayers(){
+		
+		Collection<String> pos = Data.departureBlocks.keySet();
+		pos.iterator();
+		try {
+			if (Data.DEBUG_PLAYER > 0)
+			{
+				addGeneticPlayer(10, 8, -1,"m5");
+			}
+			// players.add(new Player(10, 12, "P0", "mage"));
+			if (Data.DEBUG_PLAYER > 1)
+			{
+				addGeneticPlayer(15, 15, -1, "m8");
+			//	CompileString.compile("p1");
+			}
+			if (Data.DEBUG_PLAYER > 2)
+			{
+				addGeneticPlayer(19, 15, -1, "m7");
+			//	CompileString.compile("p2");
+			}
+			if (Data.DEBUG_PLAYER > 3)
+			{
+				addGeneticPlayer(7, 12, -1, "m9");
+			//	CompileString.compile("p3");
+			}
+			
+		} catch (IllegalCaracterClassException e) {
+			e.printStackTrace();
+		} catch (IllegalMovementException e) {
+			e.printStackTrace();
+		} catch (IllegalActionException e) {
+			e.printStackTrace();
+		}
+		
+		genHandler = new PlayerGeneticHandler(genPlayers);
+		if(Data.autoIA){
+			for(PlayerGenetic pg : genPlayers)
+			{
+				originGenPlayers.add(pg);
+			}
+		}
 	}
 
 	public void initPlayers() {
 
-		players = new ArrayList<Player>();
+		
 
 		Collection<String> pos = Data.departureBlocks.keySet();
 		pos.iterator();
@@ -263,6 +326,59 @@ public class WindowGame extends BasicGame {
 			start();
 		}
 	}
+	
+
+	/**
+	 * Add a new player
+	 * 
+	 * @param x
+	 * @param y
+	 * @throws IllegalCaracterClassException
+	 * @throws IllegalMovementException
+	 * @throws IllegalActionException
+	 */
+	@SuppressWarnings("unused")
+	public void addGeneticPlayer(int x, int y, int size, String id) throws IllegalCaracterClassException, IllegalMovementException, IllegalActionException {
+		if (gameOn)
+			throw new IllegalActionException("Can not add player genetic when game is on!");
+
+		String position = x + ":" + y;
+
+		if (WindowGame.getInstance().getAllPositions().contains(position)) {
+			// messageHandler.addMessage(new
+			// Message("Position ["+position+"] non disponible", 1));
+
+			throw new IllegalMovementException("Caracter already at the position [" + position + "]");
+		}
+
+		if (Data.untraversableBlocks.containsKey(position)) {
+			messageHandler.addGlobalMessage(new Message("Position [" + position + "] non disponible", 1));
+			throw new IllegalMovementException("Untraversable block at [" + position + "]");
+		}
+
+		if (Data.departureBlocks.containsKey(position) || (Data.DEBUG_DEPARTURE && Data.debug)) {
+			Data.departureBlocks.put(position, true);
+		} else {
+			messageHandler.addGlobalMessage(new Message(Data.DEPARTURE_BLOCK_ERROR, Data.MESSAGE_TYPE_ERROR));
+			throw new IllegalMovementException("Caracter must be at a departure position");
+		}
+
+		if (Data.MAX_PLAYER <= genPlayers.size())
+			return;
+		//String id = "P" + players.size();
+		PlayerGenetic p = new PlayerGenetic(x, y, id, "g"+genPlayers.size());
+		//p.setNumber(players.size());
+		//p.setSizeCharacter(size);
+		genPlayers.add(p);
+
+		timerInitPlayer = Data.INIT_MAX_TIME;
+		if (genPlayers.size() >= Data.MAX_PLAYER) {
+			System.out.println(" ----Max genetic player reached ----");
+			start();
+		}
+	}
+
+	
 
 	/**
 	 * Add a new player with color
@@ -415,7 +531,10 @@ public class WindowGame extends BasicGame {
 			Data.map.render(Data.MAP_X,  Data.MAP_Y);
 			mobHandler.render(container, g);
 			//renderDeckArea(container, g);
-			playerHandler.render(container, g);
+			if(Data.autoIA)
+				genHandler.render(container, g);
+			else
+				playerHandler.render(container, g);
 			if(gameWin){
 				Data.WIN_IMAGE.draw(Data.ENDING_ANIMATION_X, Data.ENDING_ANIMATION_Y, (float) Data.WIN_IMAGE.getWidth() * Data.ENDING_ANIMATION_SCALE, (float) Data.WIN_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE);
 			}
@@ -462,15 +581,17 @@ public class WindowGame extends BasicGame {
 
 			if (gameOn) {
 				mobHandler.render(container, g);
-				//renderDeckArea(container, g);
-				playerHandler.render(container, g);
+				if(Data.autoIA)genHandler.render(container, g);
+				renderDeckArea(container, g);
+				if(!Data.autoIA)playerHandler.render(container, g);
 				renderReachableBlocks(container, g);
 				renderEvents(container, g);
 			} else {
-				playerHandler.renderInitBlock(container, g);
+				if(!Data.autoIA)playerHandler.renderInitBlock(container, g);
 			}
-			playerHandler.renderPlayerStat(container, g);
+			if(!Data.autoIA)playerHandler.renderPlayerStat(container, g);
 			mobHandler.renderMobStat(container, g);
+			if(Data.autoIA)genHandler.renderMobStat(container, g);
 			renderText(container, g);
 		}
 	}
@@ -612,29 +733,41 @@ public class WindowGame extends BasicGame {
 			for(Mob mo:mobs){
 				mo.getFitness().addTurn();
 			}
-			for(Player po:players){
-				po.getFitness().addTurn();
+			if(Data.autoIA){
+				for(PlayerGenetic po:genPlayers){
+					po.getFitness().addTurn();
+				}
 			}
 		}
 		previousCharacter = currentCharacter;
 		previousCharacter.regenMana();
 		// Switch the turn
 		// Set the new character turn
-		if (turn < players.size()) {
+		if (!Data.autoIA) {
+			if (turn < players.size()){
 			players.get(turn).setMyTurn(true);
 			currentCharacter = players.get(turn);
-		} else {
+			}
+		}else if(turn < genPlayers.size()&& Data.autoIA){
+			genPlayers.get(turn).setMyTurn(true);
+			currentCharacter = genPlayers.get(turn);
+		} 
+		else if(!Data.autoIA){
 			mobs.get(turn - players.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - players.size());
+		}else{
+			mobs.get(turn - genPlayers.size()).setMyTurn(true);
+			currentCharacter = mobs.get(turn - genPlayers.size());
 		}
 
 		// set to false the previous character turn
 		previousCharacter.setMyTurn(false);
 		if (currentCharacter.isMonster() && !Data.SHOW_MOB_REACHABLE_BLOCKS)
 			reachableBlock = new ArrayList<int[]>();
-		else
+		else if(!Data.autoIA)
 			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
-
+		
+			
 		messageHandler.addGlobalMessage(new Message("Turn of " + currentCharacter.getName()));
 		actionLeft = Data.ACTION_PER_TURN;
 
@@ -652,10 +785,14 @@ public class WindowGame extends BasicGame {
 		// print the current turn in the console
 		if (Data.debug) {
 			System.out.println("========================");
-			if (turn < players.size()) {
+			if (turn < players.size() && !Data.autoIA) {
 				System.out.println("Tour du Joueur " + turn);
 				System.out.println("Player : " + players.get(turn).toString());
-			} else {
+			} else if (turn < genPlayers.size() && Data.autoIA) {
+				System.out.println("Tour du Joueur Genetic " + turn);
+				System.out.println("Player : " + genPlayers.get(turn).toString());
+			}
+			else {
 				System.out.println("Tour du Monster" + (turn - players.size()));
 				System.out.println("Monster " + mobs.get(turn - players.size()).toString());
 			}
@@ -755,10 +892,12 @@ public class WindowGame extends BasicGame {
 						System.out.println("-----------------------------------------");
 						//System.out.println(currentCharacter.getFitness().toStringFitness());
 						messageHandler.addPlayerMessage(new Message(currentCharacter.getName()+"Died "), turn);	
-						players.remove(currentCharacter);
+						if(!Data.autoIA)
+							players.remove(currentCharacter);
+						else
+							genPlayers.remove(currentCharacter);
 						mobs.remove(currentCharacter);
 						playerNumber--;
-						
 						checkEndGame();
 						switchTurn();
 					}
@@ -796,7 +935,10 @@ public class WindowGame extends BasicGame {
 							System.out.println("-----------------------------------------");
 							//System.out.println(focus.character.getFitness().toStringFitness());
 							messageHandler.addPlayerMessage(new Message(focus.character.getName()+"Died "), turn);	
-							players.remove(focus.character);
+							if(Data.autoIA)
+								genPlayers.remove(focus.character);
+							else
+								players.remove(focus.character);
 							mobs.remove(focus.character);
 							playerNumber--;
 							checkEndGame();
@@ -1002,8 +1144,14 @@ public class WindowGame extends BasicGame {
 	 */
 	public ArrayList<String> getAllPositions() {
 		ArrayList<String> list = new ArrayList<String>();
+		if(!Data.autoIA)
+		{
 		for (int i = 0; i < players.size(); i++)
 			list.add(players.get(i).getX() + ":" + players.get(i).getY());
+		}else{
+			for (int i = 0; i < genPlayers.size(); i++)
+				list.add(genPlayers.get(i).getX() + ":" + genPlayers.get(i).getY());
+		}
 		for (int i = 0; i < mobs.size(); i++)
 			list.add(mobs.get(i).getX() + ":" + mobs.get(i).getY());
 		return list;
@@ -1033,18 +1181,20 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void checkEndGame(){
-		if(Data.debug && !Data.RUN_APIX && players.size() > 0 && mobs.size() <= 0 )
-		{	
-			//GAME WIN
-			gameEnded = true;
-			gameWin = true;
-		}else if(Data.debug && !Data.RUN_APIX && (players.size() <= 0 || global_turn == Data.maxTurn))
-		{
-			
-			//GAME LOSE
-			gameEnded = true;
-			gameLose = true;
-		}
+		
+			if(Data.debug && !Data.RUN_APIX)
+			{	
+				if( mobs.size() <= 0 ){
+					//GAME WIN
+					gameEnded = true;
+					gameWin = true;
+				}else if( (players.size() <= 0 && !Data.autoIA) || (genPlayers.size() <= 0 && Data.autoIA) || global_turn == Data.maxTurn)
+				{
+					//GAME LOSE
+					gameEnded = true;
+					gameLose = true;
+				}
+			}
 		if(gameEnded)
 		{
 			//stopAllThread();
@@ -1054,9 +1204,12 @@ public class WindowGame extends BasicGame {
 				System.out.println("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness());
 				mo.getFitness().debugFile("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness(), true);
 			}	
-			for(Player po : players){
-				po.getFitness().debugFile("Player id="+po.getId()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
-			}	
+			if(Data.autoIA)
+			{
+				for(PlayerGenetic po : originGenPlayers){
+					po.getFitness().debugFile("Player id="+po.getId()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
+				}	
+			}
 		}
 		// Partie à décommenter pour avoir une partie classique mobs vs players
 		/*else
@@ -1097,20 +1250,37 @@ public class WindowGame extends BasicGame {
 			c.add(currentCharacter);
 			return c;
 		}
-		
-		for (int i = 0; i < players.size(); i++) {
-			// above
-			if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
-				c.add(players.get(i));
-			// bottom
-			if (direction == Data.SOUTH && players.get(i).getY() > y && players.get(i).getX() == x)
-				c.add(players.get(i));
-			// on left
-			if (direction == Data.EAST && players.get(i).getY() == y && players.get(i).getX() > x)
-				c.add(players.get(i));
-			// on right
-			if (direction == Data.WEST && players.get(i).getY() == y && players.get(i).getX() < x)
-				c.add(players.get(i));
+		if(!Data.autoIA)
+		{
+			for (int i = 0; i < players.size(); i++) {
+				// above
+				if (direction == Data.NORTH && players.get(i).getY() < y && players.get(i).getX() == x)
+					c.add(players.get(i));
+				// bottom
+				if (direction == Data.SOUTH && players.get(i).getY() > y && players.get(i).getX() == x)
+					c.add(players.get(i));
+				// on left
+				if (direction == Data.EAST && players.get(i).getY() == y && players.get(i).getX() > x)
+					c.add(players.get(i));
+				// on right
+				if (direction == Data.WEST && players.get(i).getY() == y && players.get(i).getX() < x)
+					c.add(players.get(i));
+			}
+		}else{
+			for (int i = 0; i < genPlayers.size(); i++) {
+				// above
+				if (direction == Data.NORTH && genPlayers.get(i).getY() < y && genPlayers.get(i).getX() == x)
+					c.add(genPlayers.get(i));
+				// bottom
+				if (direction == Data.SOUTH && genPlayers.get(i).getY() > y && genPlayers.get(i).getX() == x)
+					c.add(genPlayers.get(i));
+				// on left
+				if (direction == Data.EAST && genPlayers.get(i).getY() == y && genPlayers.get(i).getX() > x)
+					c.add(genPlayers.get(i));
+				// on right
+				if (direction == Data.WEST && genPlayers.get(i).getY() == y && genPlayers.get(i).getX() < x)
+					c.add(genPlayers.get(i));
+			}
 		}
 
 		for (int i = 0; i < mobs.size(); i++) {

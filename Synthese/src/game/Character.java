@@ -64,7 +64,7 @@ public abstract class Character {
 	 * Genere le script pour l'IA
 	 */
 	public void generateScriptGenetic() {// génération d'un script génétique
-		CompileString.generate(this.id);
+		CompileString.generate(this.trueID);
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public abstract class Character {
 	 */
 	void compileScriptGenetic()
 	{
-		IAGenetic ch = CompileString.CompileAndInstanciateClass(this.id);
+		IAGenetic ch = CompileString.CompileAndInstanciateClass(this.trueID);
 		cl = ch.getC();
 		obj = ch.getObj();
 	}
@@ -99,7 +99,7 @@ public abstract class Character {
 					String[] decode  = result.split("!!");
 					for(String st : decode)
 					{
-						 windowgame.decodeAction(st);
+						if(!st.equals("")) windowgame.decodeAction(st);
 						 
 					}
 					method = cl.getDeclaredMethod("setActionString", String.class);
@@ -483,15 +483,17 @@ public abstract class Character {
 	 * 2 => grand déplacement
 	 * Le signe de dx et dy déterminent la direction
 	 */
-	public String getDeplacement(int dx, int dy)
+	public String getDeplacement(int ddx, int ddy)
 	{
+		int dx=0;
+		int dy=0;
 		WindowGame windowgame = WindowGame.getInstance();
-		switch(dx)
+		switch(ddx)
 		{
 			case -2 : 
-				dx = -this.stats.getMovementPoints();
+				dx = -1*this.stats.getMovementPoints();
 			case -1 : 
-				dx = -(int)(this.stats.getMovementPoints())/2;
+				dx = -1*(int)(this.stats.getMovementPoints())/2;
 			case 0 : 
 				dx = 1;
 			case 1 : 
@@ -501,12 +503,12 @@ public abstract class Character {
 			default : 
 				dx = 1;
 		}
-		switch(dy)
+		switch(ddy)
 		{
 			case -2 : 
-				dy = -this.stats.getMovementPoints();
+				dy = -1*this.stats.getMovementPoints();
 			case -1 : 
-				dy = -(int)(this.stats.getMovementPoints())/2;
+				dy = -1*(int)(this.stats.getMovementPoints())/2;
 			case 0 : 
 				dy = 1;
 			case 1 : 

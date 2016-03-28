@@ -93,44 +93,46 @@ public class MessageHandler {
 	}
 
 	public void addPlayerMessage(Message message, int player) {
-		// first call we create the playerList
-		System.out.println(message+", "+player);
-		if (playerMessages.size() < 1)
-			for (int i = 0; i < WindowGame.getInstance().getPlayers().size(); i++) {
-				playerMessages.add(new ArrayList<Message>());
-				deletedPlayerMessage.add(new ArrayList<Message>());
-				waitingPlayerMessage.add(new ArrayList<Message>());
+		if(!Data.autoIA){
+			// first call we create the playerList
+			System.out.println(message+", "+player);
+			if (playerMessages.size() < 1)
+				for (int i = 0; i < WindowGame.getInstance().getPlayers().size(); i++) {
+					playerMessages.add(new ArrayList<Message>());
+					deletedPlayerMessage.add(new ArrayList<Message>());
+					waitingPlayerMessage.add(new ArrayList<Message>());
+				}
+	
+			ArrayList<Message> splitMessage = split(message);
+			if (player >= WindowGame.getInstance().getPlayers().size())
+				for (Message m : splitMessage)
+					addGlobalMessage(m);
+			else {
+				switch (player) {
+				case 0:
+					for (Message m : splitMessage)
+						m.setRotation(0);
+					break;
+				case 1:
+					for (Message m : splitMessage)
+						m.setRotation(90);
+					break;
+				case 2:
+					for (Message m : splitMessage)
+						m.setRotation(180);
+					break;
+				case 3:
+					for (Message m : splitMessage)
+						m.setRotation(-90);
+					break;
+	
+				default:
+					break;
+				}
+				for (Message m : splitMessage)
+					waitingPlayerMessage.get(player).add(m);
+	
 			}
-
-		ArrayList<Message> splitMessage = split(message);
-		if (player >= WindowGame.getInstance().getPlayers().size())
-			for (Message m : splitMessage)
-				addGlobalMessage(m);
-		else {
-			switch (player) {
-			case 0:
-				for (Message m : splitMessage)
-					m.setRotation(0);
-				break;
-			case 1:
-				for (Message m : splitMessage)
-					m.setRotation(90);
-				break;
-			case 2:
-				for (Message m : splitMessage)
-					m.setRotation(180);
-				break;
-			case 3:
-				for (Message m : splitMessage)
-					m.setRotation(-90);
-				break;
-
-			default:
-				break;
-			}
-			for (Message m : splitMessage)
-				waitingPlayerMessage.get(player).add(m);
-
 		}
 	}
 

@@ -306,7 +306,8 @@ public class CompileString {
 		partsRandomVar = getParamByType(var, type); // recupere la variable à droite du comparateur
 		String rightVar = partsRandomVar[0]; 
 		//debugSys("getComptInCond : rightVar = "+rightVar);
-		returnString = (partsRandomComp[rand] + " " + rightVar+(type.contains("(")?")":""));
+		returnString = (partsRandomComp[rand] + " " + rightVar+" "+(partsRandomComp[rand].contains("(")?")":""));
+		
 		// concaténation du comparateur et de la valeur comparante
 		return returnString;
 	}

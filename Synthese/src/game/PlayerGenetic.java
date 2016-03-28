@@ -1,5 +1,6 @@
 package game;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -8,115 +9,80 @@ import org.newdawn.slick.Image;
 import data.Data;
 import data.Hero;
 import data.HeroData;
+import data.Monster;
+import data.MonsterData;
 import data.SpellData;
 import data.Stats;
 import exception.IllegalCaracterClassException;
 
+
 public class PlayerGenetic extends Character {
-	
-	private Image icon;
-	private int number;
-	Color playerColor;
-	WindowGame windowgame = WindowGame.getInstance();
-	String actionString = "";
-	String deplacementString = "p";
-	
-	/**
-	 * This constructor is not available
-	 * @param x
-	 * @param y
-	 * @param id
-	 * @param stats
-	 * @deprecated
-	 */
-	public PlayerGenetic(int x, int y, String id, Stats stats) {
+
+	public PlayerGenetic(int x, int y, String id, String trueID) {
 		this.setX(x);
 		this.setY(y);
 		this.setId(id);
-		this.setStats(stats);
-		this.setSpells(SpellData.getSpellForClass(this.getStats().getCharacterClass()));
+		this.setTrueID(trueID);
 		init();
 
 		if (Data.debug) {
-			System.out.println("Debug : Player " + getId() + " created");
+			System.out.println("Debug : Player Genetic created : " + toStringAll());
 		}
 	}
-	
-	public PlayerGenetic(){
-		
-	}
-	
-	public String run(Character ch)
-	{
-		return actionString+"!!"+deplacementString;
-	}
-	
-	@SuppressWarnings("unused")
-	public PlayerGenetic(int x, int y, String id, String caracterClass) throws IllegalCaracterClassException{
+
+	public void init(){
 		monster=false;
-		this.setX(x);
-		this.setY(y);
-		this.setId(id);
-		this.setAiType("player");
-		this.setTrueID(id);
-		this.setName(id);
-		this.setNpc(false);
-		Hero h = HeroData.getHeroByClass(caracterClass);
-		icon = h.getIcon();
-		if(h == null){
-			throw (new IllegalCaracterClassException(caracterClass + "Doesn't exist in hero.xml"));
-		}
-			
-		this.setStats(h.getStat().clone());
-		this.setSpells(h.getSpells());
-		this.setPlayerColor(Color.black);
-		if (Data.debug) {
-			System.out.println("Debug : Player " + this.toString() + " created");
-		}
+		Monster m = MonsterData.getMonsterById(this.getId());
+		this.setAnimation(m.getAnimation());
+		this.setStats(m.getStats());
+		this.setName(m.getName());
+		this.setSpells(m.getSpells());
+		this.setAiType(m.getAiType());
 		if(Data.generateIA)
 			this.generateScriptGenetic();
 		this.compileScriptGenetic();
 		this.setFitness(new IAFitness(true));
 	}
 
-	public void init() {
-
-	}
-
-	public Image getIcon(){
-		return icon;
-	}
-	
 	public void render(GameContainer container, Graphics g) {
-		g.setColor(Color.black);
-		//if(this.isMyTurn())
-			g.setColor(this.getPlayerColor());
-		//if(Data.DISPLAY_PLAYER)
-			g.fillRect(Data.MAP_X + getX() * Data.BLOCK_SIZE_X, Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y,
-				Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		Animation[] animation = this.getAnimation();
+		int x = this.getX();
+		int y = this.getY();
+		if (isMyTurn()) 
+			Data.IMAGE_HALO.draw(getX() * Data.BLOCK_SIZE_X + Data.MAP_X - 10, getY() * Data.BLOCK_SIZE_Y + Data.MAP_Y - 10, Data.BLOCK_SIZE_X + 20 , Data.BLOCK_SIZE_Y + 20);
+		animation[6].draw(Data.MAP_X + x * Data.BLOCK_SIZE_X, Data.MAP_Y + y
+				* Data.BLOCK_SIZE_Y, Data.BLOCK_SIZE_X, Data.BLOCK_SIZE_Y);
+		/*if (isMyTurn()) {
+			int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X
+					+ Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints()
+					* Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
+			int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y
+					+ Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints()
+					* Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
+			int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X
+					+ Data.BLOCK_SIZE_X;
+			int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y
+					+ Data.BLOCK_SIZE_Y;
+			g.drawOval(posX, posY, sizeX, sizeY);
+		}*/
+		if(Data.debug){
+			if(getFocusedOn()!=null)
+				g.drawLine(Data.MAP_X + x * Data.BLOCK_SIZE_X+ Data.BLOCK_SIZE_X / 2, Data.MAP_Y + y
+				* Data.BLOCK_SIZE_Y+ Data.BLOCK_SIZE_X / 2, Data.MAP_X + getFocusedOn().getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2, Data.MAP_Y + getFocusedOn().getY()
+				* Data.BLOCK_SIZE_Y+ Data.BLOCK_SIZE_X / 2);
+		}
 
-			//int posX = Data.MAP_X + getX() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_X - Data.BLOCK_SIZE_X / 2;
-			//int posY = Data.MAP_Y + getY() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y / 2 - getStats().getMovementPoints() * Data.BLOCK_SIZE_Y - Data.BLOCK_SIZE_Y / 2;
-			//int sizeX = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_X + Data.BLOCK_SIZE_X ;
-			//int sizeY = 2 * getStats().getMovementPoints() * Data.BLOCK_SIZE_Y + Data.BLOCK_SIZE_Y ;
-			//g.drawOval(posX, posY, sizeX, sizeY);
 	}
 
-	public int getNumber(){
-		return number;
-	}
-	
-	public void setNumber(int n) {
-		this.number = n;
+	@Override
+	public String toString() {
+		return "Mob [name=" + getName() + ", x=" + getX() + ", y=" + getY()
+				+ ", id=" + getId() + "]";
 	}
 
-	public Color getPlayerColor() {
-		return playerColor;
+	public String toStringAll() {
+		return "Mob [name=" + getName() + ", x=" + getX() + ", y=" + getY()
+				+ ", id=" + getId() + ", " + getStats().toString()
+				+ ", Spells " + getSpells().toString() + "]";
 	}
-
-	public void setPlayerColor(Color playerColor) {
-		this.playerColor = playerColor;
-	}
-	
-	
 }
