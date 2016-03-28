@@ -94,11 +94,13 @@ public class WindowGame extends BasicGame {
 		windowGame = this;
 	}
 
-	private WindowGame(String title, GameContainer container, MobHandler mobHandler, ArrayList<Mob> mobs, game.PlayerHandler playerHandler,
+	private WindowGame(String title, GameContainer container,PlayerGeneticHandler genHandler,ArrayList<PlayerGenetic> genPlayers,MobHandler mobHandler, ArrayList<Mob> mobs, game.PlayerHandler playerHandler,
 			ArrayList<Player> players, MovementHandler movementHandler, ArrayList<Event> events, Character currentCharacter, int playerNumber,
 			int turn, int turnTimer, long timeStamp) {
 		super(title);
 		this.container = container;
+		this.genHandler = genHandler;
+		this.genPlayers = genPlayers;
 		this.mobHandler = mobHandler;
 		this.mobs = mobs;
 		this.playerHandler = playerHandler;
@@ -162,6 +164,13 @@ public class WindowGame extends BasicGame {
 	
 
 	private void start() {
+		genHandler = new PlayerGeneticHandler(genPlayers);
+		if(Data.autoIA){
+			for(PlayerGenetic pg : genPlayers)
+			{
+				originGenPlayers.add(pg);
+			}
+		}
 		turnTimer = Data.TURN_MAX_TIME;
 		global_turn = 1;
 		turn = 0;
@@ -217,13 +226,7 @@ public class WindowGame extends BasicGame {
 			e.printStackTrace();
 		}
 		
-		genHandler = new PlayerGeneticHandler(genPlayers);
-		if(Data.autoIA){
-			for(PlayerGenetic pg : genPlayers)
-			{
-				originGenPlayers.add(pg);
-			}
-		}
+		
 	}
 
 	public void initPlayers() {
@@ -725,7 +728,7 @@ public class WindowGame extends BasicGame {
 		turn = (turn + 1) % playerNumber;
 		if(turn == 0)
 		{
-			currentCharacter.getFitness().debugFile("=== TOUR "+global_turn+" ===", true);
+			currentCharacter.getFitness().debugFile("\n\t\t\t\t=== TOUR "+global_turn+" ===", true);
 			checkEndGame();
 			
 			global_turn++;
@@ -783,7 +786,7 @@ public class WindowGame extends BasicGame {
 		}
 
 		// print the current turn in the console
-		if (Data.debug) {
+		if (Data.debug && !gameEnded) {
 			System.out.println("========================");
 			if (turn < players.size() && !Data.autoIA) {
 				System.out.println("Tour du Joueur " + turn);
@@ -792,9 +795,12 @@ public class WindowGame extends BasicGame {
 				System.out.println("Tour du Joueur Genetic " + turn);
 				System.out.println("Player : " + genPlayers.get(turn).toString());
 			}
-			else {
+			else if(!Data.autoIA){
 				System.out.println("Tour du Monster" + (turn - players.size()));
 				System.out.println("Monster " + mobs.get(turn - players.size()).toString());
+			}else{
+				System.out.println("Tour du Monster" + (turn - genPlayers.size()));
+				System.out.println("Monster " + mobs.get(turn - genPlayers.size()).toString());
 			}
 			System.out.println("========================");
 		}
@@ -868,7 +874,8 @@ public class WindowGame extends BasicGame {
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
-							currentCharacter.getFitness().debugFile("mob "+currentCharacter.getName()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
+							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
+							+currentCharacter.getName()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
@@ -881,7 +888,8 @@ public class WindowGame extends BasicGame {
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
-							currentCharacter.getFitness().debugFile("mob "+currentCharacter.getName()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
+							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
+									currentCharacter.getName()+" a attaqué personne (echec crit) ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 					}
@@ -896,6 +904,9 @@ public class WindowGame extends BasicGame {
 							players.remove(currentCharacter);
 						else
 							genPlayers.remove(currentCharacter);
+						currentCharacter.getFitness().debugFile("*** "+(currentCharacter.isMonster()?"mob ":"genPlayer ")+
+								currentCharacter.getName()+" est mort ."+currentCharacter.getFitness().toStringFitness(),true);
+					
 						mobs.remove(currentCharacter);
 						playerNumber--;
 						checkEndGame();
@@ -939,6 +950,8 @@ public class WindowGame extends BasicGame {
 								genPlayers.remove(focus.character);
 							else
 								players.remove(focus.character);
+							currentCharacter.getFitness().debugFile("*** "+(focus.character.isMonster()?"mob ":"genPlayer ")+
+									focus.character.getName()+" a été tué par "+(currentCharacter.isMonster()?"mob ":"genPlayer ")+currentCharacter.getName()+".",true);
 							mobs.remove(focus.character);
 							playerNumber--;
 							checkEndGame();
@@ -946,7 +959,8 @@ public class WindowGame extends BasicGame {
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 						currentCharacter.getFitness().scoreUnlessSpell();
-						currentCharacter.getFitness().debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
+						currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
+								+currentCharacter.getName()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
 					}
 				}
 				events.add(e);
@@ -965,6 +979,9 @@ public class WindowGame extends BasicGame {
 		}
 		else if (action.startsWith("p")) { // Pass turn
 			currentCharacter.getFitness().scorePassTurn();
+			currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
+					currentCharacter.getName()+" passe son tour) ."+currentCharacter.getFitness().toStringFitness(),true);
+		
 			switchTurn();
 		}
 		else if (action.startsWith("m")) {// Movement action
@@ -972,11 +989,13 @@ public class WindowGame extends BasicGame {
 				String[] tokens = action.split(":");
 				if (tokens.length != 3)
 					throw new IllegalActionException("Wrong number of arguments in action string");
-
+				
 				String position = tokens[1] + ":" + tokens[2];
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				currentCharacter.getFitness().scoreMove();
+				currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
+						+currentCharacter.getName()+" Bouge en "+position+" ."+currentCharacter.getFitness().toStringFitness(),true);
 				switchTurn();
 
 			}catch (IllegalMovementException ime) {
