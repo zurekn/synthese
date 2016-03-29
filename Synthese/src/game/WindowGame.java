@@ -1216,7 +1216,7 @@ public class WindowGame extends BasicGame {
 			}
 		if(gameEnded)
 		{
-			//stopAllThread();
+			
 			System.out.println("-- FIN DE JEU-- ");
 			originMobs.get(0).getFitness().debugFile("-- FIN DE JEU --", true);
 			for(Mob mo : originMobs){
@@ -1229,6 +1229,7 @@ public class WindowGame extends BasicGame {
 					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
 				}	
 			}
+			stopAllThread();
 		}
 	}
 	
