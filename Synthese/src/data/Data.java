@@ -60,7 +60,7 @@ public class Data {
 	
 	//For Genetic IA=
 	public static boolean autoIA = true;
-	public static boolean generateIA = false;
+	public static boolean generateIA = true;
 	public static int maxTurn = 20;
 	
 	// Const TI Part

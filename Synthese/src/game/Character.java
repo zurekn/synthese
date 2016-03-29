@@ -54,6 +54,7 @@ public abstract class Character {
 
 	private Class<?> cl = null;
 	private Object obj = null;
+	WindowGame windowgame = WindowGame.getInstance();
 
 	public abstract void render(GameContainer container, Graphics g);
 
@@ -79,7 +80,7 @@ public abstract class Character {
 	
 	public void findScriptAction(int compteur){// Ici mettre l'instanciation de la nouvelle classe propre à CE charactère
 		System.out.println(this.id +"-compteur = "+compteur);
-		WindowGame windowgame = WindowGame.getInstance();
+		String result = "";
 		if(compteur>=10)
 		{	
 			try {
@@ -91,25 +92,36 @@ public abstract class Character {
 		else
 		{	try {
 				Method method = cl.getDeclaredMethod("run", Character.class);
-				String result = (String) method.invoke(obj, this);
-				
+				result = (String) method.invoke(obj, this);
 				if(result !="")
 				{
 					System.out.println("### Character.findScriptAction : result = "+result);
+					int index = 0;
 					String[] decode  = result.split("!!");
 					for(String st : decode)
 					{
-						if(!st.equals("")) windowgame.decodeAction(st);
+						if(!st.equals("") && !(index==0 && compteur > 0)  ) windowgame.decodeAction(st);
+						index++;
 						 
 					}
 					method = cl.getDeclaredMethod("setActionString", String.class);
 					method.invoke(obj, "");
 				}
 				else
+				{
+					if(compteur == 0) getFitness().debugFile("error : mob = "+getTrueID()+" print= emptyAction", true);
 					findScriptAction(++compteur);
+					return;
+				}
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				
+				if(compteur == 0)
+				{
+					e.printStackTrace();
+					getFitness().debugFile("error : mob = "+getTrueID()+"action = "+result+", print= illegalAccess", true);
+				}
 				findScriptAction(++compteur);
+				return;
 			} catch (SecurityException e) {
 				e.printStackTrace();findScriptAction(++compteur);
 			} catch (NoSuchMethodException e) {
@@ -119,8 +131,15 @@ public abstract class Character {
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			} catch (IllegalActionException e) {
-				e.printStackTrace();
+				
+				if(compteur == 0)
+					{
+					e.printStackTrace();
+					getFitness().debugFile("error : mob = "+getTrueID()+"action = "+result+", print= illegalAction", true);
+					
+					}
 				findScriptAction(++compteur);
+				return;
 			}
 		}
 	}
@@ -477,11 +496,11 @@ public abstract class Character {
 	
 	/**
 	 * Génération d'un déplacement
-	 * dx et dy sont des entiers qui correspondent à :
+	 * ddx et ddy sont des entiers qui correspondent à :
 	 * 0 => petit déplacement
 	 * 1 => moyen déplacement
 	 * 2 => grand déplacement
-	 * Le signe de dx et dy déterminent la direction
+	 * Le signe de ddx et ddy déterminent la direction
 	 */
 	public String getDeplacement(int ddx, int ddy)
 	{
@@ -491,32 +510,40 @@ public abstract class Character {
 		switch(ddx)
 		{
 			case -2 : 
-				dx = -1*this.stats.getMovementPoints();
+				dx = -this.stats.getMovementPoints();
+				break;
 			case -1 : 
-				dx = -1*(int)(this.stats.getMovementPoints())/2;
+				dx = -(int)(this.stats.getMovementPoints())/2;
+				break;
 			case 0 : 
 				dx = 1;
 			case 1 : 
 				dx = (int)(this.stats.getMovementPoints())/2;
+				break;
 			case 2 : 
 				dx = this.stats.getMovementPoints();
+				break;
 			default : 
-				dx = 1;
+				dx = 0;
 		}
 		switch(ddy)
 		{
 			case -2 : 
-				dy = -1*this.stats.getMovementPoints();
+				dy = -this.stats.getMovementPoints();
+				break;
 			case -1 : 
-				dy = -1*(int)(this.stats.getMovementPoints())/2;
+				dy = -(int)(this.stats.getMovementPoints())/2;
+				break;
 			case 0 : 
 				dy = 1;
 			case 1 : 
 				dy = (int)(this.stats.getMovementPoints())/2;
+				break;
 			case 2 : 
 				dy = this.stats.getMovementPoints();
+				break;
 			default : 
-				dy = 1;
+				dy = 0;
 		}
 
 		
@@ -591,6 +618,8 @@ public abstract class Character {
 		}
 		return maxPowered;
 	}
+	
+	
 
 	
 	public IAFitness getFitness() {

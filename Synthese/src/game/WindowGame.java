@@ -875,7 +875,7 @@ public class WindowGame extends BasicGame {
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
 							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
-							+currentCharacter.getName()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
+							+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
 						messageHandler.addPlayerMessage(new Message("Heal critic "+heal+" to the "+focus.character.getName()+"", Data.MESSAGE_TYPE_ERROR), turn);
 
@@ -888,8 +888,8 @@ public class WindowGame extends BasicGame {
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
-							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
-									currentCharacter.getName()+" a attaqué personne (echec crit) ."+currentCharacter.getFitness().toStringFitness(),true);
+							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
+									+currentCharacter.getName()+" "+currentCharacter.getTrueID()+"a attaqué personne (echec crit) ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
 						messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+currentCharacter.getName()+" and deal critic "+damage, Data.MESSAGE_TYPE_ERROR), turn);	
 					}
@@ -904,8 +904,8 @@ public class WindowGame extends BasicGame {
 							players.remove(currentCharacter);
 						else
 							genPlayers.remove(currentCharacter);
-						currentCharacter.getFitness().debugFile("*** "+(currentCharacter.isMonster()?"mob ":"genPlayer ")+
-								currentCharacter.getName()+" est mort ."+currentCharacter.getFitness().toStringFitness(),true);
+						currentCharacter.getFitness().debugFile("*** "+(currentCharacter.isMonster()?"mob ":"genPlayer ")
+								+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" est mort ."+currentCharacter.getFitness().toStringFitness(),true);
 					
 						mobs.remove(currentCharacter);
 						playerNumber--;
@@ -951,7 +951,7 @@ public class WindowGame extends BasicGame {
 							else
 								players.remove(focus.character);
 							currentCharacter.getFitness().debugFile("*** "+(focus.character.isMonster()?"mob ":"genPlayer ")+
-									focus.character.getName()+" a été tué par "+(currentCharacter.isMonster()?"mob ":"genPlayer ")+currentCharacter.getName()+".",true);
+									focus.character.getName()+" "+focus.character.getTrueID()+" a été tué par "+(currentCharacter.isMonster()?"mob ":"genPlayer ")+currentCharacter.getName()+" "+currentCharacter.getTrueID()+".",true);
 							mobs.remove(focus.character);
 							playerNumber--;
 							checkEndGame();
@@ -960,7 +960,7 @@ public class WindowGame extends BasicGame {
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 						currentCharacter.getFitness().scoreUnlessSpell();
 						currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
-								+currentCharacter.getName()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
+								+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
 					}
 				}
 				events.add(e);
@@ -980,7 +980,7 @@ public class WindowGame extends BasicGame {
 		else if (action.startsWith("p")) { // Pass turn
 			currentCharacter.getFitness().scorePassTurn();
 			currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
-					currentCharacter.getName()+" passe son tour) ."+currentCharacter.getFitness().toStringFitness(),true);
+					currentCharacter.getName()+" "+currentCharacter.getTrueID()+" PASSE son tour ."+currentCharacter.getFitness().toStringFitness(),true);
 		
 			switchTurn();
 		}
@@ -995,7 +995,7 @@ public class WindowGame extends BasicGame {
 				currentCharacter.moveTo(position);
 				currentCharacter.getFitness().scoreMove();
 				currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
-						+currentCharacter.getName()+" Bouge en "+position+" ."+currentCharacter.getFitness().toStringFitness(),true);
+						+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" BOUGE en "+position+" ."+currentCharacter.getFitness().toStringFitness(),true);
 				switchTurn();
 
 			}catch (IllegalMovementException ime) {
@@ -1221,28 +1221,15 @@ public class WindowGame extends BasicGame {
 			originMobs.get(0).getFitness().debugFile("-- FIN DE JEU --", true);
 			for(Mob mo : originMobs){
 				System.out.println("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness());
-				mo.getFitness().debugFile("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness(), true);
+				mo.getFitness().debugFile("Mob id="+mo.getTrueID()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness(), true);
 			}	
 			if(Data.autoIA)
 			{
 				for(PlayerGenetic po : originGenPlayers){
-					po.getFitness().debugFile("Player id="+po.getId()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
+					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
 				}	
 			}
 		}
-		// Partie à décommenter pour avoir une partie classique mobs vs players
-		/*else
-		{
-			if(mobs.size() <= 0 || players.size() <= 0){
-				//GAME WIN
-				stopAllThread();
-				gameEnded = true;
-				if(mobs.size() <= 0)
-					gameWin = true;
-				if(players.size() <= 0)
-					gameLose = true;
-			}	
-		}*/
 	}
 	
 	public void stopAllThread(){

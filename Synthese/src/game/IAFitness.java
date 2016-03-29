@@ -85,7 +85,7 @@ public class IAFitness {
 				currentCharacter.getFitness().setpHeal(currentCharacter.getFitness().getpHeal()+currentCharacter.getFitness().getHealAllyMaxLife());
 		}
 		debugFile((currentCharacter.isMonster()?"mob ":"genPlayer")
-				+currentCharacter.getName()+" a soigné le mob "+focusCharacter.getName()+". "+toStringFitness(),true);
+				+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a soigné le mob "+focusCharacter.getName()+" "+focusCharacter.getTrueID()+". "+toStringFitness(),true);
 		//}
 		//else{
 			//this.scoreUnlessSpell();
@@ -118,7 +118,7 @@ public class IAFitness {
 			
 			}
 			debugFile((currentCharacter.isMonster()?"mob ":"genPlayer")
-					+currentCharacter.getName()+" a lancé un sort sur mob "+focusCharacter.getName()+". "+toStringFitness(),true);
+					+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a lancé un sort sur mob "+focusCharacter.getName()+" "+focusCharacter.getTrueID()+". "+toStringFitness(),true);
 		//}else{
 			//this.scoreUnlessSpell();
 			//debugFile("mob "+currentCharacter.getName()+" a lancé un sort sur personne ."+stringFitness(),true);

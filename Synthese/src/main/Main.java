@@ -41,7 +41,7 @@ public class Main {
 		Data.checkValuesIni("paramTI.ini"); // Vérification des variables dans le fichier .ini
 		System.out.println("launch the game");
 		//launchGame(gameContaineurList.get(indexC));
-		gameContaineur = new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, Data.FULLSCREEN);
+		//gameContaineur = new AppGameContainer(new WindowGame(), Data.SCREEN_WIDTH, Data.SCREEN_HEIGHT, Data.FULLSCREEN);
 		launchGame();
 	}
 	public static void launchGame() throws SlickException

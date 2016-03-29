@@ -27,20 +27,31 @@ public class CompileString {
 	static String destPathClass = "target/classes/game/";
 	static String classTestName = "IAScript";
 	static String packageName = "game";
+	static String characType = "t_character";
+	static String intType = "t_int";
+	static String floatType = "t_float";
+	static String booleanType = "t_boolean";
+	static String stringType = "t_string";
 	static boolean aRisque = false;
 	static Class<?> c = null;
 	static int nbLignesCode = 2;
+	static boolean advanced = true;
 	private static ArrayList<String> code;
 	private static ArrayList<String> comp;
 	private static ArrayList<String> var;
 	private static ArrayList<String> cond;
+	private static ArrayList<String> func;
+	private static ArrayList<String> funcFloat;
+	private static ArrayList<String> funcString;
+	private static ArrayList<String> funcInt;
+	private static ArrayList<String> funcBoolean;
 	
 	public static void generate(String geneticName)
 	{
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
 		debugSys("\n===========   GENERATE MOB "+geneticName+"  ===========");
-		Node root = DecodeScript("AIScriptDatas.txt");
+		Node root = advanced?DecodeScript("AdvancedAIScriptDatas.txt"):DecodeScript("AIScriptDatas.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
 		for (String st : contentCode)
@@ -92,10 +103,16 @@ public class CompileString {
 		var = new ArrayList<String>();
 		comp = new ArrayList<String>();
 		code = new ArrayList<String>();
+		func = new ArrayList<String>();
+		funcInt = new ArrayList<String>();
+		funcFloat = new ArrayList<String>();
+		funcBoolean = new ArrayList<String>();
+		funcString = new ArrayList<String>();
 		boolean condBool = false;
 		boolean compBool = false;
 		boolean varBool = false;
 		boolean codeBool = false;
+		boolean funcBool = false;
 		// ====== Lecture du fichier texte ==========
 		try {
 			InputStream ips = new FileInputStream(fichier);
@@ -129,27 +146,50 @@ public class CompileString {
 					else
 						code.add(ligne);
 				}
+				if (funcBool) {
+					if (ligne.contains("}"))
+						funcBool = false;
+					else
+					{
+						func.add(ligne);
+						if(ligne.contains(intType)){
+							funcInt.add(ligne);
+						}
+						if(ligne.contains(floatType)){
+							funcFloat.add(ligne);
+						}
+						if(ligne.contains(stringType)){
+							funcString.add(ligne);
+						}
+						if(ligne.contains(booleanType)){
+							funcBoolean.add(ligne);
+						}
+					}
+				}
 
-				if (ligne.contains("cond"))
+				if (ligne.contains("cond") && !condBool)
 					condBool = true;
 
-				if (ligne.contains("comp"))
+				if (ligne.contains("comp") && !compBool)
 					compBool = true;
 
-				if (ligne.contains("var"))
+				if (ligne.contains("var") && !varBool)
 					varBool = true;
 
-				if (ligne.contains("code"))
+				if (ligne.contains("code") && !codeBool)
 					codeBool = true;
+				if (ligne.contains("func") && !funcBool)
+					funcBool = true;
 				// script.add(ligne);
 			}
 			debugSys("DecodeScript : var="+var);
 			debugSys("DecodeScript : code="+code);
 			debugSys("DecodeScript : comp="+comp);
 			debugSys("DecodeScript : cond="+cond);
+			debugSys("DecodeScript : cond="+func);
 			// ======= Construction de l'arbre ==========
 			root = addCodeLineAlea(code,nbLignesCode,root);// Ajout des lignes de code à la racinde du run()
-			root = addFullCondition(root,2); // Ajout de conditions et code à l'intérieur de ces conditions
+			root = addvancedFullCondition(root,2); // Ajout de conditions et code à l'intérieur de ces conditions
 			br.close();// fermeture du fichier txt
 		
 		} catch (Exception e) {
@@ -164,10 +204,10 @@ public class CompileString {
 	 *  
 	 * @param resNode : node where we append condition
 	 * @return : resulting node with conditions appended
-	 */
+	 *//*
 	public static Node addFullCondition(Node resNode, int maxDepth)
 	{
-		if(maxDepth > 0){
+		if(maxDepth > 0){ // Si on n'a pas atteint la profondeur max
 					int rand = 0;
 					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire (if, for, etc.)
 					Node nodeCond = new Node(""); // init. supernoeud de condition
@@ -181,16 +221,6 @@ public class CompileString {
 							nodeCond.setValue("if");
 						String[] partsRandomVar = getParam(var, -1); // LIGNE de variables aléatoire
 						conditionFull += partsRandomVar[0]; // concaténer nom de la variable
-					/*	switch(partsRandomVar[1]){
-							case "int" :
-								String[] partsRandomComp = getParam(comp, 0);
-								conditionFull += getCompInt(partsRandomComp, partsRandomVar); // concaténer la partie droite de la comparaison
-							break;
-							case "boolean" :
-								String[] partsRandomCompBool = getParam(comp, 1);
-								conditionFull += getCodeBool(partsRandomCompBool);
-							break;
-						}*/
 						conditionFull += getCompInCond(partsRandomVar[1]);
 					}
 					if (partsRandomCond[0].contains("for"))  // Cas d'un for
@@ -229,6 +259,64 @@ public class CompileString {
 		}
 		return resNode;
 		
+	}*/
+	
+	/** Add a full condition branch node with code lines inside. Advanced
+	 * 
+	 *  Should be used like : node = addFullCondition(node)
+	 *  
+	 * @param resNode : node where we append condition
+	 * @return : resulting node with conditions appended
+	 */
+	public static Node addvancedFullCondition(Node resNode, int maxDepth)
+	{
+		if(maxDepth > 0){ // Si on n'a pas atteint la profondeur max
+					int rand = 0;
+					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire (if, for, etc.)
+					Node nodeCond = new Node(""); // init. supernoeud de condition
+					String conditionFull = ""; // init. valeur textuelle de la condition
+					if (partsRandomCond[0].contains("if") // test du cas if / while
+							|| partsRandomCond[0].contains("while")) {
+						if (partsRandomCond[0].contains("while")) { // Risqué si while
+							nodeCond.setValue("while");
+							aRisque = true;
+						} else
+							nodeCond.setValue("if");
+						/** modif */
+						String[] partsRandomVar = getParam(var, -1); // LIGNE de variables aléatoire
+						if(partsRandomVar[0].contains("character"))
+						{
+							String[] partsRandomFunc = getParam(func,-1);
+							String type = partsRandomFunc[1];
+							debugSys("addvanced char. : param founded = "+partsRandomVar[1]+", type = "+type);
+							conditionFull+= replaceDefault(true,partsRandomVar[1],type,"");
+							conditionFull+= replaceDefault(false,partsRandomFunc[0],type,partsRandomVar[1]);
+							conditionFull += getCompInCond(true,type);
+							debugSys("addvanced char. : full condition = "+conditionFull);
+						}else{
+							conditionFull += partsRandomVar[1]; // concaténer nom de la variable
+							debugSys("addvanced other. : param 0 = "+partsRandomVar[1]+", type = "+partsRandomVar[0]);
+							conditionFull += getCompInCond(false,partsRandomVar[0]);
+							debugSys("addvanced other. : full condition = "+conditionFull);
+						}
+					}
+					resNode.addChild(nodeCond); // lier les supernoeuds
+					Node condFullNode = new Node(conditionFull); // création du sous-noeud
+					nodeCond.addChild(condFullNode); // Ajout du sous-noeud au supernoeud de condition
+					nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond); // *** Ajout des lignes de code dans la branche
+					boolean moreDeep = (new Random().nextInt(2)==0?false:true); // 50% de chances d'ajouter une branche conditionnelle
+					if(moreDeep)nodeCond = addvancedFullCondition(nodeCond,maxDepth-1);// Ajout d'une autre branche conditionnelle
+					if (partsRandomCond[0].contains("if")  // Cas du if avec un else
+							&& partsRandomCond[2].contains("else")) {
+						Node nodeElse = new Node("else");
+						resNode.addChild(nodeElse);
+						nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse); // *** Ajout des lignes de code dans le ELSE
+						moreDeep = (new Random().nextInt(2)==0?false:true);
+						if(moreDeep)nodeElse = addvancedFullCondition(nodeElse,maxDepth-1);// Ajout d'une autre branche conditionnelle
+					}
+		}
+		return resNode;
+		
 	}
 	
 
@@ -255,14 +343,17 @@ public class CompileString {
 			System.out.println("random : pos= "+randPosition+" string= " + dataLine);
 		dataLine = dataLine.replace("\"", "");
 		dataLine = dataLine.replace("[", "");
-		dataLine = dataLine.replace(" ", "");
+		dataLine = dataLine.replaceAll(" ", "");
+		dataLine = dataLine.replaceAll("\t", "");
+		dataLine = dataLine.replaceAll("\n", "");
+		dataLine = dataLine.replaceAll("	", "");
 		dataLine = dataLine.replace("]", "");
 		String[] partsRandom = dataLine.split(","); // implode des params de la
 													// condition dans parts
 		return partsRandom;
 	}
 	
-	/** Get a parameter by its type (int, bool, etc.)
+	/** Get a LINE parameter by its type (int, bool, etc.)
 	 * 
 	 * @param type
 	 *            : Param type
@@ -271,18 +362,61 @@ public class CompileString {
 	public static String[] getParamByType(ArrayList<String> param, String type) {
 		String dataLine = "";
 		int randPosition ;
+		debugSys("\t\tgetParamByType : researching a "+type+" in "+param.size()+" elements");
 		do{
 			randPosition = new Random().nextInt(param.size()); // param random
 			dataLine = (param.get(randPosition).toString()); // recuperation de la valeur
-		}while(!dataLine.contains(type));
-		debugSys("\t\tgetParamByType : type = "+type+", line = "+dataLine);
+		}while(!(dataLine.contains(type) || dataLine.contains(characType)));
+		
+		debugSys("\t\tgetParamByType : line = "+dataLine);
 		dataLine = dataLine.replace("\"", "");
 		dataLine = dataLine.replace("[", "");
-		dataLine = dataLine.replace(" ", "");
+		dataLine = dataLine.replaceAll(" ", "");
+		dataLine = dataLine.replaceAll("\t", "");
+		dataLine = dataLine.replaceAll("\n", "");
+		dataLine = dataLine.replaceAll("	", "");
 		dataLine = dataLine.replace("]", "");
 		String[] partsRandom = dataLine.split(","); // implode des params de la
 													// condition dans parts
 		return partsRandom;
+	}
+	
+	/** used for advanced AI Script. 
+	 * Replace var default type by corresponding attribute.
+	 * Replace function Character parameter by corresponding character.
+	 * 
+	 * @param isVar : do we replace a var ? or a func.
+	 * @param toReplace : original string with value to replace
+	 * @param type : t_int, t_boolean etc. used when isVar = true
+	 * @param varChoosen : character choosed in var or nothing if isVar = true 
+	 * @return Replaced string
+	 */
+	public static String replaceDefault(boolean isVar, String toReplace, String type, String varChoosen){
+		String returnString; 
+		returnString = toReplace;
+		debugSys("replaceDefault : isVar = "+isVar+", toReplace = "+toReplace+", type = "+type+", varChoosen = "+varChoosen);
+		if(isVar)
+		{
+			switch(type){
+			case "t_int":
+				debugSys("dans le t int");
+				returnString = returnString.replace("defaultString", "defaultInt");
+				break;
+			case "t_boolean":
+				debugSys("dans le t boolean");
+				returnString = returnString.replace("defaultString", "defaultBoolean");
+				break;
+			case "t_float":
+				debugSys("dans le t float");
+				returnString = returnString.replace("defaultString","defaultFloat");
+				break;
+			}
+		}else{
+			if(returnString.contains("choosen"))
+				returnString = returnString.replace("choosen", varChoosen );
+		}
+		debugSys("replaceDefault : replaced. result = "+returnString);
+		return returnString;
 	}
 	
 	/**
@@ -293,22 +427,43 @@ public class CompileString {
 	 * @param param
 	 * @return bout de code (comparateur) à concaténer
 	 */
-	public static String getCompInCond(String type) {
+	public static String getCompInCond(boolean characAtLeft,String type) {
 		String[] partsRandomComp;
 		String[] partsRandomVar;
+		String[] partsRandomFunc;
 		String returnString;
-		debugSys("\tgetCompInCond : récupération du comparateur ");
+		String rightVar;
+		ArrayList<String> funcParam = new ArrayList<String>();
+		debugSys("\tgetCompInCond : récupération du comparateur pour le type "+type);
 		partsRandomComp = getParamByType(comp, type);
 		int rand = 0;
 		rand = new Random().nextInt(partsRandomComp.length); // Choix random du comparateur (==, <=, >=, >, <, != )
 		rand = (rand == 0) ? 1 : rand;
 		debugSys("\tgetCompInCond : récupération de variable comparante ");
-		partsRandomVar = getParamByType(var, type); // recupere la variable à droite du comparateur
-		String rightVar = partsRandomVar[0]; 
-		//debugSys("getComptInCond : rightVar = "+rightVar);
-		returnString = (partsRandomComp[rand] + " " + rightVar+" "+(partsRandomComp[rand].contains("(")?")":""));
+		if(type.equals(intType)){
+			funcParam  = funcInt;
+		}else if(type.equals(floatType)){
+			funcParam  = funcFloat;
+		}else if(type.equals(stringType)){
+			funcParam  = funcString;
+		}else if(type.equals(booleanType)){
+			funcParam  = funcBoolean;
+		}
 		
+		partsRandomVar = getParamByType(var, (characAtLeft?type:characType)); // recupere la variable à droite du comparateur
+		if(advanced && partsRandomVar[0].contains(characType)){
+			rightVar=replaceDefault(true,partsRandomVar[1],type,"");
+			partsRandomFunc = getParamByType(funcParam, type);
+			rightVar+=replaceDefault(false,partsRandomFunc[0],type,partsRandomVar[1]);
+			
+		}else if(advanced)
+			rightVar= partsRandomVar[1]; 
+		else
+			rightVar= partsRandomVar[0]; 
+		debugSys("\tgetCompInCond : rightVar = "+rightVar);
+		returnString = (partsRandomComp[rand] + " "+rightVar+" "+(partsRandomComp[rand].contains("(")?")":""));
 		// concaténation du comparateur et de la valeur comparante
+		debugSys("\tgetCompInCond :Return String = "+returnString);
 		return returnString;
 	}
 	

@@ -10,6 +10,12 @@ public class IAScript {
 	int down=Data.SOUTH;
 	int left=Data.WEST;
 	int right=Data.EAST;
+	Character defaultC = null;
+	String defaultString = "";
+	int defaultInt = 0;
+	float defaultFloat = 0f;
+	boolean defaultBoolean = false;
+	
 	
 	public IAScript() {
 	}
