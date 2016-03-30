@@ -546,16 +546,16 @@ public class WindowGame extends BasicGame {
 			}
 			
 			if(Data.ENDING_ANIMATION_Y < (Data.MAP_HEIGHT - Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE) / 2)
-				Data.ENDING_ANIMATION_Y ++;
+				Data.ENDING_ANIMATION_Y +=100;
 			//this.container.sleep(1000);
-			if(renderj==500)
+			if(renderj==50)
 			{
 				renderj = 0;
 				gameOn = false;
 				gameEnded = false;
 				gameWin = false;
 				gameLose = false;
-				originMobs.get(0).getFitness().renameScoreFile();
+				//originMobs.get(0).getFitness().renameScoreFile();
 				//Main.reloadGame();
 			}
 			return;
@@ -870,10 +870,12 @@ public class WindowGame extends BasicGame {
 						if(focus.character != null)
 						{	
 							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						}
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 							+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
@@ -884,10 +886,12 @@ public class WindowGame extends BasicGame {
 						if(focus.character != null)
 						{	
 							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						}
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 									+currentCharacter.getName()+" "+currentCharacter.getTrueID()+"a attaqué personne (echec crit) ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
@@ -923,11 +927,13 @@ public class WindowGame extends BasicGame {
 								else
 									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
 								currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
 
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							}
 						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
@@ -936,7 +942,10 @@ public class WindowGame extends BasicGame {
 							else
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 							if(focus.character != null)
+							{	
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
+							}
 
 						}
 						if (focus.character.checkDeath()) {// si mort
@@ -959,6 +968,7 @@ public class WindowGame extends BasicGame {
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 						currentCharacter.getFitness().scoreUnlessSpell();
+						currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 								+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
 					}
@@ -979,6 +989,7 @@ public class WindowGame extends BasicGame {
 		}
 		else if (action.startsWith("p")) { // Pass turn
 			currentCharacter.getFitness().scorePassTurn();
+			currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 			currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
 					currentCharacter.getName()+" "+currentCharacter.getTrueID()+" PASSE son tour ."+currentCharacter.getFitness().toStringFitness(),true);
 		
@@ -994,6 +1005,7 @@ public class WindowGame extends BasicGame {
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				currentCharacter.getFitness().scoreMove();
+				currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 				currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 						+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" BOUGE en "+position+" ."+currentCharacter.getFitness().toStringFitness(),true);
 				switchTurn();
@@ -1201,32 +1213,40 @@ public class WindowGame extends BasicGame {
 	
 	public void checkEndGame(){
 		
-			if(Data.debug && !Data.RUN_APIX)
-			{	
-				if( mobs.size() <= 0 ){
-					//GAME WIN
-					gameEnded = true;
-					gameWin = true;
-				}else if( (players.size() <= 0 && !Data.autoIA) || (genPlayers.size() <= 0 && Data.autoIA) || global_turn == Data.maxTurn)
-				{
-					//GAME LOSE
-					gameEnded = true;
-					gameLose = true;
-				}
+		if(Data.debug && !Data.RUN_APIX)
+		{	
+			if( mobs.size() <= 0 ){
+				//GAME WIN
+				gameEnded = true;
+				gameWin = true;
+			}else if( (players.size() <= 0 && !Data.autoIA) || (genPlayers.size() <= 0 && Data.autoIA) || global_turn == Data.maxTurn)
+			{
+				//GAME LOSE
+				gameEnded = true;
+				gameLose = true;
 			}
+		}
 		if(gameEnded)
 		{
 			
 			System.out.println("-- FIN DE JEU-- ");
 			originMobs.get(0).getFitness().debugFile("-- FIN DE JEU --", true);
+			boolean winOrLoose = ((players.size()<=0)? true : false);
 			for(Mob mo : originMobs){
 				System.out.println("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness());
-				mo.getFitness().debugFile("Mob id="+mo.getTrueID()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness(), true);
+				
+				mo.getFitness().debugFile(	"Mob id="+mo.getTrueID()+" name="+mo.getName()+
+											" score final = "+mo.getFitness().calculFinalScore(winOrLoose, global_turn)+""+
+											mo.getFitness().toStringFitness(), true);
+				mo.getFitness().writeHistory(mo, false);
 			}	
 			if(Data.autoIA)
 			{
 				for(PlayerGenetic po : originGenPlayers){
-					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
+					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+
+							" score final = "+po.getFitness().calculFinalScore(gameWin, global_turn)+""+
+							po.getFitness().toStringFitness(), true);
+					po.getFitness().writeHistory(po, false);
 				}	
 			}
 			originMobs.get(0).getFitness().renameScoreFile();

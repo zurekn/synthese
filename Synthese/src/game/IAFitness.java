@@ -36,7 +36,9 @@ public class IAFitness {
 	private int unlessSpell = 1;
 	private int move = 1;
 	private int pass = 1;
+	private int scoreFinal = 0;
 	private String scoreFileName = "Synthese/src/scoring/IAdebug.txt";
+	private String historyActions="";
 	
 	//used for overall fitness
 	private int nbTurn = 0; // number of turn AI stayed alive
@@ -49,6 +51,7 @@ public class IAFitness {
 		this.pActionmissed = 0;
 		this.pMove = 0;
 		this.pPass = 0;
+		this.historyActions="";
 		debugFile("==init==",false);
 	}
 	
@@ -151,6 +154,20 @@ public class IAFitness {
 		this.setpMove(this.getpMove()+this.getMove());
 	}
 	
+	public void addHistory(String message)
+	{
+		this.historyActions += message+"\r\n";
+	}
+	
+	public int calculFinalScore(boolean gagne, int nbTourMax)
+	{
+		if(gagne)
+			this.scoreFinal = 20+this.pAction+this.pHeal+(30*(this.nbTurn/nbTourMax));
+		else
+			this.scoreFinal = 0+this.pAction+this.pHeal+(30*(this.nbTurn/nbTourMax));
+		return this.scoreFinal;
+	}
+	
 	/*
 	 * Copiage du fichier IAdebug.txt dans un même fichier dont le nom comporte la date de fin de test.
 	 */
@@ -174,6 +191,19 @@ public class IAFitness {
 			BufferedWriter bw = new BufferedWriter(fw);
 			PrintWriter fichierSortie = new PrintWriter(bw);
 			fichierSortie.println(message);
+			fichierSortie.close();
+		} catch (Exception e) {
+			System.out.println("WriteCode : "+e.toString());
+		}
+	}
+	
+	public void writeHistory(Character currentCharacter, boolean append)
+	{
+		try {
+			FileWriter fw = new FileWriter(new File("Synthese/src/mobHistory/"+currentCharacter.getName()+"_"+currentCharacter.getId()+".txt"), append);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter fichierSortie = new PrintWriter(bw);
+			fichierSortie.println(this.historyActions);
 			fichierSortie.close();
 		} catch (Exception e) {
 			System.out.println("WriteCode : "+e.toString());
@@ -298,6 +328,6 @@ public class IAFitness {
 	public void setNbTurn(int nbTurn) {
 		this.nbTurn = nbTurn;
 	}
-	
+
 	
 }

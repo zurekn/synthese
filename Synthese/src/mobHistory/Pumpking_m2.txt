@@ -1,0 +1,21 @@
+m2 m:9:5 Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 1;pMove = 1;nbTurn alive = 1
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 2;pMove = 1;nbTurn alive = 2
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 3;pMove = 1;nbTurn alive = 3
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 4;pMove = 1;nbTurn alive = 4
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 5;pMove = 1;nbTurn alive = 5
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 6;pMove = 1;nbTurn alive = 6
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 7;pMove = 1;nbTurn alive = 7
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 8;pMove = 1;nbTurn alive = 8
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 9;pMove = 1;nbTurn alive = 9
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 10;pMove = 1;nbTurn alive = 10
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 11;pMove = 1;nbTurn alive = 11
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 12;pMove = 1;nbTurn alive = 12
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 13;pMove = 1;nbTurn alive = 13
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 14;pMove = 1;nbTurn alive = 14
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 15;pMove = 1;nbTurn alive = 15
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 16;pMove = 1;nbTurn alive = 16
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 17;pMove = 1;nbTurn alive = 17
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 18;pMove = 1;nbTurn alive = 18
+m2 p Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 19;pMove = 1;nbTurn alive = 19
+
