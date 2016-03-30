@@ -123,13 +123,13 @@ public abstract class Character {
 				findScriptAction(++compteur);
 				return;
 			} catch (SecurityException e) {
-				e.printStackTrace();findScriptAction(++compteur);
+				if(compteur == 0)e.printStackTrace();findScriptAction(++compteur);
 			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
+				if(compteur == 0)e.printStackTrace();
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				if(compteur == 0)e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+				if(compteur == 0)e.printStackTrace();
 			} catch (IllegalActionException e) {
 				
 				if(compteur == 0)

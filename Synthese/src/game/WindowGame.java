@@ -1229,6 +1229,7 @@ public class WindowGame extends BasicGame {
 					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
 				}	
 			}
+			originMobs.get(0).getFitness().renameScoreFile();
 			stopAllThread();
 		}
 	}
