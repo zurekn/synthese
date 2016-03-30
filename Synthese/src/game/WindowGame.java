@@ -189,7 +189,7 @@ public class WindowGame extends BasicGame {
 			currentCharacter = genPlayers.get(turn);
 		}
 		gameOn = true;
-		currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
+		//currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
 	}
 	
 	public void initGeneticPlayers(){
@@ -782,7 +782,7 @@ public class WindowGame extends BasicGame {
 		if(!currentCharacter.isNpc())
 		{
 			//currentCharacter.
-			currentCharacter.findScriptAction(0);
+			//currentCharacter.findScriptAction(0);
 		}
 
 		// print the current turn in the console
