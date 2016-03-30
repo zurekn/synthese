@@ -413,7 +413,7 @@ public class CompileString {
 			}
 		}else{
 			if(returnString.contains("choosen"))
-				returnString = returnString.replace("choosen", varChoosen+")" );
+				returnString = returnString.replace("choosen", varChoosen);
 		}
 		debugSys("replaceDefault : replaced. result = "+returnString);
 		return returnString;
