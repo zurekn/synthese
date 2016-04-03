@@ -8,6 +8,7 @@ public class Node implements Serializable {
 	private Node parent = null;
 	private ArrayList<Node> children = null;
 	private String value;
+	private int id;
 	//private Node bro = null;
 	
 	public Node(String value)
@@ -90,8 +91,16 @@ public class Node implements Serializable {
 	
 	public void displayNode()
 	{
-		System.out.println("parent : "+ this.parent.getValue()+" value : "+ this.value);
+		System.out.println("parent : "+(hasParent(this)?this.parent.getValue():"")+" value : "+ this.value);
 	}
+	
+	public boolean hasParent(Node node){
+		if(node.parent == null)
+			return false;
+		else 
+			return true;
+	}
+	
 	
 	/*
 	 * Parcours en largeur de l'arbre.
@@ -102,8 +111,13 @@ public class Node implements Serializable {
 	public Node getSubTree(int id)
 	{
 		ArrayList<Node> arrayNode = new ArrayList<Node>();
-		arrayNode = TreeToArray(this, arrayNode);
-		return (id < 0 ? arrayNode.get(new Random().nextInt(arrayNode.size())) : arrayNode.get(id));
+		//arrayNode = TreeToArray(this, arrayNode);
+		arrayNode= this.getChildren();
+		if(id < 0 || id >= arrayNode.size())
+			return arrayNode.get(new Random().nextInt(arrayNode.size()));
+		else{
+			return arrayNode.get(id);
+		}
 	}
 	
 	public ArrayList<String> TreeToArrayList(ArrayList<String> st)

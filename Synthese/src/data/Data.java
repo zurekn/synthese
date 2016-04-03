@@ -59,7 +59,8 @@ public class Data {
 	public static String IMAGE_DIR = "C:/Users/frédéric/Google Drive/Master Cergy/Projet_PlateauJeu/Synthèse/ImageDeTest/";
 	
 	//For Genetic IA=
-	public static boolean autoIA = true;
+	public static boolean autoIA = false;
+	public static boolean jvm = false;
 	public static boolean generateIA = true;
 	public static int maxTurn = 20;
 	

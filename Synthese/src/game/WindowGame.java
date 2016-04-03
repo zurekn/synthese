@@ -54,6 +54,7 @@ public class WindowGame extends BasicGame {
 	private ArrayList<Mob> originMobs;
 	private PlayerHandler playerHandler;
 	private ArrayList<Player> players;
+	private ArrayList<Player> originPlayers;
 	private ArrayList<PlayerGenetic> genPlayers;
 	private ArrayList<PlayerGenetic> originGenPlayers;
 	private MovementHandler movementHandler;
@@ -146,7 +147,8 @@ public class WindowGame extends BasicGame {
 		players = new ArrayList<Player>();
 		genPlayers = new ArrayList<PlayerGenetic>();
 		originGenPlayers = new ArrayList<PlayerGenetic>();
-		if(Data.autoIA)
+		originPlayers = new ArrayList<Player>();
+		if(Data.autoIA && !Data.jvm)
 		{
 			initGeneticPlayers();
 		}
@@ -180,7 +182,6 @@ public class WindowGame extends BasicGame {
 			playerNumber = players.size() + mobs.size();
 			currentCharacter = players.get(turn);
 			reachableBlock = AStar.getInstance().getReachableNodes(new WindowGameData(players, mobs, turn), new CharacterData(currentCharacter));
-			
 		}
 		else
 		{
@@ -189,7 +190,7 @@ public class WindowGame extends BasicGame {
 			currentCharacter = genPlayers.get(turn);
 		}
 		gameOn = true;
-		//currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
+		if(Data.autoIA)currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
 	}
 	
 	public void initGeneticPlayers(){
@@ -368,10 +369,7 @@ public class WindowGame extends BasicGame {
 
 		if (Data.MAX_PLAYER <= genPlayers.size())
 			return;
-		//String id = "P" + players.size();
 		PlayerGenetic p = new PlayerGenetic(x, y, id, "g"+genPlayers.size());
-		//p.setNumber(players.size());
-		//p.setSizeCharacter(size);
 		genPlayers.add(p);
 
 		timerInitPlayer = Data.INIT_MAX_TIME;
@@ -546,7 +544,7 @@ public class WindowGame extends BasicGame {
 			}
 			
 			if(Data.ENDING_ANIMATION_Y < (Data.MAP_HEIGHT - Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE) / 2)
-				Data.ENDING_ANIMATION_Y ++;
+				Data.ENDING_ANIMATION_Y +=10;
 			//this.container.sleep(1000);
 			if(renderj==500)
 			{
@@ -555,7 +553,7 @@ public class WindowGame extends BasicGame {
 				gameEnded = false;
 				gameWin = false;
 				gameLose = false;
-				originMobs.get(0).getFitness().renameScoreFile();
+				//originMobs.get(0).getFitness().renameScoreFile();
 				//Main.reloadGame();
 			}
 			return;
@@ -737,8 +735,15 @@ public class WindowGame extends BasicGame {
 				mo.getFitness().addTurn();
 			}
 			if(Data.autoIA){
-				for(PlayerGenetic po:genPlayers){
-					po.getFitness().addTurn();
+				if(Data.jvm)
+				{
+					for(PlayerGenetic po:genPlayers){
+						po.getFitness().addTurn();
+					}
+				}else{
+					for(Player po:players){
+						po.getFitness().addTurn();
+					}
 				}
 			}
 		}
@@ -750,15 +755,15 @@ public class WindowGame extends BasicGame {
 			if (turn < players.size()){
 			players.get(turn).setMyTurn(true);
 			currentCharacter = players.get(turn);
+			}else{
+				mobs.get(turn - players.size()).setMyTurn(true);
+				currentCharacter = mobs.get(turn - players.size());
 			}
 		}else if(turn < genPlayers.size()&& Data.autoIA){
 			genPlayers.get(turn).setMyTurn(true);
 			currentCharacter = genPlayers.get(turn);
 		} 
-		else if(!Data.autoIA){
-			mobs.get(turn - players.size()).setMyTurn(true);
-			currentCharacter = mobs.get(turn - players.size());
-		}else{
+		else{
 			mobs.get(turn - genPlayers.size()).setMyTurn(true);
 			currentCharacter = mobs.get(turn - genPlayers.size());
 		}
@@ -782,7 +787,7 @@ public class WindowGame extends BasicGame {
 		if(!currentCharacter.isNpc())
 		{
 			//currentCharacter.
-			//currentCharacter.findScriptAction(0);
+			if(Data.autoIA && Data.jvm)currentCharacter.findScriptAction(0);
 		}
 
 		// print the current turn in the console
@@ -870,10 +875,12 @@ public class WindowGame extends BasicGame {
 						if(focus.character != null)
 						{	
 							currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						}
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 							+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a soigné personne ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
@@ -884,10 +891,12 @@ public class WindowGame extends BasicGame {
 						if(focus.character != null)
 						{	
 							currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						}
 						else
 						{
 							currentCharacter.getFitness().scoreUnlessSpell();
+							currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 									+currentCharacter.getName()+" "+currentCharacter.getTrueID()+"a attaqué personne (echec crit) ."+currentCharacter.getFitness().toStringFitness(),true);
 						}
@@ -923,11 +932,13 @@ public class WindowGame extends BasicGame {
 								else
 									messageHandler.addPlayerMessage(new Message("Heal "+heal+" to the "+focus.character.getName()+""), turn);
 								currentCharacter.getFitness().scoreHeal(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							}else{
 								damage = focus.character.takeDamage(damage, e.getType());
 
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 							}
 						else{// si ennemi
 							damage = focus.character.takeDamage(damage, e.getType());
@@ -936,7 +947,10 @@ public class WindowGame extends BasicGame {
 							else
 								messageHandler.addPlayerMessage(new Message("Use "+SpellData.getSpellById(spellID).getName()+" on "+focus.character.getName()+" and deal "+damage), turn);	
 							if(focus.character != null)
+							{	
 								currentCharacter.getFitness().scoreSpell(focus.character, currentCharacter); // scoring
+								currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
+							}
 
 						}
 						if (focus.character.checkDeath()) {// si mort
@@ -959,6 +973,7 @@ public class WindowGame extends BasicGame {
 					}else{
 						messageHandler.addPlayerMessage(new Message("Vous avez lancé "+SpellData.getSpellById(spellID).getName()+" mais personne n'a été touché"), turn);
 						currentCharacter.getFitness().scoreUnlessSpell();
+						currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 						currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 								+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" a lancé un sort sur personne ."+currentCharacter.getFitness().toStringFitness(),true);
 					}
@@ -979,6 +994,7 @@ public class WindowGame extends BasicGame {
 		}
 		else if (action.startsWith("p")) { // Pass turn
 			currentCharacter.getFitness().scorePassTurn();
+			currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 			currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")+
 					currentCharacter.getName()+" "+currentCharacter.getTrueID()+" PASSE son tour ."+currentCharacter.getFitness().toStringFitness(),true);
 		
@@ -994,6 +1010,7 @@ public class WindowGame extends BasicGame {
 				// TODO call aStar and check if character don't fall into trap
 				currentCharacter.moveTo(position);
 				currentCharacter.getFitness().scoreMove();
+				currentCharacter.getFitness().addHistory(currentCharacter.getId()+" "+action.toString()+" "+currentCharacter.getFitness().toStringFitness());
 				currentCharacter.getFitness().debugFile((currentCharacter.isMonster()?"mob ":"genPlayer ")
 						+currentCharacter.getName()+" "+currentCharacter.getTrueID()+" BOUGE en "+position+" ."+currentCharacter.getFitness().toStringFitness(),true);
 				switchTurn();
@@ -1219,14 +1236,22 @@ public class WindowGame extends BasicGame {
 			
 			System.out.println("-- FIN DE JEU-- ");
 			originMobs.get(0).getFitness().debugFile("-- FIN DE JEU --", true);
+			boolean winOrLoose = ((players.size()<=0)? true : false);
 			for(Mob mo : originMobs){
 				System.out.println("Mob id="+mo.getId()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness());
-				mo.getFitness().debugFile("Mob id="+mo.getTrueID()+" name="+mo.getName()+" "+mo.getFitness().toStringFitness(), true);
+				
+				mo.getFitness().debugFile(	"Mob id="+mo.getTrueID()+" name="+mo.getName()+
+											" score final = "+mo.getFitness().calculFinalScore(winOrLoose, global_turn)+""+
+											mo.getFitness().toStringFitness(), true);
+				mo.getFitness().writeHistory(mo, false);
 			}	
 			if(Data.autoIA)
 			{
 				for(PlayerGenetic po : originGenPlayers){
-					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+" "+po.getFitness().toStringFitness(), true);
+					po.getFitness().debugFile("Player id="+po.getTrueID()+" name="+po.getName()+
+							" score final = "+po.getFitness().calculFinalScore(gameWin, global_turn)+""+
+							po.getFitness().toStringFitness(), true);
+					po.getFitness().writeHistory(po, false);
 				}	
 			}
 			originMobs.get(0).getFitness().renameScoreFile();
@@ -1235,9 +1260,9 @@ public class WindowGame extends BasicGame {
 	}
 	
 	public void stopAllThread(){
-		//apix.stop();
-		//commands.getInstance().getThread().stop();
-		commands.getInstance().getThread().interrupt();
+		apix.stop();
+		commands.getInstance().getThread().stop();
+		//commands.getInstance().getThread().interrupt();
 		turnTimer = Integer.MAX_VALUE;
 	}
 	

@@ -21,7 +21,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 public class CompileString {
-	static Boolean debug = true;
+	static Boolean debug = false;
 	static String className = "";
 	static String pathClass = "Synthese/src/game/";
 	static String destPathClass = "target/classes/game/";
@@ -56,9 +56,16 @@ public class CompileString {
 		contentCode = root.TreeToArrayList(contentCode);
 		for (String st : contentCode)
 			System.out.println(st);
-
+		
 		className = geneticName + (aRisque ? "_Arisque" : "");
 		ReadWriteCode(contentCode, className);
+		try {
+			serializeObject("serialized_"+geneticName, root);
+			deserializeObject("serialized_"+geneticName);
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// CompileAndExecuteClass(className, "run");
 	}
 
@@ -68,7 +75,7 @@ public class CompileString {
 	public static void serializeObject(String name, Node root)
 			throws IOException {
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream("javaObjects_" + name + ".json"));
+				new FileOutputStream("javaObjects_" + name + ".txt"));
 		objectOutputStream.writeObject(root);
 		objectOutputStream.flush();
 		objectOutputStream.close();
@@ -80,11 +87,20 @@ public class CompileString {
 	public static void deserializeObject(String name) throws IOException,
 			ClassNotFoundException {
 		ObjectInputStream objectInputStream = new ObjectInputStream(
-				new FileInputStream("javaObjects_" + name + ".json"));
+				new FileInputStream("javaObjects_" + name + ".txt"));
 		Node readJSON = (Node) objectInputStream.readObject();
 		objectInputStream.close();
-
+		System.out.println("### Display Tree");
 		readJSON.displayTree();
+		System.out.println("### Tree displayed");
+		readJSON.getSubTree(1).displayNode();
+		System.out.println("### Fin deserialize");
+	}
+	
+	public static Node getRandomChild(Node node){
+		Node resultNode = new Node("");
+		resultNode = node.getSubTree(-1);
+		return resultNode;
 	}
 	
 /** Creation of genetic AI tree from a text file.
