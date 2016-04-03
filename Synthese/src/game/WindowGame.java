@@ -546,7 +546,7 @@ public class WindowGame extends BasicGame {
 			if(Data.ENDING_ANIMATION_Y < (Data.MAP_HEIGHT - Data.LOSE_IMAGE.getHeight() * Data.ENDING_ANIMATION_SCALE) / 2)
 				Data.ENDING_ANIMATION_Y +=10;
 			//this.container.sleep(1000);
-			if(renderj==500)
+			if(renderj==50)
 			{
 				renderj = 0;
 				gameOn = false;
@@ -1218,19 +1218,19 @@ public class WindowGame extends BasicGame {
 	
 	public void checkEndGame(){
 		
-			if(Data.debug && !Data.RUN_APIX)
-			{	
-				if( mobs.size() <= 0 ){
-					//GAME WIN
-					gameEnded = true;
-					gameWin = true;
-				}else if( (players.size() <= 0 && !Data.autoIA) || (genPlayers.size() <= 0 && Data.autoIA) || global_turn == Data.maxTurn)
-				{
-					//GAME LOSE
-					gameEnded = true;
-					gameLose = true;
-				}
+		if(Data.debug && !Data.RUN_APIX)
+		{	
+			if( mobs.size() <= 0 ){
+				//GAME WIN
+				gameEnded = true;
+				gameWin = true;
+			}else if( (players.size() <= 0 && !Data.autoIA) || (genPlayers.size() <= 0 && Data.autoIA) || global_turn == Data.maxTurn)
+			{
+				//GAME LOSE
+				gameEnded = true;
+				gameLose = true;
 			}
+		}
 		if(gameEnded)
 		{
 			

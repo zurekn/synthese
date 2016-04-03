@@ -1,0 +1,209 @@
+==init==
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+genPlayer Sneaky snake g1 BOUGE en 16:16 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 1;nbTurn alive = 0
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+error : mob = g2action = s2:-90!!m:15:11, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 0;nbTurn alive = 0
+genPlayer Manhunting Flower g3a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+genPlayer Manhunting Flower g3 BOUGE en 9:13 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 1;nbTurn alive = 0
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Ghost m1 BOUGE en 5:6 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 1;nbTurn alive = 0
+mob Pumpking m2 a lancé un sort sur mob Pumpking m2. Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 0;nbTurn alive = 0
+mob Pumpking m2 BOUGE en 7:6 .Fitness : pAction = -20;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+mob Slime m3 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 0
+error : mob = m3action = s2:90!!m:11:11, print= illegalAction
+mob Slime m3 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 0;nbTurn alive = 0
+mob Eye seeyou m4 BOUGE en 12:11 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 0
+
+				=== TOUR 1 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 0;nbTurn alive = 1
+genPlayer Burned head g0 BOUGE en 12:9 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 1;nbTurn alive = 1
+genPlayer Sneaky snake g1a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+genPlayer Sneaky snake g1 BOUGE en 17:17 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 2;nbTurn alive = 1
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 0;nbTurn alive = 1
+error : mob = g2action = s2:-90!!m:15:11, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 2;pMove = 0;nbTurn alive = 1
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+genPlayer Manhunting Flower g3 BOUGE en 11:14 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 2;nbTurn alive = 1
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 1
+mob Ghost m1 BOUGE en 5:7 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 2;nbTurn alive = 1
+mob Pumpking m2 a lancé un sort sur mob Pumpking m2. Fitness : pAction = -50;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 1;nbTurn alive = 1
+*** mob Pumpking m2 a été tué par mob Pumpking m2.
+mob Pumpking m2 BOUGE en 8:7 .Fitness : pAction = -50;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 2;nbTurn alive = 1
+mob Eye seeyou m4 BOUGE en 13:11 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 2;nbTurn alive = 1
+
+				=== TOUR 2 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 1;nbTurn alive = 2
+genPlayer Burned head g0 BOUGE en 14:10 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 0;pMove = 2;nbTurn alive = 2
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+genPlayer Sneaky snake g1 BOUGE en 18:18 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 3;nbTurn alive = 2
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 2;pMove = 0;nbTurn alive = 2
+error : mob = g2action = s2:-90!!m:15:11, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 3;pMove = 0;nbTurn alive = 2
+genPlayer Manhunting Flower g3a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+genPlayer Manhunting Flower g3 BOUGE en 13:15 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 3;nbTurn alive = 2
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 2
+mob Ghost m1 BOUGE en 5:8 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 3;nbTurn alive = 2
+mob Slime m3 a lancé un sort sur mob Burned head g0. Fitness : pAction = 20;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 0;nbTurn alive = 2
+mob Slime m3 BOUGE en 11:11 .Fitness : pAction = 20;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 1;nbTurn alive = 2
+mob Eye seeyou m4 BOUGE en 14:11 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 3;nbTurn alive = 2
+
+				=== TOUR 3 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 2;nbTurn alive = 3
+genPlayer Burned head g0 BOUGE en 16:11 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 0;pMove = 3;nbTurn alive = 3
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+genPlayer Sneaky snake g1 BOUGE en 19:19 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 4;nbTurn alive = 3
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 0;nbTurn alive = 3
+genPlayer Zig Bee g2 BOUGE en 21:17 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 3;pMove = 1;nbTurn alive = 3
+genPlayer Manhunting Flower g3a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+genPlayer Manhunting Flower g3 BOUGE en 15:16 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 4;nbTurn alive = 3
+mob Ghost m1a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 3
+mob Ghost m1 BOUGE en 5:9 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 4;nbTurn alive = 3
+mob Slime m3 a lancé un sort sur mob Eye seeyou m4. Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 1;nbTurn alive = 3
+mob Slime m3 BOUGE en 12:12 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 1;pMove = 2;nbTurn alive = 3
+mob Eye seeyou m4 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 3;nbTurn alive = 3
+mob Eye seeyou m4 BOUGE en 15:13 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 4;nbTurn alive = 3
+
+				=== TOUR 4 ===
+genPlayer Burned head g0a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 3;nbTurn alive = 4
+genPlayer Burned head g0 BOUGE en 18:12 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 4;nbTurn alive = 4
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 4
+genPlayer Sneaky snake g1 BOUGE en 20:20 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 4
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 3;pMove = 1;nbTurn alive = 4
+error : mob = g2action = s2:-90!!m:17:13, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 4;pMove = 1;nbTurn alive = 4
+genPlayerManhunting Flower g3 a lancé un sort sur mob Eye seeyou m4. Fitness : pAction = 30;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 4;nbTurn alive = 4
+*** mob Eye seeyou m4 a été tué par genPlayer Manhunting Flower g3.
+error : mob = g3action = s4:0!!m:15:16, print= illegalAction
+genPlayer Manhunting Flower g3 BOUGE en 17:17 .Fitness : pAction = 30;pHeal = 0;pActionmissed = 4;pPass = 0;pMove = 5;nbTurn alive = 4
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 4
+mob Ghost m1 BOUGE en 5:10 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 4
+mob Slime m3 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 2;nbTurn alive = 4
+mob Slime m3 BOUGE en 13:13 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 2;pPass = 1;pMove = 3;nbTurn alive = 4
+
+				=== TOUR 5 ===
+genPlayer Burned head g0a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 4;nbTurn alive = 5
+genPlayer Burned head g0 BOUGE en 20:13 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 5
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 5
+genPlayer Sneaky snake g1 BOUGE en 21:21 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 6;nbTurn alive = 5
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 4;pMove = 1;nbTurn alive = 5
+genPlayer Zig Bee g2 BOUGE en 23:19 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 4;pMove = 2;nbTurn alive = 5
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 5;nbTurn alive = 5
+genPlayer Manhunting Flower g3 BOUGE en 19:18 .Fitness : pAction = 30;pHeal = 0;pActionmissed = 5;pPass = 0;pMove = 6;nbTurn alive = 5
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 5
+mob Ghost m1 BOUGE en 5:11 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 6;nbTurn alive = 5
+mob Slime m3a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 1;pMove = 3;nbTurn alive = 5
+mob Slime m3 BOUGE en 14:14 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 3;pPass = 1;pMove = 4;nbTurn alive = 5
+
+				=== TOUR 6 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 5;nbTurn alive = 6
+genPlayer Burned head g0 BOUGE en 22:14 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 6;nbTurn alive = 6
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 6;nbTurn alive = 6
+genPlayer Sneaky snake g1 BOUGE en 22:22 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 6
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 4;pMove = 2;nbTurn alive = 6
+error : mob = g2action = s2:-90!!m:19:15, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 5;pMove = 2;nbTurn alive = 6
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 6;nbTurn alive = 6
+genPlayer Manhunting Flower g3 BOUGE en 21:19 .Fitness : pAction = 30;pHeal = 0;pActionmissed = 6;pPass = 0;pMove = 7;nbTurn alive = 6
+mob Ghost m1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 6;nbTurn alive = 6
+mob Ghost m1 BOUGE en 5:12 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 6
+mob Slime m3a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 1;pMove = 4;nbTurn alive = 6
+mob Slime m3 BOUGE en 15:15 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 1;pMove = 5;nbTurn alive = 6
+
+				=== TOUR 7 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 6;nbTurn alive = 7
+genPlayer Burned head g0 BOUGE en 24:15 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 7
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 7
+genPlayer Sneaky snake g1 BOUGE en 23:23 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 8;nbTurn alive = 7
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 5;pMove = 2;nbTurn alive = 7
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 6;pMove = 2;nbTurn alive = 7
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 7;pPass = 0;pMove = 7;nbTurn alive = 7
+error : mob = g3action = s2:-90!!m:21:19, print= illegalAction
+genPlayer Manhunting Flower g3 PASSE son tour .Fitness : pAction = 30;pHeal = 0;pActionmissed = 7;pPass = 1;pMove = 7;nbTurn alive = 7
+mob Ghost m1a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 7
+*** mob Ghost m1 est mort .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 7
+
+				=== TOUR 8 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 8
+error : mob = g0action = s2:-90!!m:26:16, print= illegalAction
+genPlayer Burned head g0 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 1;pMove = 7;nbTurn alive = 8
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 0;pMove = 8;nbTurn alive = 8
+error : mob = g1action = s2:-90!!m:24:24, print= illegalAction
+genPlayer Sneaky snake g1 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 1;pMove = 8;nbTurn alive = 8
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 6;pMove = 2;nbTurn alive = 8
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 7;pMove = 2;nbTurn alive = 8
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 8;pPass = 1;pMove = 7;nbTurn alive = 8
+error : mob = g3action = s2:-90!!m:21:19, print= illegalAction
+genPlayer Manhunting Flower g3 PASSE son tour .Fitness : pAction = 30;pHeal = 0;pActionmissed = 8;pPass = 2;pMove = 7;nbTurn alive = 8
+mob Slime m3 BOUGE en 16:16 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 4;pPass = 1;pMove = 6;nbTurn alive = 8
+
+				=== TOUR 9 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 1;pMove = 7;nbTurn alive = 9
+error : mob = g0action = s2:-90!!m:26:16, print= illegalAction
+genPlayer Burned head g0 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 9;pPass = 2;pMove = 7;nbTurn alive = 9
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 1;pMove = 8;nbTurn alive = 9
+error : mob = g1action = s2:-90!!m:24:24, print= illegalAction
+genPlayer Sneaky snake g1 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 2;pMove = 8;nbTurn alive = 9
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 7;pMove = 2;nbTurn alive = 9
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 8;pMove = 2;nbTurn alive = 9
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 9;pPass = 2;pMove = 7;nbTurn alive = 9
+error : mob = g3action = s2:-90!!m:21:19, print= illegalAction
+genPlayer Manhunting Flower g3 PASSE son tour .Fitness : pAction = 30;pHeal = 0;pActionmissed = 9;pPass = 3;pMove = 7;nbTurn alive = 9
+mob Slime m3 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 1;pMove = 6;nbTurn alive = 9
+mob Slime m3 BOUGE en 17:17 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 1;pMove = 7;nbTurn alive = 9
+
+				=== TOUR 10 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 2;pMove = 7;nbTurn alive = 10
+error : mob = g0action = s2:-90!!m:26:16, print= illegalAction
+genPlayer Burned head g0 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 10;pPass = 3;pMove = 7;nbTurn alive = 10
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 2;pMove = 8;nbTurn alive = 10
+error : mob = g1action = s2:-90!!m:24:24, print= illegalAction
+genPlayer Sneaky snake g1 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 3;pMove = 8;nbTurn alive = 10
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 8;pMove = 2;nbTurn alive = 10
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 9;pMove = 2;nbTurn alive = 10
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 10;pPass = 3;pMove = 7;nbTurn alive = 10
+error : mob = g3action = s2:-90!!m:21:19, print= illegalAction
+genPlayer Manhunting Flower g3 PASSE son tour .Fitness : pAction = 30;pHeal = 0;pActionmissed = 10;pPass = 4;pMove = 7;nbTurn alive = 10
+mob Slime m3 BOUGE en 18:18 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 5;pPass = 1;pMove = 8;nbTurn alive = 10
+
+				=== TOUR 11 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 3;pMove = 7;nbTurn alive = 11
+error : mob = g0action = s2:-90!!m:26:16, print= illegalAction
+genPlayer Burned head g0 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 11;pPass = 4;pMove = 7;nbTurn alive = 11
+genPlayer Sneaky snake g1a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 3;pMove = 8;nbTurn alive = 11
+error : mob = g1action = s2:-90!!m:24:24, print= illegalAction
+genPlayer Sneaky snake g1 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 4;pMove = 8;nbTurn alive = 11
+genPlayer Zig Bee g2 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 9;pMove = 2;nbTurn alive = 11
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 10;pMove = 2;nbTurn alive = 11
+genPlayer Manhunting Flower g3 a lancé un sort sur personne .Fitness : pAction = 30;pHeal = 0;pActionmissed = 11;pPass = 4;pMove = 7;nbTurn alive = 11
+error : mob = g3action = s2:-90!!m:21:19, print= illegalAction
+genPlayer Manhunting Flower g3 PASSE son tour .Fitness : pAction = 30;pHeal = 0;pActionmissed = 11;pPass = 5;pMove = 7;nbTurn alive = 11
+mob Slime m3 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 1;pMove = 8;nbTurn alive = 11
+mob Slime m3 BOUGE en 19:19 .Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 1;pMove = 9;nbTurn alive = 11
+
+				=== TOUR 12 ===
+genPlayer Burned head g0 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 4;pMove = 7;nbTurn alive = 12
+error : mob = g0action = s2:-90!!m:26:16, print= illegalAction
+genPlayer Burned head g0 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 5;pMove = 7;nbTurn alive = 12
+genPlayer Sneaky snake g1 a lancé un sort sur personne .Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 4;pMove = 8;nbTurn alive = 12
+error : mob = g1action = s2:-90!!m:24:24, print= illegalAction
+genPlayer Sneaky snake g1 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 5;pMove = 8;nbTurn alive = 12
+genPlayer Zig Bee g2a attaqué personne (echec crit) .Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 10;pMove = 2;nbTurn alive = 12
+error : mob = g2action = s4:90!!m:25:21, print= illegalAction
+genPlayer Zig Bee g2 PASSE son tour .Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 11;pMove = 2;nbTurn alive = 12
+genPlayerManhunting Flower g3 a lancé un sort sur mob Slime m3. Fitness : pAction = 60;pHeal = 0;pActionmissed = 11;pPass = 5;pMove = 7;nbTurn alive = 12
+*** mob Slime m3 a été tué par genPlayer Manhunting Flower g3.
+-- FIN DE JEU --
+Mob id=m1 name=Ghost score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 8;pPass = 0;pMove = 7;nbTurn alive = 7
+Mob id=m2 name=Pumpking score final = -30Fitness : pAction = -50;pHeal = 0;pActionmissed = 0;pPass = 0;pMove = 2;nbTurn alive = 1
+Mob id=m3 name=Slime score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 6;pPass = 1;pMove = 9;nbTurn alive = 12
+Mob id=m4 name=Eye seeyou score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 1;pPass = 0;pMove = 4;nbTurn alive = 4
+Player id=g0 name=Burned head score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 12;pPass = 5;pMove = 7;nbTurn alive = 12
+Player id=g1 name=Sneaky snake score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 5;pMove = 8;nbTurn alive = 12
+Player id=g2 name=Zig Bee score final = 20Fitness : pAction = 0;pHeal = 0;pActionmissed = 13;pPass = 11;pMove = 2;nbTurn alive = 12
+Player id=g3 name=Manhunting Flower score final = 80Fitness : pAction = 60;pHeal = 0;pActionmissed = 11;pPass = 5;pMove = 7;nbTurn alive = 12
