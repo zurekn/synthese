@@ -10,16 +10,32 @@ public class g3 {
 	int down=Data.SOUTH;
 	int left=Data.WEST;
 	int right=Data.EAST;
+	Character defaultC = null;
+	String defaultString = "";
+	int defaultInt = 0;
+	float defaultFloat = 0f;
+	boolean defaultBoolean = false;
+	
 	
 	public g3() {
 	}
 	
 	public String run(Character ch)
 	{
-		    actionString = ch.getMaxHealingSpellId()+":"+ Data.EAST;
-		if((ch.getStats().getArmor())<= ((ch.researchCharacter(right)==null)?0:ch.researchCharacter(right).getStats().getMaxLife()) )
+		    deplacementString = ch.getDeplacement(-1,2);
+		if((ch.getStats().getEyeSight())== ((ch.researchCharacter(right)==null)?defaultInt:ch.researchCharacter(right).Portee(((ch.researchCharacter(right)==null)?defaultString:ch.researchCharacter(right).getMaxHealingSpellId()))) )
 		{
-		    deplacementString = ch.getDeplacement(1,1);
+		    actionString = ch.getMaxHealingSpellId()+":"+ Data.SELF;
+		    deplacementString = ch.getDeplacement(1,2);
+		}
+		else
+		{
+		    deplacementString = ch.getDeplacement(2,2);
+		if(0.3< ((ch.researchCharacter(right)==null)?defaultFloat:ch.researchCharacter(right).getStats().getManaPercentage()) )
+		{
+		    deplacementString = ch.getDeplacement(-2,-1);
+		    deplacementString = ch.getDeplacement(1,-1);
+		}
 		}
 		return actionString+"!!"+deplacementString;
 	}

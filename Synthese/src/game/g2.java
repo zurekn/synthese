@@ -10,29 +10,27 @@ public class g2 {
 	int down=Data.SOUTH;
 	int left=Data.WEST;
 	int right=Data.EAST;
+	Character defaultC = null;
+	String defaultString = "";
+	int defaultInt = 0;
+	float defaultFloat = 0f;
+	boolean defaultBoolean = false;
+	
 	
 	public g2() {
 	}
 	
 	public String run(Character ch)
 	{
-		    deplacementString = ch.getDeplacement(2,2);
-		    deplacementString = ch.getDeplacement(0,2);
-		if(	0.3>= 	ch.getStats().getLifePercentage() )
+		    deplacementString = ch.getDeplacement(1,1);
+		    actionString = ch.passerTour();
+		if(0.2== ((ch.researchCharacter(left)==null)?defaultFloat:ch.researchCharacter(left).getStats().getManaPercentage()) )
 		{
-		    actionString = ch.getMaxDamagingSpellId()+":"+ Data.EAST;
-		if(ch.getStats().getLife()== ((ch.researchCharacter(left)==null)?0:ch.researchCharacter(left).getStats().getMaxLife()/3) )
-		{
-		    deplacementString = ch.getDeplacement(0,-2);
+		    deplacementString = ch.getDeplacement(-2,0);
 		}
 		else
 		{
-		    deplacementString = ch.getDeplacement(-2,2);
-		}
-		}
-		else
-		{
-		    actionString = ch.getMaxDamagingSpellId()+":"+ Data.SOUTH;
+		    deplacementString = ch.getDeplacement(-1,2);
 		}
 		return actionString+"!!"+deplacementString;
 	}

@@ -10,16 +10,32 @@ public class g0 {
 	int down=Data.SOUTH;
 	int left=Data.WEST;
 	int right=Data.EAST;
+	Character defaultC = null;
+	String defaultString = "";
+	int defaultInt = 0;
+	float defaultFloat = 0f;
+	boolean defaultBoolean = false;
+	
 	
 	public g0() {
 	}
 	
 	public String run(Character ch)
 	{
-		    actionString = ch.getMaxHealingSpellId()+":"+ Data.SOUTH;
-		if(ch.getStats().getMaxLife()<= ch.getStats().getMaxLife() )
+		    deplacementString = ch.getDeplacement(3,-1);
+		    deplacementString = ch.getDeplacement(2,2);
+		if(true== (ch.isCharacterInLine(left)) )
 		{
-		    deplacementString = ch.getDeplacement(0,-1);
+		    deplacementString = ch.getDeplacement(1,-1);
+		    deplacementString = ch.getDeplacement(1,0);
+		if(((ch.researchCharacter(down)==null)?defaultInt:ch.researchCharacter(down).getStats().getMaxMana()/3)< ((ch.researchCharacter(left)==null)?defaultInt:ch.researchCharacter(left).getStats().getStrength()) )
+		{
+		    deplacementString = ch.getDeplacement(1,1);
+		}
+		else
+		{
+		    actionString = ch.getMaxDamagingSpellId()+":"+ Data.EAST;
+		}
 		}
 		return actionString+"!!"+deplacementString;
 	}

@@ -10,17 +10,23 @@ public class g1 {
 	int down=Data.SOUTH;
 	int left=Data.WEST;
 	int right=Data.EAST;
+	Character defaultC = null;
+	String defaultString = "";
+	int defaultInt = 0;
+	float defaultFloat = 0f;
+	boolean defaultBoolean = false;
+	
 	
 	public g1() {
 	}
 	
 	public String run(Character ch)
 	{
-		    actionString = ch.getSpells().get(0).getId()+":"+ Data.NORTH;
-		    actionString = ch.getMaxDamagingSpellId()+":"+ Data.SOUTH;
-		if(((ch.researchCharacter(down)==null)?0:ch.researchCharacter(down).getStats().getMaxLife()/3)> (ch.getStats().getMaxLife()/3) )
+		    actionString = ch.getSpells().get(0).getId()+":"+ Data.WEST;
+		    deplacementString = ch.getDeplacement(2,-2);
+		if(((ch.researchCharacter(right)==null)?defaultInt:ch.researchCharacter(right).getStats().getMaxLife()/3)> ((ch.researchCharacter(left)==null)?defaultInt:ch.researchCharacter(left).getStats().getMagicPower()) )
 		{
-		    deplacementString = ch.getDeplacement(-2,-1);
+		    deplacementString = ch.getDeplacement(-1,-2);
 		}
 		return actionString+"!!"+deplacementString;
 	}
