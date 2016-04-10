@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import javacompiler.CompileString;
 import main.Main;
 
 import org.newdawn.slick.BasicGame;
@@ -148,7 +149,7 @@ public class WindowGame extends BasicGame {
 		genPlayers = new ArrayList<PlayerGenetic>();
 		originGenPlayers = new ArrayList<PlayerGenetic>();
 		originPlayers = new ArrayList<Player>();
-		if(Data.autoIA && !Data.jvm)
+		if(Data.autoIA && !Data.joueursVsMobs)
 		{
 			initGeneticPlayers();
 		}
@@ -190,7 +191,9 @@ public class WindowGame extends BasicGame {
 			currentCharacter = genPlayers.get(turn);
 		}
 		gameOn = true;
-		if(Data.autoIA)currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
+		// Croiseent de test dès le début.
+		CompileString.combineTrees(mobs.get(0).getTrueID(), mobs.get(1).getTrueID(), mobs.get(0).getTrueID()+"c"+mobs.get(1).getTrueID());
+		//if(Data.autoIA)currentCharacter.findScriptAction(0);//Pour lancer l'action du premier joueur
 	}
 	
 	public void initGeneticPlayers(){
@@ -735,7 +738,7 @@ public class WindowGame extends BasicGame {
 				mo.getFitness().addTurn();
 			}
 			if(Data.autoIA){
-				if(Data.jvm)
+				if(Data.joueursVsMobs)
 				{
 					for(PlayerGenetic po:genPlayers){
 						po.getFitness().addTurn();
@@ -787,7 +790,7 @@ public class WindowGame extends BasicGame {
 		if(!currentCharacter.isNpc())
 		{
 			//currentCharacter.
-			if(Data.autoIA && Data.jvm)currentCharacter.findScriptAction(0);
+			if(Data.autoIA && Data.joueursVsMobs)currentCharacter.findScriptAction(0);
 		}
 
 		// print the current turn in the console

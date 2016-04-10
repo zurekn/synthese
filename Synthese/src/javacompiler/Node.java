@@ -29,7 +29,7 @@ public class Node implements Serializable {
 	/*
 	 * Suppression d'un fils spécifique
 	 */
-	private void removeChild(Node child) 
+	public void removeChild(Node child) 
 	{
 		if (children.contains(child))
 		{	
@@ -37,6 +37,21 @@ public class Node implements Serializable {
 			children.remove(child);
 			//if(temp <= children.size()-1)
 				//children.get(temp).setBro(children.get(temp+1));
+		}
+	}
+	
+	/** Replace a child with another node
+	 * 
+	 * @param child
+	 * @param newChild
+	 */
+	public void replaceChild(Node child, Node newChild)
+	{
+		int index =0;
+		if (children.contains(child))
+		{	
+			index=children.indexOf(child);
+			children.set(index, newChild);
 		}
 	}
 	
@@ -91,11 +106,11 @@ public class Node implements Serializable {
 	
 	public void displayNode()
 	{
-		System.out.println("parent : "+(hasParent(this)?this.parent.getValue():"")+" value : "+ this.value);
+		System.out.println("parent : "+(hasParent()?this.parent.getValue():"")+" value : "+ this.value);
 	}
 	
-	public boolean hasParent(Node node){
-		if(node.parent == null)
+	public boolean hasParent(){
+		if(this.parent == null)
 			return false;
 		else 
 			return true;
@@ -110,14 +125,57 @@ public class Node implements Serializable {
 	 */
 	public Node getSubTree(int id)
 	{
+		System.out.println("\t=== getSubTree ===");
 		ArrayList<Node> arrayNode = new ArrayList<Node>();
+		Node returNode;
 		//arrayNode = TreeToArray(this, arrayNode);
 		arrayNode= this.getChildren();
-		if(id < 0 || id >= arrayNode.size())
-			return arrayNode.get(new Random().nextInt(arrayNode.size()));
-		else{
-			return arrayNode.get(id);
+		if(arrayNode != null && arrayNode.size() > 0)
+		if(id < 0 || id >= arrayNode.size()){ // Si id n'est pas un des fils, on en prend un aléatoirement
+			returNode = arrayNode.get(new Random().nextInt(arrayNode.size())); // Noeud aléatoire parmi les fils direct
+			if(returNode.getChildren() != null){
+				System.out.println("-noeud avec fils .. 50% de prendre ses fils");
+				return (new Random().nextInt(2)==0?returNode:returNode.getSubTree(id)); // 50% de chance de prendre ses fils directs
+			}else {
+				System.out.println("--noeud sans fils");
+				return returNode; // Noeud sans fils
+			}
+		}else{
+			System.out.println("choix du noeud numero "+id);
+			return arrayNode.get(id); // On prend le fils id
 		}
+		else
+			return this;
+	}
+	
+	Node lastFounded;
+	/** Search a node with given value. if this Node has children, 50% to continue the search.
+	 * Return random child if not found valued child.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public Node searchSubTreeByValue(String value){
+		ArrayList<Node> childNodes = new ArrayList<Node>();
+		childNodes = this.getChildren(); // get children
+		lastFounded = null;
+		for(Node resNode : childNodes){ // for each child
+			if(resNode.value.equals(value)){ // if we find the searched value
+				if(resNode.getChildren()==null){
+					return resNode;// we return the node if it has no children
+				}else{// 50% to return the node if it has children
+					lastFounded = resNode;// we save the node in case we don't find any matching not later.
+					return (new Random().nextInt(2)==0?resNode:resNode.searchSubTreeByValue(value));
+				}
+					//return resNode;
+
+			}else if(resNode.getChildren()!=null && resNode.getChildren().size()>0){ // if node has children but has not value searched
+				return resNode.searchSubTreeByValue(value); // Recursively search value
+			}
+		}
+		if(lastFounded != null)// if we founded matching nodes, we return the last matching node founded
+			return lastFounded;
+		return this.getSubTree(-1);  // if we didn't find any matching node, we take random node 
 	}
 	
 	public ArrayList<String> TreeToArrayList(ArrayList<String> st)
@@ -125,11 +183,11 @@ public class Node implements Serializable {
 		if(!this.getValue().contains("run"))
 		{	
 			
-			if(this.getValue() == "if" || this.getValue() == "for" || this.getValue() == "while")
+			if(this.getValue().equals("if") || this.getValue().equals("for") || this.getValue().equals("while"))
 				st.add(this.getValue()+"("+this.getChildren().get(0).getValue()+")");
-			else
+			else{
 				st.add(this.getValue());
-			
+			}
 			if(!this.getChildren().isEmpty() )
 				st.add("{");
 			for(Node n : this.getChildren())

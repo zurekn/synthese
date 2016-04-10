@@ -21,7 +21,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 public class CompileString {
-	static Boolean debug = false;
+	static Boolean debug = true;
 	static String className = "";
 	static String pathClass = "Synthese/src/game/";
 	static String destPathClass = "target/classes/game/";
@@ -51,21 +51,25 @@ public class CompileString {
 		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
 		aRisque = false;
 		debugSys("\n===========   GENERATE MOB "+geneticName+"  ===========");
-		Node root = advanced?DecodeScript("AdvancedAIScriptDatas.txt"):DecodeScript("AIScriptDatas.txt");
+		Node root = DecodeScript("AdvancedAIScriptDatas.txt");
 		ArrayList<String> contentCode = new ArrayList<String>();
 		contentCode = root.TreeToArrayList(contentCode);
-		for (String st : contentCode)
-			System.out.println(st);
+		/*for (String st : contentCode)
+			System.out.println(st);*/
+		debugSys("Resultat arbre final :");
+		root.displayTree();
 		
 		className = geneticName + (aRisque ? "_Arisque" : "");
 		ReadWriteCode(contentCode, className);
-		try {
-			serializeObject("serialized_"+geneticName, root);
-			deserializeObject("serialized_"+geneticName);
-		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+			try {
+				serializeObject("serialized_"+geneticName, root);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
 		// CompileAndExecuteClass(className, "run");
 	}
 
@@ -84,17 +88,91 @@ public class CompileString {
 	/*
 	 * Dé-sérialize un objet
 	 */
-	public static void deserializeObject(String name) throws IOException,
+	public static Node deserializeObject(String name) throws IOException,
 			ClassNotFoundException {
+		debugSys("deserializing... "+name);
 		ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream("javaObjects_" + name + ".txt"));
 		Node readJSON = (Node) objectInputStream.readObject();
 		objectInputStream.close();
-		System.out.println("### Display Tree");
+		System.out.println("### Display Tree "+name);
 		readJSON.displayTree();
 		System.out.println("### Tree displayed");
-		readJSON.getSubTree(1).displayNode();
-		System.out.println("### Fin deserialize");
+		//readJSON.getSubTree(-1).displayNode();
+		//System.out.println("### Fin deserialize");
+		//serializeObject("test", );
+		return readJSON;
+	}
+	
+	public static void combineTrees(String name1, String name2, String name){
+		System.setProperty("java.home", "C:\\MCP-IDE\\jdk1.8.0_60\\jre");
+		debugSys("Combining Trees "+name1+" and "+name2+" into "+name);
+		Node root1;
+		Node root2;
+		Node resRoot;
+		Node tmpRoot1 = null;
+		Node tmpRoot2 = null;
+		try {
+			// Get monster 1 & 2 trees
+			root1 = deserializeObject("serialized_"+name1);
+			root2 = deserializeObject("serialized_"+name2);
+			boolean done = false;
+			// While we didn't combined...
+			while(!done){
+				tmpRoot1 = root1.getSubTree(-1); // get Random subtree from root1
+				System.out.println("#Random root1. found"+tmpRoot1.getValue());
+				//if we get a 'if' node, we search another 'if' node
+				if(tmpRoot1.getValue().equals("if")){
+					
+					tmpRoot2 = root2.searchSubTreeByValue("if"); // search 'if' if 'if' found
+					if(tmpRoot2.getValue().equals("if"))
+						done = true;
+				}else if(tmpRoot1.getValue().equals("else")){
+					
+					tmpRoot2 = root2.searchSubTreeByValue("else"); // search 'else' if 'else' found
+					if(tmpRoot2.getValue().equals("else"))
+						done = true;
+				}else{
+					tmpRoot2 = root2.getSubTree(-1);
+					
+					if(!tmpRoot2.getValue().equals("else"))
+						done = true;
+				}
+				debugSys("##found "+tmpRoot2.getValue()+" in root2");
+			}
+			debugSys("\treplacing " );
+			tmpRoot1.displayTree(); 
+			debugSys("\twith " );
+			tmpRoot2.displayTree();
+			// Replace tmpRoot1 with tmpRoot2
+			if(tmpRoot1.hasParent()){
+				resRoot = tmpRoot1.getParent();
+				resRoot.replaceChild(tmpRoot1, tmpRoot2);
+				while(resRoot.hasParent()){ // Retourner a la racine (run)
+					resRoot = resRoot.getParent();
+				}
+				
+			}
+			else{ // s tmpRoot1 n'a pas de parent, resRoot = tmpRoot1
+				resRoot = tmpRoot1;
+			}
+			debugSys("###### COmbining end. Result is : ");
+			
+			// Save result
+			ArrayList<String> contentCode = new ArrayList<String>();
+			contentCode = resRoot.TreeToArrayList(contentCode);
+			resRoot.displayTree();
+		/*	for (String st : contentCode)
+				System.out.println(st);*/
+			ReadWriteCode(contentCode, name);
+			//serializeObject(name,lastRoot);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static Node getRandomChild(Node node){
@@ -213,69 +291,6 @@ public class CompileString {
 		}
 		return root;
 	}
-	
-	/** Add a full condition branch node with code lines inside.
-	 * 
-	 *  Should be used like : node = addFullCondition(node)
-	 *  
-	 * @param resNode : node where we append condition
-	 * @return : resulting node with conditions appended
-	 *//*
-	public static Node addFullCondition(Node resNode, int maxDepth)
-	{
-		if(maxDepth > 0){ // Si on n'a pas atteint la profondeur max
-					int rand = 0;
-					String[] partsRandomCond = getParam(cond, -1); // condition aléatoire (if, for, etc.)
-					Node nodeCond = new Node(""); // init. supernoeud de condition
-					String conditionFull = ""; // init. valeur textuelle de la condition
-					if (partsRandomCond[0].contains("if") // test du cas if / while
-							|| partsRandomCond[0].contains("while")) {
-						if (partsRandomCond[0].contains("while")) { // Risqué si while
-							nodeCond.setValue("while");
-							aRisque = true;
-						} else
-							nodeCond.setValue("if");
-						String[] partsRandomVar = getParam(var, -1); // LIGNE de variables aléatoire
-						conditionFull += partsRandomVar[0]; // concaténer nom de la variable
-						conditionFull += getCompInCond(partsRandomVar[1]);
-					}
-					if (partsRandomCond[0].contains("for"))  // Cas d'un for
-					{
-						nodeCond.setValue("for"); // Ajoute "for" au niveau juste en dessous du noeud resNode
-						conditionFull += "int i = 0 ; i"; // concatène l'initialisation
-						String[] partsRandomComp = getParam(comp, 0); // récupère les comparateurs pour les int
-						rand = new Random().nextInt(partsRandomComp.length); // choisis un comparateur int aléatoire
-						rand = (rand <= 2) ? 2 : 3; // soit "<=" soit ">=" autorisés
-						int condRandom = rand;
-						conditionFull += partsRandomComp[rand]; // concaténation du comparateur
-						String[] partsRandomVar = null;
-						do {
-							partsRandomVar = getParam(var, -1); //  recuperation d'une ligne "variable" int aleatoire
-						} while (!partsRandomVar[1].contains("int"));
-						// ajout de l'itération. i-- si ">=" , i++ si "<="
-						if (condRandom == 2 || condRandom == 6 )
-							conditionFull += partsRandomVar[0] + "; i--";
-						else
-							conditionFull += partsRandomVar[0] + "; i++";
-					}
-					resNode.addChild(nodeCond); // lier les supernoeuds
-					Node condFullNode = new Node(conditionFull); // création du sous-noeud
-					nodeCond.addChild(condFullNode); // Ajout du sous-noeud au supernoeud de condition
-					nodeCond = addCodeLineAlea(code,nbLignesCode,nodeCond); // *** Ajout des lignes de code dans la branche
-					boolean moreDeep = (new Random().nextInt(2)==0?false:true);
-					if(moreDeep)nodeCond = addFullCondition(nodeCond,maxDepth-1);// Ajout d'une autre branche conditionnelle
-					if (partsRandomCond[0].contains("if")  // Cas du if avec un else
-							&& partsRandomCond[2].contains("else")) {
-						Node nodeElse = new Node("else");
-						resNode.addChild(nodeElse);
-						nodeElse = addCodeLineAlea(code,nbLignesCode,nodeElse); // *** Ajout des lignes de code dans le ELSE
-						moreDeep = (new Random().nextInt(2)==0?false:true);
-						if(moreDeep)nodeElse = addFullCondition(nodeElse,maxDepth-1);// Ajout d'une autre branche conditionnelle
-					}
-		}
-		return resNode;
-		
-	}*/
 	
 	/** Add a full condition branch node with code lines inside. Advanced
 	 * 
